@@ -1,0 +1,39 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore log files
+*.log
+
+# Ignore build directories
+dist/
+build/
+
+# Ignore environment variables
+.env
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE specific files
+.vscode/
+.idea/
+*.iml
+
+# Ignore Python compiled files
+__pycache__/
+*.pyc
+
+# Ignore Python files
+config.py
+temp.py
+preferenceDataset.py
+model.py
+validation.py
+
+wandb/
+Llama-3.2-1B-DPO-wrong/
+Llama-3.2-1B-DPO/
+
+# data files
+instruction-data-with-preference.json
