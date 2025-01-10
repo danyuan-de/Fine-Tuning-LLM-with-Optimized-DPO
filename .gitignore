@@ -27,9 +27,9 @@ __pycache__/
 # Ignore Python files
 config.py
 temp.py
-preferenceDataset.py
 model.py
 validation.py
+testing.py
 
 wandb/
 Llama-3.2-1B-DPO-wrong/
