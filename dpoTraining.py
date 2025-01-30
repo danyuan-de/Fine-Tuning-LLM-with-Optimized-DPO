@@ -53,7 +53,7 @@ ref_model.config.pad_token_id = tokenizer.pad_token_id
 print("Model and tokenizer loaded.")
 
 # Load your dataset
-file_path = "instruction-data-with-preference.json"
+file_path = "physics_QA.json"
 with open(file_path, "r", encoding="utf-8") as file:
     data = json.load(file)
 
@@ -312,7 +312,7 @@ torch.manual_seed(123)
 
 optimizer = torch.optim.AdamW(policy_model.parameters(), lr=5e-6, weight_decay=0.01)
 
-num_epochs = 1
+num_epochs = 2
 tracking = train_model_dpo_simple(
     policy_model=policy_model,
     reference_model=ref_model,
@@ -356,6 +356,8 @@ plot_losses(
     label="reward_margins"
 )
 
+fine_tuned_tokenizer = AutoTokenizer.from_pretrained(save_path)
+print("Tuned model's tokenizer loaded.")
 
 # look at the response
 for entry in val_data[:3]:
@@ -365,7 +367,7 @@ for entry in val_data[:3]:
     token_ids = generate(
         model=ref_model,
         idx=text_to_token_ids(input_text, tokenizer).to(device),
-        max_new_tokens=256,
+        max_new_tokens=1024,
         eos_id=50256
     )
     generated_text = token_ids_to_text(token_ids, tokenizer)
@@ -377,11 +379,11 @@ for entry in val_data[:3]:
 
     token_ids = generate(
         model=policy_model,
-        idx=text_to_token_ids(input_text, tokenizer).to(device),
-        max_new_tokens=256,
-        eos_id=50256
+        idx=text_to_token_ids(input_text, fine_tuned_tokenizer).to(device),  # ✅ Use the fine-tuned tokenizer
+        max_new_tokens=1024,
+        eos_id=fine_tuned_tokenizer.eos_token_id
     )
-    generated_text = token_ids_to_text(token_ids, tokenizer)
+    generated_text = token_ids_to_text(token_ids, fine_tuned_tokenizer)
     policy_response_text = (
         generated_text[len(input_text):]
         .replace("### Response:", "")
@@ -389,9 +391,9 @@ for entry in val_data[:3]:
     )
 
     print(input_text)
-    print(f"\nCorrect response:\n>> {entry['output']}")
     print(f"\nReference model response:\n>> {reference_response_text.strip()}")
     print(f"\nPolicy model response:\n>> {policy_response_text.strip()}")
+    print(f"\nCorrect response:\n>> {entry['chosen']}")
     print("\n-------------------------------------\n")
 
 # # training loop

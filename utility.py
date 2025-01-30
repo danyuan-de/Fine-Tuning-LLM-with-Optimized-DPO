@@ -22,13 +22,19 @@ def get_device():
     return device
 
 def format_input(entry):
-    instruction_text = (
-        f"Below is an instruction that describes a task. "
-        f"Write a response that appropriately completes the request."
-        f"\n\n### Instruction:\n{entry['instruction']}"
-    )
-    input_text = f"\n\n### Input:\n{entry['input']}" if entry["input"] else ""
-    return instruction_text + input_text
+    if "instruction" in entry:
+        instruction_text = (
+            f"Below is an instruction that describes a task. "
+            f"Write a response that appropriately completes the request."
+            f"\n\n### Instruction:\n{entry['instruction']}"
+        ) # for the instruction-data-with-preference.json
+    elif "question" in entry:
+        instruction_text = (
+            f"Answer the following question using step-by-step reasoning and the appropriate equations."
+            f"\n\n### Instruction:\n{entry['question']}"
+        )
+    # input_text = f"\n\n### Input:\n{entry['input']}" if entry["input"] else "" # for the instruction-data-with-preference.json
+    return instruction_text #+ input_text
 
 def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss"):
     fig, ax1 = plt.subplots(figsize=(5, 3))
@@ -48,7 +54,7 @@ def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss"
 
     fig.tight_layout()  # Adjust layout to make room
     plt.savefig(f"{label}-plot.pdf")
-    plt.show()
+    # plt.show()
 
 def text_to_token_ids(text, tokenizer):
     encoded = tokenizer.encode(text) # , allowed_special={"<|endoftext|>"}) --> it's OpenAI's tiktoken
