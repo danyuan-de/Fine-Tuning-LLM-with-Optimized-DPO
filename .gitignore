@@ -41,3 +41,6 @@ Llama-3.2-1B-DPO-v1/
 instruction-data-with-preference.json
 physics_question/
 questions_answers/
+
+DPO_loss-plot.pdf
+reward_margins-plot.pdf

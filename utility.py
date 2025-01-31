@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 import torch
+import re
+from transformers import StoppingCriteria, StoppingCriteriaList
 
 # Get the device to use
 def get_device():
@@ -23,18 +25,27 @@ def get_device():
 
 def format_input(entry):
     if "instruction" in entry:
-        instruction_text = (
+        system_prompt = (
             f"Below is an instruction that describes a task. "
             f"Write a response that appropriately completes the request."
             f"\n\n### Instruction:\n{entry['instruction']}"
         ) # for the instruction-data-with-preference.json
+        input_text = f"\n\n### Input:\n{entry['input']}" if entry["input"] else "" # for the instruction-data-with-preference.json
+        return system_prompt + input_text
+    
     elif "question" in entry:
-        instruction_text = (
-            f"Answer the following question using step-by-step reasoning and the appropriate equations."
-            f"\n\n### Instruction:\n{entry['question']}"
+        system_prompt = (
+            "You are a physics expert assistant. "
+            "Deliver accurate and concise thinking processes and answers based on the following question."
         )
-    # input_text = f"\n\n### Input:\n{entry['input']}" if entry["input"] else "" # for the instruction-data-with-preference.json
-    return instruction_text #+ input_text
+        return (
+            "<|begin_of_text|>\n"
+            "<|start_header_id|>system<|end_header_id|>\n"
+            f"{system_prompt}<|eot_id|>\n"
+            "<|start_header_id|>user<|end_header_id|>\n"
+            f"Question: {entry['question']}<|eot_id|>\n"
+            "<|start_header_id|>assistant<|end_header_id|>\n"
+        )
 
 def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss"):
     fig, ax1 = plt.subplots(figsize=(5, 3))
@@ -65,68 +76,90 @@ def token_ids_to_text(token_ids, tokenizer):
     flat = token_ids.squeeze(0)  # remove batch dimension
     return tokenizer.decode(flat.tolist())
 
-def generate(model, idx, max_new_tokens, context_size=512, temperature=0.0, top_k=None, eos_id=None):
+def generate(
+    model, 
+    idx, 
+    stopping_criteria=None,
+    max_new_tokens=100,
+    context_size=512,
+    temperature=0.3,
+    top_k=None,
+    top_p=None,  
+    eos_id=None
+):
     """
-    Generate text using the model.
-
-    Args:
-        model: The language model.
-        idx: Input token IDs (batch_size, seq_len).
-        max_new_tokens: Maximum number of tokens to generate.
-        context_size: Context size for the model.
-        temperature: Temperature for sampling.
-        top_k: Top-k sampling parameter.
-        eos_id: End-of-sequence token ID.
-
-    Returns:
-        idx: Generated token IDs (batch_size, seq_len + max_new_tokens).
+    enhanced generation function that supports both top-k and top-p
+    priority: top_p > top_k (when both are set)
     """
     for _ in range(max_new_tokens):
-        # Truncate the input to the context size
+        # truncate context
         idx_cond = idx[:, -context_size:]
-
-        # Get the model's output
+        
+        # get logits
         with torch.no_grad():
             output = model(idx_cond)
+            logits = output.logits if hasattr(output, "logits") else output[0]
+        
+        # select the last token's logits
+        logits = logits[:, -1, :] / (temperature if temperature > 0 else 1.0)
+        
+        # prioritize top-p sampling
+        if top_p is not None and top_p < 1.0:
+            sorted_logits, sorted_indices = torch.sort(logits, descending=True)
+            cumulative_probs = torch.cumsum(
+                torch.softmax(sorted_logits, dim=-1), 
+                dim=-1
+            )
+            
+            # remove tokens with cumulative probability above top_p
+            sorted_indices_to_remove = cumulative_probs > top_p
+            # keep the first token above top_p
+            sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
+            sorted_indices_to_remove[..., 0] = False
+            
+            # create mask
+            indices_to_remove = sorted_indices_to_remove.scatter(
+                1, sorted_indices, sorted_indices_to_remove
+            )
+            logits[indices_to_remove] = float('-inf')
 
-        # Extract the logits from the output
-        if hasattr(output, "logits"):
-            logits = output.logits  # Extract logits from CausalLMOutputWithPast
-        elif isinstance(output, tuple):
-            logits = output[0]  # Extract logits from a tuple
-        else:
-            logits = output  # Assume output is already logits
-
-        # Focus on the last time step
-        logits = logits[:, -1, :]
-
-        # Apply top-k sampling
-        if top_k is not None:
-            # Keep only top_k values
+        # secondary top-k sampling
+        elif top_k is not None and top_k > 0:
+            top_k = min(top_k, logits.size(-1))
             top_logits, _ = torch.topk(logits, top_k)
             min_val = top_logits[:, -1]
-            logits = torch.where(logits < min_val, torch.tensor(float('-inf')).to(logits.device), logits)
+            logits = torch.where(logits < min_val, float('-inf'), logits)
 
-        # Apply temperature scaling
-        if temperature > 0.0:
-            logits = logits / temperature
+        # Probability Calculation and Sampling
+        probs = torch.softmax(logits, dim=-1)
+        idx_next = torch.multinomial(probs, num_samples=1)
 
-            # Apply softmax to get probabilities
-            probs = torch.softmax(logits, dim=-1)  # (batch_size, vocab_size)
-
-            # Sample from the distribution
-            idx_next = torch.multinomial(probs, num_samples=1)  # (batch_size, 1)
-
-        # Greedy decoding (no sampling)
-        else:
-            idx_next = torch.argmax(logits, dim=-1, keepdim=True)  # (batch_size, 1)
-
-        # Stop generating if the end-of-sequence token is encountered
+        # EOT check
         if idx_next == eos_id:
             break
 
-        # Append the generated token to the sequence
-        idx = torch.cat((idx, idx_next), dim=1)  # (batch_size, num_tokens + 1)
+        idx = torch.cat((idx, idx_next), dim=1)
 
     return idx
 
+class EOTStoppingCriteria(StoppingCriteria):
+    def __init__(self, eot_token_id):
+        self.eot_token_id = eot_token_id
+        
+    def __call__(self, input_ids, scores, **kwargs):
+        # check if the last token is the EOT token
+        return input_ids[0][-1] == self.eot_token_id
+    
+
+# postprocess response to remove unwanted tokens
+def postprocess_response(full_text: str) -> str:
+    # make sure only the first assistant part is kept
+    if "<|start_header_id|>assistant<|end_header_id|>" in full_text:
+        response = full_text.split("<|start_header_id|>assistant<|end_header_id|>")[-1]
+        # remove all subsequent HTML tags
+        response = re.sub(r"<[^>]+>", "", response)
+        # cutoff at the first EOT token
+        if "<|eot_id|>" in response:
+            response = response.split("<|eot_id|>")[0]
+        return response.strip()
+    return "Invalid response format"

@@ -27,10 +27,16 @@ print("Using CPU")
 tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
 model = AutoModelForCausalLM.from_pretrained(model_name)#.to(device)
 
-policy_model = model
+special_tokens = {
+    "additional_special_tokens": ["<|eot_id|>"]
+}
+tokenizer.add_special_tokens(special_tokens)
+eot_token_id = tokenizer.convert_tokens_to_ids("<|eot_id|>")
+model.resize_token_embeddings(len(tokenizer)) # adjust the size of the token embeddings
 
-# Create a reference model for DPO by copying and freezing the parameters
-ref_model = copy.deepcopy(model)
+policy_model = model # this is the model that will be fine-tuned
+ref_model = copy.deepcopy(model) # create a reference model for DPO by copying and freezing the parameters
+
 for param in ref_model.parameters():
     param.requires_grad = False
 ref_model.eval()
@@ -76,61 +82,73 @@ print("Test set length:", len(test_data))
 # collate_fn for DataLoader
 def custom_collate_fn(
     batch,
-    pad_token_id=50256,
+    eot_token_id=eot_token_id, #tokenizer.convert_tokens_to_ids("<|eot_id|>"),
     allowed_max_length=None,
     mask_prompt_tokens=True,
     device="cpu"
 ):
-    # Initialize lists to hold batch data
+    # Initialize the batch data
     batch_data = {
         "prompt": [],
         "chosen": [],
         "rejected": [],
-        "rejected_mask": [],
-        "chosen_mask": []
-
+        "chosen_mask": [],
+        "rejected_mask": []
     }
 
-    # Determine the longest sequence to set a common padding length
+    # calculate the maximum length of the chosen and rejected sequences
     max_length_common = 0
     if batch:
         for key in ["chosen", "rejected"]:
-            current_max = max(len(item[key])+1 for item in batch)
+            current_max = max(len(item[key]) for item in batch)
             max_length_common = max(max_length_common, current_max)
 
-    # Process each item in the batch
+    # process each item in the batch
     for item in batch:
-        prompt = torch.tensor(item["prompt"])
+        prompt = torch.tensor(item["prompt"], dtype=torch.long)
         batch_data["prompt"].append(prompt)
 
         for key in ["chosen", "rejected"]:
-            # Adjust padding according to the common maximum length
             sequence = item[key]
-            padded = sequence + [pad_token_id] * (max_length_common - len(sequence))
-            mask = torch.ones(len(padded)).bool()
+            sequence_tensor = torch.tensor(sequence, dtype=torch.long)
 
-            # Set mask for all padding tokens to False
-            mask[len(sequence):] = False
+            # fill the sequence tensor with padding tokens to match the maximum length
+            padded_sequence = torch.cat([
+                sequence_tensor,
+                torch.full((max_length_common - sequence_tensor.size(0),), fill_value=tokenizer.pad_token_id, dtype=torch.long)
+            ])
 
-            # Set mask for all input tokens to False
-            # +2 sets the 2 newline ("\n") tokens before "### Response" to False
+            # create a mask tensor to ignore the padding tokens
+            mask = torch.ones_like(padded_sequence, dtype=torch.bool)
+            mask[sequence_tensor.size(0):] = False  # set padding tokens to False
+
+            # mask the prompt tokens if needed
             if mask_prompt_tokens:
-                mask[:prompt.shape[0]+2] = False
+                mask[:prompt.size(0)] = False
 
-            batch_data[key].append(torch.tensor(padded))
+            # make sure the EOT token is not masked
+            # Inside custom_collate_fn, for both "chosen" and "rejected":
+            if eot_token_id in sequence_tensor:
+                eot_positions = (sequence_tensor == eot_token_id).nonzero(as_tuple=True)[0]
+                if len(eot_positions) > 0:
+                    eot_pos = eot_positions[-1].item()  # Last EOT in response
+                else:
+                    eot_pos = sequence_tensor.size(0) - 1
+            else:
+                eot_pos = sequence_tensor.size(0) - 1
+
+            mask[eot_pos] = True  # set the EOT token to True
+
+            batch_data[key].append(padded_sequence)
             batch_data[f"{key}_mask"].append(mask)
 
-    # Final processing
+    # stack the tensors and move them to the device
     for key in ["chosen", "rejected", "chosen_mask", "rejected_mask"]:
-        # Stack all sequences into a tensor for the given key
-        tensor_stack = torch.stack(batch_data[key])
+        batch_data[key] = torch.stack(batch_data[key]).to(device)
 
-        # Optionally truncate to maximum sequence length
+        # truncate the sequences if needed
         if allowed_max_length is not None:
-            tensor_stack = tensor_stack[:, :allowed_max_length]
-
-        # Move to the specified device
-        batch_data[key] = tensor_stack.to(device)
+            batch_data[key] = batch_data[key][:, :allowed_max_length]
 
     return batch_data
 
@@ -139,25 +157,40 @@ def custom_collate_fn(
 class PreferenceDataset(Dataset):
     def __init__(self, data, tokenizer):
         self.data = data
+        self.tokenizer = tokenizer
+        self.eot_token = "<|eot_id|>"  # Define EOT token for Llama 3 models
+
+        # Verify EOT token exists in tokenizer
+        if self.eot_token not in tokenizer.added_tokens_decoder:
+            tokenizer.add_special_tokens({"additional_special_tokens": [self.eot_token]})
 
         # Pre-tokenize texts
         self.encoded_texts = []
         for entry in data:
             prompt = format_input(entry)
-            rejected_response = entry["rejected"]
-            chosen_response = entry["chosen"]
+            
+            # Add EOT token to responses
+            chosen_response = entry["chosen"] + self.eot_token
+            rejected_response = entry["rejected"] + self.eot_token
 
-            prompt_tokens = tokenizer.encode(prompt)
-            chosen_full_text = f"{prompt}\n\n### Response:\n{chosen_response}"
-            rejected_full_text = f"{prompt}\n\n### Response:\n{rejected_response}"
-            chosen_full_tokens = tokenizer.encode(chosen_full_text)
-            rejected_full_tokens = tokenizer.encode(rejected_full_text)
+            # Tokenize full texts
+            chosen_full_text = f"{prompt}\n{chosen_response}"
+            rejected_full_text = f"{prompt}\n{rejected_response}"
+
+            # tokenize the full texts
+            chosen_full_tokens = self.tokenizer.encode(chosen_full_text)
+            rejected_full_tokens = self.tokenizer.encode(rejected_full_text)
 
             self.encoded_texts.append({
-                "prompt": prompt_tokens,
+                "prompt": self.tokenizer.encode(prompt),
                 "chosen": chosen_full_tokens,
                 "rejected": rejected_full_tokens,
             })
+        print("\n=== data pre-processing validation ===")
+        sample_entry = self.encoded_texts[0]
+        print("Prompt:", tokenizer.decode(sample_entry["prompt"]))
+        print("Chosen:", tokenizer.decode(sample_entry["chosen"]))
+        print("Rejected:", tokenizer.decode(sample_entry["rejected"]))
 
     def __getitem__(self, index):
         item = self.encoded_texts[index]
@@ -171,10 +204,10 @@ customized_collate_fn = partial(
     custom_collate_fn,
     device=device,            # Put the data directly on a GPU if available
     mask_prompt_tokens=True,  # This is optional
-    allowed_max_length=512   # The supported context length of the model
+    allowed_max_length=512    # The supported context length of the model
 )
 
-batch_size = 8
+batch_size = 4
 # Create datasets and dataloaders
 train_dataset = PreferenceDataset(train_data, tokenizer)
 train_loader = DataLoader(
@@ -208,20 +241,16 @@ for batch in train_loader:
     )
 print("\n")
 
-# # DPO loss function
-# def dpo_loss(pi_logps, ref_logps, yw_idxs, yl_idxs, beta=0.1):
-#     pi_logratios = chosen_seq_logp - rejected_seq_logp
-#     ref_logratios = chosen_ref_seq_logp - rejected_ref_seq_logp
-#     losses = -torch.nn.functional.logsigmoid(beta * (pi_logratios - ref_logratios))
-#     return losses.mean()
+# self-defined stopping criteria
+stopping_criteria = StoppingCriteriaList([
+    EOTStoppingCriteria(eot_token_id=tokenizer.convert_tokens_to_ids("<|eot_id|>"))
+])
 
 # Optimizer
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
 
 # Initialize the DPO loss function with beta=0.1
 dpo_loss_fn = DPOLoss(beta=0.1)
-
-
 
 def train_model_dpo_simple(
     policy_model, reference_model, train_loader, val_loader,
@@ -239,6 +268,8 @@ def train_model_dpo_simple(
         "tokens_seen": []
     }
     tokens_seen, global_step = 0, -1
+
+    sample_entry = val_data[0] if val_data else None # Sample entry for generation
 
     # Main training loop
     for epoch in range(num_epochs):
@@ -269,6 +300,48 @@ def train_model_dpo_simple(
                     val_loader=val_loader,
                     eval_iter=eval_iter
                 )
+                if sample_entry and (global_step // eval_freq) % 2 == 0:  # generate every 2nd evaluation
+                    policy_model.eval()
+                    with torch.no_grad():
+                        try:
+                            # prepare input
+                            input_text = format_input(sample_entry)
+                            token_ids = text_to_token_ids(input_text, tokenizer).to(device)
+                            
+                            # generation config
+                            generation_config = {
+                                'max_new_tokens': 256,
+                                'temperature': 0.7,
+                                'top_p': 0.9,
+                                'eos_id': tokenizer.convert_tokens_to_ids("<|eot_id|>")
+                            }
+                            
+                            # execute generation
+                            generated = generate(
+                                model=policy_model,
+                                idx=token_ids,
+                                stopping_criteria=stopping_criteria,
+                                **generation_config
+                            )
+                            
+                            # post-process the generated text
+                            full_text = token_ids_to_text(generated, tokenizer)
+                            response = full_text.split("<|start_header_id|>assistant<|end_header_id|>")[-1]
+                            response = response.split("<|eot_id|>")[0].strip()
+
+                        except Exception as e:
+                            response = f"Generation Error: {str(e)}"
+
+                        finally:
+                            policy_model.train()
+
+                    # Print the generated response
+                    print(f"\n{'='*40} Generation Sample (Step {global_step}) {'='*40}")
+                    print(f"[Input]\n{sample_entry['question']}")
+                    print(f"\n[Generated Response]\n{response}")
+                    print(f"[Expected Response]\n{sample_entry['chosen']}")
+                    print('='*90 + '\n')
+
                 tracking["train_losses"].append(res["train_loss"])
                 tracking["train_chosen_rewards"].append(res["train_chosen_reward"])
                 tracking["train_rejected_rewards"].append(res["train_rejected_reward"])
@@ -312,7 +385,7 @@ torch.manual_seed(123)
 
 optimizer = torch.optim.AdamW(policy_model.parameters(), lr=5e-6, weight_decay=0.01)
 
-num_epochs = 2
+num_epochs = 1
 tracking = train_model_dpo_simple(
     policy_model=policy_model,
     reference_model=ref_model,
@@ -357,150 +430,44 @@ plot_losses(
 )
 
 fine_tuned_tokenizer = AutoTokenizer.from_pretrained(save_path)
+fine_tuned_model = AutoModelForCausalLM.from_pretrained(save_path)
 print("Tuned model's tokenizer loaded.")
 
+print("Starting evaluation...")
 # look at the response
 for entry in val_data[:3]:
 
     input_text = format_input(entry)
 
-    token_ids = generate(
+    # Reference Model Generation
+    ref_input_ids = text_to_token_ids(input_text, tokenizer).to(device)
+    ref_generated = generate(
         model=ref_model,
-        idx=text_to_token_ids(input_text, tokenizer).to(device),
-        max_new_tokens=1024,
-        eos_id=50256
+        idx=ref_input_ids,
+        max_new_tokens=256,
+        temperature=0.3,
+        top_p=0.9,
+        stopping_criteria=stopping_criteria
     )
-    generated_text = token_ids_to_text(token_ids, tokenizer)
-    reference_response_text = (
-        generated_text[len(input_text):]
-        .replace("### Response:", "")
-        .strip()
+    ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
+    ref_response = postprocess_response(ref_full_text)
+
+    # Fine-Tuned Model Generation
+    fine_tuned_model_input_ids = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
+    fine_tuned_model_generated = generate(
+        model=fine_tuned_model,
+        idx=fine_tuned_model_input_ids,
+        max_new_tokens=256,
+        temperature=0.3,
+        top_p=0.9,
+        stopping_criteria=stopping_criteria
     )
+    fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
+    fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
 
-    token_ids = generate(
-        model=policy_model,
-        idx=text_to_token_ids(input_text, fine_tuned_tokenizer).to(device),  # ✅ Use the fine-tuned tokenizer
-        max_new_tokens=1024,
-        eos_id=fine_tuned_tokenizer.eos_token_id
-    )
-    generated_text = token_ids_to_text(token_ids, fine_tuned_tokenizer)
-    policy_response_text = (
-        generated_text[len(input_text):]
-        .replace("### Response:", "")
-        .strip()
-    )
-
-    print(input_text)
-    print(f"\nReference model response:\n>> {reference_response_text.strip()}")
-    print(f"\nPolicy model response:\n>> {policy_response_text.strip()}")
-    print(f"\nCorrect response:\n>> {entry['chosen']}")
-    print("\n-------------------------------------\n")
-
-# # training loop
-# num_epochs = 3
-# start_training_time = time.time()
-# for epoch in range(num_epochs):
-#     print(f"Starting epoch {epoch + 1}")
-#     epoch_training_start_time = time.time()
-#     model.train()
-#     total_loss = 0.0
-
-#     for index, batch in enumerate(train_loader, start=1):
-#         each_batch_start_time = time.time()
-#         prompt_batch = batch["prompt"]
-#         chosen_batch = batch["chosen"]
-#         rejected_batch = batch["rejected"]
-
-#         # Decode tensors back to text using the tokenizer
-#         prompt_texts = [tokenizer.decode(p, skip_special_tokens=True) for p in prompt_batch]
-#         chosen_texts = [tokenizer.decode(c, skip_special_tokens=True) for c in chosen_batch]
-#         rejected_texts = [tokenizer.decode(r, skip_special_tokens=True) for r in rejected_batch]
-
-#         # Re-encode the concatenated sequences for chosen and rejected responses
-#         chosen_inputs = tokenizer(
-#             [p + "\n\n### Response:\n" + c for p, c in zip(prompt_texts, chosen_texts)],
-#             truncation=True,
-#             padding=True,
-#             max_length=512,
-#             return_tensors="pt",
-#         )
-#         chosen_inputs["labels"] = chosen_inputs["input_ids"].clone()
-#         chosen_inputs["labels"][chosen_inputs["input_ids"] == tokenizer.pad_token_id] = -100
-#         chosen_inputs = {k: v.to(device) for k, v in chosen_inputs.items()}
-
-#         rejected_inputs = tokenizer(
-#             [p + "\n\n### Response:\n" + r for p, r in zip(prompt_texts, rejected_texts)],
-#             truncation=True,
-#             padding=True,
-#             max_length=512,
-#             return_tensors="pt",
-#         )
-#         rejected_inputs["labels"] = rejected_inputs["input_ids"].clone()
-#         rejected_inputs["labels"][rejected_inputs["input_ids"] == tokenizer.pad_token_id] = -100
-#         rejected_inputs = {k: v.to(device) for k, v in rejected_inputs.items()}
-
-#         # Compute logits for model
-#         chosen_outputs = model(**chosen_inputs)
-#         rejected_outputs = model(**rejected_inputs)
-
-#         # Compute logits for ref_model
-#         with torch.no_grad():
-#             chosen_ref_outputs = ref_model(**chosen_inputs)
-#             rejected_ref_outputs = ref_model(**rejected_inputs)
-
-#         # Get log probabilities
-#         chosen_log_probs = torch.nn.functional.log_softmax(chosen_outputs.logits, dim=-1)
-#         rejected_log_probs = torch.nn.functional.log_softmax(rejected_outputs.logits, dim=-1)
-#         chosen_ref_log_probs = torch.nn.functional.log_softmax(chosen_ref_outputs.logits, dim=-1)
-#         rejected_ref_log_probs = torch.nn.functional.log_softmax(rejected_ref_outputs.logits, dim=-1)
-
-#         chosen_labels = chosen_inputs["labels"]
-#         rejected_labels = rejected_inputs["labels"]
-
-#         # Replace -100 with pad_token_id before gather
-#         chosen_labels_safe = chosen_labels.clone()
-#         chosen_labels_safe[chosen_labels_safe == -100] = tokenizer.pad_token_id
-
-#         rejected_labels_safe = rejected_labels.clone()
-#         rejected_labels_safe[rejected_labels_safe == -100] = tokenizer.pad_token_id
-
-#         # Gather log probs at label positions using the safe labels
-#         chosen_token_logps = chosen_log_probs.gather(-1, chosen_labels_safe.unsqueeze(-1)).squeeze(-1)
-#         rejected_token_logps = rejected_log_probs.gather(-1, rejected_labels_safe.unsqueeze(-1)).squeeze(-1)
-#         chosen_ref_token_logps = chosen_ref_log_probs.gather(-1, chosen_labels_safe.unsqueeze(-1)).squeeze(-1)
-#         rejected_ref_token_logps = rejected_ref_log_probs.gather(-1, rejected_labels_safe.unsqueeze(-1)).squeeze(-1)
-
-#         chosen_mask = chosen_labels != -100
-#         rejected_mask = rejected_labels != -100
-
-#         # Compute average log probabilities per sequence
-#         chosen_seq_logp = (chosen_token_logps * chosen_mask).sum(dim=1) / chosen_mask.sum(dim=1)
-#         rejected_seq_logp = (rejected_token_logps * rejected_mask).sum(dim=1) / rejected_mask.sum(dim=1)
-#         chosen_ref_seq_logp = (chosen_ref_token_logps * chosen_mask).sum(dim=1) / chosen_mask.sum(dim=1)
-#         rejected_ref_seq_logp = (rejected_ref_token_logps * rejected_mask).sum(dim=1) / rejected_mask.sum(dim=1)
-
-#         # Compute DPO loss using the DPOLoss class
-#         loss = dpo_loss_fn(
-#             pi_logp_chosen=chosen_seq_logp,
-#             pi_logp_rejected=rejected_seq_logp,
-#             ref_logp_chosen=chosen_ref_seq_logp,
-#             ref_logp_rejected=rejected_ref_seq_logp,
-#         )
-
-#         optimizer.zero_grad()
-#         loss.backward()
-#         optimizer.step()
-
-#         total_loss += loss.item()
-#         each_batch_end_time = time.time()
-#         total_time_in_batch = each_batch_end_time - each_batch_start_time
-#         print(f"Batch {index} took {str(timedelta(seconds=total_time_in_batch))}")
-
-#     avg_loss = total_loss / len(train_loader)
-#     epoch_training_end_time = time.time()
-#     total_time_in_epoch = epoch_training_end_time - epoch_training_start_time
-#     print(f"Epoch {epoch + 1}/{num_epochs}, Loss: {avg_loss:.4f} took {str(timedelta(seconds=total_time_in_epoch))}")
-
-# end_training_time = time.time()
-# print("Training took", str(timedelta(seconds=end_training_time - start_training_time)))
+    print(f"\nInput: {entry['question']}")
+    print(f"Reference Response: {ref_response}")
+    print(f"Policy Response: {fine_tuned_model_response}")
+    print(f"Expected Answer: {entry['chosen']}")
+    print("="*80)
 
