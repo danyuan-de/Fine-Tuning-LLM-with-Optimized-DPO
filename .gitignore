@@ -32,10 +32,7 @@ validation.py
 testing.py
 
 wandb/
-Llama-3.2-1B-DPO-wrong/
-Llama-3.2-1B-DPO/
-Llama-3.2-1B-DPO-old/
-Llama-3.2-1B-DPO-v1/
+Llama-*/
 
 # data files
 instruction-data-with-preference.json

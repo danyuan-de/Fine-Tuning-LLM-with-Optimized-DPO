@@ -26,6 +26,11 @@ print("Using CPU")
 # Load a Hugging Face model and tokenizer
 tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
 model = AutoModelForCausalLM.from_pretrained(model_name)#.to(device)
+# model = AutoModelForCausalLM.from_pretrained(
+#     model_name,
+#     low_cpu_mem_usage=True,  # Reduces peak RAM during loading
+#     torch_dtype=torch.bfloat16  # Use 16-bit precision)
+# )
 
 special_tokens = {
     "additional_special_tokens": ["<|eot_id|>"]
@@ -36,6 +41,11 @@ model.resize_token_embeddings(len(tokenizer)) # adjust the size of the token emb
 
 policy_model = model # this is the model that will be fine-tuned
 ref_model = copy.deepcopy(model) # create a reference model for DPO by copying and freezing the parameters
+# ref_model = AutoModelForCausalLM.from_pretrained(
+#     model_name,
+#     low_cpu_mem_usage=True,
+#     torch_dtype=torch.bfloat16
+# )
 
 for param in ref_model.parameters():
     param.requires_grad = False
@@ -53,8 +63,8 @@ if tokenizer.pad_token is None:
         model.resize_token_embeddings(len(tokenizer))
         ref_model.resize_token_embeddings(len(tokenizer))
 
-model.config.pad_token_id = tokenizer.pad_token_id
-ref_model.config.pad_token_id = tokenizer.pad_token_id
+# model.config.pad_token_id = tokenizer.pad_token_id
+# ref_model.config.pad_token_id = tokenizer.pad_token_id
 
 print("Model and tokenizer loaded.")
 
@@ -116,7 +126,7 @@ def custom_collate_fn(
             padded_sequence = torch.cat([
                 sequence_tensor,
                 torch.full((max_length_common - sequence_tensor.size(0),), fill_value=tokenizer.pad_token_id, dtype=torch.long)
-            ])
+            ])  # change fill_value=eot_token_id
 
             # create a mask tensor to ignore the padding tokens
             mask = torch.ones_like(padded_sequence, dtype=torch.bool)
@@ -256,6 +266,20 @@ def train_model_dpo_simple(
     policy_model, reference_model, train_loader, val_loader,
     optimizer, num_epochs, beta,
     eval_freq, eval_iter):
+    """
+    Fine-tunes the policy model using the DPO method.
+
+    :param policy_model: The model to be fine-tuned.
+    :param reference_model: The reference model (with frozen weights).
+    :param train_loader: The DataLoader for the training dataset.
+    :param val_loader: The DataLoader for the validation dataset.
+    :param optimizer: The optimizer.
+    :param num_epochs: The number of training epochs.
+    :param beta: The beta value used in the DPO loss.
+    :param eval_freq: The frequency (in steps) at which to perform evaluations.
+    :param eval_iter: The number of evaluation iterations.
+    :return: A dictionary tracking various losses and reward metrics.
+    """
     print("Starting training...")
     # Initialize lists to track losses and tokens seen
     tracking = {
@@ -311,9 +335,9 @@ def train_model_dpo_simple(
                             # generation config
                             generation_config = {
                                 'max_new_tokens': 256,
-                                'temperature': 0.7,
+                                'temperature': 0.3,
                                 'top_p': 0.9,
-                                'eos_id': tokenizer.convert_tokens_to_ids("<|eot_id|>")
+                                'eot_token_id': tokenizer.convert_tokens_to_ids("<|eot_id|>")
                             }
                             
                             # execute generation
@@ -403,7 +427,7 @@ execution_time_minutes = (end_time - start_time) / 60
 print(f"Training completed in {execution_time_minutes:.2f} minutes (in {str(timedelta(seconds=end_time - start_time))})")
 
 # Save the model and tokenizer
-save_path = "./Llama-3.2-1B-DPO"
+save_path = config.fine_tuned_model_path
 policy_model.save_pretrained(save_path)
 tokenizer.save_pretrained(save_path)
 print(f"Model and tokenizer saved to {save_path}")
@@ -465,9 +489,17 @@ for entry in val_data[:3]:
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
     fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
 
+    # Calculate and display perplexity
+    ft_perplexity = calculate_perplexity(fine_tuned_model, fine_tuned_tokenizer, input_text)
+    ref_perplexity = calculate_perplexity(ref_model, tokenizer, input_text)
+
     print(f"\nInput: {entry['question']}")
     print(f"Reference Response: {ref_response}")
     print(f"Policy Response: {fine_tuned_model_response}")
     print(f"Expected Answer: {entry['chosen']}")
     print("="*80)
+
+    print(f"**Fine-Tuned Model Perplexity:** {ft_perplexity:.2f}")
+    print(f"**Original Model Perplexity:** {ref_perplexity:.2f}")
+    print("-" * 80)
 

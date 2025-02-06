@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 import torch
 import re
-from transformers import StoppingCriteria, StoppingCriteriaList
+from transformers import StoppingCriteria, StoppingCriteriaList, AutoModelForCausalLM, AutoTokenizer
+import math
 
 # Get the device to use
 def get_device():
@@ -85,7 +86,7 @@ def generate(
     temperature=0.3,
     top_k=None,
     top_p=None,  
-    eos_id=None
+    eot_token_id=None
 ):
     """
     enhanced generation function that supports both top-k and top-p
@@ -135,7 +136,7 @@ def generate(
         idx_next = torch.multinomial(probs, num_samples=1)
 
         # EOT check
-        if idx_next == eos_id:
+        if idx_next == eot_token_id:
             break
 
         idx = torch.cat((idx, idx_next), dim=1)
@@ -163,3 +164,24 @@ def postprocess_response(full_text: str) -> str:
             response = response.split("<|eot_id|>")[0]
         return response.strip()
     return "Invalid response format"
+
+def calculate_perplexity(model: AutoModelForCausalLM, tokenizer: AutoTokenizer, text: str) -> float:
+    """
+    Calculates the perplexity of the model on the given text.
+    
+    Args:
+        model (AutoModelForCausalLM): The language model.
+        tokenizer (AutoTokenizer): The tokenizer.
+        text (str): The text to evaluate.
+    
+    Returns:
+        Perplexity score as a float.
+    """
+    encodings = tokenizer(text, return_tensors="pt")
+    input_ids = encodings.input_ids#.to(DEVICE)
+    
+    with torch.no_grad():
+        outputs = model(input_ids, labels=input_ids)
+        loss = outputs.loss
+    perplexity = math.exp(loss.item())
+    return perplexity
