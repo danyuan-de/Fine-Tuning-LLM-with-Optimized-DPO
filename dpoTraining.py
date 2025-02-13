@@ -18,9 +18,9 @@ from utility import *
 
 # Replace this with a suitable model checkpoint from the Hugging Face Hub
 model_name = config.model_name
-token = config.token
+# token = config.token
 cache_dir = config.cache_dir
-os.environ['WANDB_API_KEY'] = config.WANDB_API_KEY
+# os.environ['WANDB_API_KEY'] = config.WANDB_API_KEY
 
 # check device to use
 if torch.cuda.is_available():
@@ -31,7 +31,7 @@ else:
     print("Using CPU")
 # Load a Hugging Face model and tokenizer
 tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
-model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.bfloat16)
+model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.bfloat16, device_map="auto")
 # model = AutoModelForCausalLM.from_pretrained(
 #     model_name,
 #     low_cpu_mem_usage=True,  # Reduces peak RAM during loading
