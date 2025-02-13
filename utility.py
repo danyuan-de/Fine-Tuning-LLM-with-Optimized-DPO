@@ -92,9 +92,13 @@ def generate(
     enhanced generation function that supports both top-k and top-p
     priority: top_p > top_k (when both are set)
     """
+
+    device = model.device 
+    idx = idx.to(device)
+
     for _ in range(max_new_tokens):
         # truncate context
-        idx_cond = idx[:, -context_size:].to(model.device) 
+        idx_cond = idx[:, -context_size:].to(device) 
         
         # get logits
         with torch.no_grad():
@@ -133,13 +137,13 @@ def generate(
 
         # Probability Calculation and Sampling
         probs = torch.softmax(logits, dim=-1)
-        idx_next = torch.multinomial(probs, num_samples=1).to(model.device)
+        idx_next = torch.multinomial(probs, num_samples=1).to(device)
 
         # EOT check
         if idx_next == eot_token_id:
             break
 
-        idx = torch.cat((idx, idx_next), dim=1).to(model.device)
+        idx = torch.cat((idx.to(device), idx_next), dim=1)
 
     return idx
 

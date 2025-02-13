@@ -16,13 +16,13 @@ import time
 from datetime import timedelta
 from utility import *
 
-# Replace this with a suitable model checkpoint from the Hugging Face Hub
 model_name = config.model_name
-# token = config.token
 cache_dir = config.cache_dir
+batch_size = config.batch_size
 # os.environ['WANDB_API_KEY'] = config.WANDB_API_KEY
-
+# token = config.token
 # check device to use
+
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 print(f"Device: {device}")
 # Load a Hugging Face model and tokenizer
@@ -219,7 +219,6 @@ customized_collate_fn = partial(
     allowed_max_length=512    # The supported context length of the model
 )
 
-batch_size = 4
 # Create datasets and dataloaders
 train_dataset = PreferenceDataset(train_data, tokenizer)
 train_loader = DataLoader(
