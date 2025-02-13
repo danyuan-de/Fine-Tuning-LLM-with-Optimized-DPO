@@ -23,12 +23,8 @@ cache_dir = config.cache_dir
 # os.environ['WANDB_API_KEY'] = config.WANDB_API_KEY
 
 # check device to use
-if torch.cuda.is_available():
-    device = torch.device("cuda")
-    print("Using CUDA")
-else:
-    device = torch.device("cpu")
-    print("Using CPU")
+device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+print(f"Device: {device}")
 # Load a Hugging Face model and tokenizer
 tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
 model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.bfloat16, device_map="auto")
@@ -121,7 +117,7 @@ def custom_collate_fn(
 
     # process each item in the batch
     for item in batch:
-        prompt = torch.tensor(item["prompt"], dtype=torch.long)
+        prompt = torch.tensor(item["prompt"], dtype=torch.long).to(device)
         batch_data["prompt"].append(prompt)
 
         for key in ["chosen", "rejected"]:
@@ -349,7 +345,7 @@ def train_model_dpo_simple(
                             # execute generation
                             generated = generate(
                                 model=policy_model,
-                                idx=token_ids,
+                                idx=token_ids.to(device),
                                 stopping_criteria=stopping_criteria,
                                 **generation_config
                             )
@@ -473,7 +469,7 @@ for entry in val_data[:3]:
     ref_input_ids = text_to_token_ids(input_text, tokenizer).to(device)
     ref_generated = generate(
         model=ref_model,
-        idx=ref_input_ids,
+        idx=ref_input_ids.to(device),
         max_new_tokens=256,
         temperature=0.3,
         top_p=0.9,
@@ -486,7 +482,7 @@ for entry in val_data[:3]:
     fine_tuned_model_input_ids = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
     fine_tuned_model_generated = generate(
         model=fine_tuned_model,
-        idx=fine_tuned_model_input_ids,
+        idx=fine_tuned_model_input_ids.to(device),
         max_new_tokens=256,
         temperature=0.3,
         top_p=0.9,

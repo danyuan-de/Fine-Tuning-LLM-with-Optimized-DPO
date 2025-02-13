@@ -94,7 +94,7 @@ def generate(
     """
     for _ in range(max_new_tokens):
         # truncate context
-        idx_cond = idx[:, -context_size:]
+        idx_cond = idx[:, -context_size:].to(model.device) 
         
         # get logits
         with torch.no_grad():
@@ -133,7 +133,7 @@ def generate(
 
         # Probability Calculation and Sampling
         probs = torch.softmax(logits, dim=-1)
-        idx_next = torch.multinomial(probs, num_samples=1)
+        idx_next = torch.multinomial(probs, num_samples=1).to(model.device)
 
         # EOT check
         if idx_next == eot_token_id:
