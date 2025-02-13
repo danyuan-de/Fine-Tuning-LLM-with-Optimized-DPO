@@ -30,9 +30,11 @@ temp.py
 model.py
 validation.py
 testing.py
+test.py
 
 wandb/
 Llama-*/
+Result_loss/
 
 # data files
 instruction-data-with-preference.json
