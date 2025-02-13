@@ -139,7 +139,7 @@ def generate(
         if idx_next == eot_token_id:
             break
 
-        idx = torch.cat((idx, idx_next), dim=1)
+        idx = torch.cat((idx, idx_next), dim=1).to(model.device)
 
     return idx
 
