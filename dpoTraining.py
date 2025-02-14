@@ -469,7 +469,7 @@ for entry in val_data[:3]:
     ref_generated = generate(
         model=ref_model,
         idx=ref_input_ids.to(device),
-        max_new_tokens=256,
+        max_new_tokens=100,
         temperature=0.3,
         top_p=0.9,
         stopping_criteria=stopping_criteria
@@ -482,7 +482,7 @@ for entry in val_data[:3]:
     fine_tuned_model_generated = generate(
         model=fine_tuned_model,
         idx=fine_tuned_model_input_ids.to(device),
-        max_new_tokens=256,
+        max_new_tokens=100,
         temperature=0.3,
         top_p=0.9,
         stopping_criteria=stopping_criteria
