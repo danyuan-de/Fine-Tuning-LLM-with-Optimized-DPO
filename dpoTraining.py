@@ -19,6 +19,7 @@ from utility import *
 model_name = config.model_name
 cache_dir = config.cache_dir
 batch_size = config.batch_size
+file_path = config.file_content
 # os.environ['WANDB_API_KEY'] = config.WANDB_API_KEY
 # token = config.token
 # check device to use
@@ -70,8 +71,7 @@ if tokenizer.pad_token is None:
 
 print("Model and tokenizer loaded.")
 
-# Load your dataset
-file_path = "physics_QA.json"
+# Load the data
 with open(file_path, "r", encoding="utf-8") as file:
     data = json.load(file)
 
