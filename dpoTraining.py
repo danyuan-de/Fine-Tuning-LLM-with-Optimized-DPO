@@ -28,7 +28,7 @@ device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cp
 print(f"Device: {device}")
 # Load a Hugging Face model and tokenizer
 tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
-model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.bfloat16, device_map="auto")
+model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.bfloat16)
 # model = AutoModelForCausalLM.from_pretrained(
 #     model_name,
 #     low_cpu_mem_usage=True,  # Reduces peak RAM during loading
