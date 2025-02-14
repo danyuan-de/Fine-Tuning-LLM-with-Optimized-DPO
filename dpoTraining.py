@@ -26,6 +26,7 @@ file_path = config.file_content
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 print(f"Device: {device}")
+print(f"BATCH_SIZE: {batch_size}")
 # Load a Hugging Face model and tokenizer
 tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
 model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.bfloat16)
