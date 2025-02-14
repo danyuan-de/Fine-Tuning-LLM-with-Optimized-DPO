@@ -491,8 +491,8 @@ for entry in val_data[:3]:
     fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
 
     # Calculate and display perplexity
-    ft_perplexity = calculate_perplexity(fine_tuned_model, fine_tuned_tokenizer, input_text)
-    ref_perplexity = calculate_perplexity(ref_model, tokenizer, input_text)
+    # ft_perplexity = calculate_perplexity(fine_tuned_model, fine_tuned_tokenizer, input_text)
+    # ref_perplexity = calculate_perplexity(ref_model, tokenizer, input_text)
 
     print(f"\nInput: {entry['question']}")
     print(f"Reference Response: {ref_response}")
@@ -500,7 +500,7 @@ for entry in val_data[:3]:
     print(f"Expected Answer: {entry['chosen']}")
     print("="*80)
 
-    print(f"**Fine-Tuned Model Perplexity:** {ft_perplexity:.2f}")
-    print(f"**Original Model Perplexity:** {ref_perplexity:.2f}")
-    print("-" * 80)
+    # print(f"**Fine-Tuned Model Perplexity:** {ft_perplexity:.2f}")
+    # print(f"**Original Model Perplexity:** {ref_perplexity:.2f}")
+    # print("-" * 80)
 
