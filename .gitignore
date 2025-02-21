@@ -25,12 +25,12 @@ __pycache__/
 *.pyc
 
 # Ignore Python files
-config.py
 temp.py
 model.py
 validation.py
 testing.py
 test.py
+.env
 
 wandb/
 Llama-*/
