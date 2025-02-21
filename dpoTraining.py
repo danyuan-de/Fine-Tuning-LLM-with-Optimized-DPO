@@ -8,6 +8,8 @@ import config
 import json
 import torch
 from torch.utils.data import Dataset, DataLoader
+from torch.cuda.amp import GradScaler, autocast
+from torch.optim.lr_scheduler import CosineAnnealingLR
 from transformers import AutoTokenizer, AutoModelForCausalLM, PretrainedConfig
 from functools import partial
 from dpoLoss import DPOLoss
@@ -16,13 +18,15 @@ import time
 from datetime import timedelta
 from utility import *
 
+# --------- File Paths ---------
 model_name = config.model_name
 cache_dir = config.cache_dir
-batch_size = config.batch_size
 file_path = config.file_content
-# os.environ['WANDB_API_KEY'] = config.WANDB_API_KEY
-# token = config.token
-# check device to use
+
+# --------- Hyperparameters ---------
+batch_size = config.batch_size
+num_epochs = config.num_epochs
+dpo_loss_fn = DPOLoss(beta=0.1) # Initialize the DPO loss function with beta=0.1
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 print(f"Device: {device}")
@@ -95,10 +99,10 @@ print("Test set length:", len(test_data))
 # collate_fn for DataLoader
 def custom_collate_fn(
     batch,
-    eot_token_id=eot_token_id, #tokenizer.convert_tokens_to_ids("<|eot_id|>"),
+    eot_token_id=eot_token_id,
     allowed_max_length=None,
     mask_prompt_tokens=True,
-    device="cpu"
+    device=device
 ):
     # Initialize the batch data
     batch_data = {
@@ -109,38 +113,37 @@ def custom_collate_fn(
         "rejected_mask": []
     }
 
-    # calculate the maximum length of the chosen and rejected sequences
+    # Calculate the maximum length of the chosen and rejected sequences
     max_length_common = 0
     if batch:
         for key in ["chosen", "rejected"]:
             current_max = max(len(item[key]) for item in batch)
             max_length_common = max(max_length_common, current_max)
 
-    # process each item in the batch
+    # Process each item in the batch
     for item in batch:
         prompt = torch.tensor(item["prompt"], dtype=torch.long).to(device)
         batch_data["prompt"].append(prompt)
 
         for key in ["chosen", "rejected"]:
             sequence = item[key]
-            sequence_tensor = torch.tensor(sequence, dtype=torch.long)
+            sequence_tensor = torch.tensor(sequence, dtype=torch.long).to(device)  # Move to device immediately
 
-            # fill the sequence tensor with padding tokens to match the maximum length
+            # Fill the sequence tensor with padding tokens to match the maximum length
             padded_sequence = torch.cat([
                 sequence_tensor,
-                torch.full((max_length_common - sequence_tensor.size(0),), fill_value=tokenizer.pad_token_id, dtype=torch.long)
-            ])  # change fill_value=eot_token_id
+                torch.full((max_length_common - sequence_tensor.size(0),), fill_value=tokenizer.pad_token_id, dtype=torch.long).to(device)  # Move to device
+            ])  # Change fill_value=eot_token_id
 
-            # create a mask tensor to ignore the padding tokens
-            mask = torch.ones_like(padded_sequence, dtype=torch.bool)
-            mask[sequence_tensor.size(0):] = False  # set padding tokens to False
+            # Create a mask tensor to ignore the padding tokens
+            mask = torch.ones_like(padded_sequence, dtype=torch.bool).to(device)  # Move to device
+            mask[sequence_tensor.size(0):] = False  # Set padding tokens to False
 
-            # mask the prompt tokens if needed
+            # Mask the prompt tokens if needed
             if mask_prompt_tokens:
                 mask[:prompt.size(0)] = False
 
-            # make sure the EOT token is not masked
-            # Inside custom_collate_fn, for both "chosen" and "rejected":
+            # Make sure the EOT token is not masked
             if eot_token_id in sequence_tensor:
                 eot_positions = (sequence_tensor == eot_token_id).nonzero(as_tuple=True)[0]
                 if len(eot_positions) > 0:
@@ -150,16 +153,16 @@ def custom_collate_fn(
             else:
                 eot_pos = sequence_tensor.size(0) - 1
 
-            mask[eot_pos] = True  # set the EOT token to True
+            mask[eot_pos] = True  # Set the EOT token to True
 
             batch_data[key].append(padded_sequence)
             batch_data[f"{key}_mask"].append(mask)
 
-    # stack the tensors and move them to the device
+    # Stack the tensors (already on device, no need for .to(device))
     for key in ["chosen", "rejected", "chosen_mask", "rejected_mask"]:
-        batch_data[key] = torch.stack(batch_data[key]).to(device)
+        batch_data[key] = torch.stack(batch_data[key])
 
-        # truncate the sequences if needed
+        # Truncate the sequences if needed
         if allowed_max_length is not None:
             batch_data[key] = batch_data[key][:, :allowed_max_length]
 
@@ -227,7 +230,10 @@ train_loader = DataLoader(
     batch_size=batch_size,
     collate_fn=customized_collate_fn, 
     drop_last=True, 
-    shuffle=True)
+    shuffle=True,
+    num_workers=4,  # Parallel data loading
+    pin_memory=True if device.type == "cuda" else False  # Faster GPU transfer
+)
 
 val_dataset = PreferenceDataset(val_data, tokenizer)
 val_loader = DataLoader(val_dataset, 
@@ -258,11 +264,9 @@ stopping_criteria = StoppingCriteriaList([
     EOTStoppingCriteria(eot_token_id=tokenizer.convert_tokens_to_ids("<|eot_id|>"))
 ])
 
-# Optimizer
-optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
-
-# Initialize the DPO loss function with beta=0.1
-dpo_loss_fn = DPOLoss(beta=0.1)
+scaler = GradScaler()  # No device argument needed
+optimizer = torch.optim.AdamW(policy_model.parameters(), lr=5e-6, weight_decay=0.01)
+scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs * len(train_loader), eta_min=1e-6)
 
 def train_model_dpo_simple(
     policy_model, reference_model, train_loader, val_loader,
@@ -302,17 +306,23 @@ def train_model_dpo_simple(
         policy_model.train()  # Set model to training mode
 
         for batch_idx, batch in enumerate(train_loader):
+            # Ensure all batch tensors are on the correct device
+            batch["chosen"] = batch["chosen"].to(device)
+            batch["rejected"] = batch["rejected"].to(device)
+            batch["chosen_mask"] = batch["chosen_mask"].to(device)
+            batch["rejected_mask"] = batch["rejected_mask"].to(device)
 
-            optimizer.zero_grad()  # Reset loss gradients from previous batch iteration
-
-            loss, chosen_rewards, rejected_rewards = dpo_loss_fn.compute_dpo_loss_batch(
-                batch=batch,
-                policy_model=policy_model,
-                reference_model=reference_model
-            )
-
-            loss.backward()  # Calculate loss gradients
-            optimizer.step()  # Update model weights using loss gradients
+            optimizer.zero_grad()
+            with autocast():  # Enable mixed precision
+                loss, chosen_rewards, rejected_rewards = dpo_loss_fn.compute_dpo_loss_batch(
+                    batch=batch,
+                    policy_model=policy_model,
+                    reference_model=reference_model
+                )
+            scaler.scale(loss).backward()  # Scale loss before backward
+            scaler.step(optimizer)  # Update weights with scaled gradients
+            scaler.update()  # Update scaler for next iteration
+            scheduler.step()  # Update learning rate after optimizer step
 
             tokens_seen += batch["chosen"].numel()
             global_step += 1
@@ -345,7 +355,7 @@ def train_model_dpo_simple(
                             # execute generation
                             generated = generate(
                                 model=policy_model,
-                                idx=token_ids.to(device),
+                                idx=token_ids, #.to(device),
                                 stopping_criteria=stopping_criteria,
                                 **generation_config
                             )
@@ -408,10 +418,6 @@ start_time = time.time()
 
 torch.manual_seed(123)
 
-
-optimizer = torch.optim.AdamW(policy_model.parameters(), lr=5e-6, weight_decay=0.01)
-
-num_epochs = 1
 tracking = train_model_dpo_simple(
     policy_model=policy_model,
     reference_model=ref_model,
@@ -458,6 +464,9 @@ plot_losses(
 fine_tuned_tokenizer = AutoTokenizer.from_pretrained(save_path)
 fine_tuned_model = AutoModelForCausalLM.from_pretrained(save_path)
 print("Tuned model's tokenizer loaded.")
+
+ref_model.to(device)  # Ensure reference model is on device
+fine_tuned_model.to(device)  # Ensure fine-tuned model is on device
 
 print("Starting evaluation...")
 # look at the response
