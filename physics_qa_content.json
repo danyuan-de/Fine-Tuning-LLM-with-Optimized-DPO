@@ -1,627 +1,627 @@
 [
     {
-        "question": "In an isolated system, why does entropy always increase over time?",
-        "chosen": "Step 1:\nNo energy or matter is exchanged with surroundings, so internal irreversible processes cause more disorder.\nStep 2:\nBy the second law, ΔS ≥ 0 in an isolated system, with real processes making ΔS > 0.\nAnswer:\nInternal processes move toward equilibrium, maximizing entropy within an isolated system.",
-        "rejected": "Entropy can remain constant or decrease over time if the system just chooses to do so."
+        "question": "What is thermal equilibrium, and how is it achieved?",
+        "chosen": "Step 1:\nThermal equilibrium occurs when two systems in thermal contact no longer exchange heat because they have reached the same temperature.\nStep 2:\nHeat flows until both systems have the same temperature, at which point net heat flow becomes zero.\nAnswer:\nTwo bodies are in thermal equilibrium when they are at the same temperature, meaning no net heat flows between them.",
+        "rejected": "Step 1:\nAssume that thermal equilibrium is achieved when both systems have the same amount of heat.\nStep 2:\nConclude that equal heat content implies equilibrium.\nAnswer:\nThermal equilibrium means both systems have the same heat content."
     },
     {
-        "question": "A Fresnel biprism experiment uses a wavelength of 550 nm and produces fringes separated by 1 mm on a screen 2 m away. Find the separation of the virtual sources.",
-        "chosen": "Step 1:\nFringe separation β = (λ D) / d, where D = 2 m is the distance to the screen, and d is the separation of the virtual sources.\nStep 2:\nRearrange: d = (λ D) / β.\nStep 3:\nSubstitute λ = 550 nm = 5.5 × 10⁻⁷ m, D = 2 m, and β = 1 mm = 1 × 10⁻³ m:\nd = (5.5 × 10⁻⁷ × 2) / (1 × 10⁻³) = 1.1 × 10⁻⁶ / 10⁻³ = 1.1 × 10⁻³ m = 0.0011 m = 1.1 mm.\nAnswer:\nThe virtual sources are separated by about 1.1 mm.",
-        "rejected": "A guess could put the separation at a fraction of a millimeter or more than a few millimeters, but the correct ratio depends directly on β = ( λD )/ d."
-    },
-    {
-        "question": "A 2 kg object is moving at 10 m/s. Find its kinetic energy.",
-        "chosen": "Step 1:\nUse KE = 0.5 × m × v² = 0.5 × 2 × (10)² = 100 J.\nAnswer:\n100 J.",
-        "rejected": "Could be around 50 J."
-    },
-    {
-        "question": "A moving conductor cuts through a magnetic field of 0.4 T at 3 m/s. The conductor is 0.5 m long. Find the induced emf.",
-        "chosen": "Step 1:\nε = B L v.\n\nStep 2:\nB = 0.4 T, L = 0.5 m, v = 3 m/s.\n\nStep 3:\nε = 0.4 × 0.5 × 3 = 0.6 V.\n\nAnswer:\n0.6 V.",
-        "rejected": "The emf might be extremely large, definitely more than 10 V."
-    },
-    {
-        "question": "A convex mirror has a radius of curvature of 30 cm. If an object is placed 20 cm in front of it, find the image distance and magnification.",
-        "chosen": "Step 1:\nFor a convex mirror, the focal length is f = -R/2 = -15 cm (negative sign for convex).\nStep 2:\nUse mirror equation: 1/f = 1/do + 1/di.\nSo 1/(-15) = 1/20 + 1/di.\nHence 1/di = -1/15 - 1/20 = -4/60 - 3/60 = -7/60 → di = -60/7 ≈ -8.57 cm (virtual image behind the mirror).\nStep 3:\nMagnification m = di/do = -8.57/20 ≈ -0.43.\nAnswer:\nImage distance is about -8.57 cm (virtual), and the magnification is 0.43 (reduced).",
-        "rejected": "Someone might ignore the sign conventions and conclude the image is 8.57 cm in front or that the magnification is positive, which would misrepresent the convex mirror’s geometry."
-    },
-    {
-        "question": "A prism has a refractive index of 1.52. If light enters at an angle of 40°, find the angle of deviation.",
-        "chosen": "Step 1:\nThe angle of deviation depends on the prism’s apex angle A and the refractive index n. The exact formula typically is n = sin((A + Dmin)/2) / sin(A/2) for minimum deviation.\nStep 2:\nWithout the apex angle, we can only apply Snell’s law at each interface. If we assume a certain apex angle, we can track the path. For a typical small prism, the deviation δ might be approximated by (n - 1)A.\nStep 3:\nA complete answer requires more details (e.g., apex angle), but commonly, for a small A, δ ≈ (1.52 - 1)×A.\nAnswer:\nInsufficient data to give a single numeric value; more prism geometry is needed. (In practice, one would use the apex angle and apply Snell’s law at both faces to find the exact deviation.)",
-        "rejected": "One might erroneously guess a single angle like 10° or 15° just from the refractive index, but a precise result requires the prism’s apex angle and a two-interface analysis."
-    },
-    {
-        "question": "A diffraction grating produces a second-order maximum at 30° for light of wavelength 550 nm. Find the spacing between adjacent lines on the grating.",
-        "chosen": "Step 1:\nFor a grating, d sin(θ) = m λ.\nHere, θ = 30°, m = 2, and λ = 550 nm.\nStep 2:\nsin(30°) = 0.5, so d × 0.5 = 2 × 550 nm → d = (1100 nm) / 0.5 = 2200 nm = 2.2 × 10⁻⁶ m.\nAnswer:\nThe line spacing is 2.2 × 10⁻⁶ m.",
-        "rejected": "A hasty guess might assume first order or a different angle, leading to an incorrect smaller or larger spacing."
-    },
-    {
-        "question": "A 2 kg object moving at 10 m/s collides inelastically with a 3 kg object at rest. Find their final velocity.",
-        "chosen": "Step 1:\nTotal initial momentum = 2 × 10 + 3 × 0 = 20 kg·m/s.\nStep 2:\nCombined mass = 2 + 3 = 5 kg.\nStep 3:\nFinal velocity = 20 / 5 = 4 m/s.\nAnswer:\n4 m/s.",
-        "rejected": "It might be around 6 m/s."
-    },
-    {
-        "question": "An electron and a proton have the same kinetic energy. Compare their de Broglie wavelengths.",
-        "chosen": "Step 1:\nFor the same kinetic energy K, p = √(2 m K).\nStep 2:\nλ = h / p. Since m_e « m_p, the electron has a smaller momentum at the same K.\nStep 3:\nHence λ_e > λ_p. Precisely, λ_e / λ_p = √(m_p / m_e). The electron’s wavelength is larger.\nAnswer:\nThe electron’s de Broglie wavelength is greater than that of the proton for the same K.",
-        "rejected": "Someone might incorrectly assume equal mass or ignore mass in the momentum expression, concluding λ_e = λ_p or λ_e < λ_p."
-    },
-    {
-        "question": "A body slides down a ramp, losing 50 J of energy due to friction. If its initial energy was 200 J, find its final mechanical energy.",
-        "chosen": "Step 1:\nInitial energy = 200 J, energy lost = 50 J.\nStep 2:\nFinal energy = 200 - 50 = 150 J.\nAnswer:\n150 J.",
-        "rejected": "I guess 100 J."
-    },
-    {
-        "question": "A telescope has an objective lens with a focal length of 1 m and an eyepiece with a focal length of 5 cm. Find the angular magnification.",
-        "chosen": "Step 1:\nFor an astronomical telescope, angular magnification M ≈ f_objective / f_eyepiece.\nStep 2:\nGiven f_objective = 100 cm and f_eyepiece = 5 cm.\nStep 3:\nM = 100 / 5 = 20.\nAnswer:\nThe telescope’s angular magnification is 20×.",
-        "rejected": "A guess might be 10× or 25×, but the standard formula for telescopes gives a straightforward ratio of focal lengths."
-    },
-    {
-        "question": "Two point charges of +3 μC and -2 μC are separated by 0.5 m. Calculate the electrostatic force between them. (k = 9 × 10⁹ N·m²/C²)",
-        "chosen": "Step 1:\nIdentify q₁ = +3 × 10⁻⁶ C, q₂ = -2 × 10⁻⁶ C, r = 0.5 m.\n\nStep 2:\nUse Coulomb's law (magnitude): F = k × |q₁ q₂| / r².\n\nStep 3:\nCompute |q₁ q₂| = (3 × 10⁻⁶)(2 × 10⁻⁶) = 6 × 10⁻¹ⁱ.\n\nStep 4:\nSubstitute:\nF = (9 × 10⁹)(6 × 10⁻¹ⁱ) / (0.5)² = (54 × 10⁻¹ⁱ) / 0.25 = 216 × 10⁻¹ⁱ = 2.16 × 10⁻¹ N = 0.216 N.\n\nAnswer:\n0.216 N (attractive).",
-        "rejected": "They repel each other with a force that probably doesn't depend on distance."
-    },
-    {
-        "question": "A charge of 5 μC is placed in an electric field of 2000 N/C. What is the force experienced by the charge?",
-        "chosen": "Step 1:\nConvert the charge from microcoulombs to coulombs:\n5 μC = 5 × 10⁻⁶ C.\n\nStep 2:\nUse the formula F = qE, where q is the charge and E is the electric field.\n\nStep 3:\nSubstitute the values:\nF = (5 × 10⁻⁶ C) × (2000 N/C) = 1 × 10⁻² N = 0.01 N.\n\nAnswer:\n0.01 N.",
-        "rejected": "The force might be something around 5 N, but that's just a rough guess without precise calculations."
-    },
-    {
-        "question": "A circuit contains a resistor (10 Ω), an inductor (0.5 H), and a capacitor (100 μF). Find the resonant frequency of the circuit.",
-        "chosen": "Step 1:\nAngular frequency ω₀ = 1 / √(LC), f = ω₀ / (2π).\n\nStep 2:\nConvert 100 μF = 1 × 10⁻⁴ F.\n\nStep 3:\nLC = 0.5 × 1 × 10⁻⁴ = 5 × 10⁻⁵.\n\nStep 4:\nω₀ = 1 / √(5 × 10⁻⁵) ≈ 44.72 rad/s.\n\nStep 5:\nf ≈ 44.72 / (2π) ≈ 7.12 Hz.\n\nAnswer:\n7.12 Hz (approximately).",
-        "rejected": "The circuit has no resonant frequency; the inductor and capacitor do nothing."
-    },
-    {
-        "question": "A 2 m long rod of mass 4 kg is fixed at one end. If a 10 N force is applied at the free end, find the torque about the pivot.",
-        "chosen": "Step 1:\nTorque τ = F × distance = 10 N × 2 m = 20 N·m.\nAnswer:\n20 N·m.",
-        "rejected": "Maybe around 5 N·m."
-    },
-    {
-        "question": "A convex lens produces a real image of an object placed at 25 cm. If the image forms at 50 cm, find the focal length of the lens.",
-        "chosen": "Step 1:\nUse the thin lens formula: 1/f = 1/do + 1/di.\nGiven do = 25 cm and di = 50 cm.\nStep 2:\n1/f = 1/25 + 1/50 = 2/50 + 1/50 = 3/50.\nStep 3:\nf = 50/3 ≈ 16.7 cm.\nAnswer:\nThe lens has a focal length of about 16.7 cm.",
-        "rejected": "A quick guess might assume the focal length is around 25 cm, but precise calculation shows it’s noticeably shorter."
-    },
-    {
-        "question": "A Michelson interferometer uses a light source of 600 nm wavelength. If the mirror moves by 0.3 mm, how many fringes shift?",
-        "chosen": "Step 1:\nEach fringe shift corresponds to a path difference of one wavelength (600 nm). However, moving one mirror by Δx changes the path by 2Δx.\nStep 2:\nSo total path change = 2 × 0.3 mm = 0.6 mm = 6 × 10⁻⁴ m.\nStep 3:\nNumber of fringes = (path change) / λ = (6 × 10⁻⁴) / (600 × 10⁻⁹) = 1000.\nAnswer:\n1000 fringes shift.",
-        "rejected": "One might forget to double the mirror motion or guess only 500 fringes. Correct analysis includes the factor of 2 in path difference."
-    },
-    {
-        "question": "An electron is accelerated through a potential difference of 200 V. Calculate its kinetic energy. (Charge of electron = 1.6 × 10⁻¹⁹ C)",
-        "chosen": "Step 1:\nKinetic energy gained by an electron accelerated through V volts = eV joules.\nStep 2:\nHere, e = 1.6 × 10⁻¹⁹ C, V = 200.\nSo KE = (1.6 × 10⁻¹⁹ C)(200 V) = 3.2 × 10⁻¹⁷ J.\nStep 3:\nIn electronvolts, that is 200 eV.\nAnswer:\nKinetic energy = 3.2 × 10⁻¹⁷ J (which is 200 eV).",
-        "rejected": "A hasty approach might assume a larger voltage or forget to multiply the correct charge, leading to an estimate of several × 10⁻¹⁶ J or an incorrect eV count."
-    },
-    {
-        "question": "A transmission line carries a current of 1000 A. Calculate the magnetic field at a distance of 10 cm from the wire.",
-        "chosen": "Step 1:\nB = (μ₀ I) / (2π r).\n\nStep 2:\nI = 1000 A, r = 0.1 m, μ₀ = 4π × 10⁻⁷.\n\nStep 3:\nB ≈ 2 × 10⁻³ T.\n\nAnswer:\n2 × 10⁻³ T.",
-        "rejected": "Magnetic field is too weak to measure, likely 0 T."
-    },
-    {
-        "question": "A charged particle moves in a circular path in a magnetic field of 0.01 T with a radius of 0.2 m. If the particle has a charge of 1.6 × 10⁻¹⁹ C and a mass of 9.1 × 10⁻³¹ kg, find its velocity.",
-        "chosen": "Step 1:\nr = (m v) / (q B).\n\nStep 2:\nRearrange: v = (q B r) / m.\n\nStep 3:\nSubstitute:\nq = 1.6 × 10⁻¹⁹ C, B = 0.01 T, r = 0.2 m, m = 9.1 × 10⁻³¹ kg.\n\nStep 4:\nCompute approximate v ≈ 3.5 × 10⁸ m/s.\n\nAnswer (approx.):\n3.5 × 10⁸ m/s.",
-        "rejected": "The velocity is zero because the radius is not physically meaningful."
-    },
-    {
-        "question": "A capacitor of 10 μF is charged to 50 V. Calculate the energy stored in the capacitor.",
-        "chosen": "Step 1:\nU = ½ C V².\n\nStep 2:\nC = 10 × 10⁻⁶ F, V = 50 V.\n\nStep 3:\nU = 0.5 × (1 × 10⁻µ) × 2500 = 0.0125 J.\n\nAnswer:\n0.0125 J.",
-        "rejected": "Energy storage is negligible; it might be close to zero."
-    },
-    {
-        "question": "A beam of light passes through a polarizer and analyzer at an angle of 60°. If the initial intensity is 100 W/m², find the transmitted intensity.",
-        "chosen": "Step 1:\nMalus’ law: I = I₀ cos²(θ), where θ is the angle between the polarizer and analyzer.\nStep 2:\ncos(60°) = 0.5, so cos²(60°) = 0.25.\nStep 3:\nTherefore, I = 100 × 0.25 = 25 W/m².\nAnswer:\nThe transmitted intensity is 25 W/m².",
-        "rejected": "One might incorrectly assume that half the light gets through or none at all, but Malus’ law quantifies the exact fraction transmitted."
-    },
-    {
-        "question": "A concave lens has a focal length of -20 cm. If an object is placed 10 cm in front of it, find the image distance and magnification.",
-        "chosen": "Step 1:\nUse the lens equation: 1/f = 1/do + 1/di, where f = -20 cm (negative for a concave/diverging lens) and do = 10 cm.\nStep 2:\n1/(-20) = 1/10 + 1/di.\nSo 1/di = -1/20 - 1/10 = -1/20 - 2/20 = -3/20 → di = -20/3 ≈ -6.67 cm.\n(The negative sign indicates the image is virtual and on the same side of the lens as the object.)\nStep 3:\nMagnification m = di/do = -6.67/10 = -0.67.\nAnswer:\nThe image is 6.67 cm from the lens (virtual), and the magnification is about -0.67 (reduced and upright).",
-        "rejected": "One might simply assume the image forms somewhere beyond -20 cm or guess that the magnification is around -1, but the correct computation follows the lens formula."
-    },
-    {
-        "question": "Explain the relationship between Gibbs free energy and spontaneity of a reaction.",
-        "chosen": "Step 1:\nGibbs free energy G = H - TS.\nStep 2:\nA reaction is spontaneous at constant T, p if ΔG < 0.\nAnswer:\nNegative ΔG indicates a spontaneous process; positive ΔG is non-spontaneous under constant temperature and pressure.",
-        "rejected": "Gibbs free energy doesn’t affect whether a reaction is spontaneous."
-    },
-    {
-        "question": "Calculate the binding energy of a helium-4 nucleus. (Mass of He-4 = 4.0026 u, Proton mass = 1.0073 u, Neutron mass = 1.0087 u)",
-        "chosen": "Step 1:\nSeparate nucleons mass: 2p + 2n = 2(1.0073) + 2(1.0087) = 2.0146 + 2.0174 = 4.0320 u.\nStep 2:\nMass defect = 4.0320 u - 4.0026 u = 0.0294 u.\nStep 3:\n1 u ≈ 931.5 MeV/c², so binding energy ≈ 0.0294 × 931.5 ≈ 27.4 MeV.\nAnswer:\nThe binding energy is about 27.4 MeV.",
-        "rejected": "If one omits the mass defect or uses approximate values for proton/neutron mass, they might guess ~25 MeV or ~30 MeV, not applying the precise calculation."
-    },
-    {
-        "question": "A person is standing on a rotating platform holding dumbbells. If they bring their arms closer to their body, how does the angular velocity change? (Explain using conservation of angular momentum).",
-        "chosen": "Step 1:\nBringing arms in decreases the moment of inertia.\nStep 2:\nNo external torque means L = I ω is conserved.\nStep 3:\nIf I decreases, ω must increase.\nAnswer:\nThe angular velocity increases.",
-        "rejected": "It does not change at all."
-    },
-    {
-        "question": "Compare the efficiency of real engines to the Carnot cycle and explain why real engines never reach Carnot efficiency.",
-        "chosen": "Step 1:\nCarnot efficiency is the upper bound for a heat engine operating between two temperatures.\nStep 2:\nReal engines have irreversibilities (e.g., friction, heat losses), so they can’t operate reversibly.\nAnswer:\nReal engines always exhibit lower efficiency than the ideal reversible Carnot cycle because practical processes are never perfectly reversible.",
-        "rejected": "Some real engines can exceed Carnot efficiency if built perfectly."
-    },
-    {
-        "question": "A muon decays with a proper lifetime of 2.2 μs. If it moves at 0.98c, how long does it survive in the Earth’s frame?",
-        "chosen": "Step 1:\nProper lifetime τ = 2.2 × 10⁻⁶ s.\nStep 2:\nTime dilation factor γ = 1 / √(1 - 0.98²) = 1 / √(1 - 0.9604) = 1 / √(0.0396) ≈ 5.03.\nStep 3:\nObserved lifetime = γ τ ≈ 5.03 × 2.2 × 10⁻⁶ s = 11.07 × 10⁻⁶ s ≈ 1.11 × 10⁻⁵ s.\nAnswer:\nThe muon survives about 1.1 × 10⁻⁵ s as seen from Earth.",
-        "rejected": "Not applying relativistic time dilation might yield a lifetime still at 2.2 μs in all frames, ignoring speed effects."
-    },
-    {
-        "question": "An optical fiber has a core refractive index of 1.48 and a cladding refractive index of 1.45. Find the critical angle for total internal reflection.",
-        "chosen": "Step 1:\nCritical angle θc satisfies sin(θc) = n_cladding / n_core.\nStep 2:\nSo sin(θc) = 1.45 / 1.48 ≈ 0.9797.\nStep 3:\nθc = sin⁻¹(0.9797) ≈ 78.7°.\nAnswer:\nThe critical angle is about 78.7°.",
-        "rejected": "If someone ignores the refractive indices, they might guess something near 45° or 60°, which would not be accurate for these specific indices."
-    },
-    {
-        "question": "A charged capacitor (5 μF, 100 V) is connected to an inductor of 10 mH. Find the oscillation frequency of the LC circuit.",
-        "chosen": "Step 1:\nω = 1/√(LC), f = ω / (2π).\n\nStep 2:\nC = 5 × 10⁻⁶ F, L = 10 mH = 1 × 10⁻² H.\n\nStep 3:\nLC = 5 × 10⁻⁸.\n\nStep 4:\nω = 1/√(5 × 10⁻⁸) ≈ 4.47 × 10³ rad/s.\n\nStep 5:\nf ≈ (4.47 × 10³) / (2π) ≈ 712 Hz.\n\nAnswer:\n712 Hz (approx.).",
-        "rejected": "The capacitor can't oscillate; all energy is lost instantly."
-    },
-    {
-        "question": "A rectangular loop (0.2 m × 0.1 m) is moving into a 0.5 T magnetic field at 2 m/s. Find the induced emf in the loop.",
-        "chosen": "Step 1:\nAssume 0.2 m side is perpendicular to velocity.\n\nStep 2:\nε = B × L × v = 0.5 × 0.2 × 2 = 0.2 V.\n\nAnswer:\n0.2 V.",
-        "rejected": "No emf is induced because the field is constant."
-    },
-    {
-        "question": "A 0.5 kg bullet is fired at 400 m/s into a 2 kg wooden block and remains inside. Find the final velocity of the combined system.",
-        "chosen": "Step 1:\nInitial momentum = 0.5 × 400 = 200 kg·m/s.\nStep 2:\nCombined mass = 0.5 + 2 = 2.5 kg.\nStep 3:\nFinal velocity = 200 / 2.5 = 80 m/s.\nAnswer:\n80 m/s.",
-        "rejected": "Probably 50 m/s."
-    },
-    {
-        "question": "A 0.1 kg ball moving at 5 m/s hits a wall and bounces back at 4 m/s. Find the change in momentum.",
-        "chosen": "Step 1:\nInitial momentum p_i = 0.1 × 5 = 0.5 kg·m/s.\nStep 2:\nFinal momentum p_f = 0.1 × (-4) = -0.4 kg·m/s.\nStep 3:\nΔp = p_f - p_i = -0.4 - 0.5 = -0.9 kg·m/s, so the magnitude is 0.9 kg·m/s in the opposite direction.\nAnswer:\n-0.9 kg·m/s.",
-        "rejected": "Maybe 0.2 kg·m/s."
-    },
-    {
-        "question": "A wire of length 2 m carries a current of 3 A in a magnetic field of 0.5 T. Find the force on the wire if the field is perpendicular to the current.",
-        "chosen": "Step 1:\nF = I L B.\n\nStep 2:\nSubstitute I = 3 A, L = 2 m, B = 0.5 T:\nF = 3 × 2 × 0.5 = 3 N.\n\nAnswer:\n3 N.",
-        "rejected": "The force must be over 50 N due to the strong field."
-    },
-    {
-        "question": "A microscope objective lens has a focal length of 4 mm and an eyepiece with a focal length of 20 mm. If the tube length is 160 mm, calculate the magnification.",
-        "chosen": "Step 1:\nIn a compound microscope, the objective forms an enlarged real image, then the eyepiece magnifies that image.\nStep 2:\nApproximate total magnification: M ≈ [(L - fₘ)/fₘ] × (25 cm / fₑ). Converting lengths to mm: L = 160 mm, fₘ = 4 mm, fₑ = 20 mm, and 25 cm ≈ 250 mm.\nStep 3:\n(L - fₘ)/fₘ = (160 - 4)/4 = 156/4 = 39; 25 cm / fₑ = 250/20 = 12.5.\nHence, total M ≈ 39 × 12.5 = 487.5.\nAnswer:\nThe magnification is about 488×.",
-        "rejected": "Someone might just guess it’s around 100× or 200× based on typical microscope values without applying the standard formula."
-    },
-    {
-        "question": "A steam engine operates between 800 K and 400 K. Compare its efficiency to that of a Carnot engine with the same temperature limits.",
-        "chosen": "Step 1:\nCarnot efficiency for T_H=800 K, T_L=400 K is 1 - (400/800)=0.5 or 50%.\nStep 2:\nReal engines are less efficient than the ideal Carnot cycle.\nAnswer:\nThe steam engine has an efficiency lower than 50% because no real engine reaches Carnot’s maximum.",
-        "rejected": "It can definitely match 50% or exceed it easily."
-    },
-    {
-        "question": "A diver underwater (n=1.33) looks at a fish. If the fish is 1 m away, how far does it appear to the diver?",
-        "chosen": "Step 1:\nWhen viewing objects underwater, the apparent distance d' can be approximated by d'/n, where d' is the actual distance and n is the refractive index.\nStep 2:\nHere, d' = 1 m and n = 1.33, so the apparent distance ≈ 1 / 1.33 ≈ 0.75 m.\nAnswer:\nThe fish appears about 0.75 m away to the diver.",
-        "rejected": "Without accounting for underwater refraction, one might assume it appears the same 1 m away, or possibly guess a random value like 0.5 m."
-    },
-    {
-        "question": "A radioactive sample has a half-life of 5 hours. If initially there are 800 atoms, how many remain after 15 hours?",
-        "chosen": "Step 1:\nAfter each half-life, the number of atoms halves.\nStep 2:\n15 hours is 3 half-lives (15 / 5 = 3).\nStep 3:\nRemaining atoms = 800 × (1/2)³ = 800 / 8 = 100.\nAnswer:\n100 atoms remain after 15 hours.",
-        "rejected": "Someone might assume a linear decay rate, or incorrectly apply the formula to get 200 or 50. Correct exponentiation is needed for half-life problems."
-    },
-    {
-        "question": "A parallel plate capacitor has a plate separation of 1 mm and is charged to 100 V. Find the electric field between the plates.",
-        "chosen": "Step 1:\nE = V / d.\n\nStep 2:\nConvert d: 1 mm = 1 × 10⁻³ m.\n\nStep 3:\nE = 100 V / (1 × 10⁻³ m) = 1 × 10⁵ V/m.\n\nAnswer:\n1 × 10⁵ V/m.",
-        "rejected": "The electric field is about 1 V/m, roughly."
-    },
-    {
-        "question": "A thin film of oil (n=1.40) on water (n=1.33) appears dark in reflected light of 500 nm wavelength. Find the minimum thickness for destructive interference.",
-        "chosen": "Step 1:\nFor destructive interference with reflection at a boundary of higher index, we generally use 2 n_film t = (m + 1/2)λ (for m=0 if it’s the first minimum).\nStep 2:\n2 × 1.40 × t = 0.5 × 500 nm → 2.8 t = 250 nm → t ≈ 89.3 nm.\nAnswer:\nThe minimum thickness is about 89 nm.",
-        "rejected": "If someone applies the constructive formula by mistake or ignores the phase change, they might calculate around 125 nm or 178 nm, missing the correct destructive interference condition."
-    },
-    {
-        "question": "An electron moving in a uniform magnetic field describes a circular motion. Derive the expression for its radius in terms of mass, charge, velocity, and magnetic field strength.",
-        "chosen": "1. Magnetic force: F = q v B (perpendicular).\n2. Centripetal force: F = m v² / r.\n3. Set them equal: q v B = m v² / r.\n4. Hence r = (m v) / (|q| B).",
-        "rejected": "The radius depends only on the field strength and not on velocity or mass."
-    },
-    {
-        "question": "An electron moves at 2 × 10⁶ m/s perpendicular to a magnetic field of 0.02 T. Calculate the force acting on it. (Charge of electron = 1.6 × 10⁻¹⁹ C)",
-        "chosen": "Step 1:\nF = q v B.\n\nStep 2:\nq = 1.6 × 10⁻¹⁹ C, v = 2 × 10⁶ m/s, B = 0.02 T.\n\nStep 3:\nF = (1.6 × 10⁻¹⁹) × (2 × 10⁶) × 0.02 = 6.4 × 10⁻¹⁵ N.\n\nAnswer:\n6.4 × 10⁻¹⁵ N.",
-        "rejected": "No force is generated if the electron is in a vacuum."
-    },
-    {
-        "question": "The work function of a metal is 2.5 eV. Find the threshold frequency for the photoelectric effect.",
-        "chosen": "Step 1:\nThreshold frequency f₀ = φ / h, where φ = 2.5 eV.\nStep 2:\nConvert 2.5 eV to joules: 2.5 × (1.602 × 10⁻¹⁹) = 4.005 × 10⁻¹⁹ J.\nStep 3:\nThen f₀ = (4.005 × 10⁻¹⁹ J) / (6.63 × 10⁻³⁴ J·s) ≈ 6.03 × 10¹⁴ Hz.\nAnswer:\nThreshold frequency ≈ 6.0 × 10¹⁴ Hz.",
-        "rejected": "Guessing a random frequency like 1 × 10¹⁵ Hz without applying the correct ratio would be inaccurate."
+        "question": "Prove that entropy change for an irreversible process is always greater than zero.",
+        "chosen": "Step 1:\nFor an irreversible process, the total entropy change (system plus surroundings) is positive due to dissipative effects.\nStep 2:\nThis means that irreversible processes generate additional entropy, making \\u0394S_total > 0.\nAnswer:\nEntropy increases in irreversible processes, so \\u0394S_total > 0.",
+        "rejected": "Step 1:\nAssume that energy conservation implies no change in entropy for an irreversible process.\nStep 2:\nConclude that \\u0394S_total = 0.\nAnswer:\nThe entropy change for an irreversible process is zero."
     },
     {
         "question": "What is the difference between an isothermal and adiabatic process?",
-        "chosen": "Step 1:\nIsothermal: Temperature remains constant (ΔT = 0). Heat flow occurs to keep temperature the same.\nStep 2:\nAdiabatic: No heat exchange (Q=0). Internal energy changes come solely from work done.\nAnswer:\nIsothermal has constant temperature, while adiabatic has no heat transfer.",
-        "rejected": "They both mean the same thing, no difference."
+        "chosen": "Step 1:\nIsothermal process: Temperature remains constant (\\u0394T = 0) and heat is exchanged to maintain constant temperature.\nStep 2:\nAdiabatic process: No heat is exchanged (Q = 0), so changes in internal energy come solely from work done.\nAnswer:\nIn an isothermal process, the temperature remains constant, while in an adiabatic process, there is no heat transfer.",
+        "rejected": "Step 1:\nState that in an isothermal process no heat is exchanged and in an adiabatic process the temperature remains constant.\nAnswer:\nIsothermal processes have no heat transfer, and adiabatic processes maintain constant temperature."
     },
     {
-        "question": "A concave mirror has a focal length of 10 cm. Where should an object be placed to produce a real image of twice the object's size?",
-        "chosen": "Step 1:\nFor a concave mirror, use the mirror equation:\n1/f = 1/do + 1/di, where f = 10 cm.\nStep 2:\nFor a real image magnified 2×, the image distance di is 2× the object distance do (though the inverted image implies a negative sign convention, we use the magnitude here).\nSo di = 2 do.\nStep 3:\nSubstitute di = 2 do into 1/10 = 1/do + 1/(2do) = 3/(2do).\nTherefore do = 15 cm, and di = 30 cm.\nAnswer:\nPlace the object 15 cm from the mirror to get a real image twice its size.",
-        "rejected": "One might guess placing the object at some distance like 10 cm or 20 cm without carefully using the mirror equation, but that could lead to an image size different from the desired 2× magnification."
+        "question": "A planet of mass m is moving at speed v and collides inelastically with another planet of mass M. Find the final angular momentum of the system (assuming no external torque).",
+        "chosen": "Step 1:\nNo external torque implies angular momentum is conserved.\nStep 2:\nIf the second planet was initially at rest and the collision is central, final L = initial L.\nStep 3:\nHence final L = m v r (assuming r is the perpendicular distance).\nAnswer:\nL = m v r (conserved).",
+        "rejected": "Step 1:\nAssume angular momentum adds from both planets.\nStep 2:\nFinal angular momentum = (m + M) v r.\nAnswer:\nL = (m + M) v r."
+    },
+    {
+        "question": "A 2 kg object moving at 10 m/s collides inelastically with a 3 kg object at rest. Find their final velocity.",
+        "chosen": "Step 1:\nTotal initial momentum = 2 \\xd7 10 + 3 \\xd7 0 = 20 kg\\xb7m/s.\nStep 2:\nCombined mass = 2 + 3 = 5 kg.\nStep 3:\nFinal velocity = 20 / 5 = 4 m/s.\nAnswer:\n4 m/s.",
+        "rejected": "Step 1:\nConsider only the momentum of the 2 kg object: 2 \\xd7 10 = 20 kg\\xb7m/s.\nStep 2:\nAssume final mass is 3 kg.\nStep 3:\nFinal velocity = 20 / 3 \\u2248 6.67 m/s.\nAnswer:\n6.67 m/s."
+    },
+    {
+        "question": "A diver underwater (n=1.33) looks at a fish. If the fish is 1 m away, how far does it appear to the diver?",
+        "chosen": "Step 1:\nWhen viewing objects underwater, the apparent distance d' \\u2248 d/n, where d is the actual distance and n is the refractive index.\nStep 2:\nd' = 1 m / 1.33 \\u2248 0.75 m.\nAnswer:\nThe fish appears about 0.75 m away to the diver.",
+        "rejected": "Step 1:\nErroneously calculate the apparent distance by multiplying: d' = d \\xd7 n = 1 m \\xd7 1.33 = 1.33 m.\nAnswer:\nThe fish appears about 1.33 m away."
+    },
+    {
+        "question": "A moving clock ticks once every 10 seconds in its own frame. How much time passes for an observer moving at 0.9c?",
+        "chosen": "Step 1:\nProper time \\u0394t\\u2080 = 10 s.\nStep 2:\nTime dilation: \\u0394t = \\u03b3 \\u0394t\\u2080, with \\u03b3 = 1 / \\u221a(1 - 0.9\\xb2) \\u2248 2.294.\nStep 3:\n\\u0394t \\u2248 2.294 \\xd7 10 s \\u2248 22.94 s.\nAnswer:\nAbout 22.94 s pass in the observer\\u2019s frame.",
+        "rejected": "Step 1:\nProper time \\u0394t\\u2080 = 10 s.\nStep 2:\nAssume \\u03b3 = 3.16 (using an incorrect calculation).\nStep 3:\nThen \\u0394t \\u2248 3.16 \\xd7 10 s \\u2248 31.6 s.\nAnswer:\nAbout 31.6 s pass in the observer\\u2019s frame."
+    },
+    {
+        "question": "A parallel plate capacitor has a plate separation of 1 mm and is charged to 100 V. Find the electric field between the plates.",
+        "chosen": "Step 1:\nE = V / d.\n\nStep 2:\nConvert d: 1 mm = 1 \\xd7 10\\u207b\\xb3 m.\n\nStep 3:\nE = 100 V / (1 \\xd7 10\\u207b\\xb3 m) = 1 \\xd7 10\\u2075 V/m.\n\nAnswer:\n1 \\xd7 10\\u2075 V/m.",
+        "rejected": "Step 1:\nUse E = V / d, taking 1 mm as 0.1 m.\n\nStep 2:\nCalculate E = 100 V / 0.1 m = 1000 V/m.\n\nAnswer:\n1000 V/m."
+    },
+    {
+        "question": "The work function of a metal is 2.5 eV. Find the threshold frequency for the photoelectric effect.",
+        "chosen": "Step 1:\nUse f\\u2080 = \\u03c6 / h, where \\u03c6 = 2.5 eV.\nStep 2:\nConvert 2.5 eV to joules: 2.5 \\xd7 1.602 \\xd7 10\\u207b\\xb9\\u2079 J \\u2248 4.005 \\xd7 10\\u207b\\xb9\\u2079 J.\nStep 3:\nThen f\\u2080 = (4.005 \\xd7 10\\u207b\\xb9\\u2079 J) / (6.63 \\xd7 10\\u207b\\xb3\\u2074 J\\xb7s) \\u2248 6.03 \\xd7 10\\xb9\\u2074 Hz.\nAnswer:\nThreshold frequency \\u2248 6.0 \\xd7 10\\xb9\\u2074 Hz.",
+        "rejected": "Step 1:\nUse f\\u2080 = \\u03c6 / h, but convert 2.5 eV using an incorrect factor: 2.5 eV = 2.5 \\xd7 1.602 \\xd7 10\\u207b\\xb9\\u2078 J.\nStep 2:\nThen f\\u2080 = (4.005 \\xd7 10\\u207b\\xb9\\u2078 J) / (6.63 \\xd7 10\\u207b\\xb3\\u2074 J\\xb7s) \\u2248 6.03 \\xd7 10\\xb9\\u2075 Hz.\nAnswer:\nThreshold frequency \\u2248 6.0 \\xd7 10\\xb9\\u2075 Hz."
+    },
+    {
+        "question": "A Carnot engine operates between 600 K and 300 K. What is its maximum theoretical efficiency?",
+        "chosen": "Step 1:\nCarnot efficiency \\u03b7 = 1 - (T_L / T_H).\nStep 2:\nSubstitute T_H = 600 K and T_L = 300 K: \\u03b7 = 1 - (300/600) = 0.5 or 50%.\nAnswer:\nThe maximum theoretical efficiency is 50%.",
+        "rejected": "Step 1:\nErroneously compute efficiency as 1 - (T_H / T_L) = 1 - (600/300) = -1.\nAnswer:\nThe maximum efficiency is -100%."
+    },
+    {
+        "question": "A 2 kg object is moving at 10 m/s. Find its kinetic energy.",
+        "chosen": "Step 1:\nUse KE = 0.5 \\xd7 m \\xd7 v\\xb2 = 0.5 \\xd7 2 \\xd7 (10)\\xb2 = 100 J.\nAnswer:\n100 J.",
+        "rejected": "Step 1:\nUse KE = m \\xd7 v\\xb2 = 2 \\xd7 (10)\\xb2 = 200 J.\nAnswer:\n200 J."
+    },
+    {
+        "question": "A transformer has 500 turns in the primary coil and 100 turns in the secondary coil. If the input voltage is 220 V, what is the output voltage?",
+        "chosen": "Step 1:\nV\\u2082 / V\\u2081 = N\\u2082 / N\\u2081.\n\nStep 2:\nN\\u2081 = 500, N\\u2082 = 100, V\\u2081 = 220 V.\n\nStep 3:\nV\\u2082 = 220 \\xd7 (100/500) = 44 V.\n\nAnswer:\n44 V.",
+        "rejected": "Step 1:\nUse the transformer relation and invert the ratio: V\\u2082 = 220 \\xd7 (500/100).\n\nStep 2:\nV\\u2082 = 220 \\xd7 5 = 1100 V.\n\nAnswer:\n1100 V."
+    },
+    {
+        "question": "A 500g metal block is heated from 25\\xb0C to 75\\xb0C. If its specific heat capacity is 0.9 J/g\\xb0C, how much heat is absorbed?",
+        "chosen": "Step 1:\nMass m = 500 g, temperature change \\u0394T = 75\\xb0C - 25\\xb0C = 50\\xb0C, and specific heat c = 0.9 J/g\\xb0C.\nStep 2:\nHeat absorbed Q = m \\xd7 c \\xd7 \\u0394T = 500 \\xd7 0.9 \\xd7 50 = 22,500 J.\nAnswer:\nThe metal block absorbs 22,500 J of heat.",
+        "rejected": "Step 1:\nAssume the temperature change is 75\\xb0C instead of the difference (75\\xb0C - 25\\xb0C).\nStep 2:\nThen Q = 500 \\xd7 0.9 \\xd7 75 = 33,750 J.\nAnswer:\nThe metal block absorbs 33,750 J of heat."
+    },
+    {
+        "question": "A 10 C charge is moved through a potential difference of 120 V. Calculate the work done on the charge.",
+        "chosen": "Step 1:\nUse W = q \\u0394V.\n\nStep 2:\nSubstitute q = 10 C, \\u0394V = 120 V:\nW = 10 \\xd7 120 = 1200 J.\n\nAnswer:\n1200 J.",
+        "rejected": "Step 1:\nApply the work formula W = q \\u0394V.\n\nStep 2:\nUsing q = 10 C and \\u0394V = 120 V, calculate W = 10 \\xd7 120 = 120 J.\n\nAnswer:\n120 J."
+    },
+    {
+        "question": "A thin film of oil (n=1.40) on water (n=1.33) appears dark in reflected light of 500 nm wavelength. Find the minimum thickness for destructive interference.",
+        "chosen": "Step 1:\nFor destructive interference with reflection, the condition is 2 n t = (m + 1/2)\\u03bb with m = 0 for minimum thickness.\nStep 2:\n2 \\xd7 1.40 \\xd7 t = 0.5 \\xd7 500 nm \\u2192 2.8 t = 250 nm \\u2192 t \\u2248 89.3 nm.\nAnswer:\nThe minimum thickness is about 89 nm.",
+        "rejected": "Step 1:\nMisapply the interference condition as 2 n t = \\u03bb.\nStep 2:\nThen t = 500 nm / (2 \\xd7 1.40) \\u2248 178.6 nm.\nAnswer:\nThe minimum thickness is calculated to be about 179 nm."
+    },
+    {
+        "question": "A proton moves at 1% of the speed of light. Calculate its relativistic momentum. (Mass of proton = 1.67 \\xd7 10\\u207b\\xb2\\u2077 kg)",
+        "chosen": "Step 1:\nUse p = \\u03b3 m v. At 0.01c, \\u03b3 \\u2248 1.\nStep 2:\np \\u2248 m v = (1.67 \\xd7 10\\u207b\\xb2\\u2077 kg)(0.01 \\xd7 3 \\xd7 10\\u2078 m/s) = 5.01 \\xd7 10\\u207b\\xb2\\xb9 kg\\xb7m/s.\nAnswer:\nRelativistic momentum \\u2248 5.0 \\xd7 10\\u207b\\xb2\\xb9 kg\\xb7m/s.",
+        "rejected": "Step 1:\nAssume v = 0.1c instead of 0.01c.\nStep 2:\np = (1.67 \\xd7 10\\u207b\\xb2\\u2077 kg)(0.1 \\xd7 3 \\xd7 10\\u2078 m/s) = 5.01 \\xd7 10\\u207b\\xb2\\u2070 kg\\xb7m/s.\nAnswer:\nRelativistic momentum \\u2248 5.0 \\xd7 10\\u207b\\xb2\\u2070 kg\\xb7m/s."
+    },
+    {
+        "question": "A rectangular loop (0.2 m \\xd7 0.1 m) is moving into a 0.5 T magnetic field at 2 m/s. Find the induced emf in the loop.",
+        "chosen": "Step 1:\nAssume 0.2 m side is perpendicular to velocity.\n\nStep 2:\n\\u03b5 = B \\xd7 L \\xd7 v = 0.5 \\xd7 0.2 \\xd7 2 = 0.2 V.\n\nAnswer:\n0.2 V.",
+        "rejected": "Step 1:\nUse the induced emf formula \\u03b5 = B L v, taking the length as 0.1 m.\n\nStep 2:\nWith B = 0.5 T and v = 2 m/s, \\u03b5 = 0.5 \\xd7 0.1 \\xd7 2 = 0.1 V.\n\nAnswer:\n0.1 V."
+    },
+    {
+        "question": "A magnetic field of 0.3 T is applied to a conductor carrying 5 A in a direction perpendicular to the field. If the length of the conductor is 1.5 m, find the force exerted on it.",
+        "chosen": "Step 1:\nF = I L B.\n\nStep 2:\nI = 5 A, L = 1.5 m, B = 0.3 T.\n\nStep 3:\nF = 5 \\xd7 1.5 \\xd7 0.3 = 2.25 N.\n\nAnswer:\n2.25 N.",
+        "rejected": "Step 1:\nApply F = I L B, taking L = 15 m.\n\nStep 2:\nWith I = 5 A and B = 0.3 T, F = 5 \\xd7 15 \\xd7 0.3 = 22.5 N.\n\nAnswer:\n22.5 N."
+    },
+    {
+        "question": "A circular loop of radius 0.1 m carries a current of 2 A. Find the magnetic field at its center.",
+        "chosen": "Step 1:\nB = (\\u03bc\\u2080 I) / (2R).\n\nStep 2:\nR = 0.1 m, I = 2 A, \\u03bc\\u2080 = 4\\u03c0 \\xd7 10\\u207b\\u2077.\n\nStep 3:\nB \\u2248 1.26 \\xd7 10\\u207b\\u2075 T (approx.).\n\nAnswer:\n1.26 \\xd7 10\\u207b\\u2075 T (approximately).",
+        "rejected": "Step 1:\nUse the formula for the magnetic field at the center of a loop: B = (\\u03bc\\u2080 I) / R.\n\nStep 2:\nSubstitute I = 2 A, R = 0.1 m, \\u03bc\\u2080 = 4\\u03c0 \\xd7 10\\u207b\\u2077.\n\nStep 3:\nB = (4\\u03c0 \\xd7 10\\u207b\\u2077 \\xd7 2) / 0.1 = 2.51 \\xd7 10\\u207b\\u2075 T.\n\nAnswer:\n2.51 \\xd7 10\\u207b\\u2075 T."
+    },
+    {
+        "question": "A radioactive sample has a half-life of 5 hours. If initially there are 800 atoms, how many remain after 15 hours?",
+        "chosen": "Step 1:\nAfter each half-life, the number of atoms halves.\nStep 2:\n15 hours is 3 half-lives (15/5 = 3).\nStep 3:\nRemaining atoms = 800 \\xd7 (1/2)\\xb3 = 800/8 = 100.\nAnswer:\n100 atoms remain.",
+        "rejected": "Step 1:\nAssume 15 hours corresponds to 4 half-lives.\nStep 2:\nRemaining atoms = 800 \\xd7 (1/2)\\u2074 = 800/16 = 50.\nAnswer:\n50 atoms remain."
     },
     {
         "question": "A diffraction grating with 5000 lines/cm is illuminated by light of wavelength 600 nm. Find the angle of the first-order diffraction.",
-        "chosen": "Step 1:\nConvert the grating density to line spacing: 5000 lines/cm = 5000 × 100 = 5 × 10⁵ lines/m, so d = 1 / (5 × 10⁵) m = 2 × 10⁻⁶ m.\nStep 2:\nFor the first order (m = 1), the condition is d sin(θ) = λ.\nThus sin(θ) = λ / d = (600 × 10⁻⁹) / (2 × 10⁻⁶) = 0.3.\nStep 3:\nθ = sin⁻¹(0.3) ≈ 17.46°.\nAnswer:\nThe first-order diffraction angle is about 17.46°.",
-        "rejected": "One might incorrectly guess a small angle near 10° or a larger angle near 30° without doing the precise division for sin(θ)."
+        "chosen": "Step 1:\nConvert the grating density: 5000 lines/cm = 5000 \\xd7 100 = 5 \\xd7 10\\u2075 lines/m, so the grating spacing d = 1/(5 \\xd7 10\\u2075) = 2 \\xd7 10\\u207b\\u2076 m.\nStep 2:\nFor first order (m = 1), d sin(\\u03b8) = \\u03bb, so sin(\\u03b8) = (600 \\xd7 10\\u207b\\u2079 m) / (2 \\xd7 10\\u207b\\u2076 m) = 0.3.\nStep 3:\n\\u03b8 = sin\\u207b\\xb9(0.3) \\u2248 17.46\\xb0.\nAnswer:\nThe first-order diffraction angle is about 17.46\\xb0.",
+        "rejected": "Step 1:\nMisinterpret the grating density as 5 \\xd7 10\\u2074 lines/m, so d = 1/(5 \\xd7 10\\u2074) = 2 \\xd7 10\\u207b\\u2075 m.\nStep 2:\nThen sin(\\u03b8) = (600 \\xd7 10\\u207b\\u2079 m) / (2 \\xd7 10\\u207b\\u2075 m) = 0.03, yielding \\u03b8 = sin\\u207b\\xb9(0.03) \\u2248 1.72\\xb0.\nAnswer:\nThe first-order diffraction angle is about 1.72\\xb0."
     },
     {
-        "question": "A projectile is thrown upward with an initial speed of 20 m/s. Given g = 9.8 m/s², what is the maximum height it reaches?",
-        "chosen": "Step 1:\nAt maximum height, final velocity = 0.\nStep 2:\nUse 0 = (20)² - 2 × 9.8 × h → h = 400 / 19.6 ≈ 20.4 m.\nAnswer:\n20.4 m.",
-        "rejected": "It might be around 35 m."
+        "question": "A concave mirror has a focal length of 10 cm. Where should an object be placed to produce a real image of twice the object's size?",
+        "chosen": "Step 1:\nFor a concave mirror, use the mirror equation:\n1/f = 1/do + 1/di, where f = 10 cm.\nStep 2:\nFor a real image magnified 2\\xd7, the image distance di is 2\\xd7 the object distance do (using magnitudes).\nSo di = 2 do.\nStep 3:\nSubstitute di = 2 do into 1/10 = 1/do + 1/(2do) = 3/(2do).\nTherefore do = 15 cm, and di = 30 cm.\nAnswer:\nPlace the object 15 cm from the mirror to get a real image twice its size.",
+        "rejected": "Step 1:\nAssume di = 2 do but mistakenly solve the mirror equation as 1/10 = 1/do + 1/(2do) leading to do = 20 cm.\nStep 2:\nThen di = 2 \\xd7 20 = 40 cm.\nAnswer:\nPlace the object 20 cm from the mirror to produce a real image twice its size."
+    },
+    {
+        "question": "A solenoid has 500 turns per meter and carries a current of 2 A. Calculate the magnetic field inside it. (\\u03bc\\u2080 = 4\\u03c0 \\xd7 10\\u207b\\u2077 T\\xb7m/A)",
+        "chosen": "Step 1:\nB = \\u03bc\\u2080 n I.\n\nStep 2:\nn = 500 m\\u207b\\xb9, I = 2 A, \\u03bc\\u2080 = 4\\u03c0 \\xd7 10\\u207b\\u2077 T\\xb7m/A.\n\nStep 3:\nB = (4\\u03c0 \\xd7 10\\u207b\\u2077) \\xd7 500 \\xd7 2 \\u2248 1.26 \\xd7 10\\u207b\\xb3 T.\n\nAnswer:\n1.26 \\xd7 10\\u207b\\xb3 T.",
+        "rejected": "Step 1:\nUse the formula B = \\u03bc\\u2080 n I with n = 50 m\\u207b\\xb9.\n\nStep 2:\nSubstitute n = 50 m\\u207b\\xb9, I = 2 A, \\u03bc\\u2080 = 4\\u03c0 \\xd7 10\\u207b\\u2077 T\\xb7m/A.\n\nStep 3:\nB = (4\\u03c0 \\xd7 10\\u207b\\u2077) \\xd7 50 \\xd7 2 = 1.26 \\xd7 10\\u207b\\u2074 T.\n\nAnswer:\n1.26 \\xd7 10\\u207b\\u2074 T."
+    },
+    {
+        "question": "A microscope objective lens has a focal length of 4 mm and an eyepiece with a focal length of 20 mm. If the tube length is 160 mm, calculate the magnification.",
+        "chosen": "Step 1:\nFor a compound microscope, the total magnification is approximated by M \\u2248 [(L - f\\u2092)/f\\u2092] \\xd7 (D/f\\u2091), where L = 160 mm, f\\u2092 = 4 mm, f\\u2091 = 20 mm, and D (near point) \\u2248 250 mm.\nStep 2:\n(L - f\\u2092)/f\\u2092 = (160 - 4)/4 = 156/4 = 39; and D/f\\u2091 = 250/20 = 12.5.\nStep 3:\nM \\u2248 39 \\xd7 12.5 = 487.5.\nAnswer:\nThe magnification is about 488\\xd7.",
+        "rejected": "Step 1:\nErroneously add instead of subtract: (L + f\\u2092)/f\\u2092 = (160 + 4)/4 = 164/4 = 41; and use a near point of 200 mm, so D/f\\u2091 = 200/20 = 10.\nStep 2:\nThen M \\u2248 41 \\xd7 10 = 410.\nAnswer:\nThe magnification is calculated to be about 410\\xd7."
+    },
+    {
+        "question": "How does increasing entropy affect the spontaneity of a reaction?",
+        "chosen": "Step 1:\nAn increase in entropy tends to favor spontaneous processes.\nStep 2:\nIf the total entropy (system plus surroundings) increases, the reaction is more likely to occur spontaneously.\nAnswer:\nHigher entropy generally promotes spontaneity.",
+        "rejected": "Step 1:\nAssume that increasing entropy makes a reaction less spontaneous by reducing disorder.\nAnswer:\nHigher entropy makes a reaction less likely to occur."
+    },
+    {
+        "question": "An electron is accelerated through a potential difference of 200 V. Calculate its kinetic energy. (Charge of electron = 1.6 \\xd7 10\\u207b\\xb9\\u2079 C)",
+        "chosen": "Step 1:\nKinetic energy gained = eV.\nStep 2:\nKE = (1.6 \\xd7 10\\u207b\\xb9\\u2079 C)(200 V) = 3.2 \\xd7 10\\u207b\\xb9\\u2077 J.\nStep 3:\nThis is equivalent to 200 eV.\nAnswer:\nKinetic energy = 3.2 \\xd7 10\\u207b\\xb9\\u2077 J (200 eV).",
+        "rejected": "Step 1:\nUsing the formula KE = eV, but take V = 20 V instead of 200 V.\nStep 2:\nKE = (1.6 \\xd7 10\\u207b\\xb9\\u2079 C)(20 V) = 3.2 \\xd7 10\\u207b\\xb9\\u2078 J.\nStep 3:\nThis corresponds to 20 eV.\nAnswer:\nKinetic energy = 3.2 \\xd7 10\\u207b\\xb9\\u2078 J (20 eV)."
+    },
+    {
+        "question": "A particle with a mass of 9.1 \\xd7 10\\u207b\\xb3\\xb9 kg moves at 2 \\xd7 10\\u2076 m/s. Find its de Broglie wavelength.",
+        "chosen": "Step 1:\nUse the de Broglie formula \\u03bb = h / (m v).\nStep 2:\nSubstitute h = 6.63 \\xd7 10\\u207b\\xb3\\u2074 J\\xb7s, m = 9.1 \\xd7 10\\u207b\\xb3\\xb9 kg, v = 2 \\xd7 10\\u2076 m/s.\nStep 3:\n\\u03bb = (6.63 \\xd7 10\\u207b\\xb3\\u2074) / ((9.1 \\xd7 10\\u207b\\xb3\\xb9)(2 \\xd7 10\\u2076)) \\u2248 3.64 \\xd7 10\\u207b\\xb9\\u2070 m, or 0.364 nm.\nAnswer:\nDe Broglie wavelength \\u2248 3.64 \\xd7 10\\u207b\\xb9\\u2070 m (0.364 nm).",
+        "rejected": "Step 1:\nApply \\u03bb = h / (m v) but use m = 9.1 \\xd7 10\\u207b\\xb2\\u2079 kg instead of 9.1 \\xd7 10\\u207b\\xb3\\xb9 kg.\nStep 2:\nThen \\u03bb = (6.63 \\xd7 10\\u207b\\xb3\\u2074) / ((9.1 \\xd7 10\\u207b\\xb2\\u2079)(2 \\xd7 10\\u2076)) \\u2248 3.64 \\xd7 10\\u207b\\xb9\\xb2 m, or 0.00364 nm.\nAnswer:\nDe Broglie wavelength \\u2248 3.64 \\xd7 10\\u207b\\xb9\\xb2 m (0.00364 nm)."
+    },
+    {
+        "question": "A 5 kg disk of radius 0.5 m is rotating at 6 rad/s. Find its angular momentum.",
+        "chosen": "Step 1:\nFor a solid disk, moment of inertia I = (1/2) M R\\xb2 = 0.5 \\xd7 5 \\xd7 (0.5)\\xb2 = 0.625 kg\\xb7m\\xb2.\nStep 2:\nAngular momentum L = I \\u03c9 = 0.625 \\xd7 6 = 3.75 kg\\xb7m\\xb2/s.\nAnswer:\n3.75 kg\\xb7m\\xb2/s.",
+        "rejected": "Step 1:\nAssume moment of inertia I = M R\\xb2 = 5 \\xd7 (0.5)\\xb2 = 1.25 kg\\xb7m\\xb2.\nStep 2:\nAngular momentum L = I \\u03c9 = 1.25 \\xd7 6 = 7.5 kg\\xb7m\\xb2/s.\nAnswer:\n7.5 kg\\xb7m\\xb2/s."
+    },
+    {
+        "question": "An electron is accelerated to near light speed. Show how its relativistic mass changes compared to its rest mass.",
+        "chosen": "Step 1:\nRelativistic mass m = \\u03b3 m\\u2080, with \\u03b3 = 1 / \\u221a(1 - v\\xb2/c\\xb2).\nStep 2:\nAs v \\u2192 c, \\u03b3 increases dramatically, so m increases without bound.\nAnswer:\nRelativistic mass grows by the factor \\u03b3, becoming very large near c.",
+        "rejected": "Step 1:\nAssume m = \\u03b3 m\\u2080 but take \\u03b3 \\u2248 0.5 for near light speed.\nStep 2:\nThen m becomes 0.5 m\\u2080, which is a decrease.\nAnswer:\nRelativistic mass decreases to half the rest mass."
+    },
+    {
+        "question": "A wire of length 2 m carries a current of 3 A in a magnetic field of 0.5 T. Find the force on the wire if the field is perpendicular to the current.",
+        "chosen": "Step 1:\nF = I L B.\n\nStep 2:\nSubstitute I = 3 A, L = 2 m, B = 0.5 T:\nF = 3 \\xd7 2 \\xd7 0.5 = 3 N.\n\nAnswer:\n3 N.",
+        "rejected": "Step 1:\nApply F = I L B, taking L = 0.2 m.\n\nStep 2:\nWith I = 3 A and B = 0.5 T, F = 3 \\xd7 0.2 \\xd7 0.5 = 0.3 N.\n\nAnswer:\n0.3 N."
+    },
+    {
+        "question": "A gamma-ray photon has an energy of 1 MeV. Find its wavelength.",
+        "chosen": "Step 1:\nConvert 1 MeV = 1.602 \\xd7 10\\u207b\\xb9\\xb3 J.\nStep 2:\nUse \\u03bb = (h c) / E = (6.63 \\xd7 10\\u207b\\xb3\\u2074 J\\xb7s \\xd7 3 \\xd7 10\\u2078 m/s) / (1.602 \\xd7 10\\u207b\\xb9\\xb3 J) \\u2248 1.24 \\xd7 10\\u207b\\xb9\\xb2 m.\nStep 3:\nThat is about 1.24 pm.\nAnswer:\nWavelength \\u2248 1.24 pm.",
+        "rejected": "Step 1:\nUsing the same conversion but mistakenly using E = 1.602 \\xd7 10\\u207b\\xb9\\u2074 J.\nStep 2:\nThen \\u03bb = (6.63 \\xd7 10\\u207b\\xb3\\u2074 \\xd7 3 \\xd7 10\\u2078) / (1.602 \\xd7 10\\u207b\\xb9\\u2074) \\u2248 1.24 \\xd7 10\\u207b\\xb9\\xb9 m (12.4 pm).\nAnswer:\nWavelength \\u2248 12.4 pm."
+    },
+    {
+        "question": "A force F(x) = 4x\\xb2 (N) is applied to an object as it moves from x = 1 m to x = 3 m. Find the total work done.",
+        "chosen": "Step 1:\nWork W = \\u222b from 1 to 3 of 4x\\xb2 dx.\nStep 2:\n\\u222b4x\\xb2 dx = 4 \\xd7 (x\\xb3/3); evaluate from 1 to 3: 4/3 \\xd7 (27 - 1) = (4/3) \\xd7 26 \\u2248 34.67 J.\nAnswer:\n34.67 J.",
+        "rejected": "Step 1:\nWork W = 4 \\xd7 (3\\xb2 - 1\\xb2) = 4 \\xd7 (9 - 1) = 4 \\xd7 8 = 32 J.\nAnswer:\n32 J."
+    },
+    {
+        "question": "An observer sees a rainbow. If sunlight is refracted through a water droplet (n=1.33) at an angle of 42\\xb0, find the deviation angle of red light.",
+        "chosen": "Step 1:\nFor a primary rainbow, the central bow angle is about 42\\xb0 from the antisolar point. This deviation is characteristic for red light.\nAnswer:\nThe deviation angle is about 42\\xb0 for red light.",
+        "rejected": "Step 1:\nAssume that red light is deviated by adding an extra 8\\xb0 to the 42\\xb0 refraction, giving a deviation of 50\\xb0.\nAnswer:\nThe deviation angle is calculated to be about 50\\xb0."
+    },
+    {
+        "question": "A capacitor of 10 \\u03bcF is charged to 50 V. Calculate the energy stored in the capacitor.",
+        "chosen": "Step 1:\nU = \\xbd C V\\xb2.\n\nStep 2:\nC = 10 \\xd7 10\\u207b\\u2076 F, V = 50 V.\n\nStep 3:\nU = 0.5 \\xd7 (10 \\xd7 10\\u207b\\u2076) \\xd7 2500 = 0.0125 J.\n\nAnswer:\n0.0125 J.",
+        "rejected": "Step 1:\nUse U = \\xbd C V\\xb2, taking 10 \\u03bcF as 10 \\xd7 10\\u207b\\xb3 F.\n\nStep 2:\nSubstitute C = 10 \\xd7 10\\u207b\\xb3 F and V = 50 V: U = 0.5 \\xd7 (10 \\xd7 10\\u207b\\xb3) \\xd7 2500.\n\nStep 3:\nCompute U = 0.5 \\xd7 0.01 \\xd7 2500 = 12.5 J.\n\nAnswer:\n12.5 J."
+    },
+    {
+        "question": "A person pushes an object with a force of 50 N over 10 m in the same direction as motion. Find the work done.",
+        "chosen": "Step 1:\nWork W = F \\xd7 d = 50 N \\xd7 10 m = 500 J.\nAnswer:\n500 J.",
+        "rejected": "Step 1:\nWork W = F \\xd7 d + 50 J extra, so W = 50 N \\xd7 10 m + 50 = 500 + 50 = 550 J.\nAnswer:\n550 J."
+    },
+    {
+        "question": "Define and explain the concept of enthalpy in thermodynamics.",
+        "chosen": "Step 1:\nEnthalpy (H) is defined as H = U + pV, where U is internal energy.\nStep 2:\nIt is particularly useful for processes at constant pressure because the change in enthalpy equals the heat absorbed or released.\nAnswer:\nEnthalpy measures the total heat content of a system under constant pressure.",
+        "rejected": "Step 1:\nDefine enthalpy as simply the internal energy (H = U).\nAnswer:\nEnthalpy is just the internal energy."
+    },
+    {
+        "question": "A circuit contains a resistor (10 \\u03a9), an inductor (0.5 H), and a capacitor (100 \\u03bcF). Find the resonant frequency of the circuit.",
+        "chosen": "Step 1:\nAngular frequency \\u03c9\\u2080 = 1 / \\u221a(LC), f = \\u03c9\\u2080 / (2\\u03c0).\n\nStep 2:\nConvert 100 \\u03bcF = 1 \\xd7 10\\u207b\\u2074 F.\n\nStep 3:\nLC = 0.5 \\xd7 1 \\xd7 10\\u207b\\u2074 = 5 \\xd7 10\\u207b\\u2075.\n\nStep 4:\n\\u03c9\\u2080 = 1 / \\u221a(5 \\xd7 10\\u207b\\u2075) \\u2248 44.72 rad/s.\n\nStep 5:\nf \\u2248 44.72 / (2\\u03c0) \\u2248 7.12 Hz.\n\nAnswer:\n7.12 Hz (approximately).",
+        "rejected": "Step 1:\nUse the formula for an RC circuit: f = 1 / (2\\u03c0RC).\n\nStep 2:\nWith R = 10 \\u03a9 and C = 1 \\xd7 10\\u207b\\u2074 F, compute f = 1 / (2\\u03c0 \\xd7 10 \\xd7 1 \\xd7 10\\u207b\\u2074).\n\nStep 3:\nf = 1 / (0.00628) \\u2248 159 Hz.\n\nAnswer:\nApproximately 159 Hz."
+    },
+    {
+        "question": "Calculate the binding energy of a helium-4 nucleus. (Mass of He-4 = 4.0026 u, Proton mass = 1.0073 u, Neutron mass = 1.0087 u)",
+        "chosen": "Step 1:\nCalculate mass of separate nucleons: 2p + 2n = 2(1.0073) + 2(1.0087) = 4.0320 u.\nStep 2:\nMass defect = 4.0320 u - 4.0026 u = 0.0294 u.\nStep 3:\nBinding energy \\u2248 0.0294 u \\xd7 931.5 MeV/u \\u2248 27.4 MeV.\nAnswer:\nBinding energy \\u2248 27.4 MeV.",
+        "rejected": "Step 1:\nUse the same nucleon masses but take the mass defect as 0.00294 u (an order of magnitude smaller).\nStep 2:\nThen binding energy \\u2248 0.00294 u \\xd7 931.5 MeV/u \\u2248 2.74 MeV.\nAnswer:\nBinding energy \\u2248 2.74 MeV."
+    },
+    {
+        "question": "A neutron undergoes beta decay. Calculate the energy released given the mass difference between reactants and products.",
+        "chosen": "Step 1:\nFor beta decay (n \\u2192 p + e\\u207b + \\u03bd\\u0305), determine the mass defect \\u0394m.\nStep 2:\nEnergy released Q = \\u0394m c\\xb2, which is about 0.782 MeV.\nAnswer:\nEnergy released \\u2248 0.78 MeV.",
+        "rejected": "Step 1:\nAssume a larger mass defect leading to Q = 1.5 MeV.\nAnswer:\nEnergy released \\u2248 1.5 MeV."
+    },
+    {
+        "question": "A rocket accelerates at 30 m/s\\xb2 for the first 5 seconds after launch. It then enters free fall. Find the maximum height reached (neglecting air resistance).",
+        "chosen": "Step 1:\nDuring powered flight: final velocity v = 0 + 30 \\xd7 5 = 150 m/s; distance covered = 0.5 \\xd7 30 \\xd7 (5)\\xb2 = 375 m.\nStep 2:\nDuring free fall: additional height = v\\xb2 / (2g) = 150\\xb2 / (2 \\xd7 9.8) \\u2248 1148 m.\nStep 3:\nTotal height = 375 + 1148 = 1523 m.\nAnswer:\n1523 m.",
+        "rejected": "Step 1:\nDuring powered flight, take acceleration as 3 m/s\\xb2: v = 0 + 3 \\xd7 5 = 15 m/s; distance = 0.5 \\xd7 3 \\xd7 (5)\\xb2 = 37.5 m.\nStep 2:\nDuring free fall, additional height = 15\\xb2 / (2 \\xd7 9.8) \\u2248 11.48 m.\nStep 3:\nTotal height = 37.5 + 11.48 \\u2248 48.98 m.\nAnswer:\n49 m."
+    },
+    {
+        "question": "A steam engine operates between 800 K and 400 K. Compare its efficiency to that of a Carnot engine with the same temperature limits.",
+        "chosen": "Step 1:\nFor a Carnot engine, efficiency \\u03b7 = 1 - (T_L/T_H) = 1 - (400/800) = 0.5 or 50%.\nStep 2:\nReal steam engines have irreversibilities, so their efficiency is lower than that of the ideal Carnot cycle.\nAnswer:\nThe steam engine has an efficiency lower than 50%.",
+        "rejected": "Step 1:\nAssume that a real steam engine can achieve the same efficiency as a Carnot engine, i.e., 50%.\nAnswer:\nThe steam engine has an efficiency of 50%."
+    },
+    {
+        "question": "A proton moves through a potential difference of 1 kV. Calculate its final speed. (Charge of proton = 1.6 \\xd7 10\\u207b\\xb9\\u2079 C, Mass = 1.67 \\xd7 10\\u207b\\xb2\\u2077 kg)",
+        "chosen": "Step 1:\nKinetic energy gained = q V = (1.6 \\xd7 10\\u207b\\xb9\\u2079)(1000) = 1.6 \\xd7 10\\u207b\\xb9\\u2076 J.\n\nStep 2:\nSet \\xbd m v\\xb2 = 1.6 \\xd7 10\\u207b\\xb9\\u2076.\n\nStep 3:\nv = \\u221a[(2 \\xd7 1.6 \\xd7 10\\u207b\\xb9\\u2076) / (1.67 \\xd7 10\\u207b\\xb2\\u2077)] \\u2248 1.38 \\xd7 10\\u2075 m/s.\n\nAnswer:\n1.38 \\xd7 10\\u2075 m/s (approx.).",
+        "rejected": "Step 1:\nUse \\xbd m v\\xb2 = q V, so v = \\u221a((q V) / m).\n\nStep 2:\nSubstitute q = 1.6 \\xd7 10\\u207b\\xb9\\u2079 C, V = 1000 V, and m = 1.67 \\xd7 10\\u207b\\xb2\\u2077 kg, so v = \\u221a((1.6 \\xd7 10\\u207b\\xb9\\u2076)/(1.67 \\xd7 10\\u207b\\xb2\\u2077)).\n\nStep 3:\nCalculate v = \\u221a(9.58 \\xd7 10\\xb9\\u2070) \\u2248 9.8 \\xd7 10\\u2075 m/s.\n\nAnswer:\n9.8 \\xd7 10\\u2075 m/s."
+    },
+    {
+        "question": "A gas expands at constant pressure, absorbing 500 J of heat. If it does 200 J of work, what is the change in internal energy?",
+        "chosen": "Step 1:\nUse the first law of thermodynamics: \\u0394U = Q - W.\nStep 2:\nSubstitute Q = 500 J and W = 200 J to get \\u0394U = 500 - 200 = 300 J.\nAnswer:\nThe internal energy increases by 300 J.",
+        "rejected": "Step 1:\nErroneously add the heat and work: \\u0394U = Q + W.\nStep 2:\nThen \\u0394U = 500 + 200 = 700 J.\nAnswer:\nThe internal energy increases by 700 J."
+    },
+    {
+        "question": "A rotating disk spins at 100 rpm. A 2 kg person standing at the edge moves 1 m toward the center. Find the new angular velocity (assuming no external torque).",
+        "chosen": "Step 1:\nAngular momentum is conserved: I\\u2081 \\u03c9\\u2081 = I\\u2082 \\u03c9\\u2082.\nStep 2:\nFor a point mass, I = m r\\xb2. If the person moves from radius r\\u2081 to r\\u2082 = r\\u2081 - 1, then \\u03c9\\u2082 = \\u03c9\\u2081 \\xd7 (r\\u2081\\xb2 / r\\u2082\\xb2).\nAnswer:\n\\u03c9 increases in proportion to (r\\u2081\\xb2 / (r\\u2081 - 1)\\xb2).",
+        "rejected": "Step 1:\nConvert 100 rpm to rad/s (approximately 10.47 rad/s).\nStep 2:\nAssume the new angular velocity is simply half of the original due to the inward movement, so \\u03c9\\u2082 = 10.47 / 2 \\u2248 5.24 rad/s.\nAnswer:\nApproximately 5.24 rad/s."
+    },
+    {
+        "question": "Explain the relationship between Gibbs free energy and spontaneity of a reaction.",
+        "chosen": "Step 1:\nGibbs free energy is defined as G = H - TS.\nStep 2:\nA reaction is spontaneous at constant temperature and pressure if the change in Gibbs free energy, \\u0394G, is negative.\nAnswer:\nA negative \\u0394G indicates a spontaneous reaction.",
+        "rejected": "Step 1:\nErroneously define Gibbs free energy as G = H + TS.\nStep 2:\nThen conclude that a reaction is spontaneous if \\u0394G is positive.\nAnswer:\nA reaction is spontaneous if \\u0394G is positive."
+    },
+    {
+        "question": "A beam of light passes through a polarizer and analyzer at an angle of 60\\xb0. If the initial intensity is 100 W/m\\xb2, find the transmitted intensity.",
+        "chosen": "Step 1:\nApply Malus\\u2019s law: I = I\\u2080 cos\\xb2(\\u03b8), with \\u03b8 = 60\\xb0 and cos 60\\xb0 = 0.5, so cos\\xb260\\xb0 = 0.25.\nStep 2:\nI = 100 W/m\\xb2 \\xd7 0.25 = 25 W/m\\xb2.\nAnswer:\nThe transmitted intensity is 25 W/m\\xb2.",
+        "rejected": "Step 1:\nIncorrectly use sin\\xb2 instead: I = I\\u2080 sin\\xb2(60\\xb0) with sin 60\\xb0 \\u2248 0.866, so sin\\xb260\\xb0 \\u2248 0.75.\nStep 2:\nI = 100 W/m\\xb2 \\xd7 0.75 = 75 W/m\\xb2.\nAnswer:\nThe transmitted intensity is calculated to be 75 W/m\\xb2."
+    },
+    {
+        "question": "Calculate the Compton shift when an X-ray photon of 0.1 nm scatters at 90\\xb0 from an electron.",
+        "chosen": "Step 1:\nUse \\u0394\\u03bb = (h / m\\u2091 c)(1 - cos \\u03b8); for \\u03b8 = 90\\xb0, (1 - cos 90\\xb0) = 1.\nStep 2:\nThe Compton wavelength of the electron is about 2.43 \\xd7 10\\u207b\\xb9\\xb2 m.\nStep 3:\nThus, \\u0394\\u03bb \\u2248 2.43 \\xd7 10\\u207b\\xb9\\xb2 m (or 2.43 pm).\nAnswer:\nCompton shift \\u2248 2.43 pm.",
+        "rejected": "Step 1:\nUse the formula but assume the Compton wavelength is 2.43 \\xd7 10\\u207b\\xb9\\xb9 m.\nStep 2:\nThen \\u0394\\u03bb \\u2248 2.43 \\xd7 10\\u207b\\xb9\\xb9 m (or 24.3 pm).\nAnswer:\nCompton shift \\u2248 24.3 pm."
+    },
+    {
+        "question": "A gamma-ray photon has an energy of 1 MeV. Find its wavelength.",
+        "chosen": "Step 1:\nConvert 1 MeV to joules: 1 MeV = 1.602 \\xd7 10\\u207b\\xb9\\xb3 J.\nStep 2:\nUse \\u03bb = (h c) / E = (6.63 \\xd7 10\\u207b\\xb3\\u2074 J\\xb7s \\xd7 3 \\xd7 10\\u2078 m/s) / (1.602 \\xd7 10\\u207b\\xb9\\xb3 J) \\u2248 1.24 \\xd7 10\\u207b\\xb9\\xb2 m.\nStep 3:\nThat is about 1.24 pm.\nAnswer:\nWavelength \\u2248 1.24 pm.",
+        "rejected": "Step 1:\nUsing the same conversion but mistakenly using E = 1.602 \\xd7 10\\u207b\\xb9\\u2074 J.\nStep 2:\nThen \\u03bb = (6.63 \\xd7 10\\u207b\\xb3\\u2074 \\xd7 3 \\xd7 10\\u2078) / (1.602 \\xd7 10\\u207b\\xb9\\u2074) \\u2248 1.24 \\xd7 10\\u207b\\xb9\\xb9 m (12.4 pm).\nAnswer:\nWavelength \\u2248 12.4 pm."
+    },
+    {
+        "question": "A beam of light is incident at 30\\xb0 on a glass surface (n = 1.5). Find the critical angle for total internal reflection.",
+        "chosen": "Step 1:\nThe critical angle \\u03b8c occurs when the refracted angle is 90\\xb0.\nStep 2:\nUsing sin(\\u03b8c) = n\\u2082/n\\u2081. With air n\\u2082 = 1.0 and glass n\\u2081 = 1.5: sin(\\u03b8c) = 1/1.5 \\u2248 0.667.\nStep 3:\n\\u03b8c = sin\\u207b\\xb9(0.667) \\u2248 41.8\\xb0.\nAnswer:\nThe critical angle is about 41.8\\xb0.",
+        "rejected": "Step 1:\nIncorrectly reverse the ratio: sin(\\u03b8c) = n\\u2081/n\\u2082 = 1.5/1.0 = 1.5, which is impossible.\nAnswer:\nThe calculation yields an undefined value; hence, the method is flawed."
+    },
+    {
+        "question": "A 1 kg sample of water is heated from 20\\xb0C to 80\\xb0C. Given that the specific heat of water is 4.18 J/g\\xb0C, calculate the heat required.",
+        "chosen": "Step 1:\nConvert mass: 1 kg = 1000 g.\nStep 2:\nCalculate the temperature change: \\u0394T = 80\\xb0C - 20\\xb0C = 60\\xb0C.\nStep 3:\nCompute Q = m \\xd7 c \\xd7 \\u0394T = 1000 g \\xd7 4.18 J/g\\xb0C \\xd7 60\\xb0C = 250,800 J.\nAnswer:\nThe required heat is approximately 2.51 \\xd7 10^5 J.",
+        "rejected": "Step 1:\nMistakenly assume 1 kg equals 1 g.\nStep 2:\nThen Q = 1 g \\xd7 4.18 J/g\\xb0C \\xd7 60\\xb0C = 250.8 J.\nAnswer:\nThe heat required is calculated to be 250.8 J."
+    },
+    {
+        "question": "A photon has a wavelength of 500 nm. Calculate its energy. (h = 6.63 \\xd7 10\\u207b\\xb3\\u2074 J\\xb7s, c = 3 \\xd7 10\\u2078 m/s)",
+        "chosen": "Step 1:\nConvert the wavelength \\u03bb = 500 nm = 5.00 \\xd7 10\\u207b\\u2077 m.\nStep 2:\nUse E = (h c) / \\u03bb.\nE = (6.63 \\xd7 10\\u207b\\xb3\\u2074 J\\xb7s)(3.00 \\xd7 10\\u2078 m/s) / (5.00 \\xd7 10\\u207b\\u2077 m) \\u2248 3.98 \\xd7 10\\u207b\\xb9\\u2079 J.\nStep 3:\nOptionally, to convert to eV, divide by 1.602 \\xd7 10\\u207b\\xb9\\u2079 J/eV, yielding \\u2248 2.49 eV.\nAnswer:\nEnergy \\u2248 3.98 \\xd7 10\\u207b\\xb9\\u2079 J (\\u2248 2.49 eV).",
+        "rejected": "Step 1:\nConvert the wavelength \\u03bb = 500 nm as 5.00 \\xd7 10\\u207b\\u2076 m.\nStep 2:\nUse E = (h c) / \\u03bb.\nE = (6.63 \\xd7 10\\u207b\\xb3\\u2074 J\\xb7s)(3.00 \\xd7 10\\u2078 m/s) / (5.00 \\xd7 10\\u207b\\u2076 m) \\u2248 3.98 \\xd7 10\\u207b\\xb2\\u2070 J.\nStep 3:\nConverting to eV: 3.98 \\xd7 10\\u207b\\xb2\\u2070 J / (1.602 \\xd7 10\\u207b\\xb9\\u2079 J/eV) \\u2248 0.25 eV.\nAnswer:\nEnergy \\u2248 3.98 \\xd7 10\\u207b\\xb2\\u2070 J (\\u2248 0.25 eV)."
+    },
+    {
+        "question": "A 80 kg person is standing inside an elevator that is accelerating upward at 3 m/s\\xb2. What is the normal force acting on them?",
+        "chosen": "Step 1:\nUse N = m (g + a) = 80 (9.8 + 3) = 80 \\xd7 12.8 = 1024 N.\nAnswer:\n1024 N.",
+        "rejected": "Step 1:\nUse N = m (g - a) = 80 (9.8 - 3) = 80 \\xd7 6.8 = 544 N.\nAnswer:\n544 N."
+    },
+    {
+        "question": "An electron moving in a uniform magnetic field describes a circular motion. Derive the expression for its radius in terms of mass, charge, velocity, and magnetic field strength.",
+        "chosen": "1.  Magnetic force: F = q v B (perpendicular).\n2.  Centripetal force: F = m v\\xb2 / r.\n3.  Set them equal: q v B = m v\\xb2 / r.\n4.  Hence r = (m v) / (|q| B).",
+        "rejected": "Step 1:\nResolve the velocity into components, taking v\\u22a5 = v cos\\u03b8 and v\\u2225 = v sin\\u03b8.\n\nStep 2:\nUse the circular motion formula with r = (m v cos\\u03b8) / (qB).\n\nStep 3:\nConclude that the particle moves in a circular path.\n\nAnswer:\nr = (m v cos\\u03b8) / (qB) and the trajectory is circular."
+    },
+    {
+        "question": "Two point charges of +3 \\u03bcC and -2 \\u03bcC are separated by 0.5 m. Calculate the electrostatic force between them. (k = 9 \\xd7 10\\u2079 N\\xb7m\\xb2/C\\xb2)",
+        "chosen": "Step 1:\nIdentify q\\u2081 = +3 \\xd7 10\\u207b\\u2076 C, q\\u2082 = -2 \\xd7 10\\u207b\\u2076 C, r = 0.5 m.\n\nStep 2:\nUse Coulomb's law (magnitude): F = k \\xd7 |q\\u2081q\\u2082| / r\\xb2.\n\nStep 3:\nCompute |q\\u2081q\\u2082| = (3 \\xd7 10\\u207b\\u2076)(2 \\xd7 10\\u207b\\u2076) = 6 \\xd7 10\\u207b\\xb9\\xb2.\n\nStep 4:\nSubstitute:\nF = (9 \\xd7 10\\u2079) \\xd7 (6 \\xd7 10\\u207b\\xb9\\xb2) / (0.5)\\xb2 = 0.216 N.\n\nAnswer:\n0.216 N (attractive).",
+        "rejected": "Step 1:\nConvert the charges: 3 \\u03bcC = 3 \\xd7 10\\u207b\\xb3 C and 2 \\u03bcC = 2 \\xd7 10\\u207b\\xb3 C.\n\nStep 2:\nCalculate |q\\u2081q\\u2082| = (3 \\xd7 10\\u207b\\xb3 C) \\xd7 (2 \\xd7 10\\u207b\\xb3 C) = 6 \\xd7 10\\u207b\\u2076.\n\nStep 3:\nApply Coulomb's law: F = (9 \\xd7 10\\u2079 N\\xb7m\\xb2/C\\xb2) \\xd7 (6 \\xd7 10\\u207b\\u2076) / (0.5)\\xb2.\n\nStep 4:\nSince (0.5)\\xb2 = 0.25, F = (54 \\xd7 10\\xb3) / 0.25 = 216000 N.\n\nAnswer:\n2.16 \\xd7 10\\u2075 N."
+    },
+    {
+        "question": "An electron moves at 2 \\xd7 10\\u2076 m/s perpendicular to a magnetic field of 0.02 T. Calculate the force acting on it. (Charge of electron = 1.6 \\xd7 10\\u207b\\xb9\\u2079 C)",
+        "chosen": "Step 1:\nF = q v B.\n\nStep 2:\nq = 1.6 \\xd7 10\\u207b\\xb9\\u2079 C, v = 2 \\xd7 10\\u2076 m/s, B = 0.02 T.\n\nStep 3:\nF = (1.6 \\xd7 10\\u207b\\xb9\\u2079) \\xd7 (2 \\xd7 10\\u2076) \\xd7 0.02 = 6.4 \\xd7 10\\u207b\\xb9\\u2075 N.\n\nAnswer:\n6.4 \\xd7 10\\u207b\\xb9\\u2075 N.",
+        "rejected": "Step 1:\nUse F = q v B, taking the electron charge as 1.6 \\xd7 10\\u207b\\xb9\\u2075 C.\n\nStep 2:\nSubstitute q = 1.6 \\xd7 10\\u207b\\xb9\\u2075 C, v = 2 \\xd7 10\\u2076 m/s, and B = 0.02 T.\n\nStep 3:\nCalculate F = (1.6 \\xd7 10\\u207b\\xb9\\u2075) \\xd7 (2 \\xd7 10\\u2076) \\xd7 0.02 = 6.4 \\xd7 10\\u207b\\xb9\\xb9 N.\n\nAnswer:\n6.4 \\xd7 10\\u207b\\xb9\\xb9 N."
+    },
+    {
+        "question": "A charged particle moves in a circular path in a magnetic field of 0.01 T with a radius of 0.2 m. If the particle has a charge of 1.6 \\xd7 10\\u207b\\xb9\\u2079 C and a mass of 9.1 \\xd7 10\\u207b\\xb3\\xb9 kg, find its velocity.",
+        "chosen": "Step 1:\nr = (m v) / (q B).\n\nStep 2:\nRearrange: v = (q B r) / m.\n\nStep 3:\nSubstitute: q = 1.6 \\xd7 10\\u207b\\xb9\\u2079 C, B = 0.01 T, r = 0.2 m, m = 9.1 \\xd7 10\\u207b\\xb3\\xb9 kg.\n\nStep 4:\nCompute approximate v \\u2248 3.5 \\xd7 10\\u2078 m/s.\n\nAnswer (approx.):\n3.5 \\xd7 10\\u2078 m/s.",
+        "rejected": "Step 1:\nStart with the formula r = (m v)/(q B) and rearrange to v = m/(q B r).\n\nStep 2:\nSubstitute m = 9.1 \\xd7 10\\u207b\\xb3\\xb9 kg, q = 1.6 \\xd7 10\\u207b\\xb9\\u2079 C, B = 0.01 T, and r = 0.2 m.\n\nStep 3:\nCalculate v = (9.1 \\xd7 10\\u207b\\xb3\\xb9)/(1.6 \\xd7 10\\u207b\\xb9\\u2079 \\xd7 0.01 \\xd7 0.2) = 2.84 \\xd7 10\\u207b\\u2079 m/s.\n\nAnswer:\n2.84 \\xd7 10\\u207b\\u2079 m/s."
+    },
+    {
+        "question": "A coil with 200 turns encloses an area of 0.01 m\\xb2. It is placed in a changing magnetic field that increases at 0.1 T/s. Calculate the induced emf.",
+        "chosen": "Step 1:\n\\u03b5 = N A (dB/dt).\n\nStep 2:\nN = 200, A = 0.01 m\\xb2, dB/dt = 0.1 T/s.\n\nStep 3:\n\\u03b5 = 200 \\xd7 0.01 \\xd7 0.1 = 0.2 V.\n\nAnswer:\n0.2 V.",
+        "rejected": "Step 1:\nApply \\u03b5 = N A (dB/dt) using A = 0.1 m\\xb2.\n\nStep 2:\nWith N = 200 and dB/dt = 0.1 T/s, \\u03b5 = 200 \\xd7 0.1 \\xd7 0.1 = 2 V.\n\nAnswer:\n2 V."
+    },
+    {
+        "question": "A proton collides with an antiproton, annihilating into pure energy. Find the total energy released if each has a mass of 1.67 \\xd7 10\\u207b\\xb2\\u2077 kg.",
+        "chosen": "Step 1:\nTotal mass = 2 \\xd7 (1.67 \\xd7 10\\u207b\\xb2\\u2077 kg) = 3.34 \\xd7 10\\u207b\\xb2\\u2077 kg.\nStep 2:\nEnergy released E = m c\\xb2 = 3.34 \\xd7 10\\u207b\\xb2\\u2077 kg \\xd7 (3 \\xd7 10\\u2078 m/s)\\xb2 \\u2248 3.006 \\xd7 10\\u207b\\xb9\\u2070 J.\nStep 3:\nConverting to MeV: \\u2248 1.88 GeV.\nAnswer:\nEnergy released \\u2248 3.0 \\xd7 10\\u207b\\xb9\\u2070 J (\\u2248 1.88 GeV).",
+        "rejected": "Step 1:\nAssume the energy is doubled by error, calculating E = 6.0 \\xd7 10\\u207b\\xb9\\u2070 J.\nStep 2:\nThis converts to roughly 3.76 GeV.\nAnswer:\nEnergy released \\u2248 6.0 \\xd7 10\\u207b\\xb9\\u2070 J (\\u2248 3.76 GeV)."
+    },
+    {
+        "question": "A camera lens with a focal length of 50 mm is focused on an object 2 m away. Find the image distance and magnification.",
+        "chosen": "Step 1:\nUse the lens formula: 1/f = 1/do + 1/di, where f = 50 mm and do = 2000 mm.\nStep 2:\n1/50 = 1/2000 + 1/di \\u27f9 1/di = 1/50 - 1/2000 = (40 - 1)/2000 = 39/2000 \\u2248 0.0195, so di \\u2248 51.3 mm.\nStep 3:\nMagnification m = di/do \\u2248 51.3/2000 \\u2248 0.0256.\nAnswer:\nThe image distance is about 51.3 mm and the magnification is approximately 0.026 (about 1/39).",
+        "rejected": "Step 1:\nErroneously add the reciprocals: 1/di = 1/50 + 1/2000 = 41/2000 \\u2248 0.0205, so di \\u2248 48.8 mm.\nStep 2:\nThen m = 48.8/2000 \\u2248 0.0244.\nAnswer:\nThe image distance is calculated to be about 48.8 mm and the magnification about 0.024."
+    },
+    {
+        "question": "A mass M is hanging from a light string, while another mass m is on a smooth horizontal surface, connected through a pulley. Find the acceleration of the system in terms of M, m, and g.",
+        "chosen": "Step 1:\nFor the hanging mass: M g - T = M a.\nFor the mass on the surface: T = m a.\nStep 2:\nEliminate T: M g - m a = M a, so a = (M g) / (M + m).\nAnswer:\na = (M g) / (M + m).",
+        "rejected": "Step 1:\nFor the hanging mass: M g - T = M a.\nFor the mass on the surface: T = m a.\nStep 2:\nEliminate T and obtain a = (m g) / (M + m).\nAnswer:\na = (m g) / (M + m)."
+    },
+    {
+        "question": "A muon decays with a proper lifetime of 2.2 \\u03bcs. If it moves at 0.98c, how long does it survive in the Earth\\u2019s frame?",
+        "chosen": "Step 1:\nProper lifetime \\u03c4\\u2080 = 2.2 \\xd7 10\\u207b\\u2076 s.\nStep 2:\nCalculate \\u03b3 = 1/\\u221a(1 - 0.98\\xb2) \\u2248 5.03.\nStep 3:\nObserved lifetime \\u03c4 = \\u03b3 \\u03c4\\u2080 \\u2248 5.03 \\xd7 2.2 \\xd7 10\\u207b\\u2076 s \\u2248 1.11 \\xd7 10\\u207b\\u2075 s.\nAnswer:\nMuon lifetime \\u2248 1.11 \\xd7 10\\u207b\\u2075 s.",
+        "rejected": "Step 1:\nTake proper lifetime \\u03c4\\u2080 = 2.2 \\xd7 10\\u207b\\u2076 s.\nStep 2:\nAssume \\u03b3 = 10.\nStep 3:\nThen \\u03c4 = 10 \\xd7 2.2 \\xd7 10\\u207b\\u2076 s = 2.2 \\xd7 10\\u207b\\u2075 s.\nAnswer:\nMuon lifetime \\u2248 2.2 \\xd7 10\\u207b\\u2075 s."
+    },
+    {
+        "question": "A 10 kg box is placed on a rough surface with a static friction coefficient of 0.4. If a 30 N horizontal force is applied, will the box move? (g = 9.8 m/s\\xb2)",
+        "chosen": "Step 1:\nMaximum static friction f\\u209b = \\u03bc\\u209b \\xd7 m \\xd7 g = 0.4 \\xd7 10 \\xd7 9.8 = 39.2 N.\nStep 2:\nSince 30 N < 39.2 N, the box does not move.\nAnswer:\nNo, it remains at rest.",
+        "rejected": "Step 1:\nCalculate maximum static friction f\\u209b = 0.4 \\xd7 10 \\xd7 9.8 = 39.2 N.\nStep 2:\nSince 30 N is considered greater than 39.2 N, the box moves.\nAnswer:\nYes, it moves."
+    },
+    {
+        "question": "A light ray travels from air (n=1.00) into water (n=1.33) at an angle of 45\\xb0. Find the angle of refraction.",
+        "chosen": "Step 1:\nUse Snell\\u2019s law: n\\u2081 sin(\\u03b8\\u2081) = n\\u2082 sin(\\u03b8\\u2082).\nHere, n\\u2081 = 1.00, n\\u2082 = 1.33, and \\u03b8\\u2081 = 45\\xb0.\nStep 2:\nsin(\\u03b8\\u2082) = (1.00 \\xd7 sin45\\xb0) / 1.33 \\u2248 0.707 / 1.33 \\u2248 0.53.\nStep 3:\n\\u03b8\\u2082 = sin\\u207b\\xb9(0.53) \\u2248 31.8\\xb0.\nAnswer:\nThe angle of refraction is approximately 31.8\\xb0.",
+        "rejected": "Step 1:\nApply Snell\\u2019s law but mistakenly multiply: sin(\\u03b8\\u2082) = 1.33 \\xd7 sin45\\xb0 \\u2248 1.33 \\xd7 0.707 \\u2248 0.94.\nStep 2:\nThen \\u03b8\\u2082 = sin\\u207b\\xb9(0.94) \\u2248 70\\xb0.\nAnswer:\nThe angle of refraction is calculated to be about 70\\xb0."
+    },
+    {
+        "question": "Derive the ideal gas law using the first law of thermodynamics and kinetic theory.",
+        "chosen": "Step 1:\nFrom kinetic theory, pV = NkT, where N is the number of molecules.\nStep 2:\nRelate N to the number of moles n using N = nN_A and recognize that kN_A = R.\nStep 3:\nThus, pV = nRT.\nAnswer:\nCombining kinetic theory with the definition of moles yields the ideal gas law: pV = nRT.",
+        "rejected": "Step 1:\nDerive the relation solely from the first law without considering molecular motion, incorrectly arriving at pV = U.\nAnswer:\nThe derived equation is pV = U."
+    },
+    {
+        "question": "In an isolated system, why does entropy always increase over time?",
+        "chosen": "Step 1:\nIn an isolated system, no energy or matter is exchanged with the surroundings.\nStep 2:\nIrreversible processes within the system lead to an increase in entropy as the system evolves toward equilibrium.\nAnswer:\nEntropy increases over time due to internal irreversible processes.",
+        "rejected": "Step 1:\nAssume that because the system is isolated, entropy remains constant.\nStep 2:\nConclude that \\u0394S = 0.\nAnswer:\nEntropy does not change over time in an isolated system."
+    },
+    {
+        "question": "Two cars (A = 1000 kg, B = 1500 kg) collide on an icy road with a relative speed of 20 m/s. If they undergo a completely inelastic collision, find their final velocity.",
+        "chosen": "Step 1:\nAssume Car A is moving at +10 m/s and Car B at -10 m/s, giving a relative speed of 20 m/s.\nStep 2:\nInitial total momentum = 1000 \\xd7 10 + 1500 \\xd7 (-10) = 10000 - 15000 = -5000 kg\\xb7m/s.\nStep 3:\nCombined mass = 1000 + 1500 = 2500 kg.\nStep 4:\nFinal velocity = -5000 / 2500 = -2 m/s.\nAnswer:\n-2 m/s.",
+        "rejected": "Step 1:\nAssume both cars are moving in the same direction at 10 m/s.\nStep 2:\nTotal momentum = 1000 \\xd7 10 + 1500 \\xd7 10 = 10000 + 15000 = 25000 kg\\xb7m/s.\nStep 3:\nCombined mass = 2500 kg.\nStep 4:\nFinal velocity = 25000 / 2500 = 10 m/s.\nAnswer:\n10 m/s."
+    },
+    {
+        "question": "A spaceship moves at 0.95c. If it fires a laser beam forward, what speed does an Earth observer measure for the laser?",
+        "chosen": "Step 1:\nBy the principle of invariance, the speed of light is always c in any inertial frame.\nStep 2:\nThus, the Earth observer measures the laser at c = 3 \\xd7 10\\u2078 m/s.\nAnswer:\nThe laser travels at 3 \\xd7 10\\u2078 m/s.",
+        "rejected": "Step 1:\nAssume that the spaceship's velocity adds to the laser's speed.\nStep 2:\nThen the observer would measure the laser at 0.95c, i.e., 2.85 \\xd7 10\\u2078 m/s.\nAnswer:\nThe laser is measured at 0.95c (\\u2248 2.85 \\xd7 10\\u2078 m/s)."
+    },
+    {
+        "question": "A prism has a refractive index of 1.52. If light enters at an angle of 40\\xb0, find the angle of deviation.",
+        "chosen": "Step 1:\nThe angle of deviation depends on the prism\\u2019s apex angle and the refractive index. A complete solution requires the apex angle, but for a small-angle approximation, deviation is roughly proportional to (n - 1) times the apex angle.\nStep 2:\nWithout a specific apex angle, a precise numerical answer cannot be given.\nAnswer:\nInsufficient data; the prism's apex angle is needed to determine the exact deviation.",
+        "rejected": "Step 1:\nAssume an apex angle and then mistakenly add an extra 10\\xb0 to the calculated deviation.\nStep 2:\nThis yields an arbitrarily higher deviation angle.\nAnswer:\nThe deviation angle is incorrectly determined to be about 10\\xb0 higher than expected."
+    },
+    {
+        "question": "Compare the efficiency of real engines to the Carnot cycle and explain why real engines never reach Carnot efficiency.",
+        "chosen": "Step 1:\nThe Carnot cycle represents an ideal reversible process with maximum efficiency given by \\u03b7_C = 1 - (T_L/T_H).\nStep 2:\nReal engines have irreversibilities such as friction and heat losses, which reduce their efficiency below the Carnot limit.\nAnswer:\nReal engines are less efficient than a Carnot engine due to irreversible losses.",
+        "rejected": "Step 1:\nAssume that real engines can be designed to exactly match Carnot efficiency if optimized.\nStep 2:\nConclude that real engines have the same efficiency as the Carnot cycle.\nAnswer:\nReal engines reach Carnot efficiency."
+    },
+    {
+        "question": "A diffraction grating produces a second-order maximum at 30\\xb0 for light of wavelength 550 nm. Find the spacing between adjacent lines on the grating.",
+        "chosen": "Step 1:\nFor a grating, the equation is d sin(\\u03b8) = m\\u03bb.\nHere, \\u03b8 = 30\\xb0, m = 2, and \\u03bb = 550 nm.\nStep 2:\nSince sin(30\\xb0) = 0.5, d \\xd7 0.5 = 2 \\xd7 550 nm, so d = (1100 nm) / 0.5 = 2200 nm = 2.2 \\xd7 10\\u207b\\u2076 m.\nAnswer:\nThe line spacing is 2.2 \\xd7 10\\u207b\\u2076 m.",
+        "rejected": "Step 1:\nUsing the grating equation with m = 2 and sin(30\\xb0) = 0.5, mistakenly compute d as (2 \\xd7 550 nm)/0.5 = 1100 nm instead of doubling it.\nStep 2:\nThus, d is erroneously computed as 1.1 \\xd7 10\\u207b\\u2076 m.\nAnswer:\nThe spacing between adjacent lines is calculated to be 1.1 \\xd7 10\\u207b\\u2076 m."
+    },
+    {
+        "question": "An electron is confined in a box of width 1 nm. Estimate its ground state energy using the particle-in-a-box model.",
+        "chosen": "Step 1:\nUse E\\u2081 = h\\xb2 / (8 m L\\xb2), with L = 1 \\xd7 10\\u207b\\u2079 m.\nStep 2:\nSubstitute h = 6.63 \\xd7 10\\u207b\\xb3\\u2074 J\\xb7s and m = 9.11 \\xd7 10\\u207b\\xb3\\xb9 kg.\nStep 3:\nE\\u2081 \\u2248 6.0 \\xd7 10\\u207b\\xb2\\u2070 J, which is about 0.38 eV.\nAnswer:\nGround state energy \\u2248 0.38 eV.",
+        "rejected": "Step 1:\nUse the same formula but take L = 1 \\xd7 10\\u207b\\u2078 m instead of 1 \\xd7 10\\u207b\\u2079 m.\nStep 2:\nThen E\\u2081 becomes \\u2248 6.0 \\xd7 10\\u207b\\xb2\\xb2 J, or about 0.0038 eV.\nAnswer:\nGround state energy \\u2248 0.0038 eV."
+    },
+    {
+        "question": "Describe how a heat engine works and define its efficiency formula.",
+        "chosen": "Step 1:\nA heat engine absorbs heat Q_H from a high-temperature reservoir, does work W, and rejects heat Q_L to a low-temperature reservoir.\nStep 2:\nThe efficiency is defined as \\u03b7 = W / Q_H = 1 - (Q_L / Q_H).\nAnswer:\nA heat engine converts heat into work, and its efficiency is the ratio of work output to heat input.",
+        "rejected": "Step 1:\nState that a heat engine converts work entirely into heat without any losses.\nStep 2:\nDefine efficiency as Q_H / W.\nAnswer:\nThe efficiency is Q_H divided by work done."
+    },
+    {
+        "question": "Define entropy and explain its significance in thermodynamics.",
+        "chosen": "Step 1:\nEntropy is a measure of disorder or randomness in a system.\nStep 2:\nIt indicates the number of microscopic configurations that correspond to a thermodynamic system's macroscopic state and predicts the direction of spontaneous processes.\nAnswer:\nHigher entropy generally means more disorder, and the second law of thermodynamics states that total entropy tends to increase in an isolated system.",
+        "rejected": "Step 1:\nDefine entropy as a measure of the total energy contained in a system.\nStep 2:\nConclude that a higher entropy means higher energy content.\nAnswer:\nEntropy is a measure of energy content."
+    },
+    {
+        "question": "Derive the equation for the efficiency of a Carnot engine.",
+        "chosen": "Step 1:\nThe Carnot cycle consists of two isothermal and two adiabatic processes.\nStep 2:\nAnalyzing the heat absorbed and rejected during the isothermal processes leads to the efficiency formula: \\u03b7 = 1 - (T_C / T_H).\nAnswer:\nThe efficiency of a Carnot engine is given by \\u03b7 = 1 - (T_C/T_H).",
+        "rejected": "Step 1:\nDerive the efficiency by mistakenly assuming that all the heat is converted into work, yielding \\u03b7 = 1 (or 100%).\nAnswer:\nThe efficiency of the Carnot engine is 100%."
+    },
+    {
+        "question": "A loop of wire with 50 turns and an area of 0.02 m\\xb2 rotates in a 0.1 T magnetic field at 60 Hz. Find the maximum emf generated.",
+        "chosen": "Step 1:\n\\u03b5\\u2098 = N B A \\u03c9, with \\u03c9 = 2\\u03c0f.\n\nStep 2:\nN = 50, B = 0.1 T, A = 0.02 m\\xb2, f = 60 Hz.\n\nStep 3:\n\\u03c9 = 120\\u03c0 rad/s.\n\nStep 4:\n\\u03b5\\u2098 = 50 \\xd7 0.1 \\xd7 0.02 \\xd7 120\\u03c0 \\u2248 37.7 V.\n\nAnswer:\n37.7 V (approximately).",
+        "rejected": "Step 1:\nUse \\u03b5\\u2098 = N B A \\u03c9, taking \\u03c9 = f instead of 2\\u03c0f.\n\nStep 2:\nWith N = 50, B = 0.1 T, A = 0.02 m\\xb2, and f = 60 Hz (\\u03c9 = 60 rad/s),\n\nStep 3:\nCalculate \\u03b5\\u2098 = 50 \\xd7 0.1 \\xd7 0.02 \\xd7 60 = 6 V.\n\nAnswer:\n6 V."
+    },
+    {
+        "question": "A net force of 20 N is applied to a 5 kg object. Find its acceleration.",
+        "chosen": "Step 1:\nUse a = F / m = 20 N / 5 kg = 4 m/s\\xb2.\nAnswer:\n4 m/s\\xb2.",
+        "rejected": "Step 1:\nUse a = F / m but with m taken as 10 kg: a = 20 N / 10 kg = 2 m/s\\xb2.\nAnswer:\n2 m/s\\xb2."
+    },
+    {
+        "question": "An optical fiber has a core refractive index of 1.48 and a cladding refractive index of 1.45. Find the critical angle for total internal reflection.",
+        "chosen": "Step 1:\nCritical angle \\u03b8c satisfies sin(\\u03b8c) = n_cladding / n_core.\nStep 2:\nSo sin(\\u03b8c) = 1.45 / 1.48 \\u2248 0.9797.\nStep 3:\n\\u03b8c = sin\\u207b\\xb9(0.9797) \\u2248 78.7\\xb0.\nAnswer:\nThe critical angle is about 78.7\\xb0.",
+        "rejected": "Step 1:\nMistakenly reverse the indices: sin(\\u03b8c) = n_core / n_cladding = 1.48/1.45 \\u2248 1.02, which is impossible.\nAnswer:\nThe calculation yields an invalid result."
+    },
+    {
+        "question": "A Michelson interferometer uses a light source of 600 nm wavelength. If the mirror moves by 0.3 mm, how many fringes shift?",
+        "chosen": "Step 1:\nIn a Michelson interferometer, a mirror displacement \\u0394x produces a path difference of 2\\u0394x.\nStep 2:\nThus, total path change = 2 \\xd7 0.3 mm = 0.6 mm = 6 \\xd7 10\\u207b\\u2074 m.\nStep 3:\nNumber of fringes = (path difference) / (\\u03bb) = (6 \\xd7 10\\u207b\\u2074 m) / (600 \\xd7 10\\u207b\\u2079 m) = 1000.\nAnswer:\n1000 fringes shift.",
+        "rejected": "Step 1:\nAssume the mirror displacement equals the path difference (neglecting the factor of 2), so use 0.3 mm = 3 \\xd7 10\\u207b\\u2074 m.\nStep 2:\nThen number of fringes = (3 \\xd7 10\\u207b\\u2074 m) / (600 \\xd7 10\\u207b\\u2079 m) = 500.\nAnswer:\n500 fringes shift."
+    },
+    {
+        "question": "Find the capacitance of a parallel plate capacitor with an area of 0.02 m\\xb2, plate separation of 2 mm, and dielectric constant 5. (\\u03b5\\u2080 = 8.85 \\xd7 10\\u207b\\xb9\\xb2 F/m)",
+        "chosen": "Step 1:\nConvert 2 mm to 2 \\xd7 10\\u207b\\xb3 m.\n\nStep 2:\nUse C = (k \\u03b5\\u2080 A) / d.\n\nStep 3:\nSubstitute k = 5, \\u03b5\\u2080 = 8.85 \\xd7 10\\u207b\\xb9\\xb2 F/m, A = 0.02 m\\xb2, d = 2 \\xd7 10\\u207b\\xb3 m.\n\nStep 4:\nC \\u2248 4.43 \\xd7 10\\u207b\\u2079 F.\n\nAnswer:\n4.43 \\xd7 10\\u207b\\u2079 F (approximately).",
+        "rejected": "Step 1:\nConvert the plate separation: 2 mm is taken as 0.2 m.\n\nStep 2:\nUse C = (k \\u03b5\\u2080 A) / d with k = 5, \\u03b5\\u2080 = 8.85 \\xd7 10\\u207b\\xb9\\xb2 F/m, A = 0.02 m\\xb2, and d = 0.2 m.\n\nStep 3:\nCalculate C = (5 \\xd7 8.85 \\xd7 10\\u207b\\xb9\\xb2 \\xd7 0.02) / 0.2 = 4.425 \\xd7 10\\u207b\\xb9\\xb2 F.\n\nAnswer:\n4.43 \\xd7 10\\u207b\\xb9\\xb2 F."
+    },
+    {
+        "question": "A Fresnel biprism experiment uses a wavelength of 550 nm and produces fringes separated by 1 mm on a screen 2 m away. Find the separation of the virtual sources.",
+        "chosen": "Step 1:\nFringe spacing \\u03b2 = (\\u03bbD)/d, where D = 2 m, and d is the separation of the virtual sources.\nStep 2:\nRearrange: d = (\\u03bbD)/\\u03b2.\nStep 3:\nSubstitute \\u03bb = 550 nm = 5.5 \\xd7 10\\u207b\\u2077 m, D = 2 m, and \\u03b2 = 1 mm = 1 \\xd7 10\\u207b\\xb3 m:\n d = (5.5 \\xd7 10\\u207b\\u2077 \\xd7 2) / (1 \\xd7 10\\u207b\\xb3) = 1.1 \\xd7 10\\u207b\\xb3 m = 1.1 mm.\nAnswer:\nThe virtual sources are separated by about 1.1 mm.",
+        "rejected": "Step 1:\nMisinterpret the wavelength by taking 550 nm as 5.5 \\xd7 10\\u207b\\u2078 m.\nStep 2:\nThen d = (5.5 \\xd7 10\\u207b\\u2078 \\xd7 2) / (1 \\xd7 10\\u207b\\xb3) = 1.1 \\xd7 10\\u207b\\u2074 m = 0.11 mm.\nAnswer:\nThe virtual sources are calculated to be separated by about 0.11 mm."
+    },
+    {
+        "question": "A convex lens produces a real image of an object placed at 25 cm. If the image forms at 50 cm, find the focal length of the lens.",
+        "chosen": "Step 1:\nUse the thin lens formula: 1/f = 1/do + 1/di, with do = 25 cm and di = 50 cm.\nStep 2:\n1/f = 1/25 + 1/50 = 3/50.\nStep 3:\nf = 50/3 \\u2248 16.7 cm.\nAnswer:\nThe lens has a focal length of about 16.7 cm.",
+        "rejected": "Step 1:\nErroneously subtract the reciprocals: 1/f = 1/25 - 1/50 = 1/50.\nStep 2:\nThen f = 50 cm.\nAnswer:\nThe focal length is calculated to be 50 cm."
+    },
+    {
+        "question": "An X-ray has a frequency of 3 \\xd7 10\\xb9\\u2077 Hz. Find its wavelength.",
+        "chosen": "Step 1:\nUse \\u03bb = c / f.\nStep 2:\n\\u03bb = (3 \\xd7 10\\u2078 m/s) / (3 \\xd7 10\\xb9\\u2077 Hz) = 1 \\xd7 10\\u207b\\u2079 m.\nStep 3:\nThat equals 1 nm.\nAnswer:\nWavelength is 1 nm.",
+        "rejected": "Step 1:\nUse \\u03bb = c / f with f taken as 3 \\xd7 10\\xb9\\u2078 Hz.\nStep 2:\n\\u03bb = (3 \\xd7 10\\u2078 m/s) / (3 \\xd7 10\\xb9\\u2078 Hz) = 1 \\xd7 10\\u207b\\xb9\\u2070 m.\nStep 3:\nThat equals 0.1 nm.\nAnswer:\nWavelength is 0.1 nm."
+    },
+    {
+        "question": "A 40 N force is applied horizontally to an 8 kg object, which experiences a friction force of 10 N. Find its acceleration.",
+        "chosen": "Step 1:\nNet force = 40 N - 10 N = 30 N.\nStep 2:\na = 30 N / 8 kg = 3.75 m/s\\xb2.\nAnswer:\n3.75 m/s\\xb2.",
+        "rejected": "Step 1:\nNet force = 40 N - 10 N = 30 N.\nStep 2:\nAssume mass is 10 kg, so a = 30 / 10 = 3 m/s\\xb2.\nAnswer:\n3 m/s\\xb2."
+    },
+    {
+        "question": "A 0.1 kg ball moving at 5 m/s hits a wall and bounces back at 4 m/s. Find the change in momentum.",
+        "chosen": "Step 1:\nInitial momentum p\\u1d62 = 0.1 \\xd7 5 = 0.5 kg\\xb7m/s.\nStep 2:\nFinal momentum p_f = 0.1 \\xd7 (-4) = -0.4 kg\\xb7m/s.\nStep 3:\n\\u0394p = p_f - p\\u1d62 = -0.4 - 0.5 = -0.9 kg\\xb7m/s (magnitude 0.9 kg\\xb7m/s, opposite direction).\nAnswer:\n-0.9 kg\\xb7m/s.",
+        "rejected": "Step 1:\nCalculate initial momentum p\\u1d62 = 0.1 \\xd7 5 = 0.5 kg\\xb7m/s.\nStep 2:\nCalculate final momentum p_f = 0.1 \\xd7 4 = 0.4 kg\\xb7m/s.\nStep 3:\nChange in momentum \\u0394p = p_f + p\\u1d62 = 0.4 + 0.5 = 0.9 kg\\xb7m/s.\nAnswer:\n0.9 kg\\xb7m/s."
+    },
+    {
+        "question": "A particle moves at 0.99c. Calculate its total energy and rest energy. (Mass = 1.5 \\xd7 10\\u207b\\xb2\\u2077 kg)",
+        "chosen": "Step 1:\nRest energy E\\u2080 = m c\\xb2 = (1.5 \\xd7 10\\u207b\\xb2\\u2077 kg)(3 \\xd7 10\\u2078 m/s)\\xb2 = 1.35 \\xd7 10\\u207b\\xb9\\u2070 J.\nStep 2:\nFor v = 0.99c, \\u03b3 \\u2248 7.07.\nStep 3:\nTotal energy E = \\u03b3 E\\u2080 \\u2248 7.07 \\xd7 1.35 \\xd7 10\\u207b\\xb9\\u2070 J \\u2248 9.55 \\xd7 10\\u207b\\xb9\\u2070 J.\nAnswer:\nRest energy \\u2248 1.35 \\xd7 10\\u207b\\xb9\\u2070 J; total energy \\u2248 9.55 \\xd7 10\\u207b\\xb9\\u2070 J.",
+        "rejected": "Step 1:\nCalculate E\\u2080 = 1.35 \\xd7 10\\u207b\\xb9\\u2070 J as before.\nStep 2:\nAssume \\u03b3 = 10 for 0.99c.\nStep 3:\nThen total energy E = 10 \\xd7 1.35 \\xd7 10\\u207b\\xb9\\u2070 J = 1.35 \\xd7 10\\u207b\\u2079 J.\nAnswer:\nRest energy \\u2248 1.35 \\xd7 10\\u207b\\xb9\\u2070 J; total energy \\u2248 1.35 \\xd7 10\\u207b\\u2079 J."
+    },
+    {
+        "question": "Explain why perpetual motion machines of the second kind are impossible.",
+        "chosen": "Step 1:\nPerpetual motion machines of the second kind violate the second law of thermodynamics by attempting to convert all heat into work.\nStep 2:\nSuch machines would decrease the entropy of the universe, which is not allowed by the second law.\nAnswer:\nThey are impossible because they would violate the second law of thermodynamics.",
+        "rejected": "Step 1:\nState that perpetual motion machines of the second kind are possible because they can continuously recycle energy.\nAnswer:\nThey are possible since energy can be endlessly reused."
+    },
+    {
+        "question": "A moving conductor cuts through a magnetic field of 0.4 T at 3 m/s. The conductor is 0.5 m long. Find the induced emf.",
+        "chosen": "Step 1:\n\\u03b5 = B L v.\n\nStep 2:\nB = 0.4 T, L = 0.5 m, v = 3 m/s.\n\nStep 3:\n\\u03b5 = 0.4 \\xd7 0.5 \\xd7 3 = 0.6 V.\n\nAnswer:\n0.6 V.",
+        "rejected": "Step 1:\nUse the formula \\u03b5 = B v, omitting the length.\n\nStep 2:\nWith B = 0.4 T and v = 3 m/s, \\u03b5 = 0.4 \\xd7 3 = 1.2 V.\n\nAnswer:\n1.2 V."
+    },
+    {
+        "question": "A 10 kg sphere slides at 2 m/s before it starts rolling. Find its angular velocity after rolling begins (assuming it is a uniform sphere).",
+        "chosen": "Step 1:\nFor rolling without slipping, v = \\u03c9 R.\nStep 2:\nSince the radius is not specified, the answer is expressed as \\u03c9 = v / R = 2 / R rad/s.\nAnswer:\n\\u03c9 = 2 / R rad/s (depending on the sphere's radius).",
+        "rejected": "Step 1:\nAssume the relation for rolling is \\u03c9 = v \\xd7 R.\nStep 2:\nThen \\u03c9 = 2 \\xd7 R rad/s.\nAnswer:\n\\u03c9 = 2R rad/s (depending on the sphere's radius)."
+    },
+    {
+        "question": "A body moves up a 30\\xb0 inclined plane with an initial speed of 10 m/s. Assuming no friction, find the maximum distance it travels. (g = 9.8 m/s\\xb2)",
+        "chosen": "Step 1:\nAcceleration along the incline a = g \\xd7 sin(30\\xb0) = 9.8 \\xd7 0.5 = 4.9 m/s\\xb2.\nStep 2:\nUse v\\xb2 = v\\u2080\\xb2 - 2 a s with v = 0: 0 = 10\\xb2 - 2 \\xd7 4.9 \\xd7 s, so s = 100 / 9.8 \\u2248 10.2 m.\nAnswer:\n10.2 m.",
+        "rejected": "Step 1:\nAcceleration along the incline a = 4.9 m/s\\xb2.\nStep 2:\nUse s = v\\u2080\\xb2 / a = 10\\xb2 / 4.9 \\u2248 20.4 m.\nAnswer:\n20.4 m."
+    },
+    {
+        "question": "An electron and a proton have the same kinetic energy. Compare their de Broglie wavelengths.",
+        "chosen": "Step 1:\nFor a given kinetic energy K, momentum p = \\u221a(2 m K).\nStep 2:\nSince m\\u2091 \\u226a m\\u209a, the electron has a much smaller momentum than the proton.\nStep 3:\nThus, \\u03bb = h/p is larger for the electron than for the proton.\nAnswer:\nThe electron\\u2019s de Broglie wavelength is greater than the proton\\u2019s.",
+        "rejected": "Step 1:\nAssume both have the same momentum (ignoring mass differences).\nStep 2:\nThen \\u03bb would be equal for both particles.\nAnswer:\nThe electron\\u2019s and proton\\u2019s de Broglie wavelengths are the same."
+    },
+    {
+        "question": "A gas undergoes an isothermal expansion. What happens to its pressure and volume?",
+        "chosen": "Step 1:\nFor an isothermal process, the ideal gas law (PV = constant) applies.\nStep 2:\nAs the volume increases, the pressure decreases proportionally.\nAnswer:\nThe pressure decreases while the volume increases, keeping the product constant.",
+        "rejected": "Step 1:\nAssume that during isothermal expansion both pressure and volume increase.\nStep 2:\nConclude that the pressure increases with volume.\nAnswer:\nBoth pressure and volume increase."
+    },
+    {
+        "question": "Calculate the energy required to completely ionize a hydrogen atom from its ground state.",
+        "chosen": "Step 1:\nThe ground state energy of hydrogen is -13.6 eV.\nStep 2:\nTo ionize, supply 13.6 eV to raise the energy to 0 eV.\nAnswer:\nIonization energy = 13.6 eV.",
+        "rejected": "Step 1:\nAssume the ground state energy is -1.36 eV.\nStep 2:\nThen the energy needed is 1.36 eV.\nAnswer:\nIonization energy = 1.36 eV."
+    },
+    {
+        "question": "A system undergoes a cyclic process where it does 800 J of work and absorbs 1200 J of heat. What is the efficiency of this cycle?",
+        "chosen": "Step 1:\nEfficiency \\u03b7 = W / Q_H.\nStep 2:\nSubstitute W = 800 J and Q_H = 1200 J to get \\u03b7 = 800/1200 = 0.667 or 66.7%.\nAnswer:\nThe efficiency of the cycle is about 66.7%.",
+        "rejected": "Step 1:\nAssume efficiency is given by Q_H / W.\nStep 2:\nThen efficiency = 1200/800 = 1.5 or 150%.\nAnswer:\nThe efficiency is 150%."
+    },
+    {
+        "question": "A gas expands adiabatically. How does its temperature change?",
+        "chosen": "Step 1:\nIn an adiabatic expansion, no heat is exchanged (Q=0).\nStep 2:\nThe gas does work on the surroundings, which reduces its internal energy and thus its temperature.\nAnswer:\nThe temperature of the gas decreases.",
+        "rejected": "Step 1:\nAssume that in an adiabatic expansion the temperature remains constant because no heat is exchanged.\nAnswer:\nThe temperature remains constant."
+    },
+    {
+        "question": "State the first law of thermodynamics and give an example of its application.",
+        "chosen": "Step 1:\nThe first law states: \\u0394U = Q - W, where \\u0394U is the change in internal energy, Q is the heat added to the system, and W is the work done by the system.\nStep 2:\nExample: When heating gas in a cylinder with a movable piston, part of the heat increases the gas's internal energy and part is used to do work by moving the piston.\nAnswer:\nEnergy is conserved: any heat input increases internal energy or does work on the surroundings.",
+        "rejected": "Step 1:\nState the first law as \\u0394U = Q + W, confusing the sign convention for work.\nStep 2:\nExample: Conclude that when gas expands, both heat and work add to internal energy.\nAnswer:\nThe first law is \\u0394U = Q + W."
     },
     {
         "question": "What is the difference between heat and temperature?",
         "chosen": "Step 1:\nHeat is the transfer of thermal energy due to a temperature difference.\nStep 2:\nTemperature is a measure of the average kinetic energy of particles in a substance.\nAnswer:\nHeat flows between bodies of different temperatures, while temperature indicates how hot or cold an object is.",
-        "rejected": "They are basically the same thing and can be used interchangeably."
-    },
-    {
-        "question": "A moving clock ticks once every 10 seconds in its own frame. How much time passes for an observer moving at 0.9c?",
-        "chosen": "Step 1:\nProper time interval ∆t₀ = 10 s.\nStep 2:\nTime dilation ∆t = γ ∆t₀, where γ = 1 / √(1 - 0.9²) = 1 / √(0.19) ≈ 2.294.\nStep 3:\nSo ∆t = 2.294 × 10 s ≈ 22.94 s.\nAnswer:\nAbout 22.94 seconds pass in the observer’s frame per 10-second tick in the clock’s own frame.",
-        "rejected": "A mistake might be to multiply the times incorrectly or set ∆t ≈ 10 s, ignoring relativistic effects, resulting in no dilation."
-    },
-    {
-        "question": "A beam of light is incident at 30° on a glass surface (n = 1.5). Find the critical angle for total internal reflection.",
-        "chosen": "Step 1:\nThe critical angle θc occurs when the refracted angle is 90°.\nStep 2:\nUsing sin(θc) = n₂ / n₁. Assuming the outside medium is air (n₂ = 1.0), and glass n₁ = 1.5:\nsin(θc) = 1.0 / 1.5 = 0.666...\nStep 3:\nθc = sin⁻¹(0.666...) ≈ 41.8°.\nAnswer:\nThe critical angle is about 41.8°.",
-        "rejected": "One might guess that because the beam enters at 30°, the critical angle is also 30°, but that’s not accurate. The material’s indices set θc."
-    },
-    {
-        "question": "A projectile is launched at an initial velocity of 15 m/s at a 60° angle. Find: (a) The horizontal range (b) The maximum height.",
-        "chosen": "Step 1:\nHorizontal range R = (v0² × sin(2 × 60°)) / g = (15)² × sin(120°) / 9.8 ≈ 19.9 m.\nStep 2:\nMaximum height H = (v0² × sin²(60°)) / (2 × 9.8) ≈ 8.6 m.\nAnswer:\n(a) 19.9 m\n(b) 8.6 m.",
-        "rejected": "Range around 30 m, height maybe 15 m."
-    },
-    {
-        "question": "A body moves up a 30° inclined plane with an initial speed of 10 m/s. Assuming no friction, find the maximum distance it travels. (g = 9.8 m/s²)",
-        "chosen": "Step 1:\nAcceleration along the incline is g × sin(30°) = 9.8 × 0.5 = 4.9 m/s².\nStep 2:\nUse v² = v0² - 2 a s. With v = 0, we get 0 = (10)² - 2 × 4.9 × s → s ≈ 10.2 m.\nAnswer:\n10.2 m.",
-        "rejected": "Maybe around 5 m."
-    },
-    {
-        "question": "Prove that entropy change for an irreversible process is always greater than zero.",
-        "chosen": "Step 1:\nFor an irreversible process, the system plus surroundings cannot be returned to the initial state without net effects.\nStep 2:\nAny real (irreversible) process generates entropy in the surroundings, making ΔS_total > 0.\nAnswer:\nEntropy generation in irreversible steps ensures ΔS_total > 0 for the universe.",
-        "rejected": "Entropy change can be negative in an isolated irreversible process."
-    },
-    {
-        "question": "Calculate the energy required to completely ionize a hydrogen atom from its ground state.",
-        "chosen": "Step 1:\nThe ground state of hydrogen has energy E₁ = -13.6 eV.\nStep 2:\nTo ionize, you must supply +13.6 eV so the electron can escape from n=1 to n=∞.\nAnswer:\nThe ionization energy is 13.6 eV.",
-        "rejected": "If one uses an incorrect model or confuses a different orbital level, they might guess something like 10.2 eV or 3.4 eV."
-    },
-    {
-        "question": "A 80 kg person is standing inside an elevator that is accelerating upward at 3 m/s². What is the normal force acting on them?",
-        "chosen": "Step 1:\nUse N = m (g + a) = 80 (9.8 + 3) = 80 × 12.8 = 1024 N.\nAnswer:\n1024 N.",
-        "rejected": "Probably around 800 N."
-    },
-    {
-        "question": "An electron is confined in a box of width 1 nm. Estimate its ground state energy using the particle-in-a-box model.",
-        "chosen": "Step 1:\nGround state energy E₁ = h² / (8 m L²), with L = 1 nm = 1 × 10⁻⁹ m.\nStep 2:\nPlugging in:\nh = 6.63 × 10⁻³⁴ J·s, m = 9.11 × 10⁻³± kg, L = 1 × 10⁻⁹ m.\nStep 3:\nResult is ≈ 6.0 × 10⁻²⁰ J ≈ 0.38 eV.\nAnswer:\nThe ground state energy is about 0.38 eV.",
-        "rejected": "One might overestimate by ignoring the factor of 8 in the denominator or convert incorrectly to eV, leading to a value closer to 1 eV or more."
-    },
-    {
-        "question": "A 500g metal block is heated from 25°C to 75°C. If its specific heat capacity is 0.9 J/g°C, how much heat is absorbed?",
-        "chosen": "Step 1:\nMass m = 500 g, ΔT = (75 - 25) = 50°C, c = 0.9 J/g°C.\nStep 2:\nHeat absorbed Q = m c ΔT = 500 × 0.9 × 50 = 22,500 J.\nAnswer:\nThe metal block absorbs 22,500 J of heat.",
-        "rejected": "Probably around 10,000 J, but not sure."
-    },
-    {
-        "question": "A photon has a wavelength of 500 nm. Calculate its energy. (h = 6.63 × 10⁻³⁴ J·s, c = 3 × 10⁸ m/s)",
-        "chosen": "Step 1:\nConvert the wavelength λ = 500 nm = 5.00 × 10⁻⁷ m.\nStep 2:\nUse E = (h c) / λ.\nE = (6.63 × 10⁻³⁴ J·s)(3.00 × 10⁸ m/s) / (5.00 × 10⁻⁷ m) ≈ 3.98 × 10⁻¹⁹ J.\nStep 3:\nOptionally, to convert to eV, divide by 1.602 × 10⁻¹⁹:\nE ≈ 2.49 eV.\nAnswer:\nEnergy ≈ 3.98 × 10⁻¹⁹ J «≈ 2.49 eV».",
-        "rejected": "One might guess the energy is a round value like 3 × 10⁻¹⁹ J without precisely applying the formula, or overlook the unit conversions, leading to an inaccurate result."
-    },
-    {
-        "question": "What is the Clausius statement of the second law of thermodynamics?",
-        "chosen": "Step 1:\nThe Clausius statement: Heat cannot spontaneously flow from a colder body to a hotter body without external work.\nStep 2:\nThis underpins the direction of spontaneous heat flow.\nAnswer:\nIt is impossible to construct a device that transfers heat from a cold reservoir to a hot reservoir without external energy input.",
-        "rejected": "You can always move heat from cold to hot freely."
-    },
-    {
-        "question": "What is thermal equilibrium, and how is it achieved?",
-        "chosen": "Step 1:\nThermal equilibrium occurs when two systems in thermal contact no longer exchange heat.\nStep 2:\nThey reach the same temperature, so net heat flow is zero.\nAnswer:\nTwo bodies at the same temperature are in thermal equilibrium, achieved by allowing heat to flow until temperatures match.",
-        "rejected": "It’s when systems totally stop interacting in any way."
-    },
-    {
-        "question": "A net force of 20 N is applied to a 5 kg object. Find its acceleration.",
-        "chosen": "Step 1:\nUse a = F / m = 20 N / 5 kg = 4 m/s².\nAnswer:\n4 m/s².",
-        "rejected": "I think it's around 10 m/s²."
-    },
-    {
-        "question": "State the first law of thermodynamics and give an example of its application.",
-        "chosen": "Step 1:\nThe first law states: ΔU = Q - W, where ΔU is the change in internal energy, Q is heat added, and W is work done by the system.\nStep 2:\nExample: When you heat gas in a cylinder, part of the energy increases the internal energy, and part is used to do work by expanding the piston.\nAnswer:\nEnergy is conserved: any heat input increases internal energy or goes into work done by the system.",
-        "rejected": "It just says energy is created and destroyed freely."
-    },
-    {
-        "question": "A laser beam of 650 nm wavelength passes through a double slit with a separation of 0.2 mm. Find the distance between adjacent fringes on a screen 2 m away.",
-        "chosen": "Step 1:\nFringe spacing y = (λ L) / d.\nHere, λ = 650 nm = 6.5 × 10⁻⁷ m, L = 2 m, and d = 0.2 mm = 2 × 10⁻⁴ m.\nStep 2:\ny = (6.5 × 10⁻⁷ × 2) / (2 × 10⁻⁴) = (1.3 × 10⁻⁶) / (2 × 10⁻⁴) = 6.5 × 10⁻³ = 0.0065 m.\nStep 3:\nConvert to mm: 0.0065 m = 6.5 mm.\nAnswer:\nAdjacent fringes are separated by about 6.5 mm.",
-        "rejected": "A rough guess might suggest only 1 mm or 10 mm without plugging into the double-slit formula. Exact calculation is needed for a correct value."
-    },
-    {
-        "question": "A car starts from rest and accelerates at 2 m/s². What is its velocity after 5 seconds?",
-        "chosen": "Step 1:\nInitial velocity v0 = 0 m/s, acceleration a = 2 m/s², time t = 5 s.\nStep 2:\nUse v = v0 + a × t = 0 + (2)(5) = 10 m/s.\nAnswer:\n10 m/s.",
-        "rejected": "It's probably around 20 m/s, but I'm not entirely sure."
-    },
-    {
-        "question": "A circular loop of radius 0.1 m carries a current of 2 A. Find the magnetic field at its center.",
-        "chosen": "Step 1:\nB = (μ₀ I) / (2R).\n\nStep 2:\nR = 0.1 m, I = 2 A, μ₀ = 4π × 10⁻⁷.\n\nStep 3:\nB ≈ 1.26 × 10⁻⁵ T (approx.).\n\nAnswer:\n1.26 × 10⁻⁵ T (approximately).",
-        "rejected": "There is no magnetic field at the center; it's effectively zero."
-    },
-    {
-        "question": "A gas expands adiabatically. How does its temperature change?",
-        "chosen": "Step 1:\nIn an adiabatic expansion, no heat is added (Q=0). The gas does work on surroundings.\nStep 2:\nWork done by the gas reduces its internal energy, leading to a temperature decrease.\nAnswer:\nIts temperature decreases as it expands adiabatically.",
-        "rejected": "The temperature remains constant since Q=0."
-    },
-    {
-        "question": "An X-ray has a frequency of 3 × 10¹⁷ Hz. Find its wavelength.",
-        "chosen": "Step 1:\nUse λ = c / f.\nStep 2:\nλ = (3 × 10⁸ m/s) / (3 × 10¹⁷ Hz) = 1 × 10⁻⁹ m.\nStep 3:\nThat is 1 nm.\nAnswer:\nThe X-ray wavelength is 1 nm.",
-        "rejected": "An incorrect approach might guess it’s 10 nm or 0.1 nm if the frequency was misread or the speed of light incorrectly used."
-    },
-    {
-        "question": "A gamma-ray photon has an energy of 1 MeV. Find its wavelength.",
-        "chosen": "Step 1:\n1 MeV = 1 × 10⁶ eV = 1 × 10⁶ × 1.602 × 10⁻¹⁹ J = 1.602 × 10⁻¹⁳ J.\nStep 2:\nλ = (h c) / E = (6.63 × 10⁻³⁴ × 3 × 10⁸) / (1.602 × 10⁻¹⁳).\nStep 3:\nNumerically ≈ 1.24 × 10⁻¹² m = 1.24 pm.\nAnswer:\nThe photon’s wavelength is about 1.24 picometers.",
-        "rejected": "Guessing it’s 1 nm or 0.1 pm without carefully doing E = hc/λ would be too rough. Gamma rays are on the scale of picometers or smaller."
-    },
-    {
-        "question": "A coil of resistance 2 Ω and inductance 0.2 H is connected to a 10 V battery. Calculate the time constant and find the current after 0.1 seconds.",
-        "chosen": "Step 1:\nτ = L / R = 0.2 / 2 = 0.1 s.\n\nStep 2:\nSteady-state current Iₘₐₓ = V / R = 10 / 2 = 5 A.\n\nStep 3:\ni(t) = 5 × [1 - e^(-t/τ)].\n\nAt t = 0.1 s:\ni(0.1) = 5 × [1 - e^(-1)] ≈ 5 × 0.6321 = 3.16 A.\n\nAnswer:\nτ = 0.1 s; i(0.1 s) ≈ 3.16 A.",
-        "rejected": "The time constant is infinite, so the current never increases."
+        "rejected": "Step 1:\nAssume that heat and temperature are the same property because both relate to energy.\nStep 2:\nConclude that they are interchangeable terms.\nAnswer:\nHeat is considered the same as temperature."
     },
     {
         "question": "A soap film (n=1.33) reflects violet light (400 nm) most strongly. What is the minimum thickness of the film for constructive interference?",
-        "chosen": "Step 1:\nFor a film with air on both sides and n > 1, reflection at the top interface introduces a half-wavelength phase shift. The condition for the first constructive maximum is 2 n t = (m + 1/2)λ in air, with m = 0 for the minimum thickness.\nStep 2:\n2 × 1.33 × t = 0.5 × 400 nm → 2.66 t = 200 nm → t ≈ 75.2 nm.\nAnswer:\nThe minimum film thickness is about 75 nm.",
-        "rejected": "Without considering phase shifts, one might use 2 n t = m λ directly and end up with a different answer, such as around 150 nm, overlooking the extra half-wavelength shift."
+        "chosen": "Step 1:\nFor a film with air on both sides, the reflection at the top interface introduces a half-wavelength phase shift. The condition for the first constructive maximum is 2 n t = (m + 1/2)\\u03bb with m = 0.\nStep 2:\n2 \\xd7 1.33 \\xd7 t = 0.5 \\xd7 400 nm \\u2192 2.66 t = 200 nm \\u2192 t \\u2248 75.2 nm.\nAnswer:\nThe minimum film thickness is about 75 nm.",
+        "rejected": "Step 1:\nMisapply the interference condition as 2 n t = \\u03bb (ignoring the half-wavelength shift).\nStep 2:\nThen t = 400 nm / (2 \\xd7 1.33) \\u2248 150 nm.\nAnswer:\nThe minimum thickness is calculated to be about 150 nm."
     },
     {
-        "question": "A 10 kg box is placed on a rough surface with a static friction coefficient of 0.4. If a 30 N horizontal force is applied, will the box move? (g = 9.8 m/s²)",
-        "chosen": "Step 1:\nMaximum static friction = μ ₘ × m × g = 0.4 × 10 × 9.8 = 39.2 N.\nStep 2:\nSince 30 N < 39.2 N, the box does not move.\nAnswer:\nNo, it remains at rest.",
-        "rejected": "Yes, it definitely slides."
+        "question": "A 0.5 kg bullet is fired at 400 m/s into a 2 kg wooden block and remains inside. Find the final velocity of the combined system.",
+        "chosen": "Step 1:\nInitial momentum = 0.5 \\xd7 400 = 200 kg\\xb7m/s.\nStep 2:\nCombined mass = 0.5 + 2 = 2.5 kg.\nStep 3:\nFinal velocity = 200 / 2.5 = 80 m/s.\nAnswer:\n80 m/s.",
+        "rejected": "Step 1:\nConvert the bullet's mass to 0.05 kg, so initial momentum = 0.05 \\xd7 400 = 20 kg\\xb7m/s.\nStep 2:\nCombined mass = 0.05 + 2 = 2.05 kg.\nStep 3:\nFinal velocity = 20 / 2.05 \\u2248 9.76 m/s.\nAnswer:\n9.76 m/s."
     },
     {
-        "question": "A force F(x) = 4x² (N) is applied to an object as it moves from x = 1 m to x = 3 m. Find the total work done.",
-        "chosen": "Step 1:\nWork W = ∫(4x²) dx from x = 1 to 3.\nStep 2:\n∫(4x² dx) = 4 × ∫(x² dx) = 4 × [x³/3].\nEvaluate 4/3 × (3³ - 1³) = (4/3) × 26 ≈ 34.67 J.\nAnswer:\n34.67 J.",
-        "rejected": "Maybe about 50 J."
+        "question": "A projectile is thrown upward with an initial speed of 20 m/s. Given g = 9.8 m/s\\xb2, what is the maximum height it reaches?",
+        "chosen": "Step 1:\nAt maximum height, final velocity = 0.\nStep 2:\nUse v\\xb2 = v\\u2080\\xb2 - 2 g h \\u2192 0 = 20\\xb2 - 2 \\xd7 9.8 \\xd7 h, so h = 400 / 19.6 \\u2248 20.4 m.\nAnswer:\n20.4 m.",
+        "rejected": "Step 1:\nAt maximum height, final velocity = 0.\nStep 2:\nUse v\\xb2 = v\\u2080\\xb2 - 2 g h with g taken as 10 m/s\\xb2: 0 = 20\\xb2 - 2 \\xd7 10 \\xd7 h, so h = 400 / 20 = 20 m.\nAnswer:\n20 m."
     },
     {
-        "question": "A rotating disk spins at 100 rpm. A 2 kg person standing at the edge moves 1 m toward the center. Find the new angular velocity (assuming no external torque).",
-        "chosen": "Step 1:\nAngular momentum is conserved: I1 ω1 = I2 ω2.\nStep 2:\nFor a point mass, I = m r², so m r1² ω1 = m r2² ω2.\nStep 3:\nHence ω2 = ω1 × (r1² / r2²). If r2 = (r1 - 1), the new ω follows that ratio.\nAnswer:\nω increases in proportion to (r1² / r2²).",
-        "rejected": "It remains at 100 rpm."
+        "question": "A telescope has an objective lens with a focal length of 1 m and an eyepiece with a focal length of 5 cm. Find the angular magnification.",
+        "chosen": "Step 1:\nFor an astronomical telescope, angular magnification M = f_objective / f_eyepiece.\nStep 2:\nGiven f_objective = 100 cm and f_eyepiece = 5 cm, M = 100/5 = 20.\nAnswer:\nThe telescope\\u2019s angular magnification is 20\\xd7.",
+        "rejected": "Step 1:\nIncorrectly invert the ratio to M = f_eyepiece / f_objective = 5/100 = 0.05.\nAnswer:\nThe angular magnification is calculated to be 0.05\\xd7."
     },
     {
-        "question": "A proton moves through a potential difference of 1 kV. Calculate its final speed. (Charge of proton = 1.6 × 10⁻¹⁹ C, Mass = 1.67 × 10⁻²⁷ kg)",
-        "chosen": "Step 1:\nKinetic energy gained = q V = (1.6 × 10⁻¹⁹)(1000) = 1.6 × 10⁻¹⁶ J.\n\nStep 2:\nSet ½ m v² = 1.6 × 10⁻¹⁶.\n\nStep 3:\nv = √[(2 × 1.6 × 10⁻¹⁶) / (1.67 × 10⁻²⁷)] ≈ 1.38 × 10⁵ m/s.\n\nAnswer:\n1.38 × 10⁵ m/s (approx.).",
-        "rejected": "The proton remains stationary; the voltage doesn't affect it."
+        "question": "A charge of 5 \\u03bcC is placed in an electric field of 2000 N/C. What is the force experienced by the charge?",
+        "chosen": "Step 1:\nConvert the charge from microcoulombs to coulombs:\n5 \\u03bcC = 5 \\xd7 10\\u207b\\u2076 C.\n\nStep 2:\nUse the formula F = qE, where q is the charge and E is the electric field.\n\nStep 3:\nSubstitute the values:\nF = (5 \\xd7 10\\u207b\\u2076 C) \\xd7 (2000 N/C) = 0.01 N.\n\nAnswer:\n0.01 N.",
+        "rejected": "Step 1:\nConvert the charge from microcoulombs to coulombs: 5 \\u03bcC = 5 \\xd7 10\\u207b\\xb3 C.\n\nStep 2:\nApply the formula F = qE.\n\nStep 3:\nSubstitute the values:\nF = (5 \\xd7 10\\u207b\\xb3 C) \\xd7 (2000 N/C) = 10 N.\n\nAnswer:\n10 N."
     },
     {
-        "question": "A charge of 4 μC is moved in an electric field from a point of 10 V to 30 V. Calculate the work done.",
-        "chosen": "Step 1:\nW = q ΔV.\n\nStep 2:\nq = 4 × 10⁻⁶ C, ΔV = 20 V.\n\nStep 3:\nW = (4 × 10⁻⁶) × 20 = 80 × 10⁻⁶ = 8 × 10⁻⁵ J.\n\nAnswer:\n8 × 10⁻⁵ J.",
-        "rejected": "No work is done unless we supply an external current."
-    },
-    {
-        "question": "A gas undergoes an isothermal expansion. What happens to its pressure and volume?",
-        "chosen": "Step 1:\nFor an isothermal process, PV = constant.\nStep 2:\nAs volume increases, pressure decreases proportionally.\nAnswer:\nThe pressure decreases while the volume increases, maintaining the same temperature.",
-        "rejected": "The pressure stays the same if it’s isothermal."
-    },
-    {
-        "question": "A rocket accelerates at 30 m/s² for the first 5 seconds after launch. It then enters free fall. Find the maximum height reached (neglecting air resistance).",
-        "chosen": "Step 1:\nIn 5 s, final velocity v = 0 + 30 × 5 = 150 m/s.\nDistance covered in this phase = 0.5 × 30 × (5)² = 375 m.\nStep 2:\nThen it decelerates under gravity from v = 150 m/s: additional height = (150)² / (2 × 9.8) ≈ 1148 m.\nStep 3:\nTotal height = 375 + 1148 = 1523 m.\nAnswer:\n1523 m.",
-        "rejected": "Likely around 2000 m."
-    },
-    {
-        "question": "A proton collides with an antiproton, annihilating into pure energy. Find the total energy released if each has a mass of 1.67 × 10⁻²⁷ kg.",
-        "chosen": "Step 1:\nTotal mass = 2 × (1.67 × 10⁻²⁷) = 3.34 × 10⁻²⁷ kg.\nStep 2:\nE = mc² = 3.34 × 10⁻²⁷ × (3 × 10⁸)² = 3.34 × 10⁻²⁷ × 9 × 10¹⁶ = 3.006 × 10⁻¹⁰ J.\nStep 3:\nIn MeV, divide by 1.602 × 10⁻¹⁳: ≈ 1.88 × 10¹³ eV = 1.88 GeV.\nAnswer:\nTotal released energy ≈ 3.0 × 10⁻¹⁰ J «≈ 1.88 GeV».",
-        "rejected": "Forgetting to double the proton mass or using approximate c² factors might yield a smaller or bigger energy by 2× or more."
-    },
-    {
-        "question": "A photon has an energy of 2 eV. Find its frequency.",
-        "chosen": "Step 1:\nConvert energy to joules: E = 2 eV = 2 × (1.602 × 10⁻¹⁹) J = 3.204 × 10⁻¹⁹ J.\nStep 2:\nUse E = h f → f = E / h = (3.204 × 10⁻¹⁹) / (6.63 × 10⁻³⁴).\nStep 3:\nf ≈ 4.83 × 10¹⁴ Hz.\nAnswer:\nIts frequency is about 4.83 × 10¹⁴ Hz.",
-        "rejected": "A guess might convert incorrectly from eV to J, leading to a frequency in the wrong range, such as 10¹² Hz or 10¹⁵ Hz."
-    },
-    {
-        "question": "A particle is moving at 0.8c. Find its Lorentz factor.",
-        "chosen": "Step 1:\nγ = 1 / √(1 - v²/c²). For v = 0.8c, that is\nγ = 1 / √(1 - 0.64) = 1 / √(0.36) = 1 / 0.6 = 1.6667.\nStep 2:\nThus γ ≈ 1.67.\nAnswer:\nThe Lorentz factor is about 1.67.",
-        "rejected": "One might assume 2 or 1.5 by rough estimation, but the correct square-root calculation yields about 1.67."
-    },
-    {
-        "question": "A 10 kg sphere slides at 2 m/s before it starts rolling. Find its angular velocity after rolling begins (assuming it is a uniform sphere).",
-        "chosen": "Step 1:\nFor rolling without slipping, v = ω R.\nStep 2:\nSince the radius isn't specified, ω = v / R = 2 / R.\nAnswer:\nω = 2 / R rad/s (depending on the sphere's radius).",
-        "rejected": "Possibly around 10 rad/s."
-    },
-    {
-        "question": "Derive the ideal gas law using the first law of thermodynamics and kinetic theory.",
-        "chosen": "Step 1:\nFrom kinetic theory, pV = NkT (where N is the number of molecules).\nStep 2:\nLinking internal energy and the equipartition theorem leads to pV = nRT for macroscopic amounts.\nAnswer:\nCombining molecular arguments with thermodynamics yields pV = nRT.",
-        "rejected": "Just state pV = nRT is obvious without any derivation."
-    },
-    {
-        "question": "A particle with a mass of 9.1 × 10⁻³± kg moves at 2 × 10⁶ m/s. Find its de Broglie wavelength.",
-        "chosen": "Step 1:\nThe de Broglie wavelength is λ = h / (m v).\nStep 2:\nPlug values:\nh = 6.63 × 10⁻³⁴ J·s, m = 9.1 × 10⁻³± kg, v = 2 × 10⁶ m/s.\nStep 3:\nλ = (6.63 × 10⁻³⁴) / «(9.1 × 10⁻³±)(2 × 10⁶)» ≈ 3.64 × 10⁻¹⁰ m.\nAnswer:\nThe de Broglie wavelength ≈ 3.64 × 10⁻¹⁰ m (0.364 nm).",
-        "rejected": "If someone drops the units or incorrectly applies the formula, they might guess a wavelength of 10⁻⁸ m or 10⁻¹² m, missing the correct scale."
-    },
-    {
-        "question": "A 40 N force is applied horizontally to an 8 kg object, which experiences a friction force of 10 N. Find its acceleration.",
-        "chosen": "Step 1:\nNet force = 40 N - 10 N = 30 N.\nStep 2:\na = 30 / 8 = 3.75 m/s².\nAnswer:\n3.75 m/s².",
-        "rejected": "It might be about 2 m/s²."
-    },
-    {
-        "question": "A particle moves at 0.99c. Calculate its total energy and rest energy. (Mass = 1.5 × 10⁻²⁷ kg)",
-        "chosen": "Step 1:\nRest energy E₀ = m c². For m = 1.5 × 10⁻²⁷ kg:\nE₀ = 1.5 × 10⁻²⁷ × (3 × 10⁸)² = 1.5 × 10⁻²⁷ × 9 × 10¹⁶ = 1.35 × 10⁻¹⁰ J.\nStep 2:\nγ for 0.99c is 1 / √(1 - 0.99²) = 1 / √(1 - 0.9801) = 1 / √(0.0199) ≈ 7.07.\nStep 3:\nTotal energy E = γ E₀ ≈ 7.07 × 1.35 × 10⁻¹⁰ ≈ 9.55 × 10⁻¹⁰ J.\nAnswer:\nRest energy ≈ 1.35 × 10⁻¹⁰ J; total energy ≈ 9.55 × 10⁻¹⁰ J.",
-        "rejected": "Omitting the γ factor might lead to the claim that total energy is identical to rest energy, ignoring relativistic effects."
-    },
-    {
-        "question": "A 1 kg sample of water is heated from 20°C to 80°C. Given that the specific heat of water is 4.18 J/g°C, calculate the heat required.",
-        "chosen": "Step 1:\nConvert mass to grams: 1 kg = 1000 g.\nStep 2:\nΔT = (80 - 20) = 60°C, c = 4.18 J/g°C.\nStep 3:\nQ = m c ΔT = 1000 × 4.18 × 60 = 250,800 J.\nAnswer:\nThe required heat is 2.51 × 10^5 J.",
-        "rejected": "About 400 kJ, not calculated precisely."
-    },
-    {
-        "question": "A camera lens with a focal length of 50 mm is focused on an object 2 m away. Find the image distance and magnification.",
-        "chosen": "Step 1:\nUse the lens formula 1/f = 1/do + 1/di. Here, f = 50 mm, do = 2000 mm.\nStep 2:\n1/50 = 1/2000 + 1/di → 1/di = 1/50 - 1/2000 = 40/2000 - 1/2000 = 39/2000 = 0.0195 → di ≈ 51.28 mm.\nStep 3:\nMagnification m = di/do ≈ 51.28/2000 ≈ 0.0256.\nAnswer:\nImage distance ≈ 51.3 mm; magnification ≈ 0.026 (about 1/39).",
-        "rejected": "One might assume the image forms at 50 mm exactly or guess a magnification of 0.01, but careful application of the lens equation refines the result."
-    },
-    {
-        "question": "A spaceship moves at 0.95c. If it fires a laser beam forward, what speed does an Earth observer measure for the laser?",
-        "chosen": "Step 1:\nSpecial relativity postulates that the speed of light in vacuum is constant c in all inertial frames.\nStep 2:\nTherefore, despite the spaceship moving at 0.95c, the laser beam is still measured at speed c by an external observer.\nAnswer:\nThe Earth observer measures the laser traveling at c (3 × 10⁸ m/s).",
-        "rejected": "Classical addition of velocities might yield 1.95c. Relativity ensures it remains exactly c, never exceeding c."
-    },
-    {
-        "question": "A charged particle is moving at an angle of 30° with respect to a uniform magnetic field. Derive an expression for its trajectory.",
-        "chosen": "1. Velocity components: v⊥ = v sinθ, v∥ = v cosθ.\n2. Circular motion from v⊥ => radius r = (m v sinθ) / (q B).\n3. Uniform motion from v∥ => pitch of the helix.\n\nHence the path is helical.",
-        "rejected": "The trajectory is a straight line because the angle doesn't matter."
-    },
-    {
-        "question": "Explain why perpetual motion machines of the second kind are impossible.",
-        "chosen": "Step 1:\nBy the second law, you cannot convert all heat into work without dumping heat to a colder reservoir.\nStep 2:\nA machine that spontaneously produces work from a single heat reservoir violates the second law.\nAnswer:\nThey violate the second law of thermodynamics, making them impossible.",
-        "rejected": "They are possible, but we just haven’t built one yet."
-    },
-    {
-        "question": "A loop of wire with 50 turns and an area of 0.02 m² rotates in a 0.1 T magnetic field at 60 Hz. Find the maximum emf generated.",
-        "chosen": "Step 1:\nεₘ = N B A ω, with ω = 2πf.\n\nStep 2:\nN = 50, B = 0.1 T, A = 0.02 m², f = 60 Hz.\n\nStep 3:\nω = 120π rad/s.\n\nStep 4:\nεₘ = 50 × 0.1 × 0.02 × 120π ≈ 37.7 V.\n\nAnswer:\n37.7 V (approximately).",
-        "rejected": "The coil can't generate any emf unless you add a battery."
-    },
-    {
-        "question": "An observer sees a rainbow. If sunlight is refracted through a water droplet (n = 1.33) at an angle of 42°, find the deviation angle of red light.",
-        "chosen": "Step 1:\nFor a primary rainbow, the central bow angle is about 42° from the antisolar point. This is effectively the deviation from the original path.\nStep 2:\nDeviations can be slightly different for different wavelengths, but red light commonly deviates around 42°.\nAnswer:\nThe deviation angle is about 42° for red light in a primary rainbow.",
-        "rejected": "One might guess the angle is 45° or 40°. While there is minor variation by wavelength, 42° is typically cited for red light in a primary bow."
-    },
-    {
-        "question": "A neutron undergoes beta decay. Calculate the energy released given the mass difference between reactants and products.",
-        "chosen": "Step 1:\nBeta decay: n → p + e⁻ + ν̅.\nStep 2:\nFind mass difference Δm = m_n - (m_p + m_e + m_ν). The neutrino mass is very small, but not always zero.\nStep 3:\nEnergy released Q = Δm c². Numerically, it is about 0.782 MeV in free neutron decay.\nAnswer:\nAbout 0.78 MeV of energy is released (precise value depends on exact mass difference).",
-        "rejected": "One might assume the energies are in the keV range or forget the neutrino in the mass balance, resulting in a different number for Q."
-    },
-    {
-        "question": "A 5 kg disk of radius 0.5 m is rotating at 6 rad/s. Find its angular momentum.",
-        "chosen": "Step 1:\nFor a solid disk, I = (1/2) M R² = 0.5 × 5 × (0.5)² = 0.625 kg·m².\nStep 2:\nAngular momentum L = I ω = 0.625 × 6 = 3.75 kg·m²/s.\nAnswer:\n3.75 kg·m²/s.",
-        "rejected": "Maybe about 10 kg·m²/s."
-    },
-    {
-        "question": "A 5 kg object falls freely from a height of 20 m (g = 9.8 m/s²). Find its velocity when it reaches the ground.",
-        "chosen": "Step 1:\nv² = 2 g h = 2 × 9.8 × 20 = 392.\nStep 2:\nv = √392 ≈ 19.8 m/s.\nAnswer:\n19.8 m/s.",
-        "rejected": "Possibly around 10 m/s."
-    },
-    {
-        "question": "A person pushes an object with a force of 50 N over 10 m in the same direction as motion. Find the work done.",
-        "chosen": "Step 1:\nWork W = F × d = 50 N × 10 m = 500 J.\nAnswer:\n500 J.",
-        "rejected": "Maybe 1000 J."
-    },
-    {
-        "question": "A magnetic field of 0.3 T is applied to a conductor carrying 5 A in a direction perpendicular to the field. If the length of the conductor is 1.5 m, find the force exerted on it.",
-        "chosen": "Step 1:\nF = I L B.\n\nStep 2:\nI = 5 A, L = 1.5 m, B = 0.3 T.\n\nStep 3:\nF = 5 × 1.5 × 0.3 = 2.25 N.\n\nAnswer:\n2.25 N.",
-        "rejected": "The conductor experiences zero force since it's too short."
-    },
-    {
-        "question": "A reflecting telescope has a mirror of 1.2 m diameter. Calculate its resolving power for light of 600 nm wavelength.",
-        "chosen": "Step 1:\nThe Rayleigh criterion for a circular aperture: θ ≈ 1.22 (λ / D).\nStep 2:\nHere, λ = 600 nm = 6 × 10⁻⁷ m, and D = 1.2 m.\nStep 3:\nθ = 1.22 × (6 × 10⁻⁷ / 1.2) = 1.22 × 5 × 10⁻⁷ = 6.1 × 10⁻⁷ radians.\nAnswer:\nThe telescope’s resolving angle is about 6.1 × 10⁻⁷ rad (or roughly 3.5 × 10⁻⁵ degrees).",
-        "rejected": "A guess might state a resolution near 10⁻⁶ rad or 10⁻⁴ rad without applying the 1.22 λ/D formula precisely."
-    },
-    {
-        "question": "A refrigerator operates at an efficiency of 35%. If it extracts 500 J of heat, how much work does it require?",
-        "chosen": "Step 1:\nFor a refrigerator, efficiency or COP is Q_C / W. Here, 0.35 = 500 J / W.\nStep 2:\nSo W = 500 / 0.35 ≈ 1429 J.\nAnswer:\nThe refrigerator needs about 1429 J of work.",
-        "rejected": "Probably around 500 J of work, ignoring the coefficient of performance."
-    },
-    {
-        "question": "A proton moves at 1% of the speed of light. Calculate its relativistic momentum. (Mass of proton = 1.67 × 10⁻²⁷ kg)",
-        "chosen": "Step 1:\nMomentum p = γ m v. At 0.01c, γ ≈ 1 because v « c.\nStep 2:\np ≈ m v = (1.67 × 10⁻²⁷ kg) × (0.01 × 3 × 10⁸ m/s).\nStep 3:\np ≈ 1.67 × 10⁻²⁷ × 3 × 10⁶ = 5.01 × 10⁻²ⁱ kg·m/s.\nAnswer:\nThe relativistic momentum is approximately 5.0 × 10⁻²ⁱ kg·m/s.",
-        "rejected": "Someone might treat it as highly relativistic and use a large γ, leading to a momentum that’s off by orders of magnitude."
-    },
-    {
-        "question": "Derive the equation for the efficiency of a Carnot engine.",
-        "chosen": "Step 1:\nCarnot cycle has two isothermal processes and two adiabatic processes.\nStep 2:\nEfficiency η = 1 - (T_C / T_H), derived by analyzing heat exchanged in isothermal expansions/compressions at T_H and T_C.\nAnswer:\nHence η = 1 - —T_C / T_H— for the reversible, ideal Carnot cycle.",
-        "rejected": "It’s exactly W/Q without any special form."
-    },
-    {
-        "question": "A Carnot engine operates between 600 K and 300 K. What is its maximum theoretical efficiency?",
-        "chosen": "Step 1:\nCarnot efficiency η = 1 - (T_L / T_H).\nStep 2:\nT_H = 600 K, T_L = 300 K.\nη = 1 - (300/600) = 1 - 0.5 = 0.5.\nAnswer:\nMaximum efficiency is 50%.",
-        "rejected": "It achieves 100% efficiency because it’s an ideal engine."
-    },
-    {
-        "question": "A spaceship moves at 0.6c relative to Earth. Find the relativistic kinetic energy of a 1000 kg object onboard.",
-        "chosen": "Step 1:\nRelativistic kinetic energy K = (γ - 1) m c².\nStep 2:\nγ = 1 / √(1 - 0.6²) = 1 / √(1 - 0.36) = 1 / 0.8 = 1.25.\nStep 3:\nK = (1.25 - 1)(1000 kg)(3 × 10⁸ m/s)² = 0.25 × 1000 × 9 × 10¹⁶ = 2.25 × 10¹⁹ J.\nAnswer:\nThe relativistic kinetic energy is about 2.25 × 10¹⁹ J.",
-        "rejected": "Someone might plug in non-relativistic KE = (1/2) m v², giving ~ 5.4 × 10¹⁶ J, or incorrectly handle γ - 1."
-    },
-    {
-        "question": "A gas expands at constant pressure, absorbing 500 J of heat. If it does 200 J of work, what is the change in internal energy?",
-        "chosen": "Step 1:\nUse the first law: ΔU = Q - W.\nQ = 500 J, W = 200 J.\nStep 2:\nΔU = 500 - 200 = 300 J.\nAnswer:\nThe internal energy increases by 300 J.",
-        "rejected": "Change in internal energy is roughly 500 J, ignoring the work done."
-    },
-    {
-        "question": "A convex lens has a focal length of 15 cm. If an object is placed at 30 cm, find the image distance and magnification.",
-        "chosen": "Step 1:\nApply the lens formula: 1/f = 1/do + 1/di with f = 15 cm and do = 30 cm.\nStep 2:\n1/15 = 1/30 + 1/di → 1/di = 1/15 − 1/30 = 1/30 → di = 30 cm.\nStep 3:\nMagnification m = di/do = 30/30 = 1.\nAnswer:\nThe image distance is 30 cm, and the magnification is 1 (same size as the object).",
-        "rejected": "Someone might roughly say that because the lens is 15 cm focal length and the object is at twice that distance, the image could appear at some arbitrary distance, maybe 20 or 25 cm, but that overlooks the precise lens equation."
-    },
-    {
-        "question": "Two cars (A = 1000 kg, B = 1500 kg) collide on an icy road with a relative speed of 20 m/s. If they undergo a completely inelastic collision, find their final velocity.",
-        "chosen": "Step 1:\nAssume Car A = +10 m/s, Car B = -10 m/s so that their relative speed is 20 m/s.\nStep 2:\nInitial total momentum = 1000 × 10 + 1500 × (-10) = 10000 - 15000 = -5000 kg·m/s.\nStep 3:\nCombined mass = 1000 + 1500 = 2500 kg.\nFinal velocity = -5000 / 2500 = -2 m/s (i.e. 2 m/s in B's original direction).\nAnswer:\n-2 m/s.",
-        "rejected": "They might just end up at 0 m/s."
-    },
-    {
-        "question": "A light wave has a wavelength of 500 nm in air. What is its frequency? (Speed of light = 3 × 10⁸ m/s)",
-        "chosen": "Step 1:\nUse the relationship c = λ × f, where λ = 500 nm = 500 × 10⁻⁹ m, and c = 3 × 10⁸ m/s.\nStep 2:\nf = c / λ = (3 × 10⁸ m/s) / (5 × 10⁻⁷ m) = 6 × 10¹⁴ Hz.\nAnswer:\nThe frequency is approximately 6 × 10¹⁴ Hz.",
-        "rejected": "An offhand approximation might be 5 × 10¹⁴ Hz or some other rough figure. Precise calculation yields about 6 × 10¹⁴ Hz."
-    },
-    {
-        "question": "A solenoid has 500 turns per meter and carries a current of 2 A. Calculate the magnetic field inside it. (μ₀ = 4π × 10⁻⁷ T·m/A)",
-        "chosen": "Step 1:\nB = μ₀ n I.\n\nStep 2:\nn = 500 m⁻¹, I = 2 A, μ₀ = 4π × 10⁻⁷.\n\nStep 3:\nB = (4π × 10⁻⁷) × 500 × 2 ≈ 1.26 × 10⁻³ T.\n\nAnswer:\n1.26 × 10⁻³ T.",
-        "rejected": "The magnetic field inside the solenoid is zero by default."
-    },
-    {
-        "question": "A planet of mass m is moving at speed v and collides inelastically with another planet of mass M. Find the final angular momentum of the system (assuming no external torque).",
-        "chosen": "Step 1:\nNo external torque → angular momentum is conserved.\nStep 2:\nIf the second planet was initially at rest and the collision is central, final L = initial L.\nStep 3:\nHence final L = m v r (assuming r is the perpendicular distance).\nAnswer:\nL = m v r (conserved).",
-        "rejected": "It might be zero."
-    },
-    {
-        "question": "An electron is accelerated to near light speed. Show how its relativistic mass changes compared to its rest mass.",
-        "chosen": "Step 1:\nRelativistic mass mₒ = γ m₀, where γ = 1 / √(1 - v²/c²).\nStep 2:\nAs v → c, γ → ∞, so the effective mass → ∞.\nStep 3:\nHence at speeds close to c, the electron’s relativistic mass can far exceed its rest mass m₀.\nAnswer:\nThe electron’s mass grows by the factor γ, which becomes very large near c.",
-        "rejected": "A purely classical view might hold the electron’s mass constant or fail to include γ, concluding no change in mass at high speeds."
-    },
-    {
-        "question": "Calculate the Compton shift when an X-ray photon of 0.1 nm scatters at 90° from an electron.",
-        "chosen": "Step 1:\nCompton shift ∆λ = (h / mₑ c) (1 - cos θ). For θ = 90°, (1 - cos 90°) = 1.\nStep 2:\nThe Compton wavelength of electron, h/(mₑ c), is about 2.43 × 10⁻¹² m.\nStep 3:\nHence ∆λ = 2.43 × 10⁻¹² m.\nAnswer:\nThe Compton shift is about 2.43 pm at 90°.\n(Original 0.1 nm is 100 pm, so the shift is a few percent of the initial wavelength.)",
-        "rejected": "An incorrect approach might just subtract final from initial wavelength ignoring Compton’s formula, or guess a shift smaller than 0.01 pm, incorrectly downplaying the effect."
-    },
-    {
-        "question": "Find the capacitance of a parallel plate capacitor with an area of 0.02 m², plate separation of 2 mm, and dielectric constant 5. (ε₀ = 8.85 × 10⁻¹² F/m)",
-        "chosen": "Step 1:\nConvert 2 mm to 2 × 10⁻³ m.\n\nStep 2:\nUse C = (k ε₀ A) / d.\n\nStep 3:\nSubstitute k = 5, ε₀ = 8.85 × 10⁻¹², A = 0.02, d = 2 × 10⁻³.\n\nStep 4:\nC ≈ 4.43 × 10⁻¹° F.\n\nAnswer:\n4.43 × 10⁻¹° F (approximately).",
-        "rejected": "The capacitor's capacitance is likely just a few hundred farads."
-    },
-    {
-        "question": "Define entropy and explain its significance in thermodynamics.",
-        "chosen": "Step 1:\nEntropy is a measure of disorder or randomness in a system.\nStep 2:\nIt indicates the spontaneous direction of processes: total entropy tends to increase.\nAnswer:\nHigher entropy typically corresponds to more microstates available, governing the natural direction of irreversible processes.",
-        "rejected": "It’s basically just another word for energy."
-    },
-    {
-        "question": "A coil with 200 turns encloses an area of 0.01 m². It is placed in a changing magnetic field that increases at 0.1 T/s. Calculate the induced emf.",
-        "chosen": "Step 1:\nε = N A (dB/dt).\n\nStep 2:\nN = 200, A = 0.01 m², dB/dt = 0.1 T/s.\n\nStep 3:\nε = 200 × 0.01 × 0.1 = 0.2 V.\n\nAnswer:\n0.2 V.",
-        "rejected": "Induced emf is impossible without an external battery."
-    },
-    {
-        "question": "Define and explain the concept of enthalpy in thermodynamics.",
-        "chosen": "Step 1:\nEnthalpy H is defined as H = U + pV, where U is internal energy.\nStep 2:\nIt’s useful for processes at constant pressure, as ΔH equals heat added at constant pressure.\nAnswer:\nEnthalpy measures total heat content, simplifying analysis of constant-pressure scenarios.",
-        "rejected": "It’s basically just the same as internal energy."
-    },
-    {
-        "question": "Derive the energy levels of the hydrogen atom using the Bohr model.",
-        "chosen": "Step 1:\nBohr’s assumptions: quantized angular momentum mₙ vₙ rₙ = n h / 2π.\nStep 2:\nBalance electrostatic force and centripetal force: k e² / r² = m v² / r.\nStep 3:\nSolving yields Eₙ = - (13.6 eV) / n².\nAnswer:\nThe hydrogen energy levels are Eₙ = -13.6 eV / n², n = 1, 2, 3, ….",
-        "rejected": "If someone merges the classical orbit formula incorrectly or omits quantization, they might produce a linear energy dependence or a different numeric constant."
-    },
-    {
-        "question": "How does increasing entropy affect the spontaneity of a reaction?",
-        "chosen": "Step 1:\nAn increase in entropy generally favors spontaneous processes.\nStep 2:\nIf the total entropy (system + surroundings) rises, the reaction tends to be spontaneous.\nAnswer:\nHigher entropy production is typically associated with greater spontaneity.",
-        "rejected": "Entropy doesn’t influence spontaneity at all."
-    },
-    {
-        "question": "A light ray travels from air (n=1.00) into water (n=1.33) at an angle of 45°. Find the angle of refraction.",
-        "chosen": "Step 1:\nUse Snell’s law: n1 sin(θ₁) = n2 sin(θ₂).\nHere, n1 = 1.00, n2 = 1.33, and θ₁ = 45°.\nStep 2:\nsin(θ₂) = (1.00 × sin(45°)) / 1.33 ≈ 0.707 / 1.33 ≈ 0.53.\nStep 3:\nθ₂ = sin⁻¹(0.53) ≈ 31.8°.\nAnswer:\nThe angle of refraction is approximately 31.8°.",
-        "rejected": "Without applying Snell’s law, one might guess something like 40° or 35°. However, the exact calculation is essential for correct refraction angles."
-    },
-    {
-        "question": "A 10 C charge is moved through a potential difference of 120 V. Calculate the work done on the charge.",
-        "chosen": "Step 1:\nUse W = q ΔV.\n\nStep 2:\nSubstitute q = 10 C, ΔV = 120 V:\nW = 10 × 120 = 1200 J.\n\nAnswer:\n1200 J.",
-        "rejected": "The work done is negligible because the voltage is not very large."
-    },
-    {
-        "question": "A transformer has 500 turns in the primary coil and 100 turns in the secondary coil. If the input voltage is 220 V, what is the output voltage?",
-        "chosen": "Step 1:\nVₒ / Vₑ = Nₒ / Nₑ.\n\nStep 2:\nNₑ = 500, Nₒ = 100, Vₑ = 220 V.\n\nStep 3:\nVₒ = 220 × (100/500) = 44 V.\n\nAnswer:\n44 V.",
-        "rejected": "The output voltage stays the same at 220 V because transformation is not possible."
-    },
-    {
-        "question": "A mass M is hanging from a light string, while another mass m is on a smooth horizontal surface, connected through a pulley. Find the acceleration of the system in terms of M, m, and g.",
-        "chosen": "Step 1:\nFor the hanging mass: M g - T = M a.\nFor the mass on the surface: T = m a.\nStep 2:\nEliminate T: M g - m a = M a → a = (M g) / (M + m).\nAnswer:\na = (M g) / (M + m).",
-        "rejected": "Maybe it's 0.5 g."
-    },
-    {
-        "question": "A laser beam undergoes total internal reflection inside a glass block (n=1.50). Find the minimum angle of incidence for this to occur.",
-        "chosen": "Step 1:\nFor TIR, sin(θc) = n₂ / n₁. Typically, the beam goes from n=1.50 to air (n=1.00).\nStep 2:\nsin(θc) = 1.00 / 1.50 = 0.666...\nStep 3:\nθc ≈ sin⁻¹(0.666...) ≈ 41.8°.\nAnswer:\nThe minimum angle of incidence is about 41.8°.",
-        "rejected": "Someone might randomly guess 45° or 30°, but the ratio of the indices precisely defines the critical angle."
-    },
-    {
-        "question": "Describe how a heat engine works and define its efficiency formula.",
-        "chosen": "Step 1:\nA heat engine absorbs heat Q_H from a high-temperature reservoir, does work W, and dumps heat Q_L into a low-temperature reservoir.\nStep 2:\nEfficiency η = W / Q_H = 1 - (Q_L / Q_H).\nAnswer:\nHeat engines convert some of the input heat into work, with efficiency determined by the ratio of work done to heat absorbed from the hot source.",
-        "rejected": "It just uses heat to create 100% work all the time."
+        "question": "A person is standing on a rotating platform holding dumbbells. If they bring their arms closer to their body, how does the angular velocity change? (Explain using conservation of angular momentum)",
+        "chosen": "Step 1:\nBringing the arms in decreases the moment of inertia.\nStep 2:\nSince no external torque acts, angular momentum L = I \\u03c9 is conserved.\nStep 3:\nThus, if I decreases, \\u03c9 must increase.\nAnswer:\nThe angular velocity increases.",
+        "rejected": "Step 1:\nBringing the arms in is assumed to increase the moment of inertia.\nStep 2:\nWith conservation of angular momentum, if I increases, then \\u03c9 must decrease.\nAnswer:\nThe angular velocity decreases."
     },
     {
         "question": "A uranium-235 nucleus undergoes fission, releasing 200 MeV per event. How much energy is released from 1 gram of uranium?",
-        "chosen": "Step 1:\nNumber of µ(=moles) in 1 g of U-235 = 1 / 235 ≈ 0.004255 moles.\nStep 2:\nNumber of nuclei = 0.004255 × (6.022 × 10²³) ≈ 2.56 × 10²¹.\nStep 3:\nTotal energy = (2.56 × 10²¹) × 200 MeV = 5.12 × 10²³ MeV.\nConverting to joules: multiply by 1.602 × 10⁻¹⁳ ≈ 8.2 × 10¹⁰ J.\nAnswer:\nAbout 8.2 × 10¹⁰ J is released from 1 g of U-235 (roughly 82 GJ).",
-        "rejected": "A common error might be missing the factor of Avogadro’s number or mixing up units, leading to an underestimate by millions of times."
+        "chosen": "Step 1:\nCalculate moles: 1 g / 235 g/mol \\u2248 0.004255 mol.\nStep 2:\nNumber of nuclei = 0.004255 \\xd7 6.022 \\xd7 10\\xb2\\xb3 \\u2248 2.56 \\xd7 10\\xb2\\xb9.\nStep 3:\nTotal energy = 2.56 \\xd7 10\\xb2\\xb9 \\xd7 200 MeV; converting 1 MeV \\u2248 1.602 \\xd7 10\\u207b\\xb9\\xb3 J gives \\u2248 8.2 \\xd7 10\\xb9\\u2070 J.\nAnswer:\nEnergy \\u2248 8.2 \\xd7 10\\xb9\\u2070 J (\\u2248 82 GJ).",
+        "rejected": "Step 1:\nAssume the number of nuclei is 2.56 \\xd7 10\\xb9\\u2079 (two orders lower).\nStep 2:\nThen total energy = 2.56 \\xd7 10\\xb9\\u2079 \\xd7 200 MeV; converting yields \\u2248 8.2 \\xd7 10\\u2078 J.\nAnswer:\nEnergy \\u2248 8.2 \\xd7 10\\u2078 J."
     },
     {
-        "question": "A system undergoes a cyclic process where it does 800 J of work and absorbs 1200 J of heat. What is the efficiency of this cycle?",
-        "chosen": "Step 1:\nEfficiency η = W / Q_H.\nStep 2:\nW = 800 J, Q_H = 1200 J.\nHence η = 800/1200 = 0.666... or 66.7%.\nAnswer:\nThe cycle’s efficiency is about 66.7%.",
-        "rejected": "It’s about 95%, ignoring the actual ratio."
+        "question": "Derive the energy levels of the hydrogen atom using the Bohr model.",
+        "chosen": "Step 1:\nApply Bohr\\u2019s postulate: m\\u2091 v r = n h/(2\\u03c0).\nStep 2:\nEquate the centripetal force m\\u2091 v\\xb2/r to the Coulomb force k e\\xb2/r\\xb2 and solve for r and v.\nStep 3:\nDerive E\\u2099 = -13.6 eV/n\\xb2.\nAnswer:\nEnergy levels: E\\u2099 = -13.6 eV/n\\xb2, for n = 1, 2, 3, \\u2026",
+        "rejected": "Step 1:\nAssume the derivation leads to E\\u2099 = -3.4 eV/n\\xb2.\nStep 2:\nThus, the energy levels are one-fourth the correct values.\nAnswer:\nEnergy levels: E\\u2099 = -3.4 eV/n\\xb2."
+    },
+    {
+        "question": "A charge of 4 \\u03bcC is moved in an electric field from a point of 10 V to 30 V. Calculate the work done.",
+        "chosen": "Step 1:\nW = q \\u0394V.\n\nStep 2:\nq = 4 \\xd7 10\\u207b\\u2076 C, \\u0394V = 20 V.\n\nStep 3:\nW = (4 \\xd7 10\\u207b\\u2076) \\xd7 20 = 8 \\xd7 10\\u207b\\u2075 J.\n\nAnswer:\n8 \\xd7 10\\u207b\\u2075 J.",
+        "rejected": "Step 1:\nUse the work formula W = q \\u0394V, converting 4 \\u03bcC as 4 \\xd7 10\\u207b\\xb3 C.\n\nStep 2:\nAssume \\u0394V = 20 V.\n\nStep 3:\nCalculate W = (4 \\xd7 10\\u207b\\xb3) \\xd7 20 = 0.08 J.\n\nAnswer:\n0.08 J."
+    },
+    {
+        "question": "A particle is moving at 0.8c. Find its Lorentz factor.",
+        "chosen": "Step 1:\n\\u03b3 = 1 / \\u221a(1 - v\\xb2/c\\xb2). For v = 0.8c, v\\xb2/c\\xb2 = 0.64.\nStep 2:\n\\u03b3 = 1 / \\u221a(1 - 0.64) = 1 / 0.6 \\u2248 1.67.\nAnswer:\nLorentz factor \\u2248 1.67.",
+        "rejected": "Step 1:\nIncorrectly calculate \\u03b3 using \\u03b3 = 1 / \\u221a(1 - v) with v = 0.8c.\nStep 2:\nThen \\u03b3 = 1 / \\u221a(1 - 0.8) = 1 / \\u221a0.2 \\u2248 2.24.\nAnswer:\nLorentz factor \\u2248 2.24."
+    },
+    {
+        "question": "A car starts from rest and accelerates at 2 m/s\\xb2. What is its velocity after 5 seconds?",
+        "chosen": "Step 1:\nInitial velocity v\\u2080 = 0 m/s, acceleration a = 2 m/s\\xb2, time t = 5 s.\nStep 2:\nUse v = v\\u2080 + a \\xd7 t = 0 + (2)(5) = 10 m/s.\nAnswer:\n10 m/s.",
+        "rejected": "Step 1:\nInitial velocity v\\u2080 = 0 m/s, acceleration a = 2 m/s\\xb2, time t = 10 s.\nStep 2:\nUse v = v\\u2080 + a \\xd7 t = 0 + (2)(10) = 20 m/s.\nAnswer:\n20 m/s."
+    },
+    {
+        "question": "A convex lens has a focal length of 15 cm. If an object is placed at 30 cm, find the image distance and magnification.",
+        "chosen": "Step 1:\nApply the lens formula: 1/f = 1/do + 1/di with f = 15 cm and do = 30 cm.\nStep 2:\n1/15 = 1/30 + 1/di \\u27f9 1/di = 1/15 \\u2013 1/30 = 1/30, so di = 30 cm.\nStep 3:\nMagnification m = di/do = 30/30 = 1.\nAnswer:\nThe image distance is 30 cm, and the magnification is 1 (same size as the object).",
+        "rejected": "Step 1:\nErroneously compute 1/di as 1/30 \\u2013 1/15 = -1/30, giving di = -30 cm (virtual image).\nStep 2:\nThen m = -30/30 = -1.\nAnswer:\nThe image is 30 cm from the lens (virtual) with a magnification of -1."
+    },
+    {
+        "question": "A laser beam undergoes total internal reflection inside a glass block (n=1.50). Find the minimum angle of incidence for this to occur.",
+        "chosen": "Step 1:\nFor total internal reflection, light must travel from glass (n=1.50) to air (n=1.00).\nStep 2:\nThe critical angle is given by sin(\\u03b8c) = n_air/n_glass = 1/1.5 \\u2248 0.667.\nStep 3:\n\\u03b8c = sin\\u207b\\xb9(0.667) \\u2248 41.8\\xb0.\nAnswer:\nThe minimum angle of incidence is about 41.8\\xb0.",
+        "rejected": "Step 1:\nAssume that the mirror\\u2019s angle adds directly to the critical condition by incorrectly using the ratio n_glass/n_air = 1.5/1.0 = 1.5.\nStep 2:\nThis yields an impossible sine value, resulting in an undefined angle.\nAnswer:\nThe calculation yields an undefined result."
+    },
+    {
+        "question": "A 5 kg object falls freely from a height of 20 m (g = 9.8 m/s\\xb2). Find its velocity when it reaches the ground.",
+        "chosen": "Step 1:\nUse v\\xb2 = 2 g h = 2 \\xd7 9.8 \\xd7 20 = 392.\nStep 2:\nv = \\u221a392 \\u2248 19.8 m/s.\nAnswer:\n19.8 m/s.",
+        "rejected": "Step 1:\nUse v\\xb2 = 2 g h with g taken as 10 m/s\\xb2: v\\xb2 = 2 \\xd7 10 \\xd7 20 = 400.\nStep 2:\nv = \\u221a400 = 20 m/s.\nAnswer:\n20 m/s."
+    },
+    {
+        "question": "A projectile is launched at an initial velocity of 15 m/s at a 60\\xb0 angle. Find: (a) The horizontal range (b) The maximum height.",
+        "chosen": "Step 1:\nHorizontal range R = (v\\u2080\\xb2 \\xd7 sin(2 \\xd7 60\\xb0)) / g = (15\\xb2 \\xd7 sin(120\\xb0)) / 9.8 \\u2248 19.9 m.\nStep 2:\nMaximum height H = (v\\u2080\\xb2 \\xd7 sin\\xb260\\xb0) / (2 \\xd7 9.8) \\u2248 8.6 m.\nAnswer:\n(a) 19.9 m\n(b) 8.6 m.",
+        "rejected": "Step 1:\nCalculate horizontal range using R = (v\\u2080\\xb2 \\xd7 sin60\\xb0) / g with g = 10 m/s\\xb2: R = (225 \\xd7 0.866) / 10 \\u2248 19.5 m.\nStep 2:\nCalculate maximum height using H = (v\\u2080\\xb2 \\xd7 sin\\xb260\\xb0) / g: H = (225 \\xd7 0.75) / 10 = 16.875 m, rounded to 17.2 m.\nAnswer:\n(a) 19.5 m\n(b) 17.2 m."
+    },
+    {
+        "question": "A charged particle is moving at an angle of 30\\xb0 with respect to a uniform magnetic field. Derive an expression for its trajectory.",
+        "chosen": "1.  Velocity components: v\\u22a5 = v sin\\u03b8, v\\u2225 = v cos\\u03b8.\n2.  Circular motion from v\\u22a5 \\u21d2 radius r = (m v sin\\u03b8) / (qB).\n3.  Uniform motion from v\\u2225 \\u21d2 pitch of the helix.\n\nHence the path is helical.",
+        "rejected": "Step 1:\nResolve the velocity into components, taking v\\u22a5 = v cos\\u03b8 and v\\u2225 = v sin\\u03b8.\n\nStep 2:\nUse the circular motion formula with r = (m v cos\\u03b8)/(qB).\n\nStep 3:\nConclude that the particle moves in a circular path.\n\nAnswer:\nr = (m v cos\\u03b8)/(qB) and the trajectory is circular."
+    },
+    {
+        "question": "A light wave has a wavelength of 500 nm in air. What is its frequency? (Speed of light = 3 \\xd7 10\\u2078 m/s)",
+        "chosen": "Step 1:\nUse the relationship c = \\u03bb \\xd7 f, where \\u03bb = 500 nm = 500 \\xd7 10\\u207b\\u2079 m.\nStep 2:\nf = c/\\u03bb = (3 \\xd7 10\\u2078 m/s) / (5 \\xd7 10\\u207b\\u2077 m) = 6 \\xd7 10\\xb9\\u2074 Hz.\nAnswer:\nThe frequency is approximately 6 \\xd7 10\\xb9\\u2074 Hz.",
+        "rejected": "Step 1:\nMisconvert the wavelength by taking 500 nm as 500 \\xd7 10\\u207b\\u2076 m.\nStep 2:\nf = (3 \\xd7 10\\u2078 m/s) / (5 \\xd7 10\\u207b\\u2074 m) = 6 \\xd7 10\\xb9\\xb9 Hz.\nAnswer:\nThe frequency is approximately 6 \\xd7 10\\xb9\\xb9 Hz."
+    },
+    {
+        "question": "A 2 m long rod of mass 4 kg is fixed at one end. If a 10 N force is applied at the free end, find the torque about the pivot.",
+        "chosen": "Step 1:\nTorque \\u03c4 = F \\xd7 distance = 10 N \\xd7 2 m = 20 N\\xb7m.\nAnswer:\n20 N\\xb7m.",
+        "rejected": "Step 1:\nCalculate torque as \\u03c4 = F \\xd7 (distance)\\xb2 = 10 N \\xd7 (2 m)\\xb2 = 10 \\xd7 4 = 40 N\\xb7m.\nAnswer:\n40 N\\xb7m."
+    },
+    {
+        "question": "A transmission line carries a current of 1000 A. Calculate the magnetic field at a distance of 10 cm from the wire.",
+        "chosen": "Step 1:\nB = (\\u03bc\\u2080 I) / (2\\u03c0 r).\n\nStep 2:\nI = 1000 A, r = 0.1 m, \\u03bc\\u2080 = 4\\u03c0 \\xd7 10\\u207b\\u2077.\n\nStep 3:\nB \\u2248 2 \\xd7 10\\u207b\\xb3 T.\n\nAnswer:\n2 \\xd7 10\\u207b\\xb3 T.",
+        "rejected": "Step 1:\nUse B = (\\u03bc\\u2080 I) / (2\\u03c0 r) with r = 1 m.\n\nStep 2:\nSubstitute I = 1000 A and \\u03bc\\u2080 = 4\\u03c0 \\xd7 10\\u207b\\u2077, with r = 1 m.\n\nStep 3:\nB = (4\\u03c0 \\xd7 10\\u207b\\u2077 \\xd7 1000) / (2\\u03c0 \\xd7 1) = 2 \\xd7 10\\u207b\\u2074 T.\n\nAnswer:\n2 \\xd7 10\\u207b\\u2074 T."
+    },
+    {
+        "question": "A convex mirror has a radius of curvature of 30 cm. If an object is placed 20 cm in front of it, find the image distance and magnification.",
+        "chosen": "Step 1:\nFor a convex mirror, the focal length is f = -R/2 = -15 cm.\nStep 2:\nUse the mirror equation: 1/f = 1/do + 1/di with do = 20 cm.\nStep 3:\n1/(-15) = 1/20 + 1/di \\u27f9 1/di = -1/15 - 1/20 = -7/60 \\u27f9 di \\u2248 -8.57 cm (virtual image).\nStep 4:\nMagnification m = di/do = -8.57/20 \\u2248 -0.43.\nAnswer:\nThe image is virtual, about 8.57 cm behind the mirror, with a magnification of approximately 0.43 (reduced).",
+        "rejected": "Step 1:\nUse f = -15 cm, but mistakenly solve 1/di = 1/20 - 1/15 = -1/60, yielding di = -60 cm.\nStep 2:\nThen m = -60/20 = -3.\nAnswer:\nThe image is 60 cm behind the mirror with a magnification of -3."
+    },
+    {
+        "question": "A reflecting telescope has a mirror of 1.2 m diameter. Calculate its resolving power for light of 600 nm wavelength.",
+        "chosen": "Step 1:\nUse the Rayleigh criterion for a circular aperture: \\u03b8 \\u2248 1.22 (\\u03bb/D).\nStep 2:\nSubstitute \\u03bb = 600 nm = 6 \\xd7 10\\u207b\\u2077 m and D = 1.2 m: \\u03b8 \\u2248 1.22 \\xd7 (6 \\xd7 10\\u207b\\u2077/1.2) \\u2248 6.1 \\xd7 10\\u207b\\u2077 rad.\nAnswer:\nThe resolving angle is about 6.1 \\xd7 10\\u207b\\u2077 rad (or roughly 3.5 \\xd7 10\\u207b\\u2075\\xb0).",
+        "rejected": "Step 1:\nMisapply the Rayleigh criterion by assuming the mirror diameter is 0.12 m instead of 1.2 m.\nStep 2:\nThen \\u03b8 \\u2248 1.22 \\xd7 (6 \\xd7 10\\u207b\\u2077/0.12) \\u2248 6.1 \\xd7 10\\u207b\\u2076 rad.\nAnswer:\nThe resolving angle is calculated to be about 6.1 \\xd7 10\\u207b\\u2076 rad."
+    },
+    {
+        "question": "A body slides down a ramp, losing 50 J of energy due to friction. If its initial energy was 200 J, find its final mechanical energy.",
+        "chosen": "Step 1:\nInitial energy = 200 J, energy lost = 50 J.\nStep 2:\nFinal energy = 200 - 50 = 150 J.\nAnswer:\n150 J.",
+        "rejected": "Step 1:\nInitial energy = 200 J, energy lost = 50 J.\nStep 2:\nFinal energy = 200 + 50 = 250 J.\nAnswer:\n250 J."
+    },
+    {
+        "question": "A charged capacitor (5 \\u03bcF, 100 V) is connected to an inductor of 10 mH. Find the oscillation frequency of the LC circuit.",
+        "chosen": "Step 1:\n\\u03c9 = 1/\\u221a(LC), f = \\u03c9 / (2\\u03c0).\n\nStep 2:\nC = 5 \\xd7 10\\u207b\\u2076 F, L = 10 mH = 1 \\xd7 10\\u207b\\xb2 H.\n\nStep 3:\nLC = 5 \\xd7 10\\u207b\\u2078.\n\nStep 4:\n\\u03c9 = 1/\\u221a(5 \\xd7 10\\u207b\\u2078) \\u2248 4.47 \\xd7 10\\xb3 rad/s.\n\nStep 5:\nf \\u2248 (4.47 \\xd7 10\\xb3)/(2\\u03c0) \\u2248 712 Hz.\n\nAnswer:\n712 Hz (approx.).",
+        "rejected": "Step 1:\nUse \\u03c9 = 1/\\u221a(LC) taking C = 5 \\xd7 10\\u207b\\u2075 F instead of 5 \\xd7 10\\u207b\\u2076 F, with L = 0.01 H.\n\nStep 2:\nThen LC = 0.01 \\xd7 5 \\xd7 10\\u207b\\u2075 = 5 \\xd7 10\\u207b\\u2077.\n\nStep 3:\nCalculate \\u03c9 = 1/\\u221a(5 \\xd7 10\\u207b\\u2077) \\u2248 1414 rad/s.\n\nStep 4:\nFind f = 1414/(2\\u03c0) \\u2248 225 Hz.\n\nAnswer:\n225 Hz."
+    },
+    {
+        "question": "A refrigerator operates at an efficiency of 35%. If it extracts 500 J of heat, how much work does it require?",
+        "chosen": "Step 1:\nFor a refrigerator, the coefficient of performance (COP) is defined as COP = Q_C/W, where Q_C is the heat removed and W is the work input.\nStep 2:\nGiven COP = 0.35 and Q_C = 500 J, then W = Q_C / COP = 500 / 0.35 \\u2248 1429 J.\nAnswer:\nThe refrigerator requires approximately 1429 J of work.",
+        "rejected": "Step 1:\nAssume the work is given by multiplying instead of dividing: W = Q_C \\xd7 COP = 500 \\xd7 0.35 = 175 J.\nAnswer:\nThe work required is 175 J."
+    },
+    {
+        "question": "A laser beam of 650 nm wavelength passes through a double slit with a separation of 0.2 mm. Find the distance between adjacent fringes on a screen 2 m away.",
+        "chosen": "Step 1:\nFringe spacing y = (\\u03bb L) / d, where \\u03bb = 650 nm = 6.5 \\xd7 10\\u207b\\u2077 m, L = 2 m, and d = 0.2 mm = 2 \\xd7 10\\u207b\\u2074 m.\nStep 2:\ny = (6.5 \\xd7 10\\u207b\\u2077 m \\xd7 2 m) / (2 \\xd7 10\\u207b\\u2074 m) = 6.5 \\xd7 10\\u207b\\xb3 m = 6.5 mm.\nAnswer:\nAdjacent fringes are separated by about 6.5 mm.",
+        "rejected": "Step 1:\nMisinterpret the slit separation by taking d = 0.02 mm = 2 \\xd7 10\\u207b\\u2075 m.\nStep 2:\ny = (6.5 \\xd7 10\\u207b\\u2077 m \\xd7 2 m) / (2 \\xd7 10\\u207b\\u2075 m) = 0.065 m = 65 mm.\nAnswer:\nAdjacent fringes are calculated to be 65 mm apart."
+    },
+    {
+        "question": "A photon has an energy of 2 eV. Find its frequency.",
+        "chosen": "Step 1:\nConvert energy: E = 2 eV = 2 \\xd7 1.602 \\xd7 10\\u207b\\xb9\\u2079 J = 3.204 \\xd7 10\\u207b\\xb9\\u2079 J.\nStep 2:\nUse E = h f, so f = E / h = (3.204 \\xd7 10\\u207b\\xb9\\u2079 J) / (6.63 \\xd7 10\\u207b\\xb3\\u2074 J\\xb7s) \\u2248 4.83 \\xd7 10\\xb9\\u2074 Hz.\nAnswer:\nFrequency \\u2248 4.83 \\xd7 10\\xb9\\u2074 Hz.",
+        "rejected": "Step 1:\nConvert 2 eV to joules using an incorrect factor: 2 eV = 2 \\xd7 1.602 \\xd7 10\\u207b\\xb9\\u2078 J.\nStep 2:\nThen f = (3.204 \\xd7 10\\u207b\\xb9\\u2078 J) / (6.63 \\xd7 10\\u207b\\xb3\\u2074 J\\xb7s) \\u2248 4.83 \\xd7 10\\xb9\\u2075 Hz.\nAnswer:\nFrequency \\u2248 4.83 \\xd7 10\\xb9\\u2075 Hz."
+    },
+    {
+        "question": "A coil of resistance 2 \\u03a9 and inductance 0.2 H is connected to a 10 V battery. Calculate the time constant and find the current after 0.1 seconds.",
+        "chosen": "Step 1:\n\\u03c4 = L / R = 0.2 / 2 = 0.1 s.\n\nStep 2:\nSteady-state current I\\u2080 = V / R = 10 / 2 = 5 A.\n\nStep 3:\ni(t) = 5 \\xd7 [1 - e^(-t/\\u03c4)].\n\nAt t = 0.1 s:\ni(0.1) \\u2248 5 \\xd7 [1 - e^(-1)] \\u2248 5 \\xd7 0.6321 = 3.16 A.\n\nAnswer:\n\\u03c4 = 0.1 s; i(0.1 s) \\u2248 3.16 A.",
+        "rejected": "Step 1:\nUse \\u03c4 = R / L with R = 2 \\u03a9 and L = 0.2 H, so \\u03c4 = 2 / 0.2 = 10 s.\n\nStep 2:\nSteady-state current I\\u2080 = V / R = 10 / 2 = 5 A.\n\nStep 3:\ni(t) = 5 \\xd7 [1 - e^(-t/\\u03c4)] with t = 0.1 s and \\u03c4 = 10 s, then i(0.1) = 5 \\xd7 [1 - e^(-0.01)] \\u2248 5 \\xd7 0.01 = 0.05 A.\n\nAnswer:\n\\u03c4 = 10 s; i(0.1 s) \\u2248 0.05 A."
+    },
+    {
+        "question": "What is the Clausius statement of the second law of thermodynamics?",
+        "chosen": "Step 1:\nThe Clausius statement: It is impossible for heat to spontaneously flow from a colder body to a hotter body without external work.\nStep 2:\nThis means that heat naturally flows from hot to cold.\nAnswer:\nHeat cannot be transferred from a cold object to a hot object without additional work.",
+        "rejected": "Step 1:\nState that the Clausius statement implies energy can be created from nothing.\nAnswer:\nIt is possible to create energy from a cold reservoir."
+    },
+    {
+        "question": "A concave lens has a focal length of -20 cm. If an object is placed 10 cm in front of it, find the image distance and magnification.",
+        "chosen": "Step 1:\nUse the lens equation: 1/f = 1/do + 1/di, where f = -20 cm (negative for a concave/diverging lens) and do = 10 cm.\nStep 2:\n1/(-20) = 1/10 + 1/di.\nSo 1/di = -1/20 - 1/10 = -3/20 \\u27f9 di = -20/3 \\u2248 -6.67 cm.\n(The negative sign indicates the image is virtual and on the same side as the object.)\nStep 3:\nMagnification m = di/do = -6.67/10 = -0.67.\nAnswer:\nThe image is 6.67 cm from the lens (virtual), and the magnification is about -0.67 (reduced and upright).",
+        "rejected": "Step 1:\nApply the lens equation with f = -20 cm and do = 10 cm, but mistakenly compute 1/di = -1/20 + 1/10 = 1/20.\nStep 2:\nThen di = 20 cm, implying a real image.\nStep 3:\nMagnification m = 20/10 = 2.\nAnswer:\nThe image is 20 cm from the lens with a magnification of 2."
     }
 ]
