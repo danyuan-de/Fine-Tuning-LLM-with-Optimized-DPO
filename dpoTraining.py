@@ -1,5 +1,6 @@
 # Description: This script trains a model using DPO on the instruction data with preferences.
-# Execute: PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0 python DPO_training.py
+# Execute: PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0 python DPO_training.py for MPS (MacOS)
+# Execute: python DPO_training.py for CUDA (Linux)
 # Update pytorch: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/mps
 
 
