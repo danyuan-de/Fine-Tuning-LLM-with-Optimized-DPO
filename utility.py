@@ -98,7 +98,7 @@ def generate(
 
     for _ in range(max_new_tokens):
         # truncate context
-        idx_cond = idx[:, -context_size:].to(device) 
+        idx_cond = idx[:, -context_size:]#.to(device) 
         
         # get logits
         with torch.no_grad():
@@ -108,6 +108,12 @@ def generate(
         # select the last token's logits
         logits = logits[:, -1, :] / (temperature if temperature > 0 else 1.0)
         
+        # Check top_p and top_k are valid
+        if top_p is not None:
+            assert 0 < top_p <= 1.0, f"top_p must be between 0 and 1, got {top_p}"
+        if top_k is not None:
+            assert top_k > 0, f"top_k must be positive, got {top_k}"
+            
         # prioritize top-p sampling
         if top_p is not None and top_p < 1.0:
             sorted_logits, sorted_indices = torch.sort(logits, descending=True)
@@ -153,7 +159,7 @@ class EOTStoppingCriteria(StoppingCriteria):
         
     def __call__(self, input_ids, scores, **kwargs):
         # check if the last token is the EOT token
-        return input_ids[0][-1] == self.eot_token_id
+        return len(input_ids[0]) > 0 and input_ids[0][-1] == self.eot_token_id
     
 
 # postprocess response to remove unwanted tokens
@@ -182,7 +188,7 @@ def calculate_perplexity(model: AutoModelForCausalLM, tokenizer: AutoTokenizer, 
         Perplexity score as a float.
     """
     encodings = tokenizer(text, return_tensors="pt")
-    input_ids = encodings.input_ids#.to(DEVICE)
+    input_ids = encodings.input_ids[:, :512]#.to(DEVICE)
     
     with torch.no_grad():
         outputs = model(input_ids, labels=input_ids)

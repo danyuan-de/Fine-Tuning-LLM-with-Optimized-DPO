@@ -26,10 +26,13 @@ cache_dir = config.cache_dir
 file_path = config.file_content
 
 # --------- Hyperparameters ---------
+allowed_max_length = config.allowed_max_length
+max_new_tokens = config.max_new_tokens
 batch_size = config.batch_size
 num_epochs = config.num_epochs
 beta = config.beta
-dpo_loss_fn = DPOLoss(beta=beta) # Initialize the DPO loss function with beta=0.1
+learning_rate = config.learning_rate
+dpo_loss_fn = DPOLoss(beta=beta)
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 print(f"Device: {device}")
@@ -223,7 +226,7 @@ customized_collate_fn = partial(
     custom_collate_fn,
     device=device,            # Put the data directly on a GPU if available
     mask_prompt_tokens=True,  # This is optional
-    allowed_max_length=512    # The supported context length of the model
+    allowed_max_length=allowed_max_length    # The supported context length of the model
 )
 
 # Create datasets and dataloaders
@@ -268,7 +271,7 @@ stopping_criteria = StoppingCriteriaList([
 ])
 
 scaler = GradScaler()  # No device argument needed
-optimizer = torch.optim.AdamW(policy_model.parameters(), lr=5e-6, weight_decay=0.01)
+optimizer = torch.optim.AdamW(policy_model.parameters(), lr=learning_rate, weight_decay=0.01)
 scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs * len(train_loader), eta_min=1e-6)
 
 def train_model_dpo_simple(
@@ -309,11 +312,11 @@ def train_model_dpo_simple(
         policy_model.train()  # Set model to training mode
 
         for batch_idx, batch in enumerate(train_loader):
-            # Ensure all batch tensors are on the correct device
-            batch["chosen"] = batch["chosen"].to(device)
-            batch["rejected"] = batch["rejected"].to(device)
-            batch["chosen_mask"] = batch["chosen_mask"].to(device)
-            batch["rejected_mask"] = batch["rejected_mask"].to(device)
+            # # Ensure all batch tensors are on the correct device
+            # batch["chosen"] = batch["chosen"].to(device)
+            # batch["rejected"] = batch["rejected"].to(device)
+            # batch["chosen_mask"] = batch["chosen_mask"].to(device)
+            # batch["rejected_mask"] = batch["rejected_mask"].to(device)
 
             optimizer.zero_grad()
             with autocast():  # Enable mixed precision
@@ -327,6 +330,7 @@ def train_model_dpo_simple(
             scaler.update()  # Update scaler for next iteration
             scheduler.step()  # Update learning rate after optimizer step
 
+            tokens_seen = torch.tensor(0, dtype=torch.int64) # avoid overflow by using torch.tensor with dtype int64
             tokens_seen += batch["chosen"].numel()
             global_step += 1
 
@@ -349,7 +353,7 @@ def train_model_dpo_simple(
                             
                             # generation config
                             generation_config = {
-                                'max_new_tokens': 256,
+                                'max_new_tokens': max_new_tokens,
                                 'temperature': 0.3,
                                 'top_p': 0.9,
                                 'eot_token_id': tokenizer.convert_tokens_to_ids("<|eot_id|>")
@@ -369,7 +373,8 @@ def train_model_dpo_simple(
                             response = response.split("<|eot_id|>")[0].strip()
 
                         except Exception as e:
-                            response = f"Generation Error: {str(e)}"
+                            response = f"~~~ Generation Error: {str(e)}"
+                            print(f"Generation failed at step {global_step}: {str(e)}")
 
                         finally:
                             policy_model.train()
@@ -400,8 +405,8 @@ def train_model_dpo_simple(
     print("Training completed.")
     return tracking
 
-# Before starting the training, print the initail losses and rewards:
-torch.manual_seed(123) # For reproducibility due to the shuffling in the data loader
+
+# torch.manual_seed(123) # For reproducibility due to the shuffling in the data loader
 
 res = dpo_loss_fn.evaluate_dpo_loss_loader(
     policy_model=model,
@@ -411,6 +416,7 @@ res = dpo_loss_fn.evaluate_dpo_loss_loader(
     eval_iter=5
 )
 
+# Before starting the training, print the initail losses and rewards:
 print("Training loss:", res["train_loss"])
 print("Validation loss:", res["val_loss"])
 
@@ -419,7 +425,7 @@ print("Val reward margin:", res["val_chosen_reward"] - res["val_rejected_reward"
 
 start_time = time.time()
 
-torch.manual_seed(123)
+# torch.manual_seed(123)
 
 tracking = train_model_dpo_simple(
     policy_model=policy_model,
@@ -482,7 +488,7 @@ for entry in val_data[:3]:
     ref_generated = generate(
         model=ref_model,
         idx=ref_input_ids.to(device),
-        max_new_tokens=100,
+        max_new_tokens=max_new_tokens,
         temperature=0.3,
         top_p=0.9,
         stopping_criteria=stopping_criteria
@@ -495,7 +501,7 @@ for entry in val_data[:3]:
     fine_tuned_model_generated = generate(
         model=fine_tuned_model,
         idx=fine_tuned_model_input_ids.to(device),
-        max_new_tokens=100,
+        max_new_tokens=max_new_tokens,
         temperature=0.3,
         top_p=0.9,
         stopping_criteria=stopping_criteria
