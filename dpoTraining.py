@@ -277,7 +277,7 @@ stopping_criteria = StoppingCriteriaList([
 
 # scaler = GradScaler()  # No device argument needed
 optimizer = torch.optim.AdamW(policy_model.parameters(), lr=learning_rate, weight_decay=0.01)
-scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs * len(train_loader), eta_min=1e-6)
+# scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs * len(train_loader), eta_min=1e-6)
 
 def train_model_dpo_simple(
     policy_model, reference_model, train_loader, val_loader,
@@ -324,15 +324,15 @@ def train_model_dpo_simple(
             # batch["rejected_mask"] = batch["rejected_mask"].to(device)
 
             optimizer.zero_grad()
-            with autocast():  # Enable mixed precision
-                loss, chosen_rewards, rejected_rewards = dpo_loss_fn.compute_dpo_loss_batch(
+            # with autocast():  # Enable mixed precision
+            loss, chosen_rewards, rejected_rewards = dpo_loss_fn.compute_dpo_loss_batch(
                     batch=batch,
                     policy_model=policy_model,
                     reference_model=reference_model
-                )
+            )
             loss.backward()  # Direct backward pass without scaling
             optimizer.step()  # Direct optimizer step
-            scheduler.step()  # Update learning rate after optimizer step
+            # scheduler.step()  # Update learning rate after optimizer step
 
             tokens_seen = torch.tensor(0, dtype=torch.int64) # avoid overflow by using torch.tensor with dtype int64
             tokens_seen += batch["chosen"].numel()
