@@ -233,8 +233,8 @@ train_loader = DataLoader(
     collate_fn=customized_collate_fn, 
     drop_last=True, 
     shuffle=True,
-    num_workers=0,  # Parallel data loading
-    pin_memory=True if device.type == "cuda" else False  # Faster GPU transfer
+    # num_workers=0,  # Parallel data loading
+    # pin_memory=False#True if device.type == "cuda" else False  # Faster GPU transfer
 )
 
 val_dataset = PreferenceDataset(val_data, tokenizer)
