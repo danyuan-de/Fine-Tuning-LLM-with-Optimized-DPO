@@ -5,6 +5,7 @@ cache_dir = "/workspace/models" # for cloud storage
 
 batch_size = 4
 num_epochs = 1
+beta = 0.1
 
 file_content = "physics_qa_content.json"
 file_structure = "physics_qa_structure.json"
