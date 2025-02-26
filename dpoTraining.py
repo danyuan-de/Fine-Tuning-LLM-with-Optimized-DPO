@@ -149,17 +149,22 @@ def custom_collate_fn(
             if mask_prompt_tokens:
                 mask[:prompt.size(0)] = False
 
-            # Make sure the EOT token is not masked
-            if eot_token_id in sequence_tensor:
-                eot_positions = (sequence_tensor == eot_token_id).nonzero(as_tuple=True)[0]
-                if len(eot_positions) > 0:
-                    eot_pos = eot_positions[-1].item()  # Last EOT in response
-                else:
-                    eot_pos = sequence_tensor.size(0) - 1
-            else:
-                eot_pos = sequence_tensor.size(0) - 1
+            # # Make sure the EOT token is not masked
+            # if eot_token_id in sequence_tensor:
+            #     eot_positions = (sequence_tensor == eot_token_id).nonzero(as_tuple=True)[0]
+            #     if len(eot_positions) > 0:
+            #         eot_pos = eot_positions[-1].item()  # Last EOT in response
+            #     else:
+            #         eot_pos = sequence_tensor.size(0) - 1
+            # else:
+            #     eot_pos = sequence_tensor.size(0) - 1
 
-            mask[eot_pos] = True  # Set the EOT token to True
+            # mask[eot_pos] = True  # Set the EOT token to True
+
+            # Ensure EOT token is unmasked
+            eot_positions = (sequence_tensor == eot_token_id).nonzero(as_tuple=True)[0]
+            eot_pos = eot_positions[-1].item() if len(eot_positions) > 0 else sequence_tensor.size(0) - 1
+            mask[eot_pos] = True
 
             batch_data[key].append(padded_sequence)
             batch_data[f"{key}_mask"].append(mask)

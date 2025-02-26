@@ -30,7 +30,7 @@ class DPOLoss(nn.Module):
 
         
         if model is not None and input_ids is not None:  # Compute logits with attention mask
-            attention_mask = selection_mask[:, :-1].clone() if selection_mask is not None else None
+            attention_mask = selection_mask.clone() if selection_mask is not None else None
             outputs = model(input_ids=input_ids, attention_mask=attention_mask)
             logits = outputs.logits if hasattr(outputs, "logits") else outputs[0]
         elif hasattr(logits, "logits"):
