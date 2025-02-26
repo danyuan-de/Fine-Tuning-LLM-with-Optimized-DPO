@@ -28,7 +28,8 @@ file_path = config.file_content
 # --------- Hyperparameters ---------
 batch_size = config.batch_size
 num_epochs = config.num_epochs
-dpo_loss_fn = DPOLoss(beta=0.1) # Initialize the DPO loss function with beta=0.1
+beta = config.beta
+dpo_loss_fn = DPOLoss(beta=beta) # Initialize the DPO loss function with beta=0.1
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 print(f"Device: {device}")
@@ -427,7 +428,7 @@ tracking = train_model_dpo_simple(
     val_loader=val_loader,
     optimizer=optimizer,
     num_epochs=num_epochs,
-    beta=0.1, # value between 0.1 and 0.5
+    beta=beta, # value between 0.1 and 0.5
     eval_freq=5,
     eval_iter=5,
 )

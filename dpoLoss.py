@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class DPOLoss(nn.Module):
-    def __init__(self, beta=0.1):
+    def __init__(self, beta):
         """
         Initializes the DPO Loss module.
 
@@ -67,6 +67,7 @@ class DPOLoss(nn.Module):
             return avg_log_prob
 
         else:
+            print("Warning: No selection mask provided, assuming all tokens are valid.")
             return selected_log_probs.mean(-1)
 
     def compute_dpo_loss(self, model_chosen_logprobs, model_rejected_logprobs, reference_chosen_logprobs, reference_rejected_logprobs):
