@@ -18,6 +18,7 @@ import copy
 import time
 from datetime import timedelta
 from utility import *
+import multiprocessing
 
 # --------- File Paths ---------
 model_name = config.model_name
@@ -232,7 +233,7 @@ train_loader = DataLoader(
     collate_fn=customized_collate_fn, 
     drop_last=True, 
     shuffle=True,
-    num_workers=4,  # Parallel data loading
+    num_workers=0,  # Parallel data loading
     pin_memory=True if device.type == "cuda" else False  # Faster GPU transfer
 )
 
