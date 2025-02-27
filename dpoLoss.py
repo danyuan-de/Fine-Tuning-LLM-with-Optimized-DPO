@@ -13,7 +13,7 @@ class DPOLoss(nn.Module):
         super(DPOLoss, self).__init__()
         self.beta = beta
 
-    def compute_logprobs(self, logits, labels, selection_mask=None):
+    def compute_logprobs(self, logits, labels, selection_mask=None, model=None, input_ids=None):
         """
         Compute log probabilities.
 
@@ -29,6 +29,17 @@ class DPOLoss(nn.Module):
         """
 
         
+        if model is not None and input_ids is not None:  # Compute logits with attention mask
+            attention_mask = selection_mask.clone() if selection_mask is not None else None
+            outputs = model(input_ids=input_ids, attention_mask=attention_mask)
+            logits = outputs.logits if hasattr(outputs, "logits") else outputs[0]
+        elif hasattr(logits, "logits"):
+            logits = logits.logits
+        
+        # Debug: Print the structure of logits
+        # print(f"logits type: {type(logits)}")
+        # print(f"logits shape: {logits.shape if hasattr(logits, 'shape') else 'N/A'}")
+
         # Labels are the inputs shifted by one
         labels = labels[:, 1:].clone()
 
@@ -51,12 +62,12 @@ class DPOLoss(nn.Module):
             selected_log_probs = selected_log_probs * mask
 
             # Calculate the average log probability excluding padding tokens
-            # This averages over the tokens, so the shape is (batch_size, num_tokens)
             avg_log_prob = selected_log_probs.sum(-1) / mask.sum(-1)
 
             return avg_log_prob
 
         else:
+            print("Warning: No selection mask provided, assuming all tokens are valid.")
             return selected_log_probs.mean(-1)
 
     def compute_dpo_loss(self, model_chosen_logprobs, model_rejected_logprobs, reference_chosen_logprobs, reference_rejected_logprobs):
@@ -105,11 +116,15 @@ class DPOLoss(nn.Module):
             logits=policy_model(batch["chosen"]),
             labels=batch["chosen"],
             selection_mask=batch["chosen_mask"],
+            model=policy_model,
+            input_ids=batch["chosen"]
         )
         policy_rejected_log_probas = self.compute_logprobs(
             logits=policy_model(batch["rejected"]),
             labels=batch["rejected"],
             selection_mask=batch["rejected_mask"],
+            model=policy_model,
+            input_ids=batch["rejected"]
         )
 
         # Compute log probabilities for reference model
@@ -117,11 +132,15 @@ class DPOLoss(nn.Module):
             logits=reference_model(batch["chosen"]),
             labels=batch["chosen"],
             selection_mask=batch["chosen_mask"],
+            model=reference_model,
+            input_ids=batch["chosen"]
         )
         ref_rejected_log_probas = self.compute_logprobs(
             logits=reference_model(batch["rejected"]),
             labels=batch["rejected"],
             selection_mask=batch["rejected_mask"],
+            model=reference_model,
+            input_ids=batch["rejected"]
         )
 
         print(f"Policy chosen log_prob: {policy_chosen_log_probas.mean().item():.4f}")
