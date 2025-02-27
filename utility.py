@@ -170,6 +170,8 @@ def postprocess_response(full_text: str) -> str:
         response = full_text.split("<|start_header_id|>assistant<|end_header_id|>")[-1]
         # remove all subsequent HTML tags
         response = re.sub(r"<[^>]+>", "", response)
+        # Remove any trailing non-physics content (e.g., URLs, Bootstrap)
+        response = re.sub(r"://.*$", "", response, flags=re.DOTALL)
         # cutoff at the first EOT token
         if "<|eot_id|>" in response:
             response = response.split("<|eot_id|>")[0]
