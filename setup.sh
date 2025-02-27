@@ -47,10 +47,6 @@ else
     echo "No requirements.txt found. Skipping dependency installation."
 fi
 
-# Log into Hugging Face CLI
-echo "Please log into Hugging Face CLI (Press Enter when ready)"
-huggingface-cli login
-
 # Run dpoTraining.py if it exists
 SCRIPT_FILE="dpoTraining.py"
 if [ -f "$SCRIPT_FILE" ]; then
