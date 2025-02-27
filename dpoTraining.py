@@ -516,9 +516,9 @@ for i, entry in enumerate(val_data[:3]):
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
     fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
 
-    # Calculate and display perplexity
-    ft_perplexity = calculate_perplexity(fine_tuned_model, fine_tuned_tokenizer, input_text)
-    ref_perplexity = calculate_perplexity(ref_model, tokenizer, input_text)
+    # Calculate perplexity
+    # ft_perplexity = calculate_perplexity(fine_tuned_model, fine_tuned_tokenizer, input_text)
+    # ref_perplexity = calculate_perplexity(ref_model, tokenizer, input_text)
 
     print(f"\nInput{i}: {entry['question']}")
 
@@ -535,7 +535,8 @@ for i, entry in enumerate(val_data[:3]):
 
     print("="*80, "\n")
 
-    print(f"**Fine-Tuned Model Perplexity:** {ft_perplexity:.2f}")
-    print(f"**Original Model Perplexity:** {ref_perplexity:.2f}")
-    print("-" * 80)
+    # Display perplexity
+    # print(f"**Fine-Tuned Model Perplexity:** {ft_perplexity:.2f}")
+    # print(f"**Original Model Perplexity:** {ref_perplexity:.2f}")
+    # print("-" * 80)
 
