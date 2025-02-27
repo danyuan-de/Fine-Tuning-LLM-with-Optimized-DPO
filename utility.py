@@ -37,8 +37,7 @@ def format_input(entry):
     elif "question" in entry:
         system_prompt = (
             "You are a physics expert assistant. "
-            "Provide a detailed, step-by-step reasoning process "
-            "followed by a clear final answer for the following question."
+            "Provide a detailed, step-by-step reasoning process followed by a clear final answer for the following question in unicode format."
         )
         return (
             "<|begin_of_text|>\n"
@@ -190,8 +189,9 @@ def calculate_perplexity(model: AutoModelForCausalLM, tokenizer: AutoTokenizer, 
     Returns:
         Perplexity score as a float.
     """
+    device = model.device
     encodings = tokenizer(text, return_tensors="pt")
-    input_ids = encodings.input_ids[:, :512]#.to(DEVICE)
+    input_ids = encodings.input_ids[:, :512].to(device)
     
     with torch.no_grad():
         outputs = model(input_ids, labels=input_ids)
