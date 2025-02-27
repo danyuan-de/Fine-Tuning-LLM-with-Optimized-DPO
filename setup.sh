@@ -48,7 +48,7 @@ else
 fi
 
 # Run dpoTraining.py if it exists
-SCRIPT_FILE="Training.py"
+SCRIPT_FILE="main.py"
 if [ -f "$SCRIPT_FILE" ]; then
     echo "Running $SCRIPT_FILE..."
     python "$SCRIPT_FILE"
