@@ -32,6 +32,8 @@ batch_size = config.batch_size
 num_epochs = config.num_epochs
 beta = config.beta
 learning_rate = config.learning_rate
+temperature = config.temperature
+top_p = config.top_p
 dpo_loss_fn = DPOLoss(beta=beta)
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -358,8 +360,8 @@ def train_model_dpo_simple(
                             # generation config
                             generation_config = {
                                 'max_new_tokens': max_new_tokens,
-                                'temperature': 0.3,
-                                'top_p': 0.9,
+                                'temperature': temperature,
+                                'top_p': top_p,
                                 'eot_token_id': tokenizer.convert_tokens_to_ids("<|eot_id|>")
                             }
                             
@@ -493,8 +495,8 @@ for entry in val_data[:3]:
         model=ref_model,
         idx=ref_input_ids.to(device),
         max_new_tokens=max_new_tokens,
-        temperature=0.3,
-        top_p=0.9,
+        temperature=temperature,
+        top_p=top_p,
         stopping_criteria=stopping_criteria
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
@@ -506,8 +508,8 @@ for entry in val_data[:3]:
         model=fine_tuned_model,
         idx=fine_tuned_model_input_ids.to(device),
         max_new_tokens=max_new_tokens,
-        temperature=0.3,
-        top_p=0.9,
+        temperature=temperature,
+        top_p=top_p,
         stopping_criteria=stopping_criteria
     )
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
