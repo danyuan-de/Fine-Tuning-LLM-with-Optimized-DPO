@@ -7,8 +7,8 @@ allowed_max_length = 512 # maximum number of tokens in a sequence for training i
 max_new_tokens = 216  # maximum number of tokens to generate
 batch_size = 4
 num_epochs = 1
-beta = 0.1
-learning_rate = 5e-6
+beta = 0.2
+learning_rate = 1e-5 # default is 5e-6, too small
 temperature = 0.7 # default is 0.3
 top_p = 0.95 # default is 0.9
 
