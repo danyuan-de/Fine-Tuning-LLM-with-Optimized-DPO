@@ -87,12 +87,13 @@ class DPOLoss(nn.Module):
         pi_diff = model_chosen_logprobs - model_rejected_logprobs
         ref_diff = reference_chosen_logprobs - reference_rejected_logprobs
         logits = pi_diff - ref_diff
-
+        print(f"Logits: {logits.mean().item():.4f}")
         logits = (logits - logits.mean()) / (logits.std() + 1e-8)  # Normalize logits
 
         # DPO (Eq. 7 of https://arxiv.org/pdf/2305.18290.pdf)
         losses = -F.logsigmoid(self.beta * logits)
-
+        print(f"Losses: {losses.mean().item():.4f}")
+        
         # Optional values to track progress during training
         chosen_rewards = (model_chosen_logprobs - reference_chosen_logprobs).detach()
         rejected_rewards = (model_rejected_logprobs - reference_rejected_logprobs).detach()
