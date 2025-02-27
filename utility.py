@@ -37,7 +37,8 @@ def format_input(entry):
     elif "question" in entry:
         system_prompt = (
             "You are a physics expert assistant. "
-            "Deliver accurate and concise thinking processes and answers based on the following question."
+            "Provide a detailed, step-by-step reasoning process "
+            "followed by a clear final answer for the following question."
         )
         return (
             "<|begin_of_text|>\n"

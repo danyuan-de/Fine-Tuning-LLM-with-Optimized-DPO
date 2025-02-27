@@ -47,12 +47,12 @@ model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, to
 #     low_cpu_mem_usage=True,  # Reduces peak RAM during loading
 #     torch_dtype=torch.bfloat16  # Use 16-bit precision)
 # )
+eot_token_id = tokenizer.convert_tokens_to_ids("<|eot_id|>")
 
 special_tokens = {
     "additional_special_tokens": ["<|eot_id|>"]
 }
 tokenizer.add_special_tokens(special_tokens)
-eot_token_id = tokenizer.convert_tokens_to_ids("<|eot_id|>")
 model.resize_token_embeddings(len(tokenizer)) # adjust the size of the token embeddings
 
 policy_model = model # this is the model that will be fine-tuned
@@ -274,8 +274,9 @@ print("\n")
 
 # self-defined stopping criteria
 stopping_criteria = StoppingCriteriaList([
-    EOTStoppingCriteria(eot_token_id=tokenizer.convert_tokens_to_ids("<|eot_id|>"))
+    EOTStoppingCriteria(eot_token_id=eot_token_id)
 ])
+
 
 # scaler = GradScaler()  # No device argument needed
 optimizer = torch.optim.AdamW(policy_model.parameters(), lr=learning_rate, weight_decay=0.01)
@@ -362,7 +363,7 @@ def train_model_dpo_simple(
                                 'max_new_tokens': max_new_tokens,
                                 'temperature': temperature,
                                 'top_p': top_p,
-                                'eot_token_id': tokenizer.convert_tokens_to_ids("<|eot_id|>")
+                                'eot_token_id': eot_token_id
                             }
                             
                             # execute generation
@@ -485,7 +486,7 @@ fine_tuned_model.to(device)  # Ensure fine-tuned model is on device
 
 print("Starting evaluation...")
 # look at the response
-for entry in val_data[:3]:
+for i, entry in enumerate(val_data[:3]):
 
     input_text = format_input(entry)
 
@@ -516,16 +517,25 @@ for entry in val_data[:3]:
     fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
 
     # Calculate and display perplexity
-    # ft_perplexity = calculate_perplexity(fine_tuned_model, fine_tuned_tokenizer, input_text)
-    # ref_perplexity = calculate_perplexity(ref_model, tokenizer, input_text)
+    ft_perplexity = calculate_perplexity(fine_tuned_model, fine_tuned_tokenizer, input_text)
+    ref_perplexity = calculate_perplexity(ref_model, tokenizer, input_text)
 
-    print(f"\nInput: {entry['question']}")
+    print(f"\nInput{i}: {entry['question']}")
+
+    print("\n ----- Reference Model ----- ")
+    print(f"Reference Response without post-processing: {ref_full_text}")
     print(f"Reference Response: {ref_response}")
-    print(f"Policy Response: {fine_tuned_model_response}")
-    print(f"Expected Answer: {entry['chosen']}")
-    print("="*80)
 
-    # print(f"**Fine-Tuned Model Perplexity:** {ft_perplexity:.2f}")
-    # print(f"**Original Model Perplexity:** {ref_perplexity:.2f}")
-    # print("-" * 80)
+    print("\n ----- Policy Model ----- ")
+    print(f"Policy Response without post-processing: {fine_tuned_model_full_text}")
+    print(f"Policy Response: {fine_tuned_model_response}")
+
+    print("\n ----- Expected Response ----- ")
+    print(f"Expected Answer: {entry['chosen']}")
+
+    print("="*80, "\n")
+
+    print(f"**Fine-Tuned Model Perplexity:** {ft_perplexity:.2f}")
+    print(f"**Original Model Perplexity:** {ref_perplexity:.2f}")
+    print("-" * 80)
 
