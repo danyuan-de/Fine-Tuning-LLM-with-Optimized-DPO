@@ -143,6 +143,9 @@ class DPOLoss(nn.Module):
             input_ids=batch["rejected"]
         )
 
+        print(f"Policy chosen log_prob: {policy_chosen_log_probas.mean().item():.4f}")
+        print(f"Ref chosen log_prob: {ref_chosen_log_probas.mean().item():.4f}")
+
         # Compute the DPO loss
         loss, chosen_rewards, rejected_rewards = self.compute_dpo_loss(
             model_chosen_logprobs=policy_chosen_log_probas,

@@ -66,6 +66,8 @@ ref_model = copy.deepcopy(model) # create a reference model for DPO by copying a
 for param in ref_model.parameters():
     param.requires_grad = False
 ref_model.eval()
+print("Ref model grad status:", next(ref_model.parameters()).requires_grad)
+print("Policy model grad status:", next(policy_model.parameters()).requires_grad)
 
 policy_model.to(device)
 ref_model.to(device)
@@ -282,6 +284,12 @@ stopping_criteria = StoppingCriteriaList([
 optimizer = torch.optim.AdamW(policy_model.parameters(), lr=learning_rate, weight_decay=0.01)
 # scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs * len(train_loader), eta_min=1e-6)
 
+# Before training loop. If chosen and rejected responses are too similar, the preference margin won’t grow.
+batch = next(iter(train_loader))
+print("Chosen sample:", tokenizer.decode(batch["chosen"][0].tolist()))
+print("Rejected sample:", tokenizer.decode(batch["rejected"][0].tolist()))
+
+# Define the training function
 def train_model_dpo_simple(
     policy_model, reference_model, train_loader, val_loader,
     optimizer, num_epochs, beta,
@@ -301,6 +309,7 @@ def train_model_dpo_simple(
     :return: A dictionary tracking various losses and reward metrics.
     """
     print("Starting training...")
+    print("Ref model grad status:", next(ref_model.parameters()).requires_grad)
     # Initialize lists to track losses and tokens seen
     tracking = {
         "train_losses": [],
@@ -333,11 +342,17 @@ def train_model_dpo_simple(
                     policy_model=policy_model,
                     reference_model=reference_model
             )
+            print(f"Step {global_step+1}: Loss before backward: {loss.item():.4f}")
             loss.backward()  # Direct backward pass without scaling
-            optimizer.step()  # Direct optimizer step
+            grad_norm = torch.nn.utils.clip_grad_norm_(policy_model.parameters(), max_norm=1.0)  # Optional clipping
+            print(f"Step {global_step+1}: Grad norm: {grad_norm.item():.4f}")
+            param_before = next(policy_model.parameters()).clone().sum().item()
+            optimizer.step() # Direct optimizer step
+            param_after = next(policy_model.parameters()).sum().item()
+            print(f"Step {global_step+1}: Param sum change: {param_after - param_before:.6f}")
             # scheduler.step()  # Update learning rate after optimizer step
 
-            tokens_seen = torch.tensor(0, dtype=torch.int64) # avoid overflow by using torch.tensor with dtype int64
+            # tokens_seen = torch.tensor(0, dtype=torch.int64) # avoid overflow by using torch.tensor with dtype int64
             tokens_seen += batch["chosen"].numel()
             global_step += 1
 
