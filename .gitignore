@@ -41,5 +41,5 @@ instruction-data-with-preference.json
 physics_question/
 questions_answers/
 
-DPO_loss-plot.pdf
-reward_margins-plot.pdf
+# DPO_loss-plot.pdf
+# reward_margins-plot.pdf
