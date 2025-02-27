@@ -9,12 +9,6 @@
 # Stop execution on any error
 set -e
 
-# Check if the script is being run as root
-if [ "$EUID" -eq 0 ]; then
-    echo "Please run this script as a non-root user."
-    exit 1
-fi
-
 # Update package lists
 echo "Updating package lists..."
 apt-get update
