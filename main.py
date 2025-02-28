@@ -487,7 +487,6 @@ ref_model.to(device)  # Ensure reference model is on device
 fine_tuned_model.to(device)  # Ensure fine-tuned model is on device
 
 print("Starting evaluation...")
-# look at the response
 for i, entry in enumerate(val_data[:3]):
 
     input_text = format_input(entry)
@@ -525,11 +524,9 @@ for i, entry in enumerate(val_data[:3]):
     print(f"\nInput{i}: {entry['question']}")
 
     print("\n ----- Reference Model ----- ")
-    print(f"Reference Response without post-processing: {ref_full_text}")
     print(f"Reference Response: {ref_response}")
 
     print("\n ----- Policy Model ----- ")
-    print(f"Policy Response without post-processing: {fine_tuned_model_full_text}")
     print(f"Policy Response: {fine_tuned_model_response}")
 
     print("\n ----- Expected Response ----- ")
@@ -555,7 +552,7 @@ test_res = dpo_loss_fn.evaluate_dpo_loss_loader(
 print("Test loss:", test_res["val_loss"])
 print("Test reward margin:", test_res["val_chosen_reward"] - test_res["val_rejected_reward"])
 
-for i, entry in enumerate(test_data):
+for i, entry in enumerate(test_data[:3]):
     input_text = format_input(entry)
 
     # Reference Model Generation
