@@ -365,48 +365,48 @@ def train_model_dpo_simple(
                     val_loader=val_loader,
                     eval_iter=eval_iter
                 )
-                if sample_entry and (global_step // eval_freq) % 2 == 0:  # generate every 2nd evaluation
-                    policy_model.eval()
-                    with torch.no_grad():
-                        try:
-                            # prepare input
-                            input_text = format_input(sample_entry)
-                            token_ids = text_to_token_ids(input_text, tokenizer).to(device)
+                # if sample_entry and (global_step // eval_freq) % 2 == 0:  # generate every 2nd evaluation
+                #     policy_model.eval()
+                #     with torch.no_grad():
+                #         try:
+                #             # prepare input
+                #             input_text = format_input(sample_entry)
+                #             token_ids = text_to_token_ids(input_text, tokenizer).to(device)
                             
-                            # generation config
-                            generation_config = {
-                                'max_new_tokens': max_new_tokens,
-                                'temperature': temperature,
-                                'top_p': top_p,
-                                'eot_token_id': eot_token_id
-                            }
+                #             # generation config
+                #             generation_config = {
+                #                 'max_new_tokens': max_new_tokens,
+                #                 'temperature': temperature,
+                #                 'top_p': top_p,
+                #                 'eot_token_id': eot_token_id
+                #             }
                             
-                            # execute generation
-                            generated = generate(
-                                model=policy_model,
-                                idx=token_ids, #.to(device),
-                                stopping_criteria=stopping_criteria,
-                                **generation_config
-                            )
+                #             # execute generation
+                #             generated = generate(
+                #                 model=policy_model,
+                #                 idx=token_ids, #.to(device),
+                #                 stopping_criteria=stopping_criteria,
+                #                 **generation_config
+                #             )
                             
-                            # post-process the generated text
-                            full_text = token_ids_to_text(generated, tokenizer)
-                            response = full_text.split("<|start_header_id|>assistant<|end_header_id|>")[-1]
-                            response = response.split("<|eot_id|>")[0].strip()
+                #             # post-process the generated text
+                #             full_text = token_ids_to_text(generated, tokenizer)
+                #             response = full_text.split("<|start_header_id|>assistant<|end_header_id|>")[-1]
+                #             response = response.split("<|eot_id|>")[0].strip()
 
-                        except Exception as e:
-                            response = f"~~~ Generation Error: {str(e)}"
-                            print(f"Generation failed at step {global_step}: {str(e)}")
+                #         except Exception as e:
+                #             response = f"~~~ Generation Error: {str(e)}"
+                #             print(f"Generation failed at step {global_step}: {str(e)}")
 
-                        finally:
-                            policy_model.train()
+                #         finally:
+                #             policy_model.train()
 
-                    # Print the generated response
-                    print(f"\n{'='*40} Generation Sample (Step {global_step}) {'='*40}")
-                    print(f"[Input]\n{sample_entry['question']}")
-                    print(f"\n[Generated Response]\n{response}")
-                    print(f"[Expected Response]\n{sample_entry['chosen']}")
-                    print('='*90 + '\n')
+                #     # Print the generated response
+                #     print(f"\n{'='*40} Generation Sample (Step {global_step}) {'='*40}")
+                #     print(f"[Input]\n{sample_entry['question']}")
+                #     print(f"\n[Generated Response]\n{response}")
+                #     print(f"[Expected Response]\n{sample_entry['chosen']}")
+                #     print('='*90 + '\n')
 
                 tracking["train_losses"].append(res["train_loss"])
                 tracking["train_chosen_rewards"].append(res["train_chosen_reward"])
