@@ -8,7 +8,7 @@ max_new_tokens = 216  # maximum number of tokens to generate
 batch_size = 4
 num_epochs = 1
 beta = 0.1
-learning_rate = 1e-5 # default is 5e-6, too small
+learning_rate = 5e-6 # default is 5e-6, too small
 temperature = 0.8 # default is 0.3
 top_p = 0.95 # default is 0.9
 
