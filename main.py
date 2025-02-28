@@ -498,8 +498,8 @@ for i, entry in enumerate(val_data[:3]):
         model=ref_model,
         idx=ref_input_ids.to(device),
         max_new_tokens=max_new_tokens,
-        temperature=temperature,
-        top_p=top_p,
+        # temperature=temperature,
+        # top_p=top_p,
         stopping_criteria=stopping_criteria
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
@@ -511,8 +511,8 @@ for i, entry in enumerate(val_data[:3]):
         model=fine_tuned_model,
         idx=fine_tuned_model_input_ids.to(device),
         max_new_tokens=max_new_tokens,
-        temperature=temperature,
-        top_p=top_p,
+        # temperature=temperature,
+        # top_p=top_p,
         stopping_criteria=stopping_criteria
     )
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
@@ -542,3 +542,65 @@ for i, entry in enumerate(val_data[:3]):
     # print(f"**Original Model Perplexity:** {ref_perplexity:.2f}")
     # print("-" * 80)
 
+# Use the test data to evaluate the fine-tuned model
+print("Starting test evaluation...")
+test_res = dpo_loss_fn.evaluate_dpo_loss_loader(
+    policy_model=fine_tuned_model,
+    reference_model=ref_model,
+    train_loader=test_loader,
+    val_loader=test_loader,
+    eval_iter=5
+)
+
+print("Test loss:", test_res["val_loss"])
+print("Test reward margin:", test_res["val_chosen_reward"] - test_res["val_rejected_reward"])
+
+for i, entry in enumerate(test_data):
+    input_text = format_input(entry)
+
+    # Reference Model Generation
+    ref_input_ids = text_to_token_ids(input_text, tokenizer).to(device)
+    ref_generated = generate(
+        model=ref_model,
+        idx=ref_input_ids.to(device),
+        max_new_tokens=max_new_tokens,
+        temperature=temperature,
+        top_p=top_p,
+        stopping_criteria=stopping_criteria
+    )
+    ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
+    ref_response = postprocess_response(ref_full_text)
+
+    # Fine-Tuned Model Generation
+    fine_tuned_model_input_ids = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
+    fine_tuned_model_generated = generate(
+        model=fine_tuned_model,
+        idx=fine_tuned_model_input_ids.to(device),
+        max_new_tokens=max_new_tokens,
+        temperature=temperature,
+        top_p=top_p,
+        stopping_criteria=stopping_criteria
+    )
+    fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
+    fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
+
+    print(f"\nInput{i}: {entry['question']}")
+    print("\n ----- Reference Model ----- ")
+    print(f"Reference Response: {ref_response}")
+
+    print("\n ----- Policy Model ----- ")
+    print(f"Policy Response: {fine_tuned_model_response}")
+
+    print("\n ----- Expected Response ----- ")
+    print(f"Expected Answer: {entry['chosen']}")
+    print("="*80, "\n")
+
+    with open("result.txt", "r") as f:
+        f.write(f"\nInput{i}: {entry['question']}")
+        f.write("\n ----- Reference Model ----- ")
+        f.write(f"Reference Response: {ref_response}")
+        f.write("\n ----- Policy Model ----- ")
+        f.write(f"Policy Response: {fine_tuned_model_response}")
+        f.write("\n ----- Expected Response ----- ")
+        f.write(f"Expected Answer: {entry['chosen']}")
+        f.write("="*80 + "\n")
