@@ -5,11 +5,11 @@ cache_dir = "/workspace/models" # for cloud storage
 
 allowed_max_length = 512 # maximum number of tokens in a sequence for training input data
 max_new_tokens = 216  # maximum number of tokens to generate
-batch_size = 8
+batch_size = 4
 num_epochs = 1
 beta = 0.1
 learning_rate = 1e-5 # default is 5e-6, too small
-temperature = 0.7 # default is 0.3
+temperature = 0.8 # default is 0.3
 top_p = 0.95 # default is 0.9
 
 file_content = "physics_qa_content.json"

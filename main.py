@@ -23,7 +23,7 @@ import multiprocessing
 # --------- File Paths ---------
 model_name = config.model_name
 cache_dir = config.cache_dir
-file_path = config.file_preference
+file_path = config.file_content
 
 # --------- Hyperparameters ---------
 allowed_max_length = config.allowed_max_length
@@ -36,17 +36,15 @@ temperature = config.temperature
 top_p = config.top_p
 dpo_loss_fn = DPOLoss(beta=beta)
 
+# --------- Device ---------
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 print(f"Device: {device}")
-print(f"BATCH_SIZE: {batch_size}")
-# Load a Hugging Face model and tokenizer
+
+# --------- Load a Hugging Face model and tokenizer ---------
 tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
 model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.bfloat16)
-# model = AutoModelForCausalLM.from_pretrained(
-#     model_name,
-#     low_cpu_mem_usage=True,  # Reduces peak RAM during loading
-#     torch_dtype=torch.bfloat16  # Use 16-bit precision)
-# )
+
+# Add the EOT token to the tokenizer
 eot_token_id = tokenizer.convert_tokens_to_ids("<|eot_id|>")
 
 special_tokens = {
@@ -57,11 +55,6 @@ model.resize_token_embeddings(len(tokenizer)) # adjust the size of the token emb
 
 policy_model = model # this is the model that will be fine-tuned
 ref_model = copy.deepcopy(model) # create a reference model for DPO by copying and freezing the parameters
-# ref_model = AutoModelForCausalLM.from_pretrained(
-#     model_name,
-#     low_cpu_mem_usage=True,
-#     torch_dtype=torch.bfloat16
-# )
 
 for param in ref_model.parameters():
     param.requires_grad = False
@@ -153,17 +146,17 @@ def custom_collate_fn(
             if mask_prompt_tokens:
                 mask[:prompt.size(0)] = False
 
-            # # Make sure the EOT token is not masked
-            # if eot_token_id in sequence_tensor:
-            #     eot_positions = (sequence_tensor == eot_token_id).nonzero(as_tuple=True)[0]
-            #     if len(eot_positions) > 0:
-            #         eot_pos = eot_positions[-1].item()  # Last EOT in response
-            #     else:
-            #         eot_pos = sequence_tensor.size(0) - 1
-            # else:
-            #     eot_pos = sequence_tensor.size(0) - 1
+            # Make sure the EOT token is not masked
+            if eot_token_id in sequence_tensor:
+                eot_positions = (sequence_tensor == eot_token_id).nonzero(as_tuple=True)[0]
+                if len(eot_positions) > 0:
+                    eot_pos = eot_positions[-1].item()  # Last EOT in response
+                else:
+                    eot_pos = sequence_tensor.size(0) - 1
+            else:
+                eot_pos = sequence_tensor.size(0) - 1
 
-            # mask[eot_pos] = True  # Set the EOT token to True
+            mask[eot_pos] = True  # Set the EOT token to True
 
             # Ensure EOT token is unmasked
             eot_positions = (sequence_tensor == eot_token_id).nonzero(as_tuple=True)[0]
@@ -245,9 +238,7 @@ train_loader = DataLoader(
     batch_size=batch_size,
     collate_fn=customized_collate_fn, 
     drop_last=True, 
-    shuffle=True,
-    # num_workers=0,  # Parallel data loading
-    # pin_memory=False#True if device.type == "cuda" else False  # Faster GPU transfer
+    shuffle=True
 )
 
 val_dataset = PreferenceDataset(val_data, tokenizer)
@@ -280,9 +271,8 @@ stopping_criteria = StoppingCriteriaList([
 ])
 
 
-# scaler = GradScaler()  # No device argument needed
 optimizer = torch.optim.AdamW(policy_model.parameters(), lr=learning_rate, weight_decay=0.01)
-# scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs * len(train_loader), eta_min=1e-6)
+scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs * len(train_loader), eta_min=1e-6)
 
 # Before training loop. If chosen and rejected responses are too similar, the preference margin won’t grow.
 batch = next(iter(train_loader))
@@ -350,7 +340,7 @@ def train_model_dpo_simple(
             optimizer.step() # Direct optimizer step
             param_after = next(policy_model.parameters()).sum().item()
             print(f"Step {global_step+1}: Param sum change: {param_after - param_before:.6f}")
-            # scheduler.step()  # Update learning rate after optimizer step
+            scheduler.step()  # Update learning rate after optimizer step
 
             # tokens_seen = torch.tensor(0, dtype=torch.int64) # avoid overflow by using torch.tensor with dtype int64
             tokens_seen += batch["chosen"].numel()
@@ -427,9 +417,6 @@ def train_model_dpo_simple(
     print("Training completed.")
     return tracking
 
-
-# torch.manual_seed(123) # For reproducibility due to the shuffling in the data loader
-
 res = dpo_loss_fn.evaluate_dpo_loss_loader(
     policy_model=model,
     reference_model=ref_model,
@@ -447,7 +434,7 @@ print("Val reward margin:", res["val_chosen_reward"] - res["val_rejected_reward"
 
 start_time = time.time()
 
-# torch.manual_seed(123)
+torch.manual_seed(123) # For reproducibility due to the shuffling in the data loader
 
 tracking = train_model_dpo_simple(
     policy_model=policy_model,
@@ -456,7 +443,7 @@ tracking = train_model_dpo_simple(
     val_loader=val_loader,
     optimizer=optimizer,
     num_epochs=num_epochs,
-    beta=beta, # value between 0.1 and 0.5
+    beta=beta, 
     eval_freq=5,
     eval_iter=5,
 )
