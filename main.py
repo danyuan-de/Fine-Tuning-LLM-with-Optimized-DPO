@@ -23,7 +23,7 @@ import multiprocessing
 # --------- File Paths ---------
 model_name = config.model_name
 cache_dir = config.cache_dir
-file_path = config.file_content
+file_path = config.file_preference
 
 # --------- Hyperparameters ---------
 allowed_max_length = config.allowed_max_length

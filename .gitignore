@@ -37,7 +37,7 @@ Llama-*/
 Result_loss/
 
 # data files
-instruction-data-with-preference.json
+# instruction-data-with-preference.json
 physics_question/
 questions_answers/
 

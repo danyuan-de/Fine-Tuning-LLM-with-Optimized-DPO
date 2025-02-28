@@ -112,6 +112,18 @@ class DPOLoss(nn.Module):
         Returns:
             torch.Tensor: Computed DPO loss.
         """
+
+        policy_chosen_out = policy_model(batch["chosen"])
+        policy_rejected_out = policy_model(batch["rejected"])
+        ref_chosen_out = reference_model(batch["chosen"])
+        ref_rejected_out = reference_model(batch["rejected"])
+
+        # Log raw logits
+        print(f"Policy chosen logits mean: {policy_chosen_out.logits.mean().item():.4f}")
+        print(f"Ref chosen logits mean: {ref_chosen_out.logits.mean().item():.4f}")
+        print(f"Policy rejected logits mean: {policy_rejected_out.logits.mean().item():.4f}")
+        print(f"Ref rejected logits mean: {ref_rejected_out.logits.mean().item():.4f}")
+
         # Compute log probabilities for policy model
         policy_chosen_log_probas = self.compute_logprobs(
             logits=policy_model(batch["chosen"]),
