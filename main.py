@@ -319,11 +319,6 @@ def train_model_dpo_simple(
         policy_model.train()  # Set model to training mode
 
         for batch_idx, batch in enumerate(train_loader):
-            # # Ensure all batch tensors are on the correct device
-            # batch["chosen"] = batch["chosen"].to(device)
-            # batch["rejected"] = batch["rejected"].to(device)
-            # batch["chosen_mask"] = batch["chosen_mask"].to(device)
-            # batch["rejected_mask"] = batch["rejected_mask"].to(device)
 
             optimizer.zero_grad()
             # with autocast():  # Enable mixed precision
