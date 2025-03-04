@@ -1,0 +1,14 @@
+# requirements.txt
+
+# Core machine learning and numerical libraries
+torch>=2.0.0  # PyTorch 
+# torchvision>=0.15.0  # for computer vision tasks (make sure to match the version with PyTorch)
+# torchaudio>=2.0.0  # for audio processing (same as above, ensure compatibility)
+
+# Transformers and NLP libraries
+transformers>=4.35.0  # Hugging Face Transformers
+
+trl>=0.1.0  # Training Loop library
+
+numpy>=1.24.0  # PyTorch and Transformers depend on NumPy
+
