@@ -490,7 +490,7 @@ print("Starting evaluation...")
 val_res = dpo_loss_fn.evaluate_dpo_loss_loader(
     policy_model=fine_tuned_model,
     reference_model=ref_model,
-    train_loader=val_loader,
+    train_loader=None,
     val_loader=val_loader,
     eval_iter=5
 )
@@ -555,7 +555,7 @@ print("Starting test evaluation...")
 test_res = dpo_loss_fn.evaluate_dpo_loss_loader(
     policy_model=fine_tuned_model,
     reference_model=ref_model,
-    train_loader=test_loader,
+    train_loader=None,
     val_loader=test_loader,
     eval_iter=5
 )

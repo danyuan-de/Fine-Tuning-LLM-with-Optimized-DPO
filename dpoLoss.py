@@ -187,33 +187,74 @@ class DPOLoss(nn.Module):
         total_rejected_rewards /= num_batches
         return total_loss, total_chosen_rewards, total_rejected_rewards
     
-    def evaluate_dpo_loss_loader(self, policy_model, reference_model, train_loader, val_loader, eval_iter):
-        """Compute the DPO loss for the training and validation dataset"""
+    # def evaluate_dpo_loss_loader(self, policy_model, reference_model, train_loader, val_loader, eval_iter):
+    #     """Compute the DPO loss for the training and validation dataset"""
 
+    #     policy_model.eval()
+    #     with torch.no_grad():
+    #         train_loss, train_chosen_rewards, train_rejected_rewards = self.compute_dpo_loss_loader(
+    #             data_loader=train_loader,
+    #             policy_model=policy_model,
+    #             reference_model=reference_model,
+    #             num_batches=eval_iter
+    #         )
+
+    #         val_loss, val_chosen_rewards, val_rejected_rewards = self.compute_dpo_loss_loader(
+    #             data_loader=val_loader,
+    #             policy_model=policy_model,
+    #             reference_model=reference_model,
+    #             num_batches=eval_iter
+    #         )
+
+    #     res = {
+    #         "train_loss": train_loss,
+    #         "train_chosen_reward": train_chosen_rewards,
+    #         "train_rejected_reward": train_rejected_rewards,
+    #         "val_loss": val_loss,
+    #         "val_chosen_reward": val_chosen_rewards,
+    #         "val_rejected_reward": val_rejected_rewards
+    #     }
+
+    #     policy_model.train()
+    #     return res
+    
+    def evaluate_dpo_loss_loader(self, policy_model, reference_model, train_loader=None, val_loader=None, eval_iter=5):
+        """Compute the DPO loss for the training and/or validation dataset based on provided loaders"""
+        
         policy_model.eval()
-        with torch.no_grad():
-            train_loss, train_chosen_rewards, train_rejected_rewards = self.compute_dpo_loss_loader(
-                data_loader=train_loader,
-                policy_model=policy_model,
-                reference_model=reference_model,
-                num_batches=eval_iter
-            )
-
-            val_loss, val_chosen_rewards, val_rejected_rewards = self.compute_dpo_loss_loader(
-                data_loader=val_loader,
-                policy_model=policy_model,
-                reference_model=reference_model,
-                num_batches=eval_iter
-            )
-
         res = {
-            "train_loss": train_loss,
-            "train_chosen_reward": train_chosen_rewards,
-            "train_rejected_reward": train_rejected_rewards,
-            "val_loss": val_loss,
-            "val_chosen_reward": val_chosen_rewards,
-            "val_rejected_reward": val_rejected_rewards
+            "train_loss": float("nan"),
+            "train_chosen_reward": float("nan"),
+            "train_rejected_reward": float("nan"),
+            "val_loss": float("nan"),
+            "val_chosen_reward": float("nan"),
+            "val_rejected_reward": float("nan")
         }
+        
+        with torch.no_grad():
+            # Calculate the loss and rewards for the training dataset if train_loader is provided
+            if train_loader is not None:
+                train_loss, train_chosen_rewards, train_rejected_rewards = self.compute_dpo_loss_loader(
+                    data_loader=train_loader,
+                    policy_model=policy_model,
+                    reference_model=reference_model,
+                    num_batches=eval_iter
+                )
+                res["train_loss"] = train_loss
+                res["train_chosen_reward"] = train_chosen_rewards
+                res["train_rejected_reward"] = train_rejected_rewards
+
+            # Compute the loss and rewards for the validation dataset if val_loader is provided
+            if val_loader is not None:
+                val_loss, val_chosen_rewards, val_rejected_rewards = self.compute_dpo_loss_loader(
+                    data_loader=val_loader,
+                    policy_model=policy_model,
+                    reference_model=reference_model,
+                    num_batches=eval_iter
+                )
+                res["val_loss"] = val_loss
+                res["val_chosen_reward"] = val_chosen_rewards
+                res["val_rejected_reward"] = val_rejected_rewards
 
         policy_model.train()
         return res
