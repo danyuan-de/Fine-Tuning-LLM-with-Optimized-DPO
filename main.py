@@ -486,6 +486,18 @@ ref_model.to(device)  # Ensure reference model is on device
 fine_tuned_model.to(device)  # Ensure fine-tuned model is on device
 
 print("Starting evaluation...")
+# Evaluate the fine-tuned model on the validation set
+val_res = dpo_loss_fn.evaluate_dpo_loss_loader(
+    policy_model=fine_tuned_model,
+    reference_model=ref_model,
+    train_loader=val_loader,
+    val_loader=val_loader,
+    eval_iter=5
+)
+
+print("Evaluation loss:", val_res["val_loss"])
+print("Evaluation reward margin:", val_res["val_chosen_reward"] - val_res["val_rejected_reward"])
+
 for i, entry in enumerate(val_data[:3]):
 
     input_text = format_input(entry)
