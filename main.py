@@ -90,6 +90,10 @@ train_portion = int(len(data) * 0.85)
 test_portion = int(len(data) * 0.1)
 val_portion = len(data) - train_portion - test_portion
 
+print("Train portion:", train_portion)
+print("Validation portion:", val_portion)
+print("Test portion:", test_portion)
+
 train_data = data[:train_portion]
 test_data = data[train_portion:train_portion + test_portion]
 val_data = data[train_portion + test_portion:]
@@ -327,14 +331,14 @@ def train_model_dpo_simple(
                     policy_model=policy_model,
                     reference_model=reference_model
             )
-            print(f"Step {global_step+1}: Loss before backward: {loss.item():.4f}")
+            # print(f"Step {global_step+1}: Loss before backward: {loss.item():.4f}")
             loss.backward()  # Direct backward pass without scaling
             grad_norm = torch.nn.utils.clip_grad_norm_(policy_model.parameters(), max_norm=1.0)  # Optional clipping
-            print(f"Step {global_step+1}: Grad norm: {grad_norm.item():.4f}")
+            # print(f"Step {global_step+1}: Grad norm: {grad_norm.item():.4f}")
             param_before = next(policy_model.parameters()).clone().sum().item()
             optimizer.step() # Direct optimizer step
             param_after = next(policy_model.parameters()).sum().item()
-            print(f"Step {global_step+1}: Param sum change: {param_after - param_before:.6f}")
+            # print(f"Step {global_step+1}: Param sum change: {param_after - param_before:.6f}")
             scheduler.step()  # Update learning rate after optimizer step
 
             # tokens_seen = torch.tensor(0, dtype=torch.int64) # avoid overflow by using torch.tensor with dtype int64
@@ -547,7 +551,7 @@ test_res = dpo_loss_fn.evaluate_dpo_loss_loader(
 print("Test loss:", test_res["val_loss"])
 print("Test reward margin:", test_res["val_chosen_reward"] - test_res["val_rejected_reward"])
 
-for i, entry in enumerate(test_data[:3]):
+for i, entry in enumerate(test_data[:train_portion//2]):
     input_text = format_input(entry)
 
     # Reference Model Generation
@@ -556,8 +560,8 @@ for i, entry in enumerate(test_data[:3]):
         model=ref_model,
         idx=ref_input_ids.to(device),
         max_new_tokens=max_new_tokens,
-        temperature=temperature,
-        top_p=top_p,
+        # temperature=temperature,
+        # top_p=top_p,
         stopping_criteria=stopping_criteria
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
@@ -569,8 +573,8 @@ for i, entry in enumerate(test_data[:3]):
         model=fine_tuned_model,
         idx=fine_tuned_model_input_ids.to(device),
         max_new_tokens=max_new_tokens,
-        temperature=temperature,
-        top_p=top_p,
+        # temperature=temperature,
+        # top_p=top_p,
         stopping_criteria=stopping_criteria
     )
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
@@ -587,7 +591,7 @@ for i, entry in enumerate(test_data[:3]):
     print(f"Expected Answer: {entry['chosen']}")
     print("="*80, "\n")
 
-    with open("result.txt", "r") as f:
+    with open("result.txt", "a") as f:
         f.write(f"\nInput{i}: {entry['question']}")
         f.write("\n ----- Reference Model ----- ")
         f.write(f"Reference Response: {ref_response}")

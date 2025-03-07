@@ -90,12 +90,12 @@ class DPOLoss(nn.Module):
         pi_diff = model_chosen_logprobs - model_rejected_logprobs
         ref_diff = reference_chosen_logprobs - reference_rejected_logprobs
         logits = pi_diff - ref_diff
-        print(f"Logits: {logits.mean().item():.4f}")
+        # print(f"Logits: {logits.mean().item():.4f}")
         # logits = (logits - logits.mean()) / (logits.std() + 1e-8)  # Normalize logits
 
         # DPO (Eq. 7 of https://arxiv.org/pdf/2305.18290.pdf)
         losses = -F.logsigmoid(self.beta * logits)
-        print(f"Losses: {losses.mean().item():.4f}")
+        # print(f"Losses: {losses.mean().item():.4f}")
         
         # Optional values to track progress during training
         chosen_rewards = (model_chosen_logprobs - reference_chosen_logprobs).detach()
@@ -151,7 +151,7 @@ class DPOLoss(nn.Module):
             reference_chosen_logprobs=ref_chosen_log_probas,
             reference_rejected_logprobs=ref_rejected_log_probas
         )
-        print(f"Logits mean: {((policy_chosen_log_probas - policy_rejected_log_probas) - (ref_chosen_log_probas - ref_rejected_log_probas)).mean().item():.4f}")
+        # print(f"Logits mean: {((policy_chosen_log_probas - policy_rejected_log_probas) - (ref_chosen_log_probas - ref_rejected_log_probas)).mean().item():.4f}")
         return loss, chosen_rewards, rejected_rewards
 
     def compute_dpo_loss_loader(self, data_loader, policy_model, reference_model, num_batches=None):
