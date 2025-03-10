@@ -2,626 +2,626 @@
     {
         "question": "A spaceship moves at $0.95c$. If it fires a laser beam forward, what speed does an Earth observer measure for the laser?",
         "chosen": "Step 1:\\\\By the principle of invariance, the speed of light is always $c$ in any inertial frame.\\\\Step 2:\\\\Thus, the Earth observer measures the laser at $c = 3 \\times 10^{8}\\,\\mathrm{m/s}$.\\\\Answer:\\\\The laser travels at $3 \\times 10^{8}\\,\\mathrm{m/s}$.",
-        "rejected": "Step 1:\\\\Assume that the spaceship's velocity adds to the laser's speed.\\\\Step 2:\\\\Then the observer would measure the laser at $0.95c$, i.e., $2.85 \\times 10^{8}\\,\\mathrm{m/s}$.\\\\Answer:\\\\The laser is measured at $0.95c$ ($\\approx 2.85 \\times 10^{8}\\,\\mathrm{m/s}$)."
+        "rejected": "The relativistic kinetic energy is given by $K.E. = (\\gamma - 1) m c^{2}$. Substituting $\\gamma = 1.25$ and $m = 1000\\,\\mathrm{kg}$: $K.E. \\approx 2.44 \\times 10^{12}\\,\\mathrm{J}$."
     },
     {
         "question": "A telescope has an objective lens with a focal length of $1\\,\\mathrm{m}$ and an eyepiece with a focal length of $5\\,\\mathrm{cm}$. Find the angular magnification.",
-        "chosen": "Step 1:\\\\For an astronomical telescope, angular magnification $M = \\frac{f_{\\text{objective}}}{f_{\\text{eyepiece}}}$.\\\\Step 2:\\\\Given $f_{\\text{objective}} = 100\\,\\mathrm{cm}$ and $f_{\\text{eyepiece}} = 5\\,\\mathrm{cm}$, $M = \\frac{100}{5} = 20$.\\\\Answer:\\\\The telescope’s angular magnification is $20\\times$.",
-        "rejected": "Step 1:\\\\Incorrectly invert the ratio to $M = \\frac{f_{\\text{eyepiece}}}{f_{\\text{objective}}} = \\frac{5}{100} = 0.05$.\\\\Answer:\\\\The angular magnification is calculated to be $0.05\\times$."
+        "chosen": "Step 1:\\\\For an astronomical telescope, angular magnification $M = \\frac{f_{\\text{objective}}}{f_{\\text{eyepiece}}}$.\\\\Step 2:\\\\Given $f_{\\text{objective}} = 100\\,\\mathrm{cm}$ and $f_{\\text{eyepiece}} = 5\\,\\mathrm{cm}$, $M = \\frac{100}{5} = 20$.\\\\Answer:\\\\The telescope\u2019s angular magnification is $20\\times$.",
+        "rejected": "Magnification: $M = \\frac{100\\,\\mathrm{cm}}{5\\,\\mathrm{cm}} = 20\\times$."
     },
     {
         "question": "Calculate the Compton shift when an X-ray photon of $0.1\\,\\mathrm{nm}$ scatters at $90^\\circ$ from an electron.",
         "chosen": "Step 1:\\\\Use $\\Delta \\lambda = \\frac{h}{m_e c}(1 - \\cos \\theta)$; for $\\theta = 90^\\circ$, $(1 - \\cos 90^\\circ) = 1$.\\\\Step 2:\\\\The Compton wavelength of the electron is about $2.43 \\times 10^{-12}\\,\\mathrm{m}$.\\\\Step 3:\\\\Thus, $\\Delta \\lambda \\approx 2.43 \\times 10^{-12}\\,\\mathrm{m}$ (or $2.43\\,\\mathrm{pm}$).\\\\Answer:\\\\Compton shift $\\approx 2.43\\,\\mathrm{pm}$.",
-        "rejected": "Step 1:\\\\Use the formula but assume the Compton wavelength is $2.43 \\times 10^{-11}\\,\\mathrm{m}$.\\\\Step 2:\\\\Then $\\Delta \\lambda \\approx 2.43 \\times 10^{-11}\\,\\mathrm{m}$ (or $24.3\\,\\mathrm{pm}$).\\\\Answer:\\\\Compton shift $\\approx 24.3\\,\\mathrm{pm}$."
+        "rejected": "The Compton shift is given by $\\Delta \\lambda = \\frac{h}{m_e c}(1-\\cos\\theta)$. For $90^\\circ$ scattering, $\\cos 90^\\circ = 0$, so $\\Delta \\lambda = \\frac{h}{m_e c} \\approx 2.43\\times10^{-12}\\,\\mathrm{m}$."
     },
     {
         "question": "A convex mirror has a radius of curvature of $30\\,\\mathrm{cm}$. If an object is placed $20\\,\\mathrm{cm}$ in front of it, find the image distance and magnification.",
         "chosen": "Step 1:\\\\For a convex mirror, the focal length is $f = -\\frac{R}{2} = -15\\,\\mathrm{cm}$.\\\\Step 2:\\\\Use the mirror equation: $\\frac{1}{f} = \\frac{1}{d_o} + \\frac{1}{d_i}$ with $d_o = 20\\,\\mathrm{cm}$.\\\\Step 3:\\\\$\\frac{1}{-15} = \\frac{1}{20} + \\frac{1}{d_i} \\implies \\frac{1}{d_i} = -\\frac{1}{15} - \\frac{1}{20} = -\\frac{7}{60} \\implies d_i \\approx -8.57\\,\\mathrm{cm}$ (virtual image).\\\\Step 4:\\\\Magnification $m = \\frac{d_i}{d_o} = \\frac{-8.57}{20} \\approx -0.43$.\\\\Answer:\\\\The image is virtual, about $8.57\\,\\mathrm{cm}$ behind the mirror, with a magnification of approximately $0.43$ (reduced).",
-        "rejected": "Step 1:\\\\Use $f = -15\\,\\mathrm{cm}$, but mistakenly solve $\\frac{1}{d_i} = \\frac{1}{20} - \\frac{1}{15} = -\\frac{1}{60}$, yielding $d_i = -60\\,\\mathrm{cm}$.\\\\Step 2:\\\\Then $m = \\frac{-60}{20} = -3$.\\\\Answer:\\\\The image is $60\\,\\mathrm{cm}$ behind the mirror with a magnification of $-3$."
+        "rejected": "Using the mirror equation: $\\frac{1}{-15} = \\frac{1}{20} + \\frac{1}{v} \\implies v \\approx -8.57\\,\\mathrm{cm}$. Magnification: $m = 0.43$."
     },
     {
         "question": "A diver underwater ($n=1.33$) looks at a fish. If the fish is $1\\,\\mathrm{m}$ away, how far does it appear to the diver?",
         "chosen": "Step 1:\\\\When viewing objects underwater, the apparent distance $d' \\approx \\frac{d}{n}$, where $d$ is the actual distance and $n$ is the refractive index.\\\\Step 2:\\\\$d' = \\frac{1\\,\\mathrm{m}}{1.33} \\approx 0.75\\,\\mathrm{m}$.\\\\Answer:\\\\The fish appears about $0.75\\,\\mathrm{m}$ away to the diver.",
-        "rejected": "Step 1:\\\\Erroneously calculate the apparent distance by multiplying: $d' = d \\times n = 1\\,\\mathrm{m} \\times 1.33 = 1.33\\,\\mathrm{m}$.\\\\Answer:\\\\The fish appears about $1.33\\,\\mathrm{m}$ away."
+        "rejected": "Apparent depth: $d' = \\frac{1\\,\\mathrm{m}}{1.33} \\approx 0.75\\,\\mathrm{m}$."
     },
     {
         "question": "Derive the energy levels of the hydrogen atom using the Bohr model.",
-        "chosen": "Step 1:\\\\Apply Bohr’s postulate: $m_e v r = \\frac{n h}{2\\pi}$.\\\\Step 2:\\\\Equate the centripetal force $\\frac{m_e v^2}{r}$ to the Coulomb force $\\frac{k e^2}{r^2}$ and solve for $r$ and $v$.\\\\Step 3:\\\\Derive $E_n = -\\frac{13.6\\,\\mathrm{eV}}{n^2}$.\\\\Answer:\\\\Energy levels: $E_n = -\\frac{13.6\\,\\mathrm{eV}}{n^2}$, for $n = 1, 2, 3, \\ldots$",
-        "rejected": "Step 1:\\\\Assume the derivation leads to $E_n = -\\frac{3.4\\,\\mathrm{eV}}{n^2}$.\\\\Step 2:\\\\Thus, the energy levels are one-fourth the correct values.\\\\Answer:\\\\Energy levels: $E_n = -\\frac{3.4\\,\\mathrm{eV}}{n^2}$."
+        "chosen": "Step 1:\\\\Apply Bohr\u2019s postulate: $m_e v r = \\frac{n h}{2\\pi}$.\\\\Step 2:\\\\Equate the centripetal force $\\frac{m_e v^2}{r}$ to the Coulomb force $\\frac{k e^2}{r^2}$ and solve for $r$ and $v$.\\\\Step 3:\\\\Derive $E_n = -\\frac{13.6\\,\\mathrm{eV}}{n^2}$.\\\\Answer:\\\\Energy levels: $E_n = -\\frac{13.6\\,\\mathrm{eV}}{n^2}$, for $n = 1, 2, 3, \\ldots$",
+        "rejected": "By applying the Bohr model, the energy levels are derived as $E_n = -\\frac{13.6\\,\\mathrm{eV}}{n^2}$ by equating the centripetal and Coulomb forces and quantizing the angular momentum."
     },
     {
         "question": "What is the Clausius statement of the second law of thermodynamics?",
         "chosen": "Step 1:\\\\The Clausius statement: It is impossible for heat to spontaneously flow from a colder body to a hotter body without external work.\\\\Step 2:\\\\This means that heat naturally flows from hot to cold.\\\\Answer:\\\\Heat cannot be transferred from a cold object to a hot object without additional work.",
-        "rejected": "Step 1:\\\\State that the Clausius statement implies energy can be created from nothing.\\\\Answer:\\\\It is possible to create energy from a cold reservoir."
+        "rejected": "The Clausius statement of the second law of thermodynamics asserts that it is impossible for heat to flow spontaneously from a colder region to a hotter region without external work being done; this forms the basis for the operation of refrigerators and heat pumps."
     },
     {
         "question": "A transformer has 500 turns in the primary coil and 100 turns in the secondary coil. If the input voltage is $220\\,\\mathrm{V}$, what is the output voltage?",
         "chosen": "Step 1:\\\\$\\frac{V_2}{V_1} = \\frac{N_2}{N_1}$.\\\\Step 2:\\\\$N_1 = 500$, $N_2 = 100$, $V_1 = 220\\,\\mathrm{V}$.\\\\Step 3:\\\\$V_2 = 220 \\times \\frac{100}{500} = 44\\,\\mathrm{V}$.\\\\Answer: $44\\,\\mathrm{V}$.",
-        "rejected": "Step 1:\\\\Use the transformer relation and invert the ratio: $V_2 = 220 \\times \\frac{500}{100}$.\\\\Step 2:\\\\$V_2 = 220 \\times 5 = 1100\\,\\mathrm{V}$.\\\\Answer: $1100\\,\\mathrm{V}$."
+        "rejected": "The output voltage of a transformer with $500$ turns in the primary coil and $100$ turns in the secondary coil, given an input voltage of $220\\,\\mathrm{V}$, is calculated as $V_{2} = V_{1} \\frac{N_{2}}{N_{1}} = 220\\,\\mathrm{V} \\times \\frac{100}{500} = 44\\,\\mathrm{V}$."
     },
     {
         "question": "A rocket accelerates at $30\\,\\mathrm{m/s^2}$ for the first $5\\,\\mathrm{s}$ after launch. It then enters free fall. Find the maximum height reached (neglecting air resistance).",
         "chosen": "Step 1:\\\\During powered flight: final velocity $v = 0 + 30 \\times 5 = 150\\,\\mathrm{m/s}$; distance covered = $0.5 \\times 30 \\times (5)^2 = 375\\,\\mathrm{m}$.\\\\Step 2:\\\\During free fall: additional height = $\\frac{v^2}{2g} = \\frac{150^2}{2 \\times 9.8} \\approx 1148\\,\\mathrm{m}$.\\\\Step 3:\\\\Total height = $375 + 1148 = 1523\\,\\mathrm{m}$.\\\\Answer:\\\\$1523\\,\\mathrm{m}$.",
-        "rejected": "Step 1:\\\\During powered flight, take acceleration as $3\\,\\mathrm{m/s^2}$: $v = 0 + 3 \\times 5 = 15\\,\\mathrm{m/s}$; distance = $0.5 \\times 3 \\times (5)^2 = 37.5\\,\\mathrm{m}$.\\\\Step 2:\\\\During free fall, additional height = $\\frac{15^2}{2 \\times 9.8} \\approx 11.48\\,\\mathrm{m}$.\\\\Step 3:\\\\Total height = $37.5 + 11.48 \\approx 48.98\\,\\mathrm{m}$.\\\\Answer:\\\\$49\\,\\mathrm{m}$."
+        "rejected": "The velocity after $5\\,\\mathrm{s}$ $v = at = 150\\,\\mathrm{m/s}$. The height during acceleration $h_1 = 0.5 \\cdot a t^2 = 375\\,\\mathrm{meters}$. Additional height $h_2 = v^2 / (2g) \\approx 1147.96\\,\\mathrm{meters}$. Total height $h = h_1 + h_2 \\approx 1522.96\\,\\mathrm{meters}$."
     },
     {
         "question": "A force $F(x) = 4x^2\\,\\mathrm{N}$ is applied to an object as it moves from $x = 1\\,\\mathrm{m}$ to $x = 3\\,\\mathrm{m}$. Find the total work done.",
         "chosen": "Step 1:\\\\Work $W = \\int_{1}^{3} 4x^2 \\, dx$.\\\\Step 2:\\\\$\\int 4x^2 \\, dx = 4 \\times \\frac{x^3}{3}$; evaluate from $1$ to $3$: $\\frac{4}{3} \\times (27 - 1) = \\frac{4}{3} \\times 26 \\approx 34.67\\,\\mathrm{J}$.\\\\Answer:\\\\$34.67\\,\\mathrm{J}$.",
-        "rejected": "Step 1:\\\\Work $W = 4 \\times (3^2 - 1^2) = 4 \\times (9 - 1) = 4 \\times 8 = 32\\,\\mathrm{J}$.\\\\Answer:\\\\$32\\,\\mathrm{J}$."
+        "rejected": "Work done $W = \\int F(x)\\,dx$ from $1$ to $3 = \\int 4x^2\\,dx = (4/3)x^3$ from $1$ to $3 = (4/3)(27 - 1) = 34.67\\,\\mathrm{Joules}$."
     },
     {
         "question": "Compare the efficiency of real engines to the Carnot cycle and explain why real engines never reach Carnot efficiency.",
         "chosen": "Step 1:\\\\The Carnot cycle represents an ideal reversible process with maximum efficiency given by $\\eta_C = 1 - \\frac{T_L}{T_H}$.\\\\Step 2:\\\\Real engines have irreversibilities such as friction and heat losses, which reduce their efficiency below the Carnot limit.\\\\Answer:\\\\Real engines are less efficient than a Carnot engine due to irreversible losses.",
-        "rejected": "Step 1:\\\\Assume that real engines can be designed to exactly match Carnot efficiency if optimized.\\\\Step 2:\\\\Conclude that real engines have the same efficiency as the Carnot cycle.\\\\Answer:\\\\Real engines reach Carnot efficiency."
+        "rejected": "Real engines are less efficient than the Carnot cycle due to practical factors such as friction, heat losses, and other irreversibilities that occur during the engine cycle. These factors prevent real engines from achieving the theoretical maximum efficiency defined by the Carnot cycle, which assumes reversible processes and no energy dissipation."
     },
     {
         "question": "A $10\\,\\mathrm{kg}$ sphere slides at $2\\,\\mathrm{m/s}$ before it starts rolling. Find its angular velocity after rolling begins (assuming it is a uniform sphere).",
         "chosen": "Step 1:\\\\For rolling without slipping, $v = \\omega R$.\\\\Step 2:\\\\Since the radius is not specified, the answer is expressed as $\\omega = \\frac{v}{R} = \\frac{2}{R}\\,\\mathrm{rad/s}$.\\\\Answer:\\\\$\\omega = \\frac{2}{R}\\,\\mathrm{rad/s}$ (depending on the sphere's radius).",
-        "rejected": "Step 1:\\\\Assume the relation for rolling is $\\omega = v \\times R$.\\\\Step 2:\\\\Then $\\omega = 2 \\times R\\,\\mathrm{rad/s}$.\\\\Answer:\\\\$\\omega = 2R\\,\\mathrm{rad/s}$ (depending on the sphere's radius)."
+        "rejected": "For rolling without slipping, $\\omega = v/r$. Given $v = 2\\,\\mathrm{m/s}$ and assuming a typical radius $r$ (not provided), $\\omega$ can be estimated as $2/r$."
     },
     {
         "question": "A light wave has a wavelength of $500\\,\\mathrm{nm}$ in air. What is its frequency? (Speed of light = $3 \\times 10^{8}\\,\\mathrm{m/s}$)",
         "chosen": "Step 1:\\\\Use the relationship $c = \\lambda \\times f$, where $\\lambda = 500\\,\\mathrm{nm} = 500 \\times 10^{-9}\\,\\mathrm{m}$.\\\\Step 2:\\\\$f = \\frac{c}{\\lambda} = \\frac{3 \\times 10^{8}\\,\\mathrm{m/s}}{5 \\times 10^{-7}\\,\\mathrm{m}} = 6 \\times 10^{14}\\,\\mathrm{Hz}$.\\\\Answer:\\\\The frequency is approximately $6 \\times 10^{14}\\,\\mathrm{Hz}$.",
-        "rejected": "Step 1:\\\\Misconvert the wavelength by taking $500\\,\\mathrm{nm}$ as $500 \\times 10^{-6}\\,\\mathrm{m}$.\\\\Step 2:\\\\$f = \\frac{3 \\times 10^{8}\\,\\mathrm{m/s}}{5 \\times 10^{-4}\\,\\mathrm{m}} = 6 \\times 10^{11}\\,\\mathrm{Hz}$.\\\\Answer:\\\\The frequency is approximately $6 \\times 10^{11}\\,\\mathrm{Hz}$."
+        "rejected": "Frequency: $f = \\frac{3 \\times 10^{8}}{500 \\times 10^{-9}} = 6 \\times 10^{14}\\,\\mathrm{Hz}$."
     },
     {
         "question": "Derive the equation for the efficiency of a Carnot engine.",
         "chosen": "Step 1:\\\\The Carnot cycle consists of two isothermal and two adiabatic processes.\\\\Step 2:\\\\Analyzing the heat absorbed and rejected during the isothermal processes leads to the efficiency formula: $\\eta = 1 - \\frac{T_C}{T_H}$.\\\\Answer:\\\\The efficiency of a Carnot engine is given by $\\eta = 1 - \\frac{T_C}{T_H}$.",
-        "rejected": "Step 1:\\\\Derive the efficiency by mistakenly assuming that all the heat is converted into work, yielding $\\eta = 1$ (or $100\\%$).\\\\Answer:\\\\The efficiency of the Carnot engine is $100\\%$."
+        "rejected": "The efficiency of a Carnot engine, representing the maximum possible efficiency of a heat engine as dictated by the second law of thermodynamics, is derived from the temperatures of the hot and cold reservoirs: $\\eta = 1 - \\frac{T_{c}}{T_{h}}$, where $T_{c}$ is the absolute temperature of the cold reservoir and $T_{h}$ is the absolute temperature of the hot reservoir."
     },
     {
         "question": "A person pushes an object with a force of $50\\,\\mathrm{N}$ over $10\\,\\mathrm{m}$ in the same direction as motion. Find the work done.",
         "chosen": "Step 1:\\\\Work $W = F \\times d = 50\\,\\mathrm{N} \\times 10\\,\\mathrm{m} = 500\\,\\mathrm{J}$.\\\\Answer:\\\\$500\\,\\mathrm{J}$.",
-        "rejected": "Step 1:\\\\Work $W = F \\times d + 50\\,\\mathrm{J}$ extra, so $W = 50\\,\\mathrm{N} \\times 10\\,\\mathrm{m} + 50 = 500 + 50 = 550\\,\\mathrm{J}$.\\\\Answer:\\\\$550\\,\\mathrm{J}$."
+        "rejected": "Work done $W = F \\cdot d = 50\\,\\mathrm{N} \\times 10\\,\\mathrm{m} = 500\\,\\mathrm{Joules}$."
     },
     {
         "question": "A body slides down a ramp, losing $50\\,\\mathrm{J}$ of energy due to friction. If its initial energy was $200\\,\\mathrm{J}$, find its final mechanical energy.",
         "chosen": "Step 1:\\\\Initial energy = $200\\,\\mathrm{J}$, energy lost = $50\\,\\mathrm{J}$.\\\\Step 2:\\\\Final energy = $200 - 50 = 150\\,\\mathrm{J}$.\\\\Answer:\\\\$150\\,\\mathrm{J}$.",
-        "rejected": "Step 1:\\\\Initial energy = $200\\,\\mathrm{J}$, energy lost = $50\\,\\mathrm{J}$.\\\\Step 2:\\\\Final energy = $200 + 50 = 250\\,\\mathrm{J}$.\\\\Answer:\\\\$250\\,\\mathrm{J}$."
+        "rejected": "Final energy = initial energy - energy lost to friction = $200\\,\\mathrm{J} - 50\\,\\mathrm{J} = 150\\,\\mathrm{J}$."
     },
     {
         "question": "A $2\\,\\mathrm{kg}$ object is moving at $10\\,\\mathrm{m/s}$. Find its kinetic energy.",
         "chosen": "Step 1:\\\\Use $KE = 0.5 \\times m \\times v^2 = 0.5 \\times 2 \\times (10)^2 = 100\\,\\mathrm{J}$.\\\\Answer:\\\\$100\\,\\mathrm{J}$.",
-        "rejected": "Step 1:\\\\Use $KE = m \\times v^2 = 2 \\times (10)^2 = 200\\,\\mathrm{J}$.\\\\Answer:\\\\$200\\,\\mathrm{J}$."
+        "rejected": "Kinetic energy $KE = 0.5 \\cdot m v^2 = 0.5 \\times 2 \\times 10^2 = 100\\,\\mathrm{Joules}$."
     },
     {
         "question": "A steam engine operates between $800\\,\\mathrm{K}$ and $400\\,\\mathrm{K}$. Compare its efficiency to that of a Carnot engine with the same temperature limits.",
         "chosen": "Step 1:\\\\For a Carnot engine, efficiency $\\eta = 1 - \\frac{T_L}{T_H} = 1 - \\frac{400}{800} = 0.5$ or $50\\%$.\\\\Step 2:\\\\Real steam engines have irreversibilities such as friction and heat losses, so their efficiency is lower than that of the ideal Carnot cycle.\\\\Answer:\\\\The steam engine has an efficiency lower than $50\\%$.",
-        "rejected": "Step 1:\\\\Assume that a real steam engine can achieve the same efficiency as a Carnot engine, i.e., $50\\%$.\\\\Answer:\\\\The steam engine has an efficiency of $50\\%$."
+        "rejected": "The efficiency of a real steam engine operating between $800\\,\\mathrm{K}$ and $400\\,\\mathrm{K}$ would be less than that of a Carnot engine due to practical irreversibilities such as friction and non-ideal gas behavior, even though the theoretical efficiency for a Carnot cycle under these conditions is $50\\%$."
     },
     {
         "question": "Find the capacitance of a parallel plate capacitor with an area of $0.02\\,\\mathrm{m^2}$, plate separation of $2\\,\\mathrm{mm}$, and dielectric constant 5. ($\\varepsilon_0 = 8.85 \\times 10^{-12}\\,\\mathrm{F/m}$)",
         "chosen": "Step 1:\\\\Convert $2\\,\\mathrm{mm}$ to $2 \\times 10^{-3}\\,\\mathrm{m}$.\\\\Step 2:\\\\Use $C = \\frac{k \\varepsilon_0 A}{d}$.\\\\Step 3:\\\\Substitute $k = 5$, $\\varepsilon_0 = 8.85 \\times 10^{-12}\\,\\mathrm{F/m}$, $A = 0.02\\,\\mathrm{m^2}$, $d = 2 \\times 10^{-3}\\,\\mathrm{m}$.\\\\Step 4:\\\\$C \\approx 4.425 \\times 10^{-10}\\,\\mathrm{F}$.\\\\Answer: $4.425 \\times 10^{-10}\\,\\mathrm{F}$ (approximately).",
-        "rejected": "Step 1:\\\\Convert the plate separation: $2\\,\\mathrm{mm}$ is taken as $0.2\\,\\mathrm{m}$.\\\\Step 2:\\\\Use $C = \\frac{k \\varepsilon_0 A}{d}$ with $k = 5$, $\\varepsilon_0 = 8.85 \\times 10^{-12}\\,\\mathrm{F/m}$, $A = 0.02\\,\\mathrm{m^2}$, and $d = 0.2\\,\\mathrm{m}$.\\\\Step 3:\\\\Calculate $C = \\frac{5 \\times 8.85 \\times 10^{-12} \\times 0.02}{0.2} = 4.425 \\times 10^{-12}\\,\\mathrm{F}$.\\\\Answer: $4.43 \\times 10^{-12}\\,\\mathrm{F}$."
+        "rejected": "The capacitance of a parallel plate capacitor with the given dimensions and dielectric constant is calculated using $C = \\varepsilon_{0} \\varepsilon_{r} \\frac{A}{d}$, resulting in $C = (8.85 \\times 10^{-12}\\,\\mathrm{F/m}) \\times 5 \\times (0.02\\,\\mathrm{m^{2}} / 0.002\\,\\mathrm{m}) = 4.425 \\times 10^{-10}\\,\\mathrm{F}$."
     },
     {
         "question": "A Fresnel biprism experiment uses a wavelength of $550\\,\\mathrm{nm}$ and produces fringes separated by $1\\,\\mathrm{mm}$ on a screen $2\\,\\mathrm{m}$ away. Find the separation of the virtual sources.",
         "chosen": "Step 1:\\\\Fringe spacing $\\beta = \\frac{\\lambda D}{d}$, where $D = 2\\,\\mathrm{m}$, and $d$ is the separation of the virtual sources.\\\\Step 2:\\\\Rearrange: $d = \\frac{\\lambda D}{\\beta}$.\\\\Step 3:\\\\Substitute $\\lambda = 550\\,\\mathrm{nm} = 5.5 \\times 10^{-7}\\,\\mathrm{m}$, $D = 2\\,\\mathrm{m}$, and $\\beta = 1\\,\\mathrm{mm} = 1 \\times 10^{-3}\\,\\mathrm{m}$:\\\\$d = \\frac{(5.5 \\times 10^{-7} \\times 2)}{1 \\times 10^{-3}} = 1.1 \\times 10^{-3}\\,\\mathrm{m} = 1.1\\,\\mathrm{mm}$.\\\\Answer:\\\\The virtual sources are separated by about $1.1\\,\\mathrm{mm}$.",
-        "rejected": "Step 1:\\\\Misinterpret the wavelength by taking $550\\,\\mathrm{nm}$ as $5.5 \\times 10^{-8}\\,\\mathrm{m}$.\\\\Step 2:\\\\Then $d = \\frac{(5.5 \\times 10^{-8} \\times 2)}{1 \\times 10^{-3}} = 1.1 \\times 10^{-4}\\,\\mathrm{m} = 0.11\\,\\mathrm{mm}$.\\\\Answer:\\\\The virtual sources are calculated to be separated by about $0.11\\,\\mathrm{mm}$."
+        "rejected": "Virtual source separation: $d = \\frac{550 \\times 10^{-9} \\times 2}{1 \\times 10^{-3}} = 1.1\\,\\mathrm{mm}$."
     },
     {
         "question": "Two cars (A = $1000\\,\\mathrm{kg}$, B = $1500\\,\\mathrm{kg}$) collide on an icy road with a relative speed of $20\\,\\mathrm{m/s}$. If they undergo a completely inelastic collision, find their final velocity.",
         "chosen": "Step 1:\\\\Assume Car A is moving at $+10\\,\\mathrm{m/s}$ and Car B at $-10\\,\\mathrm{m/s}$, giving a relative speed of $20\\,\\mathrm{m/s}$.\\\\Step 2:\\\\Initial total momentum = $1000 \\times 10 + 1500 \\times (-10) = 10000 - 15000 = -5000\\,\\mathrm{kg \\cdot m/s}$.\\\\Step 3:\\\\Combined mass = $1000 + 1500 = 2500\\,\\mathrm{kg}$.\\\\Step 4:\\\\Final velocity = $\\frac{-5000}{2500} = -2\\,\\mathrm{m/s}$.\\\\Answer:\\\\$-2\\,\\mathrm{m/s}$.",
-        "rejected": "Step 1:\\\\Assume both cars are moving in the same direction at $10\\,\\mathrm{m/s}$.\\\\Step 2:\\\\Total momentum = $1000 \\times 10 + 1500 \\times 10 = 10000 + 15000 = 25000\\,\\mathrm{kg \\cdot m/s}$.\\\\Step 3:\\\\Combined mass = $2500\\,\\mathrm{kg}$.\\\\Step 4:\\\\Final velocity = $\\frac{25000}{2500} = 10\\,\\mathrm{m/s}$.\\\\Answer:\\\\$10\\,\\mathrm{m/s}$."
+        "rejected": "Assuming car $A$ moves at $20\\,\\mathrm{m/s}$ and $B$ is stationary, using conservation of momentum, $(1000 \\times 20 + 1500 \\times 0) = 2500 v_{\\text{final}}$, $v_{\\text{final}} = 8\\,\\mathrm{m/s}$ towards $A$'s direction."
     },
     {
         "question": "An electron is confined in a box of width $1\\,\\mathrm{nm}$. Estimate its ground state energy using the particle-in-a-box model.",
         "chosen": "Step 1:\\\\Use $E_1 = \\frac{h^2}{8 m L^2}$, with $L = 1 \\times 10^{-9}\\,\\mathrm{m}$.\\\\Step 2:\\\\Substitute $h = 6.63 \\times 10^{-34}\\,\\mathrm{J \\cdot s}$ and $m = 9.11 \\times 10^{-31}\\,\\mathrm{kg}$.\\\\Step 3:\\\\$E_1 \\approx 6.0 \\times 10^{-20}\\,\\mathrm{J}$, which is about $0.38\\,\\mathrm{eV}$.\\\\Answer:\\\\Ground state energy $\\approx 0.38\\,\\mathrm{eV}$.",
-        "rejected": "Step 1:\\\\Use the same formula but take $L = 1 \\times 10^{-8}\\,\\mathrm{m}$ instead of $1 \\times 10^{-9}\\,\\mathrm{m}$.\\\\Step 2:\\\\Then $E_1 \\approx 6.0 \\times 10^{-22}\\,\\mathrm{J}$, or about $0.0038\\,\\mathrm{eV}$.\\\\Answer:\\\\Ground state energy $\\approx 0.0038\\,\\mathrm{eV}$."
+        "rejected": "The ground state energy is given by $E_{1} = \\frac{h^{2}}{8 m L^{2}}$, where $h$ is Planck's constant, $m$ is the electron mass, and $L$ is the box width. Substituting the given values: $E_{1} \\approx 6.02 \\times 10^{-20}\\,\\mathrm{J}$."
     },
     {
         "question": "An optical fiber has a core refractive index of $1.48$ and a cladding refractive index of $1.45$. Find the critical angle for total internal reflection.",
         "chosen": "Step 1:\\\\Critical angle $\\theta_c$ satisfies $\\sin(\\theta_c) = \\frac{n_{\\text{cladding}}}{n_{\\text{core}}}$.\\\\Step 2:\\\\So $\\sin(\\theta_c) = \\frac{1.45}{1.48} \\approx 0.9797$.\\\\Step 3:\\\\$\\theta_c = \\sin^{-1}(0.9797) \\approx 78.7^\\circ$.\\\\Answer:\\\\The critical angle is about $78.7^\\circ$.",
-        "rejected": "Step 1:\\\\Mistakenly reverse the indices: $\\sin(\\theta_c) = \\frac{n_{\\text{core}}}{n_{\\text{cladding}}} = \\frac{1.48}{1.45} \\approx 1.02$, which is impossible.\\\\Answer:\\\\The calculation yields an invalid result."
+        "rejected": "Critical angle: $\\sin \\theta_{c} = \\frac{1.45}{1.48} \\approx 0.9797 \\implies \\theta_{c} \\approx 78.5^{\\circ}$."
     },
     {
         "question": "A car starts from rest and accelerates at $2\\,\\mathrm{m/s^2}$. What is its velocity after $5\\,\\mathrm{s}$?",
         "chosen": "Step 1:\\\\Initial velocity $v_0 = 0\\,\\mathrm{m/s}$, acceleration $a = 2\\,\\mathrm{m/s^2}$, time $t = 5\\,\\mathrm{s}$.\\\\Step 2:\\\\Use $v = v_0 + a \\times t = 0 + (2)(5) = 10\\,\\mathrm{m/s}$.\\\\Answer:\\\\$10\\,\\mathrm{m/s}$.",
-        "rejected": "Step 1:\\\\Initial velocity $v_0 = 0\\,\\mathrm{m/s}$, acceleration $a = 2\\,\\mathrm{m/s^2}$, time $t = 10\\,\\mathrm{s}$.\\\\Step 2:\\\\Use $v = v_0 + a \\times t = 0 + (2)(10) = 20\\,\\mathrm{m/s}$.\\\\Answer:\\\\$20\\,\\mathrm{m/s}$."
+        "rejected": "Using the formula for velocity $v = at$, where $a = 2\\,\\mathrm{m/s^2}$ and $t = 5\\,\\mathrm{seconds}$, the velocity $v = 2 \\times 5 = 10\\,\\mathrm{m/s}$."
     },
     {
         "question": "A solenoid has 500 turns per meter and carries a current of $2\\,\\mathrm{A}$. Calculate the magnetic field inside it. ($\\mu_0 = 4\\pi \\times 10^{-7}\\,\\mathrm{T \\cdot m/A}$)",
         "chosen": "Step 1:\\\\$B = \\mu_0 n I$.\\\\Step 2:\\\\$n = 500\\,\\mathrm{m^{-1}}$, $I = 2\\,\\mathrm{A}$, $\\mu_0 = 4\\pi \\times 10^{-7}\\,\\mathrm{T \\cdot m/A}$.\\\\Step 3:\\\\$B = (4\\pi \\times 10^{-7}) \\times 500 \\times 2 \\approx 1.26 \\times 10^{-3}\\,\\mathrm{T}$.\\\\Answer: $1.26 \\times 10^{-3}\\,\\mathrm{T}$.",
-        "rejected": "Step 1:\\\\Use the formula $B = \\mu_0 n I$ with $n = 50\\,\\mathrm{m^{-1}}$.\\\\Step 2:\\\\Substitute $n = 50\\,\\mathrm{m^{-1}}$, $I = 2\\,\\mathrm{A}$, $\\mu_0 = 4\\pi \\times 10^{-7}\\,\\mathrm{T \\cdot m/A}$.\\\\Step 3:\\\\$B = (4\\pi \\times 10^{-7}) \\times 50 \\times 2 = 1.26 \\times 10^{-4}\\,\\mathrm{T}$.\\\\Answer: $1.26 \\times 10^{-4}\\,\\mathrm{T}$."
+        "rejected": "The magnetic field inside a solenoid with $500\\,\\mathrm{turns per meter}$ and a $2\\,\\mathrm{A}$ current is $B = \\mu_{0} n I$, where $B = 4 \\pi \\times 10^{-7}\\,\\mathrm{T \\cdot m/A} \\times 500\\,\\mathrm{turns/m} \\times 2\\,\\mathrm{A} = 1.256 \\times 10^{-3}\\,\\mathrm{T}$."
     },
     {
         "question": "A $0.5\\,\\mathrm{kg}$ bullet is fired at $400\\,\\mathrm{m/s}$ into a $2\\,\\mathrm{kg}$ wooden block and remains inside. Find the final velocity of the combined system.",
         "chosen": "Step 1:\\\\Initial momentum = $0.5 \\times 400 = 200\\,\\mathrm{kg \\cdot m/s}$.\\\\Step 2:\\\\Combined mass = $0.5 + 2 = 2.5\\,\\mathrm{kg}$.\\\\Step 3:\\\\Final velocity = $\\frac{200}{2.5} = 80\\,\\mathrm{m/s}$.\\\\Answer:\\\\$80\\,\\mathrm{m/s}$.",
-        "rejected": "Step 1:\\\\Convert the bullet's mass to $0.05\\,\\mathrm{kg}$, so initial momentum = $0.05 \\times 400 = 20\\,\\mathrm{kg \\cdot m/s}$.\\\\Step 2:\\\\Combined mass = $0.05 + 2 = 2.05\\,\\mathrm{kg}$.\\\\Step 3:\\\\Final velocity = $\\frac{20}{2.05} \\approx 9.76\\,\\mathrm{m/s}$.\\\\Answer:\\\\$9.76\\,\\mathrm{m/s}$."
+        "rejected": "Using conservation of momentum, $(0.5 \\times 400 + 2 \\times 0) = 2.5 v_{\\text{final}}$, $v_{\\text{final}} = 80\\,\\mathrm{m/s}$."
     },
     {
         "question": "A thin film of oil ($n=1.40$) on water ($n=1.33$) appears dark in reflected light of $500\\,\\mathrm{nm}$ wavelength. Find the minimum thickness for destructive interference.",
         "chosen": "Step 1:\\\\For destructive interference with reflection, the condition is $2 n t = (m + \\frac{1}{2})\\lambda$ with $m = 0$ for minimum thickness.\\\\Step 2:\\\\$2 \\times 1.40 \\times t = 0.5 \\times 500\\,\\mathrm{nm} \\to 2.8 t = 250\\,\\mathrm{nm} \\to t \\approx 89.3\\,\\mathrm{nm}$.\\\\Answer:\\\\The minimum thickness is about $89\\,\\mathrm{nm}$.",
-        "rejected": "Step 1:\\\\Misapply the interference condition as $2 n t = \\lambda$.\\\\Step 2:\\\\Then $t = \\frac{500\\,\\mathrm{nm}}{2 \\times 1.40} \\approx 178.6\\,\\mathrm{nm}$.\\\\Answer:\\\\The minimum thickness is calculated to be about $179\\,\\mathrm{nm}$."
+        "rejected": "Minimum thickness: $t = \\frac{500}{4 \\times 1.40} = 89.3\\,\\mathrm{nm}$ (one phase shift)."
     },
     {
         "question": "A diffraction grating with $5000\\,\\mathrm{lines/cm}$ is illuminated by light of wavelength $600\\,\\mathrm{nm}$. Find the angle of the first-order diffraction.",
         "chosen": "Step 1:\\\\Convert the grating density: $5000\\,\\mathrm{lines/cm} = 5000 \\times 100 = 5 \\times 10^{5}\\,\\mathrm{lines/m}$, so the grating spacing $d = \\frac{1}{5 \\times 10^{5}} = 2 \\times 10^{-6}\\,\\mathrm{m}$.\\\\Step 2:\\\\For first order ($m = 1$), $d \\sin(\\theta) = \\lambda$, so $\\sin(\\theta) = \\frac{600 \\times 10^{-9}\\,\\mathrm{m}}{2 \\times 10^{-6}\\,\\mathrm{m}} = 0.3$.\\\\Step 3:\\\\$\\theta = \\sin^{-1}(0.3) \\approx 17.46^\\circ$.\\\\Answer:\\\\The first-order diffraction angle is about $17.46^\\circ$.",
-        "rejected": "Step 1:\\\\Misinterpret the grating density as $5 \\times 10^{4}\\,\\mathrm{lines/m}$, so $d = \\frac{1}{5 \\times 10^{4}} = 2 \\times 10^{-5}\\,\\mathrm{m}$.\\\\Step 2:\\\\Then $\\sin(\\theta) = \\frac{600 \\times 10^{-9}\\,\\mathrm{m}}{2 \\times 10^{-5}\\,\\mathrm{m}} = 0.03$, yielding $\\theta = \\sin^{-1}(0.03) \\approx 1.72^\\circ$.\\\\Answer:\\\\The first-order diffraction angle is about $1.72^\\circ$."
+        "rejected": "Grating spacing: $d = 2 \\times 10^{-6}\\,\\mathrm{m}$. Using $d \\sin \\theta = \\lambda$, $\\sin \\theta = \\frac{600 \\times 10^{-9}}{2 \\times 10^{-6}} = 0.3 \\implies \\theta \\approx 17.46^{\\circ}$."
     },
     {
         "question": "In an isolated system, why does entropy always increase over time?",
         "chosen": "Step 1:\\\\In an isolated system, no energy or matter is exchanged with the surroundings.\\\\Step 2:\\\\Irreversible processes within the system lead to an increase in entropy as the system evolves toward equilibrium.\\\\Answer:\\\\Entropy increases over time due to internal irreversible processes.",
-        "rejected": "Step 1:\\\\Assume that because the system is isolated, entropy remains constant.\\\\Step 2:\\\\Conclude that $\\Delta S = 0$.\\\\Answer:\\\\Entropy does not change over time in an isolated system."
+        "rejected": "In an isolated system, entropy always increases over time because there are no energy exchanges with the environment, and the system evolves towards a state of maximum entropy, which corresponds to thermodynamic equilibrium. This increase is a fundamental principle stated by the second law of thermodynamics."
     },
     {
         "question": "A $2\\,\\mathrm{kg}$ object moving at $10\\,\\mathrm{m/s}$ collides inelastically with a $3\\,\\mathrm{kg}$ object at rest. Find their final velocity.",
         "chosen": "Step 1:\\\\Total initial momentum = $2 \\times 10 + 3 \\times 0 = 20\\,\\mathrm{kg \\cdot m/s}$.\\\\Step 2:\\\\Combined mass = $2 + 3 = 5\\,\\mathrm{kg}$.\\\\Step 3:\\\\Final velocity = $\\frac{20}{5} = 4\\,\\mathrm{m/s}$.\\\\Answer:\\\\$4\\,\\mathrm{m/s}$.",
-        "rejected": "Step 1:\\\\Consider only the momentum of the $2\\,\\mathrm{kg}$ object: $2 \\times 10 = 20\\,\\mathrm{kg \\cdot m/s}$.\\\\Step 2:\\\\Assume final mass is $3\\,\\mathrm{kg}$.\\\\Step 3:\\\\Final velocity = $\\frac{20}{3} \\approx 6.67\\,\\mathrm{m/s}$.\\\\Answer:\\\\$6.67\\,\\mathrm{m/s}$."
+        "rejected": "Using conservation of momentum, $(2 \\times 10 + 3 \\times 0) = 5v$, $v = 4\\,\\mathrm{m/s}$."
     },
     {
         "question": "A convex lens produces a real image of an object placed at $25\\,\\mathrm{cm}$. If the image forms at $50\\,\\mathrm{cm}$, find the focal length of the lens.",
         "chosen": "Step 1:\\\\Use the thin lens formula: $\\frac{1}{f} = \\frac{1}{d_o} + \\frac{1}{d_i}$, with $d_o = 25\\,\\mathrm{cm}$ and $d_i = 50\\,\\mathrm{cm}$.\\\\Step 2:\\\\$\\frac{1}{f} = \\frac{1}{25} + \\frac{1}{50} = \\frac{3}{50}$.\\\\Step 3:\\\\$f = \\frac{50}{3} \\approx 16.7\\,\\mathrm{cm}$.\\\\Answer:\\\\The lens has a focal length of about $16.7\\,\\mathrm{cm}$.",
-        "rejected": "Step 1:\\\\Erroneously subtract the reciprocals: $\\frac{1}{f} = \\frac{1}{25} - \\frac{1}{50} = \\frac{1}{50}$.\\\\Step 2:\\\\Then $f = 50\\,\\mathrm{cm}$.\\\\Answer:\\\\The focal length is calculated to be $50\\,\\mathrm{cm}$."
+        "rejected": "Focal length: $\\frac{1}{f} = \\frac{1}{25} + \\frac{1}{50} = \\frac{3}{50} \\implies f = 16.67\\,\\mathrm{cm}$."
     },
     {
         "question": "A magnetic field of $0.3\\,\\mathrm{T}$ is applied to a conductor carrying $5\\,\\mathrm{A}$ in a direction perpendicular to the field. If the length of the conductor is $1.5\\,\\mathrm{m}$, find the force exerted on it.",
         "chosen": "Step 1:\\\\$F = I L B$.\\\\Step 2:\\\\$I = 5\\,\\mathrm{A}$, $L = 1.5\\,\\mathrm{m}$, $B = 0.3\\,\\mathrm{T}$.\\\\Step 3:\\\\$F = 5 \\times 1.5 \\times 0.3 = 2.25\\,\\mathrm{N}$.\\\\Answer: $2.25\\,\\mathrm{N}$.",
-        "rejected": "Step 1:\\\\Apply $F = I L B$, taking $L = 15\\,\\mathrm{m}$.\\\\Step 2:\\\\With $I = 5\\,\\mathrm{A}$ and $B = 0.3\\,\\mathrm{T}$, $F = 5 \\times 15 \\times 0.3 = 22.5\\,\\mathrm{N}$.\\\\Answer: $22.5\\,\\mathrm{N}$."
+        "rejected": "The force exerted on a conductor carrying $5\\,\\mathrm{A}$ in a magnetic field of $0.3\\,\\mathrm{T}$ perpendicular to it, with a length of $1.5\\,\\mathrm{m}$, is $F = I L B = 5\\,\\mathrm{A} \\times 1.5\\,\\mathrm{m} \\times 0.3\\,\\mathrm{T} = 2.25\\,\\mathrm{N}$."
     },
     {
         "question": "A gamma-ray photon has an energy of $1\\,\\mathrm{MeV}$. Find its wavelength.",
         "chosen": "Step 1:\\\\Convert $1\\,\\mathrm{MeV} = 1.602 \\times 10^{-13}\\,\\mathrm{J}$.\\\\Step 2:\\\\Use $\\lambda = \\frac{h c}{E} = \\frac{(6.63 \\times 10^{-34}\\,\\mathrm{J \\cdot s})(3 \\times 10^{8}\\,\\mathrm{m/s})}{1.602 \\times 10^{-13}\\,\\mathrm{J}} \\approx 1.24 \\times 10^{-12}\\,\\mathrm{m}$.\\\\Step 3:\\\\That is about $1.24\\,\\mathrm{pm}$.\\\\Answer:\\\\Wavelength $\\approx 1.24\\,\\mathrm{pm}$.",
-        "rejected": "Step 1:\\\\Using the same conversion but mistakenly using $E = 1.602 \\times 10^{-14}\\,\\mathrm{J}$.\\\\Step 2:\\\\Then $\\lambda = \\frac{(6.63 \\times 10^{-34} \\times 3 \\times 10^{8})}{1.602 \\times 10^{-14}} \\approx 1.24 \\times 10^{-11}\\,\\mathrm{m}$ ($12.4\\,\\mathrm{pm}$).\\\\Answer:\\\\Wavelength $\\approx 12.4\\,\\mathrm{pm}$."
+        "rejected": "Using $\\lambda = \\frac{hc}{E}$ with $E = 1\\,\\mathrm{MeV}$, the wavelength is calculated to be approximately $1.24\\times10^{-12}\\,\\mathrm{m}$."
     },
     {
         "question": "How does increasing entropy affect the spontaneity of a reaction?",
         "chosen": "Step 1:\\\\An increase in entropy tends to favor spontaneous processes.\\\\Step 2:\\\\If the total entropy (system plus surroundings) increases, the reaction is more likely to occur spontaneously.\\\\Answer:\\\\Higher entropy generally promotes spontaneity.",
-        "rejected": "Step 1:\\\\Assume that increasing entropy makes a reaction less spontaneous by reducing disorder.\\\\Answer:\\\\Higher entropy makes a reaction less likely to occur."
+        "rejected": "Increasing entropy, which indicates a greater degree of disorder or randomness, typically enhances the spontaneity of a process; a reaction or process is considered spontaneous if it leads to an increase in the entropy of the universe ($\\Delta S_{\\text{universe}} > 0$)."
     },
     {
         "question": "A Michelson interferometer uses a light source of $600\\,\\mathrm{nm}$ wavelength. If the mirror moves by $0.3\\,\\mathrm{mm}$, how many fringes shift?",
         "chosen": "Step 1:\\\\In a Michelson interferometer, a mirror displacement $\\Delta x$ produces a path difference of $2 \\Delta x$.\\\\Step 2:\\\\Thus, total path change = $2 \\times 0.3\\,\\mathrm{mm} = 0.6\\,\\mathrm{mm} = 6 \\times 10^{-4}\\,\\mathrm{m}$.\\\\Step 3:\\\\Number of fringes = $\\frac{\\text{path difference}}{\\lambda} = \\frac{6 \\times 10^{-4}\\,\\mathrm{m}}{600 \\times 10^{-9}\\,\\mathrm{m}} = 1000$.\\\\Answer:\\\\$1000$ fringes shift.",
-        "rejected": "Step 1:\\\\Assume the mirror displacement equals the path difference (neglecting the factor of $2$), so use $0.3\\,\\mathrm{mm} = 3 \\times 10^{-4}\\,\\mathrm{m}$.\\\\Step 2:\\\\Then number of fringes = $\\frac{3 \\times 10^{-4}\\,\\mathrm{m}}{600 \\times 10^{-9}\\,\\mathrm{m}} = 500$.\\\\Answer:\\\\$500$ fringes shift."
+        "rejected": "Fringes shifted: $N = \\frac{2 \\times 0.3\\,\\mathrm{mm}}{600\\,\\mathrm{nm}} = \\frac{6 \\times 10^{-4}}{6 \\times 10^{-7}} = 1000$."
     },
     {
         "question": "The work function of a metal is $2.5\\,\\mathrm{eV}$. Find the threshold frequency for the photoelectric effect.",
         "chosen": "Step 1:\\\\Use $f_0 = \\frac{\\phi}{h}$, where $\\phi = 2.5\\,\\mathrm{eV}$.\\\\Step 2:\\\\Convert $2.5\\,\\mathrm{eV}$ to joules: $2.5 \\times 1.602 \\times 10^{-19}\\,\\mathrm{J} \\approx 4.005 \\times 10^{-19}\\,\\mathrm{J}$.\\\\Step 3:\\\\Then $f_0 = \\frac{4.005 \\times 10^{-19}\\,\\mathrm{J}}{6.63 \\times 10^{-34}\\,\\mathrm{J \\cdot s}} \\approx 6.03 \\times 10^{14}\\,\\mathrm{Hz}$.\\\\Answer:\\\\Threshold frequency $\\approx 6.0 \\times 10^{14}\\,\\mathrm{Hz}$.",
-        "rejected": "Step 1:\\\\Use $f_0 = \\frac{\\phi}{h}$, but convert $2.5\\,\\mathrm{eV}$ using an incorrect factor: $2.5\\,\\mathrm{eV} = 2.5 \\times 1.602 \\times 10^{-18}\\,\\mathrm{J}$.\\\\Step 2:\\\\Then $f_0 = \\frac{4.005 \\times 10^{-18}\\,\\mathrm{J}}{6.63 \\times 10^{-34}\\,\\mathrm{J \\cdot s}} \\approx 6.03 \\times 10^{15}\\,\\mathrm{Hz}$.\\\\Answer:\\\\Threshold frequency $\\approx 6.0 \\times 10^{15}\\,\\mathrm{Hz}$."
+        "rejected": "The threshold frequency is found using $f_0 = \\frac{\\phi}{h}$, yielding approximately $6.04\\times10^{14}\\,\\mathrm{Hz}$ after converting $2.5\\,\\mathrm{eV}$ to Joules."
     },
     {
         "question": "A $500\\,\\mathrm{g}$ metal block is heated from $25^\\circ\\mathrm{C}$ to $75^\\circ\\mathrm{C}$. If its specific heat capacity is $0.9\\,\\mathrm{J/g^\\circ C}$, how much heat is absorbed?",
         "chosen": "Step 1:\\\\Mass $m = 500\\,\\mathrm{g}$, temperature change $\\Delta T = 75^\\circ\\mathrm{C} - 25^\\circ\\mathrm{C} = 50^\\circ\\mathrm{C}$, and specific heat $c = 0.9\\,\\mathrm{J/g^\\circ C}$.\\\\Step 2:\\\\Heat absorbed $Q = m \\times c \\times \\Delta T = 500 \\times 0.9 \\times 50 = 22,500\\,\\mathrm{J}$.\\\\Answer:\\\\The metal block absorbs $22,500\\,\\mathrm{J}$ of heat.",
-        "rejected": "Step 1:\\\\Assume the temperature change is $75^\\circ\\mathrm{C}$ instead of the difference ($75^\\circ\\mathrm{C} - 25^\\circ\\mathrm{C}$).\\\\Step 2:\\\\Then $Q = 500 \\times 0.9 \\times 75 = 33,750\\,\\mathrm{J}$.\\\\Answer:\\\\The metal block absorbs $33,750\\,\\mathrm{J}$ of heat."
+        "rejected": "Using the formula $Q = m c \\Delta T$, where $m = 500\\,\\mathrm{g}$, $c = 0.9\\,\\mathrm{J/g^{\\circ}C}$, and $\\Delta T = 50^{\\circ}\\mathrm{C}$, the heat absorbed is $Q = 500 \\times 0.9 \\times 50 = 22500\\,\\mathrm{J}$."
     },
     {
         "question": "A proton moves at $1\\%$ of the speed of light. Calculate its relativistic momentum. (Mass of proton = $1.67 \\times 10^{-27}\\,\\mathrm{kg}$)",
         "chosen": "Step 1:\\\\Use $p = \\gamma m v$. At $0.01c$, $\\gamma \\approx 1$.\\\\Step 2:\\\\$p \\approx m v = (1.67 \\times 10^{-27}\\,\\mathrm{kg})(0.01 \\times 3 \\times 10^{8}\\,\\mathrm{m/s}) = 5.01 \\times 10^{-21}\\,\\mathrm{kg \\cdot m/s}$.\\\\Answer:\\\\Relativistic momentum $\\approx 5.0 \\times 10^{-21}\\,\\mathrm{kg \\cdot m/s}$.",
-        "rejected": "Step 1:\\\\Assume $v = 0.1c$ instead of $0.01c$.\\\\Step 2:\\\\$p = (1.67 \\times 10^{-27}\\,\\mathrm{kg})(0.1 \\times 3 \\times 10^{8}\\,\\mathrm{m/s}) = 5.01 \\times 10^{-20}\\,\\mathrm{kg \\cdot m/s}$.\\\\Answer:\\\\Relativistic momentum $\\approx 5.0 \\times 10^{-20}\\,\\mathrm{kg \\cdot m/s}$."
+        "rejected": "Relativistic momentum is given by $p = \\gamma m v$, where $\\gamma = \\frac{1}{\\sqrt{1 - \\frac{v^{2}}{c^{2}}}}$. For $v = 0.01c$, $\\gamma \\approx 1.00005$. So, $p = 1.00005 \\times 1.67 \\times 10^{-27}\\,\\mathrm{kg} \\times 0.01c \\approx 5.01 \\times 10^{-21}\\,\\mathrm{kg \\cdot m/s}$."
     },
     {
         "question": "A mass $M$ is hanging from a light string, while another mass $m$ is on a smooth horizontal surface, connected through a pulley. Find the acceleration of the system in terms of $M$, $m$, and $g$.",
         "chosen": "Step 1:\\\\For the hanging mass: $M g - T = M a$.\\\\For the mass on the surface: $T = m a$.\\\\Step 2:\\\\Eliminate $T$: $M g - m a = M a$, so $a = \\frac{M g}{M + m}$.\\\\Answer:\\\\$a = \\frac{M g}{M + m}$.",
-        "rejected": "Step 1:\\\\For the hanging mass: $M g - T = M a$.\\\\For the mass on the surface: $T = m a$.\\\\Step 2:\\\\Eliminate $T$ and obtain $a = \\frac{m g}{M + m}$.\\\\Answer:\\\\$a = \\frac{m g}{M + m}$."
+        "rejected": "The acceleration is determined by balancing the forces: $Mg - T = Ma$ for the hanging mass and $T = ma$ for the horizontal mass. Solving these equations gives the correct acceleration $a = \\frac{Mg}{M + m}$."
     },
     {
         "question": "Two point charges of $+3\\,\\mu\\mathrm{C}$ and $-2\\,\\mu\\mathrm{C}$ are separated by $0.5\\,\\mathrm{m}$. Calculate the electrostatic force between them. ($k = 9 \\times 10^{9}\\,\\mathrm{N \\cdot m^2 / C^2}$)",
         "chosen": "Step 1:\\\\Identify $q_1 = +3 \\times 10^{-6}\\,\\mathrm{C}$, $q_2 = -2 \\times 10^{-6}\\,\\mathrm{C}$, $r = 0.5\\,\\mathrm{m}$.\\\\Step 2:\\\\Use Coulomb's law (magnitude): $F = k \\times \\frac{|q_1 q_2|}{r^2}$.\\\\Step 3:\\\\Compute $|q_1 q_2| = (3 \\times 10^{-6})(2 \\times 10^{-6}) = 6 \\times 10^{-12}$.\\\\Step 4:\\\\Substitute: $F = (9 \\times 10^{9}) \\times \\frac{6 \\times 10^{-12}}{(0.5)^2} = 0.216\\,\\mathrm{N}$.\\\\Answer: $0.216\\,\\mathrm{N}$ (attractive).",
-        "rejected": "Step 1:\\\\Convert the charges: $3\\,\\mu\\mathrm{C} = 3 \\times 10^{-3}\\,\\mathrm{C}$ and $2\\,\\mu\\mathrm{C} = 2 \\times 10^{-3}\\,\\mathrm{C}$.\\\\Step 2:\\\\Calculate $|q_1 q_2| = (3 \\times 10^{-3}\\,\\mathrm{C}) \\times (2 \\times 10^{-3}\\,\\mathrm{C}) = 6 \\times 10^{-6}$.\\\\Step 3:\\\\Apply Coulomb's law: $F = (9 \\times 10^{9}\\,\\mathrm{N \\cdot m^2 / C^2}) \\times \\frac{6 \\times 10^{-6}}{(0.5)^2}$.\\\\Step 4:\\\\Since $(0.5)^2 = 0.25$, $F = \\frac{54 \\times 10^{3}}{0.25} = 216000\\,\\mathrm{N}$.\\\\Answer: $2.16 \\times 10^{5}\\,\\mathrm{N}$."
+        "rejected": "Using Coulomb\u2019s law, the force between charges of $+3\\,\\mu\\mathrm{C}$ and $-2\\,\\mu\\mathrm{C}$ separated by $0.5\\,\\mathrm{m}$ is calculated as $F = (9 \\times 10^{9}\\,\\mathrm{N \\cdot m^{2}/C^{2}}) \\times (3 \\times 10^{-6}\\,\\mathrm{C}) \\times (-2 \\times 10^{-6}\\,\\mathrm{C}) / (0.5\\,\\mathrm{m})^{2} = 0.216\\,\\mathrm{N}$. The negative sign indicates attraction."
     },
     {
         "question": "An observer sees a rainbow. If sunlight is refracted through a water droplet ($n=1.33$) at an angle of $42^\\circ$, find the deviation angle of red light.",
         "chosen": "Step 1:\\\\For a primary rainbow, the central bow angle is about $42^\\circ$ from the antisolar point. This deviation is characteristic for red light.\\\\Answer:\\\\The deviation angle is about $42^\\circ$ for red light.",
-        "rejected": "Step 1:\\\\Assume that red light is deviated by adding an extra $8^\\circ$ to the $42^\\circ$ refraction, giving a deviation of $50^\\circ$.\\\\Answer:\\\\The deviation angle is calculated to be about $50^\\circ$."
+        "rejected": "Deviation angle: $\\delta = 180^{\\circ} - 2 \\times 42^{\\circ} + 4 \\times \\theta_{\\text{refraction}} \\approx 138^{\\circ}$."
     },
     {
         "question": "A diffraction grating produces a second-order maximum at $30^\\circ$ for light of wavelength $550\\,\\mathrm{nm}$. Find the spacing between adjacent lines on the grating.",
         "chosen": "Step 1:\\\\For a grating, the equation is $d \\sin(\\theta) = m\\lambda$.\\\\Here, $\\theta = 30^\\circ$, $m = 2$, and $\\lambda = 550\\,\\mathrm{nm}$.\\\\Step 2:\\\\Since $\\sin(30^\\circ) = 0.5$, $d \\times 0.5 = 2 \\times 550\\,\\mathrm{nm}$, so $d = \\frac{1100\\,\\mathrm{nm}}{0.5} = 2200\\,\\mathrm{nm} = 2.2 \\times 10^{-6}\\,\\mathrm{m}$.\\\\Answer:\\\\The line spacing is $2.2 \\times 10^{-6}\\,\\mathrm{m}$.",
-        "rejected": "Step 1:\\\\Using the grating equation with $m = 2$ and $\\sin(30^\\circ) = 0.5$, mistakenly compute $d$ as $\\frac{2 \\times 550\\,\\mathrm{nm}}{0.5} = 1100\\,\\mathrm{nm}$ instead of doubling it.\\\\Step 2:\\\\Thus, $d$ is erroneously computed as $1.1 \\times 10^{-6}\\,\\mathrm{m}$.\\\\Answer:\\\\The spacing between adjacent lines is calculated to be $1.1 \\times 10^{-6}\\,\\mathrm{m}$."
+        "rejected": "Grating equation: $d = \\frac{2 \\times 550 \\times 10^{-9}}{\\sin 30^{\\circ}} = \\frac{1.1 \\times 10^{-6}}{0.5} = 2.2 \\times 10^{-6}\\,\\mathrm{m}$."
     },
     {
         "question": "A concave lens has a focal length of $-20\\,\\mathrm{cm}$. If an object is placed $10\\,\\mathrm{cm}$ in front of it, find the image distance and magnification.",
         "chosen": "Step 1:\\\\Use the lens equation: $\\frac{1}{f} = \\frac{1}{d_o} + \\frac{1}{d_i}$, where $f = -20\\,\\mathrm{cm}$ (negative for a concave/diverging lens) and $d_o = 10\\,\\mathrm{cm}$.\\\\Step 2:\\\\$\\frac{1}{-20} = \\frac{1}{10} + \\frac{1}{d_i}$.\\\\So $\\frac{1}{d_i} = -\\frac{1}{20} - \\frac{1}{10} = -\\frac{3}{20} \\implies d_i = -\\frac{20}{3} \\approx -6.67\\,\\mathrm{cm}$.\\\\(The negative sign indicates the image is virtual and on the same side as the object.)\\\\Step 3:\\\\Magnification $m = \\frac{d_i}{d_o} = \\frac{-6.67}{10} = -0.67$.\\\\Answer:\\\\The image is $6.67\\,\\mathrm{cm}$ from the lens (virtual), and the magnification is about $-0.67$ (reduced and upright).",
-        "rejected": "Step 1:\\\\Apply the lens equation with $f = -20\\,\\mathrm{cm}$ and $d_o = 10\\,\\mathrm{cm}$, but mistakenly compute $\\frac{1}{d_i} = -\\frac{1}{20} + \\frac{1}{10} = \\frac{1}{20}$.\\\\Step 2:\\\\Then $d_i = 20\\,\\mathrm{cm}$, implying a real image.\\\\Step 3:\\\\Magnification $m = \\frac{20}{10} = 2$.\\\\Answer:\\\\The image is $20\\,\\mathrm{cm}$ from the lens with a magnification of $2$."
+        "rejected": "For a concave lens: $\\frac{1}{-20} = \\frac{1}{d_{i}} + \\frac{1}{10} \\implies d_{i} = -6.67\\,\\mathrm{cm}$. The virtual image has a magnification of $0.67$."
     },
     {
         "question": "A $0.1\\,\\mathrm{kg}$ ball moving at $5\\,\\mathrm{m/s}$ hits a wall and bounces back at $4\\,\\mathrm{m/s}$. Find the change in momentum.",
         "chosen": "Step 1:\\\\Initial momentum $p_i = 0.1 \\times 5 = 0.5\\,\\mathrm{kg \\cdot m/s}$.\\\\Step 2:\\\\Final momentum $p_f = 0.1 \\times (-4) = -0.4\\,\\mathrm{kg \\cdot m/s}$.\\\\Step 3:\\\\$\\Delta p = p_f - p_i = -0.4 - 0.5 = -0.9\\,\\mathrm{kg \\cdot m/s}$ (magnitude $0.9\\,\\mathrm{kg \\cdot m/s}$, opposite direction).\\\\Answer:\\\\$-0.9\\,\\mathrm{kg \\cdot m/s}$.",
-        "rejected": "Step 1:\\\\Calculate initial momentum $p_i = 0.1 \\times 5 = 0.5\\,\\mathrm{kg \\cdot m/s}$.\\\\Step 2:\\\\Calculate final momentum $p_f = 0.1 \\times 4 = 0.4\\,\\mathrm{kg \\cdot m/s}$.\\\\Step 3:\\\\Change in momentum $\\Delta p = p_f + p_i = 0.4 + 0.5 = 0.9\\,\\mathrm{kg \\cdot m/s}$.\\\\Answer:\\\\$0.9\\,\\mathrm{kg \\cdot m/s}$."
+        "rejected": "Change in momentum = $m(v_{\\text{final}} - v_{\\text{initial}}) = 0.1(-4 - 5) = -0.9\\,\\mathrm{kg\\cdot m/s}$ (magnitude $0.9\\,\\mathrm{kg\\cdot m/s}$)."
     },
     {
         "question": "Calculate the energy required to completely ionize a hydrogen atom from its ground state.",
         "chosen": "Step 1:\\\\The ground state energy of hydrogen is $-2.18\\times10^{-18}\\,\\mathrm{J}$ (since $-13.6\\,\\mathrm{eV} \\approx -2.18\\times10^{-18}\\,\\mathrm{J}$).\\\\Step 2:\\\\To ionize, supply $2.18\\times10^{-18}\\,\\mathrm{J}$ to raise the energy to $0\\,\\mathrm{J}$.\\\\Step 3:\\\\Convert the energy to electron volts: $\\frac{2.18\\times10^{-18}\\,\\mathrm{J}}{1.602\\times10^{-19}\\,\\mathrm{J/eV}} \\approx 13.6\\,\\mathrm{eV}$.\\\\Answer:\\\\Ionization energy = $2.18\\times10^{-18}\\,\\mathrm{J}$ ($13.6\\,\\mathrm{eV}$).",
-        "rejected": "Step 1:\\\\Assume the ground state energy is $-1.36\\,\\mathrm{eV}$.\\\\Step 2:\\\\Then the energy needed is $1.36\\,\\mathrm{eV}$.\\\\Answer:\\\\Ionization energy = $1.36\\,\\mathrm{eV}$."
+        "rejected": "The ionization energy of hydrogen is $13.6\\,\\mathrm{eV}$, which converts to approximately $2.18\\times10^{-18}\\,\\mathrm{J}$."
     },
     {
-        "question": "A muon decays with a proper lifetime of $2.2\\,\\mu\\mathrm{s}$. If it moves at $0.98c$, how long does it survive in the Earth’s frame?",
+        "question": "A muon decays with a proper lifetime of $2.2\\,\\mu\\mathrm{s}$. If it moves at $0.98c$, how long does it survive in the Earth\u2019s frame?",
         "chosen": "Step 1:\\\\Proper lifetime $\\tau_0 = 2.2 \\times 10^{-6}\\,\\mathrm{s}$.\\\\Step 2:\\\\Calculate $\\gamma = \\frac{1}{\\sqrt{1 - 0.98^2}} \\approx 5.03$.\\\\Step 3:\\\\Observed lifetime $\\tau = \\gamma \\tau_0 \\approx 5.03 \\times 2.2 \\times 10^{-6}\\,\\mathrm{s} \\approx 1.11 \\times 10^{-5}\\,\\mathrm{s}$.\\\\Answer:\\\\Muon lifetime $\\approx 1.11 \\times 10^{-5}\\,\\mathrm{s}$.",
-        "rejected": "Step 1:\\\\Take proper lifetime $\\tau_0 = 2.2 \\times 10^{-6}\\,\\mathrm{s}$.\\\\Step 2:\\\\Assume $\\gamma = 10$.\\\\Step 3:\\\\Then $\\tau = 10 \\times 2.2 \\times 10^{-6}\\,\\mathrm{s} = 2.2 \\times 10^{-5}\\,\\mathrm{s}$.\\\\Answer:\\\\Muon lifetime $\\approx 2.2 \\times 10^{-5}\\,\\mathrm{s}$."
+        "rejected": "Using time dilation with $\\gamma \\approx 5.03$ for a speed of $0.98c$, the muon\u2019s lifetime in the Earth\u2019s frame is approximately $11.1\\,\\mu\\mathrm{s}$."
     },
     {
         "question": "A $10\\,\\mathrm{kg}$ box is placed on a rough surface with a static friction coefficient of $0.4$. If a $30\\,\\mathrm{N}$ horizontal force is applied, will the box move? ($g = 9.8\\,\\mathrm{m/s^2}$)",
         "chosen": "Step 1:\\\\Maximum static friction $f_s = \\mu_s \\times m \\times g = 0.4 \\times 10 \\times 9.8 = 39.2\\,\\mathrm{N}$.\\\\Step 2:\\\\Since $30\\,\\mathrm{N} < 39.2\\,\\mathrm{N}$, the box does not move.\\\\Answer:\\\\No, it remains at rest.",
-        "rejected": "Step 1:\\\\Calculate maximum static friction $f_s = 0.4 \\times 10 \\times 9.8 = 39.2\\,\\mathrm{N}$.\\\\Step 2:\\\\Since $30\\,\\mathrm{N}$ is considered greater than $39.2\\,\\mathrm{N}$, the box moves.\\\\Answer:\\\\Yes, it moves."
+        "rejected": "The maximum static friction force $f = \\mu \\cdot mg = 0.4 \\times 10 \\times 9.8 = 39.2\\,\\mathrm{N}$. Since the applied force ($30\\,\\mathrm{N}$) is less than $39.2\\,\\mathrm{N}$, the box will not move."
     },
     {
         "question": "A wire of length $2\\,\\mathrm{m}$ carries a current of $3\\,\\mathrm{A}$ in a magnetic field of $0.5\\,\\mathrm{T}$. Find the force on the wire if the field is perpendicular to the current.",
         "chosen": "Step 1:\\\\$F = I L B$.\\\\Step 2:\\\\Substitute $I = 3\\,\\mathrm{A}$, $L = 2\\,\\mathrm{m}$, $B = 0.5\\,\\mathrm{T}$: $F = 3 \\times 2 \\times 0.5 = 3\\,\\mathrm{N}$.\\\\Answer: $3\\,\\mathrm{N}$.",
-        "rejected": "Step 1:\\\\Apply $F = I L B$, taking $L = 0.2\\,\\mathrm{m}$.\\\\Step 2:\\\\With $I = 3\\,\\mathrm{A}$ and $B = 0.5\\,\\mathrm{T}$, $F = 3 \\times 0.2 \\times 0.5 = 0.3\\,\\mathrm{N}$.\\\\Answer: $0.3\\,\\mathrm{N}$."
+        "rejected": "The force on a $2\\,\\mathrm{m}$ wire carrying a $3\\,\\mathrm{A}$ current in a $0.5\\,\\mathrm{T}$ magnetic field perpendicular to the wire is $F = I L B = 3\\,\\mathrm{A} \\times 2\\,\\mathrm{m} \\times 0.5\\,\\mathrm{T} = 3\\,\\mathrm{N}$."
     },
     {
         "question": "A Carnot engine operates between $600\\,\\mathrm{K}$ and $300\\,\\mathrm{K}$. What is its maximum theoretical efficiency?",
         "chosen": "Step 1:\\\\Carnot efficiency $\\eta = 1 - \\frac{T_L}{T_H}$.\\\\Step 2:\\\\Substitute $T_H = 600\\,\\mathrm{K}$ and $T_L = 300\\,\\mathrm{K}$: $\\eta = 1 - \\frac{300}{600} = 0.5$ or $50\\%$.\\\\Answer:\\\\The maximum theoretical efficiency is $50\\%$.",
-        "rejected": "Step 1:\\\\Erroneously compute efficiency as $1 - \\frac{T_H}{T_L} = 1 - \\frac{600}{300} = -1$.\\\\Answer:\\\\The maximum efficiency is $-100\\%$."
+        "rejected": "The maximum efficiency of a Carnot engine operating between temperatures of $600\\,\\mathrm{K}$ (hot reservoir) and $300\\,\\mathrm{K}$ (cold reservoir) is calculated by $\\eta = 1 - \\frac{T_{c}}{T_{h}} = 1 - \\frac{300}{600} = 50\\%$."
     },
     {
         "question": "An electron is accelerated to near light speed. Show how its relativistic mass changes compared to its rest mass.",
         "chosen": "Step 1:\\\\Relativistic mass $m = \\gamma m_0$, with $\\gamma = \\frac{1}{\\sqrt{1 - \\frac{v^2}{c^2}}}$.\\\\Step 2:\\\\As $v \\to c$, $\\gamma$ increases dramatically, so $m$ increases without bound.\\\\Answer:\\\\Relativistic mass grows by the factor $\\gamma$, becoming very large near $c$.",
-        "rejected": "Step 1:\\\\Assume $m = \\gamma m_0$ but take $\\gamma \\approx 0.5$ for near light speed.\\\\Step 2:\\\\Then $m$ becomes $0.5 m_0$, which is a decrease.\\\\Answer:\\\\Relativistic mass decreases to half the rest mass."
+        "rejected": "The relativistic mass is given by $m = \\frac{m_0}{\\sqrt{1-\\frac{v^2}{c^2}}}$. As $v$ approaches $c$, the mass increases significantly compared to the rest mass."
     },
     {
         "question": "A coil of resistance $2\\,\\Omega$ and inductance $0.2\\,\\mathrm{H}$ is connected to a $10\\,\\mathrm{V}$ battery. Calculate the time constant and find the current after $0.1\\,\\mathrm{s}$.",
         "chosen": "Step 1:\\\\$\\tau = \\frac{L}{R} = \\frac{0.2}{2} = 0.1\\,\\mathrm{s}$.\\\\Step 2:\\\\Steady-state current $I_0 = \\frac{V}{R} = \\frac{10}{2} = 5\\,\\mathrm{A}$.\\\\Step 3:\\\\$i(t) = 5 \\times [1 - e^{-t/\\tau}]$.\\\\At $t = 0.1\\,\\mathrm{s}$: $i(0.1) \\approx 5 \\times [1 - e^{-1}] \\approx 5 \\times 0.6321 = 3.16\\,\\mathrm{A}$.\\\\Answer: $\\tau = 0.1\\,\\mathrm{s}$; $i(0.1\\,\\mathrm{s}) \\approx 3.16\\,\\mathrm{A}$.",
-        "rejected": "Step 1:\\\\Use $\\tau = \\frac{R}{L}$ with $R = 2\\,\\Omega$ and $L = 0.2\\,\\mathrm{H}$, so $\\tau = \\frac{2}{0.2} = 10\\,\\mathrm{s}$.\\\\Step 2:\\\\Steady-state current $I_0 = \\frac{V}{R} = \\frac{10}{2} = 5\\,\\mathrm{A}$.\\\\Step 3:\\\\$i(t) = 5 \\times [1 - e^{-t/\\tau}]$ with $t = 0.1\\,\\mathrm{s}$ and $\\tau = 10\\,\\mathrm{s}$, then $i(0.1) = 5 \\times [1 - e^{-0.01}] \\approx 5 \\times 0.01 = 0.05\\,\\mathrm{A}$.\\\\Answer: $\\tau = 10\\,\\mathrm{s}$; $i(0.1\\,\\mathrm{s}) \\approx 0.05\\,\\mathrm{A}$."
+        "rejected": "In an RL circuit with a $2\\,\\Omega$ resistor and $0.2\\,\\mathrm{H}$ inductor connected to a $10\\,\\mathrm{V}$ battery, the time constant $\\tau = \\frac{L}{R} = \\frac{0.2\\,\\mathrm{H}}{2\\,\\Omega} = 0.1\\,\\mathrm{s}$. The current after $0.1\\,\\mathrm{s}$ is $I(t) = \\frac{V}{R} [1 - e^{-t/\\tau}] = \\frac{10\\,\\mathrm{V}}{2\\,\\Omega} [1 - e^{-0.1\\,\\mathrm{s}/0.1\\,\\mathrm{s}}] \\approx 3.16\\,\\mathrm{A}$."
     },
     {
         "question": "A $1\\,\\mathrm{kg}$ sample of water is heated from $20^\\circ\\mathrm{C}$ to $80^\\circ\\mathrm{C}$. Given that the specific heat of water is $4.18\\,\\mathrm{J/g^\\circ C}$, calculate the heat required.",
         "chosen": "Step 1:\\\\Convert mass: $1\\,\\mathrm{kg} = 1000\\,\\mathrm{g}$.\\\\Step 2:\\\\Calculate the temperature change: $\\Delta T = 80^\\circ\\mathrm{C} - 20^\\circ\\mathrm{C} = 60^\\circ\\mathrm{C}$.\\\\Step 3:\\\\Compute $Q = m \\times c \\times \\Delta T = 1000\\,\\mathrm{g} \\times 4.18\\,\\mathrm{J/g^\\circ C} \\times 60^\\circ\\mathrm{C} = 250,800\\,\\mathrm{J}$.\\\\Answer:\\\\The required heat is approximately $2.51 \\times 10^{5}\\,\\mathrm{J}$.",
-        "rejected": "Step 1:\\\\Mistakenly assume $1\\,\\mathrm{kg}$ equals $1\\,\\mathrm{g}$.\\\\Step 2:\\\\Then $Q = 1\\,\\mathrm{g} \\times 4.18\\,\\mathrm{J/g^\\circ C} \\times 60^\\circ\\mathrm{C} = 250.8\\,\\mathrm{J}$.\\\\Answer:\\\\The heat required is calculated to be $250.8\\,\\mathrm{J}$."
+        "rejected": "To heat $1\\,\\mathrm{kg}$ ($1000\\,\\mathrm{g}$) of water from $20^{\\circ}\\mathrm{C}$ to $80^{\\circ}\\mathrm{C}$, the heat required is calculated using $Q = m c \\Delta T$ where $c = 4.18\\,\\mathrm{J/g^{\\circ}C}$ and $\\Delta T = 60^{\\circ}\\mathrm{C}$, resulting in $Q = 1000 \\times 4.18 \\times 60 = 250800\\,\\mathrm{J}$."
     },
     {
         "question": "An electron and a proton have the same kinetic energy. Compare their de Broglie wavelengths.",
-        "chosen": "Step 1:\\\\For a given kinetic energy $K$, momentum $p = \\sqrt{2 m K}$.\\\\Step 2:\\\\Since $m_e \\ll m_p$, the electron has a much smaller momentum than the proton.\\\\Step 3:\\\\Thus, $\\lambda = \\frac{h}{p}$ is larger for the electron than for the proton.\\\\Answer:\\\\The electron’s de Broglie wavelength is greater than the proton’s.",
-        "rejected": "Step 1:\\\\Assume both have the same momentum (ignoring mass differences).\\\\Step 2:\\\\Then $\\lambda$ would be equal for both particles.\\\\Answer:\\\\The electron’s and proton’s de Broglie wavelengths are the same."
+        "chosen": "Step 1:\\\\For a given kinetic energy $K$, momentum $p = \\sqrt{2 m K}$.\\\\Step 2:\\\\Since $m_e \\ll m_p$, the electron has a much smaller momentum than the proton.\\\\Step 3:\\\\Thus, $\\lambda = \\frac{h}{p}$ is larger for the electron than for the proton.\\\\Answer:\\\\The electron\u2019s de Broglie wavelength is greater than the proton\u2019s.",
+        "rejected": "Given that $\\lambda = \\frac{h}{\\sqrt{2mK}}$ and the proton\u2019s mass is about $1836\\,m_e$, the electron\u2019s de Broglie wavelength is roughly $42.8$ times larger than the proton's."
     },
     {
         "question": "Explain the relationship between Gibbs free energy and spontaneity of a reaction.",
         "chosen": "Step 1:\\\\Gibbs free energy is defined as $G = H - TS$.\\\\Step 2:\\\\A reaction is spontaneous at constant temperature and pressure if the change in Gibbs free energy, $\\Delta G$, is negative.\\\\Answer:\\\\A negative $\\Delta G$ indicates a spontaneous reaction.",
-        "rejected": "Step 1:\\\\Erroneously define Gibbs free energy as $G = H + TS$.\\\\Step 2:\\\\Then conclude that a reaction is spontaneous if $\\Delta G$ is positive.\\\\Answer:\\\\A reaction is spontaneous if $\\Delta G$ is positive."
+        "rejected": "Gibbs free energy ($G$), defined as $G = H - TS$ where $H$ is enthalpy and $S$ is entropy, provides a criterion for spontaneity at constant temperature and pressure. A reaction is spontaneous if $\\Delta G$ is negative, which indicates that the process can proceed without needing external energy."
     },
     {
         "question": "A projectile is thrown upward with an initial speed of $20\\,\\mathrm{m/s}$. Given $g = 9.8\\,\\mathrm{m/s^2}$, what is the maximum height it reaches?",
         "chosen": "Step 1:\\\\At maximum height, final velocity = $0$.\\\\Step 2:\\\\Use $v^2 = v_0^2 - 2 g h \\rightarrow 0 = 20^2 - 2 \\times 9.8 \\times h$, so $h = \\frac{400}{19.6} \\approx 20.4\\,\\mathrm{m}$.\\\\Answer:\\\\$20.4\\,\\mathrm{m}$.",
-        "rejected": "Step 1:\\\\At maximum height, final velocity = $0$.\\\\Step 2:\\\\Use $v^2 = v_0^2 - 2 g h$ with $g$ taken as $10\\,\\mathrm{m/s^2}$: $0 = 20^2 - 2 \\times 10 \\times h$, so $h = \\frac{400}{20} = 20\\,\\mathrm{m}$.\\\\Answer:\\\\$20\\,\\mathrm{m}$."
+        "rejected": "The maximum height can be calculated using the formula $h = v^2 / (2g)$, where $v = 20\\,\\mathrm{m/s}$. Thus, $h = 20^2 / (2 \\times 9.8) \\approx 20.41\\,\\mathrm{meters}$."
     },
     {
         "question": "Define entropy and explain its significance in thermodynamics.",
         "chosen": "Step 1:\\\\Entropy is a measure of disorder or randomness in a system.\\\\Step 2:\\\\It indicates the number of microscopic configurations that correspond to a thermodynamic system's macroscopic state and predicts the direction of spontaneous processes.\\\\Answer:\\\\Higher entropy generally means more disorder, and the second law of thermodynamics states that total entropy tends to increase in an isolated system.",
-        "rejected": "Step 1:\\\\Define entropy as a measure of the total energy contained in a system.\\\\Step 2:\\\\Conclude that a higher entropy means higher energy content.\\\\Answer:\\\\Entropy is a measure of energy content."
+        "rejected": "Entropy, a measure of disorder or randomness in a system, plays a crucial role in determining the direction of spontaneous processes; it increases in spontaneous processes according to the second law of thermodynamics."
     },
     {
         "question": "An electron moving in a uniform magnetic field describes a circular motion. Derive the expression for its radius in terms of mass, charge, velocity, and magnetic field strength.",
         "chosen": "Step 1:\\\\Velocity components: $v_{\\perp} = v \\sin\\theta$, $v_{\\parallel} = v \\cos\\theta$.\\\\Step 2:\\\\Circular motion from $v_{\\perp}$ gives a radius $r = \\frac{m v \\sin\\theta}{qB}$.\\\\Step 3:\\\\Uniform motion from $v_{\\parallel}$ gives the pitch of the helix.\\\\Hence the path is helical.",
-        "rejected": "Step 1:\\\\Resolve the velocity into components, taking $v_{\\perp} = v \\cos\\theta$ and $v_{\\parallel} = v \\sin\\theta$.\\\\Step 2:\\\\Use the circular motion formula with $r = \\frac{m v \\cos\\theta}{qB}$.\\\\Step 3:\\\\Conclude that the particle moves in a circular path.\\\\Answer: $r = \\frac{m v \\cos\\theta}{qB}$ and the trajectory is circular."
+        "rejected": "The radius of an electron's circular motion in a magnetic field is given by the formula $r = \\frac{m v}{q B}$, where $m$ is the mass of the electron, $v$ is its velocity, $q$ is its charge, and $B$ is the magnetic field strength."
     },
     {
         "question": "An X-ray has a frequency of $3 \\times 10^{17}\\,\\mathrm{Hz}$. Find its wavelength.",
         "chosen": "Step 1:\\\\Use $\\lambda = \\frac{c}{f}$.\\\\Step 2:\\\\$\\lambda = \\frac{3 \\times 10^{8}\\,\\mathrm{m/s}}{3 \\times 10^{17}\\,\\mathrm{Hz}} = 1 \\times 10^{-9}\\,\\mathrm{m}$.\\\\Step 3:\\\\That equals $1\\,\\mathrm{nm}$.\\\\Answer:\\\\Wavelength is $1\\,\\mathrm{nm}$.",
-        "rejected": "Step 1:\\\\Use $\\lambda = \\frac{c}{f}$ with $f$ taken as $3 \\times 10^{18}\\,\\mathrm{Hz}$.\\\\Step 2:\\\\$\\lambda = \\frac{3 \\times 10^{8}\\,\\mathrm{m/s}}{3 \\times 10^{18}\\,\\mathrm{Hz}} = 1 \\times 10^{-10}\\,\\mathrm{m}$.\\\\Step 3:\\\\That equals $0.1\\,\\mathrm{nm}$.\\\\Answer:\\\\Wavelength is $0.1\\,\\mathrm{nm}$."
+        "rejected": "The wavelength of a wave is given by $\\lambda = \\frac{c}{f}$. Substituting the given values: $\\lambda = \\frac{3 \\times 10^{8}\\,\\mathrm{m/s}}{3 \\times 10^{17}\\,\\mathrm{Hz}}$, resulting in $\\lambda = 1 \\times 10^{-9}\\,\\mathrm{m}$."
     },
     {
         "question": "A camera lens with a focal length of $50\\,\\mathrm{mm}$ is focused on an object $2\\,\\mathrm{m}$ away. Find the image distance and magnification.",
         "chosen": "Step 1:\\\\Use the lens formula: $\\frac{1}{f} = \\frac{1}{d_o} + \\frac{1}{d_i}$, where $f = 50\\,\\mathrm{mm}$ and $d_o = 2000\\,\\mathrm{mm}$.\\\\Step 2:\\\\$\\frac{1}{50} = \\frac{1}{2000} + \\frac{1}{d_i} \\implies \\frac{1}{d_i} = \\frac{1}{50} - \\frac{1}{2000} = \\frac{40 - 1}{2000} = \\frac{39}{2000} \\approx 0.0195$, so $d_i \\approx 51.3\\,\\mathrm{mm}$.\\\\Step 3:\\\\Magnification $m = \\frac{d_i}{d_o} \\approx \\frac{51.3}{2000} \\approx 0.0256$.\\\\Answer:\\\\The image distance is about $51.3\\,\\mathrm{mm}$ and the magnification is approximately $0.026$ (about $1/39$).",
-        "rejected": "Step 1:\\\\Erroneously add the reciprocals: $\\frac{1}{d_i} = \\frac{1}{50} + \\frac{1}{2000} = \\frac{41}{2000} \\approx 0.0205$, so $d_i \\approx 48.8\\,\\mathrm{mm}$.\\\\Step 2:\\\\Then $m = \\frac{48.8}{2000} \\approx 0.0244$.\\\\Answer:\\\\The image distance is calculated to be about $48.8\\,\\mathrm{mm}$ and the magnification about $0.024$."
+        "rejected": "Using the lens formula: $\\frac{1}{50} = \\frac{1}{2000} + \\frac{1}{d_{i}} \\implies d_{i} \\approx 51.3\\,\\mathrm{mm}$, magnification $\\approx -0.0256$."
     },
     {
         "question": "Prove that entropy change for an irreversible process is always greater than zero.",
         "chosen": "Step 1:\\\\For an irreversible process, the total entropy change (system plus surroundings) is positive due to dissipative effects.\\\\Step 2:\\\\This means that irreversible processes generate additional entropy, making $\\Delta S_{\\text{total}} > 0$.\\\\Answer:\\\\Entropy increases in irreversible processes, so $\\Delta S_{\\text{total}} > 0$.",
-        "rejected": "Step 1:\\\\Assume that energy conservation implies no change in entropy for an irreversible process.\\\\Step 2:\\\\Conclude that $\\Delta S_{\\text{total}} = 0$.\\\\Answer:\\\\The entropy change for an irreversible process is zero."
+        "rejected": "The entropy change for an irreversible process is always greater than zero because such processes increase the overall entropy of the universe. This increase in entropy is a manifestation of the second law of thermodynamics, which states that the total entropy of an isolated system can never decrease over time."
     },
     {
         "question": "A $2\\,\\mathrm{m}$ long rod of mass $4\\,\\mathrm{kg}$ is fixed at one end. If a $10\\,\\mathrm{N}$ force is applied at the free end, find the torque about the pivot.",
         "chosen": "Step 1:\\\\Torque $\\tau = F \\times \\text{distance} = 10\\,\\mathrm{N} \\times 2\\,\\mathrm{m} = 20\\,\\mathrm{N \\cdot m}$.\\\\Answer:\\\\$20\\,\\mathrm{N \\cdot m}$.",
-        "rejected": "Step 1:\\\\Calculate torque as $\\tau = F \\times (\\text{distance})^2 = 10\\,\\mathrm{N} \\times (2\\,\\mathrm{m})^2 = 10 \\times 4 = 40\\,\\mathrm{N \\cdot m}$.\\\\Answer:\\\\$40\\,\\mathrm{N \\cdot m}$."
+        "rejected": "The torque $\\tau$ can be calculated by $\\tau = r \\cdot F$, where $r = 2\\,\\mathrm{m}$ and $F = 10\\,\\mathrm{N}$. Thus, $\\tau = 2 \\times 10 = 20\\,\\mathrm{N\\cdot m}$."
     },
     {
         "question": "A rectangular loop ($0.2\\,\\mathrm{m} \\times 0.1\\,\\mathrm{m}$) is moving into a $0.5\\,\\mathrm{T}$ magnetic field at $2\\,\\mathrm{m/s}$. Find the induced emf in the loop.",
         "chosen": "Step 1:\\\\Assume the $0.2\\,\\mathrm{m}$ side is perpendicular to the velocity.\\\\Step 2:\\\\$\\varepsilon = B \\times L \\times v = 0.5 \\times 0.2 \\times 2 = 0.2\\,\\mathrm{V}$.\\\\Answer: $0.2\\,\\mathrm{V}$.",
-        "rejected": "Step 1:\\\\Use the induced emf formula $\\varepsilon = B L v$, taking the length as $0.1\\,\\mathrm{m}$.\\\\Step 2:\\\\With $B = 0.5\\,\\mathrm{T}$ and $v = 2\\,\\mathrm{m/s}$, $\\varepsilon = 0.5 \\times 0.1 \\times 2 = 0.1\\,\\mathrm{V}$.\\\\Answer: $0.1\\,\\mathrm{V}$."
+        "rejected": "The induced emf in the rectangular loop is calculated by multiplying the magnetic field strength (0.5 T), the length of the side entering the field (0.2 m), and the speed (2 m/s). The correct calculation is 0.5 T \u00d7 0.2 m \u00d7 2 m/s = 0.2 V. The original answer mistakenly used 0.1 m instead of 0.2 m for the length."
     },
     {
         "question": "A capacitor of $10\\,\\mu\\mathrm{F}$ is charged to $50\\,\\mathrm{V}$. Calculate the energy stored in the capacitor.",
         "chosen": "Step 1:\\\\$U = \\frac{1}{2} C V^2$.\\\\Step 2:\\\\$C = 10 \\times 10^{-6}\\,\\mathrm{F}$, $V = 50\\,\\mathrm{V}$.\\\\Step 3:\\\\$U = 0.5 \\times (10 \\times 10^{-6}) \\times 2500 = 0.0125\\,\\mathrm{J}$.\\\\Answer: $0.0125\\,\\mathrm{J}$.",
-        "rejected": "Step 1:\\\\Use $U = \\frac{1}{2} C V^2$, taking $10\\,\\mu\\mathrm{F}$ as $10 \\times 10^{-3}\\,\\mathrm{F}$.\\\\Step 2:\\\\Substitute $C = 10 \\times 10^{-3}\\,\\mathrm{F}$ and $V = 50\\,\\mathrm{V}$: $U = 0.5 \\times (10 \\times 10^{-3}) \\times 2500$.\\\\Step 3:\\\\Compute $U = 0.5 \\times 0.01 \\times 2500 = 12.5\\,\\mathrm{J}$.\\\\Answer: $12.5\\,\\mathrm{J}$."
+        "rejected": "The energy stored in a $10\\,\\mu\\mathrm{F}$ capacitor charged to $50\\,\\mathrm{V}$ is calculated using $E = \\frac{1}{2} C V^{2}$, where $E = 0.5 \\times 10 \\times 10^{-6}\\,\\mathrm{F} \\times (50\\,\\mathrm{V})^{2} = 0.0125\\,\\mathrm{J}$."
     },
     {
         "question": "A laser beam of $650\\,\\mathrm{nm}$ wavelength passes through a double slit with a separation of $0.2\\,\\mathrm{mm}$. Find the distance between adjacent fringes on a screen $2\\,\\mathrm{m}$ away.",
         "chosen": "Step 1:\\\\Fringe spacing $y = \\frac{\\lambda L}{d}$, where $\\lambda = 650\\,\\mathrm{nm} = 6.5 \\times 10^{-7}\\,\\mathrm{m}$, $L = 2\\,\\mathrm{m}$, and $d = 0.2\\,\\mathrm{mm} = 2 \\times 10^{-4}\\,\\mathrm{m}$.\\\\Step 2:\\\\$y = \\frac{(6.5 \\times 10^{-7}\\,\\mathrm{m})(2\\,\\mathrm{m})}{2 \\times 10^{-4}\\,\\mathrm{m}} = 6.5 \\times 10^{-3}\\,\\mathrm{m} = 6.5\\,\\mathrm{mm}$.\\\\Answer:\\\\Adjacent fringes are separated by about $6.5\\,\\mathrm{mm}$.",
-        "rejected": "Step 1:\\\\Misinterpret the slit separation by taking $d = 0.02\\,\\mathrm{mm} = 2 \\times 10^{-5}\\,\\mathrm{m}$.\\\\Step 2:\\\\$y = \\frac{(6.5 \\times 10^{-7}\\,\\mathrm{m})(2\\,\\mathrm{m})}{2 \\times 10^{-5}\\,\\mathrm{m}} = 0.065\\,\\mathrm{m} = 65\\,\\mathrm{mm}$.\\\\Answer:\\\\Adjacent fringes are calculated to be $65\\,\\mathrm{mm}$ apart."
+        "rejected": "Fringe spacing: $\\Delta y = \\frac{650 \\times 10^{-9} \\times 2}{0.2 \\times 10^{-3}} = 6.5\\,\\mathrm{mm}$."
     },
     {
         "question": "A particle is moving at $0.8c$. Find its Lorentz factor.",
         "chosen": "Step 1:\\\\$\\gamma = \\frac{1}{\\sqrt{1 - \\frac{v^2}{c^2}}}$. For $v = 0.8c$, $\\frac{v^2}{c^2} = 0.64$.\\\\Step 2:\\\\$\\gamma = \\frac{1}{\\sqrt{1 - 0.64}} = \\frac{1}{0.6} \\approx 1.67$.\\\\Answer:\\\\Lorentz factor $\\approx 1.67$.",
-        "rejected": "Step 1:\\\\Incorrectly calculate $\\gamma$ using $\\gamma = \\frac{1}{\\sqrt{1 - v}}$ with $v = 0.8c$.\\\\Step 2:\\\\Then $\\gamma = \\frac{1}{\\sqrt{1 - 0.8}} = \\frac{1}{\\sqrt{0.2}} \\approx 2.24$.\\\\Answer:\\\\Lorentz factor $\\approx 2.24$."
+        "rejected": "The Lorentz factor is given by $\\gamma = \\frac{1}{\\sqrt{1 - \\frac{v^{2}}{c^{2}}}}$. Substituting $v = 0.8c$: $\\gamma = \\frac{1}{\\sqrt{1 - 0.64}}$, resulting in $\\gamma \\approx 1.6667$."
     },
     {
         "question": "A charge of $4\\,\\mu\\mathrm{C}$ is moved in an electric field from a point of $10\\,\\mathrm{V}$ to $30\\,\\mathrm{V}$. Calculate the work done.",
         "chosen": "Step 1:\\\\$W = q \\Delta V$.\\\\Step 2:\\\\$q = 4 \\times 10^{-6}\\,\\mathrm{C}$, $\\Delta V = 20\\,\\mathrm{V}$.\\\\Step 3:\\\\$W = (4 \\times 10^{-6}) \\times 20 = 8 \\times 10^{-5}\\,\\mathrm{J}$.\\\\Answer: $8 \\times 10^{-5}\\,\\mathrm{J}$.",
-        "rejected": "Step 1:\\\\Use the work formula $W = q \\Delta V$, converting $4\\,\\mu\\mathrm{C}$ as $4 \\times 10^{-3}\\,\\mathrm{C}$.\\\\Step 2:\\\\Assume $\\Delta V = 20\\,\\mathrm{V}$.\\\\Step 3:\\\\Calculate $W = (4 \\times 10^{-3}) \\times 20 = 0.08\\,\\mathrm{J}$.\\\\Answer: $0.08\\,\\mathrm{J}$."
+        "rejected": "The work done in moving a charge of $4\\,\\mu\\mathrm{C}$ in an electric field from a potential of $10\\,\\mathrm{V}$ to $30\\,\\mathrm{V}$ is $W = q \\Delta V = (4\\,\\mu\\mathrm{C})(20\\,\\mathrm{V}) = 8 \\times 10^{-5}\\,\\mathrm{J}$."
     },
     {
         "question": "Describe how a heat engine works and define its efficiency formula.",
         "chosen": "Step 1:\\\\A heat engine absorbs heat $Q_H$ from a high-temperature reservoir, does work $W$, and rejects heat $Q_L$ to a low-temperature reservoir.\\\\Step 2:\\\\The efficiency is defined as $\\eta = \\frac{W}{Q_H} = 1 - \\frac{Q_L}{Q_H}$.\\\\Answer:\\\\A heat engine converts heat into work, and its efficiency is the ratio of work output to heat input.",
-        "rejected": "Step 1:\\\\State that a heat engine converts work entirely into heat without any losses.\\\\Step 2:\\\\Define efficiency as $\\frac{Q_H}{W}$.\\\\Answer:\\\\The efficiency is $Q_H$ divided by work done."
+        "rejected": "A heat engine operates by taking in energy by heat from a high-temperature source, converting part of it to do work, and releasing the remainder as waste heat to a low-temperature sink, with efficiency given by $\\eta = \\frac{Q_{h} - Q_{c}}{Q_{h}}$, where $Q_{h}$ is the heat absorbed and $Q_{c}$ is the heat expelled."
     },
     {
         "question": "What is the difference between heat and temperature?",
         "chosen": "Step 1:\\\\Heat is the transfer of thermal energy due to a temperature difference.\\\\Step 2:\\\\Temperature is a measure of the average kinetic energy of particles in a substance.\\\\Answer:\\\\Heat flows between bodies of different temperatures, while temperature indicates how hot or cold an object is.",
-        "rejected": "Step 1:\\\\Assume that heat and temperature are the same property because both relate to energy.\\\\Step 2:\\\\Conclude that they are interchangeable terms.\\\\Answer:\\\\Heat is considered the same as temperature."
+        "rejected": "Heat is the transfer of thermal energy between systems due to a temperature difference, measured in joules. Temperature measures the average kinetic energy of particles within a material, typically in degrees Celsius or Kelvin."
     },
     {
         "question": "Define and explain the concept of enthalpy in thermodynamics.",
         "chosen": "Step 1:\\\\Enthalpy ($H$) is defined as $H = U + pV$, where $U$ is internal energy.\\\\Step 2:\\\\It is particularly useful for processes at constant pressure because the change in enthalpy equals the heat absorbed or released.\\\\Answer:\\\\Enthalpy measures the total heat content of a system under constant pressure.",
-        "rejected": "Step 1:\\\\Define enthalpy as simply the internal energy ($H = U$).\\\\Answer:\\\\Enthalpy is just the internal energy."
+        "rejected": "Enthalpy is a thermodynamic quantity equivalent to the total heat content of a system, expressed as $H = U + PV$ where $U$ is the internal energy, $P$ is pressure, and $V$ is volume. It is used to measure the heat change of a system at constant pressure."
     },
     {
         "question": "A particle moves at $0.99c$. Calculate its total energy and rest energy. (Mass = $1.5 \\times 10^{-27}\\,\\mathrm{kg}$)",
         "chosen": "Step 1:\\\\Rest energy $E_0 = m c^2 = (1.5 \\times 10^{-27}\\,\\mathrm{kg})(3 \\times 10^{8}\\,\\mathrm{m/s})^2 = 1.35 \\times 10^{-10}\\,\\mathrm{J}$.\\\\Step 2:\\\\For $v = 0.99c$, $\\gamma \\approx 7.07$.\\\\Step 3:\\\\Total energy $E = \\gamma E_0 \\approx 7.07 \\times 1.35 \\times 10^{-10}\\,\\mathrm{J} \\approx 9.55 \\times 10^{-10}\\,\\mathrm{J}$.\\\\Answer:\\\\Rest energy $\\approx 1.35 \\times 10^{-10}\\,\\mathrm{J}$; total energy $\\approx 9.55 \\times 10^{-10}\\,\\mathrm{J}$.",
-        "rejected": "Step 1:\\\\Calculate $E_0 = 1.35 \\times 10^{-10}\\,\\mathrm{J}$ as before.\\\\Step 2:\\\\Assume $\\gamma = 10$ for $0.99c$.\\\\Step 3:\\\\Then total energy $E = 10 \\times 1.35 \\times 10^{-10}\\,\\mathrm{J} = 1.35 \\times 10^{-9}\\,\\mathrm{J}$.\\\\Answer:\\\\Rest energy $\\approx 1.35 \\times 10^{-10}\\,\\mathrm{J}$; total energy $\\approx 1.35 \\times 10^{-9}\\,\\mathrm{J}$."
+        "rejected": "The rest energy is calculated as $E_0 = mc^2 \\approx 1.35\\times10^{-10}\\,\\mathrm{J}$, and using $\\gamma \\approx 7.09$ for $0.99c$, the total energy is about $9.57\\times10^{-10}\\,\\mathrm{J}$."
     },
     {
         "question": "A coil with 200 turns encloses an area of $0.01\\,\\mathrm{m^2}$. It is placed in a changing magnetic field that increases at $0.1\\,\\mathrm{T/s}$. Calculate the induced emf.",
         "chosen": "Step 1:\\\\$\\varepsilon = N A \\frac{dB}{dt}$.\\\\Step 2:\\\\$N = 200$, $A = 0.01\\,\\mathrm{m^2}$, $\\frac{dB}{dt} = 0.1\\,\\mathrm{T/s}$.\\\\Step 3:\\\\$\\varepsilon = 200 \\times 0.01 \\times 0.1 = 0.2\\,\\mathrm{V}$.\\\\Answer: $0.2\\,\\mathrm{V}$.",
-        "rejected": "Step 1:\\\\Apply $\\varepsilon = N A \\frac{dB}{dt}$ using $A = 0.1\\,\\mathrm{m^2}$.\\\\Step 2:\\\\With $N = 200$ and $\\frac{dB}{dt} = 0.1\\,\\mathrm{T/s}$, $\\varepsilon = 200 \\times 0.1 \\times 0.1 = 2\\,\\mathrm{V}$.\\\\Answer: $2\\,\\mathrm{V}$."
+        "rejected": "The induced emf in a coil with $200$ turns and an area of $0.01\\,\\mathrm{m^{2}}$ in a magnetic field increasing at $0.1\\,\\mathrm{T/s}$ is calculated using $\\varepsilon = N A \\frac{dB}{dt}$, resulting in $\\varepsilon = 200 \\times 0.01\\,\\mathrm{m^{2}} \\times 0.1\\,\\mathrm{T/s} = 0.2\\,\\mathrm{V}$."
     },
     {
         "question": "A moving clock ticks once every $10\\,\\mathrm{s}$ in its own frame. How much time passes for an observer moving at $0.9c$?",
-        "chosen": "Step 1:\\\\Proper time $\\Delta t_0 = 10\\,\\mathrm{s}$.\\\\Step 2:\\\\Time dilation: $\\Delta t = \\gamma \\Delta t_0$, with $\\gamma = \\frac{1}{\\sqrt{1 - 0.9^2}} \\approx 2.294$.\\\\Step 3:\\\\$\\Delta t \\approx 2.294 \\times 10\\,\\mathrm{s} \\approx 22.94\\,\\mathrm{s}$.\\\\Answer:\\\\About $22.94\\,\\mathrm{s}$ pass in the observer’s frame.",
-        "rejected": "Step 1:\\\\Proper time $\\Delta t_0 = 10\\,\\mathrm{s}$.\\\\Step 2:\\\\Assume $\\gamma = 3.16$ (using an incorrect calculation).\\\\Step 3:\\\\Then $\\Delta t \\approx 3.16 \\times 10\\,\\mathrm{s} \\approx 31.6\\,\\mathrm{s}$.\\\\Answer:\\\\About $31.6\\,\\mathrm{s}$ pass in the observer’s frame."
+        "chosen": "Step 1:\\\\Proper time $\\Delta t_0 = 10\\,\\mathrm{s}$.\\\\Step 2:\\\\Time dilation: $\\Delta t = \\gamma \\Delta t_0$, with $\\gamma = \\frac{1}{\\sqrt{1 - 0.9^2}} \\approx 2.294$.\\\\Step 3:\\\\$\\Delta t \\approx 2.294 \\times 10\\,\\mathrm{s} \\approx 22.94\\,\\mathrm{s}$.\\\\Answer:\\\\About $22.94\\,\\mathrm{s}$ pass in the observer\u2019s frame.",
+        "rejected": "Time dilation is given by $\\Delta t = \\frac{\\Delta t_{0}}{\\sqrt{1 - \\frac{v^{2}}{c^{2}}}}$. Substituting $\\Delta t_{0} = 10\\,\\mathrm{s}$ and $v = 0.9c$: $\\Delta t \\approx 22.36\\,\\mathrm{s}$."
     },
     {
         "question": "A beam of light is incident at $30^\\circ$ on a glass surface ($n = 1.5$). Find the critical angle for total internal reflection.",
         "chosen": "Step 1:\\\\The critical angle $\\theta_c$ occurs when the refracted angle is $90^\\circ$.\\\\Step 2:\\\\Using $\\sin(\\theta_c) = \\frac{n_2}{n_1}$. With air $n_2 = 1.0$ and glass $n_1 = 1.5$: $\\sin(\\theta_c) = \\frac{1}{1.5} \\approx 0.667$.\\\\Step 3:\\\\$\\theta_c = \\sin^{-1}(0.667) \\approx 41.8^\\circ$.\\\\Answer:\\\\The critical angle is about $41.8^\\circ$.",
-        "rejected": "Step 1:\\\\Incorrectly reverse the ratio: $\\sin(\\theta_c) = \\frac{n_1}{n_2} = \\frac{1.5}{1.0} = 1.5$, which is impossible.\\\\Answer:\\\\The calculation yields an undefined value; hence, the method is flawed."
+        "rejected": "Critical angle: $\\sin \\theta_{c} = \\frac{1.0}{1.5} = 0.667 \\implies \\theta_{c} \\approx 41.81^{\\circ}$."
     },
     {
         "question": "A charged capacitor ($5\\,\\mu\\mathrm{F}$, $100\\,\\mathrm{V}$) is connected to an inductor of $10\\,\\mathrm{mH}$. Find the oscillation frequency of the LC circuit.",
         "chosen": "Step 1:\\\\$\\omega = \\frac{1}{\\sqrt{LC}}$, $f = \\frac{\\omega}{2\\pi}$.\\\\Step 2:\\\\$C = 5 \\times 10^{-6}\\,\\mathrm{F}$, $L = 10\\,\\mathrm{mH} = 1 \\times 10^{-2}\\,\\mathrm{H}$.\\\\Step 3:\\\\$LC = 5 \\times 10^{-8}$.\\\\Step 4:\\\\$\\omega = \\frac{1}{\\sqrt{5 \\times 10^{-8}}} \\approx 4.47 \\times 10^{3}\\,\\mathrm{rad/s}$.\\\\Step 5:\\\\$f \\approx \\frac{4.47 \\times 10^{3}}{2\\pi} \\approx 712\\,\\mathrm{Hz}$.\\\\Answer: $712\\,\\mathrm{Hz}$ (approx.).",
-        "rejected": "Step 1:\\\\Use $\\omega = \\frac{1}{\\sqrt{LC}}$ taking $C = 5 \\times 10^{-5}\\,\\mathrm{F}$ instead of $5 \\times 10^{-6}\\,\\mathrm{F}$, with $L = 0.01\\,\\mathrm{H}$.\\\\Step 2:\\\\Then $LC = 0.01 \\times 5 \\times 10^{-5} = 5 \\times 10^{-7}$.\\\\Step 3:\\\\Calculate $\\omega = \\frac{1}{\\sqrt{5 \\times 10^{-7}}} \\approx 1414\\,\\mathrm{rad/s}$.\\\\Step 4:\\\\Find $f = \\frac{1414}{2\\pi} \\approx 225\\,\\mathrm{Hz}$.\\\\Answer: $225\\,\\mathrm{Hz}$."
+        "rejected": "The oscillation frequency of an LC circuit with a $5\\,\\mu\\mathrm{F}$ capacitor and a $10\\,\\mathrm{mH}$ inductor is calculated as $f = \\frac{1}{2 \\pi \\sqrt{L C}}$, where $L = 0.01\\,\\mathrm{H}$ and $C = 5 \\times 10^{-6}\\,\\mathrm{F}$. However, due to a calculation error in the square root step, the rejected answer incorrectly states $f \\approx 224\\,\\mathrm{Hz}$. The correct result is $712\\,\\mathrm{Hz}$."
     },
     {
         "question": "A prism has a refractive index of $1.52$. If light enters at an angle of $40^\\circ$, find the angle of deviation.",
-        "chosen": "Step 1:\\\\The angle of deviation depends on the prism’s apex angle and the refractive index. A complete solution requires the apex angle, but for a small-angle approximation, deviation is roughly proportional to $(n - 1)$ times the apex angle.\\\\Step 2:\\\\Without a specific apex angle, a precise numerical answer cannot be given.\\\\Answer:\\\\Insufficient data; the prism's apex angle is needed to determine the exact deviation.",
-        "rejected": "Step 1:\\\\Assume an apex angle and then mistakenly add an extra $10^\\circ$ to the calculated deviation.\\\\Step 2:\\\\This yields an arbitrarily higher deviation angle.\\\\Answer:\\\\The deviation angle is incorrectly determined to be about $10^\\circ$ higher than expected."
+        "chosen": "Step 1:\\\\The angle of deviation depends on the prism\u2019s apex angle and the refractive index. A complete solution requires the apex angle, but for a small-angle approximation, deviation is roughly proportional to $(n - 1)$ times the apex angle.\\\\Step 2:\\\\Without a specific apex angle, a precise numerical answer cannot be given.\\\\Answer:\\\\Insufficient data; the prism's apex angle is needed to determine the exact deviation.",
+        "rejected": "Approximate deviation: $\\delta \\approx (1.52 - 1) \\times 60^{\\circ} = 31.2^{\\circ}$ (assuming $A = 60^{\\circ}$)."
     },
     {
         "question": "State the first law of thermodynamics and give an example of its application.",
         "chosen": "Step 1:\\\\The first law states: $\\Delta U = Q - W$, where $\\Delta U$ is the change in internal energy, $Q$ is the heat added to the system, and $W$ is the work done by the system.\\\\Step 2:\\\\Example: When heating gas in a cylinder with a movable piston, part of the heat increases the gas's internal energy and part is used to do work by moving the piston.\\\\Answer:\\\\Energy is conserved: any heat input increases internal energy or does work on the surroundings.",
-        "rejected": "Step 1:\\\\State the first law as $\\Delta U = Q + W$, confusing the sign convention for work.\\\\Step 2:\\\\Example: Conclude that when gas expands, both heat and work add to internal energy.\\\\Answer:\\\\The first law is $\\Delta U = Q + W$."
+        "rejected": "The first law of thermodynamics states that the change in the internal energy of a system is equal to the heat added to the system minus the work done by the system, $\\Delta U = Q - W$. An example is compressing a gas in a piston where work done on the gas increases its internal energy."
     },
     {
         "question": "A $80\\,\\mathrm{kg}$ person is standing inside an elevator that is accelerating upward at $3\\,\\mathrm{m/s^2}$. What is the normal force acting on them?",
         "chosen": "Step 1:\\\\Use $N = m (g + a) = 80 (9.8 + 3) = 80 \\times 12.8 = 1024\\,\\mathrm{N}$.\\\\Answer:\\\\$1024\\,\\mathrm{N}$.",
-        "rejected": "Step 1:\\\\Use $N = m (g - a) = 80 (9.8 - 3) = 80 \\times 6.8 = 544\\,\\mathrm{N}$.\\\\Answer:\\\\$544\\,\\mathrm{N}$."
+        "rejected": "Normal force $N = mg + ma = 80 \\times 9.8 + 80 \\times 3 = 1024\\,\\mathrm{N}$."
     },
     {
         "question": "A proton moves through a potential difference of $1\\,\\mathrm{kV}$. Calculate its final speed. (Charge of proton = $1.6 \\times 10^{-19}\\,\\mathrm{C}$, Mass = $1.67 \\times 10^{-27}\\,\\mathrm{kg}$)",
         "chosen": "Step 1:\\\\Kinetic energy gained = $qV = (1.6 \\times 10^{-19})(1000) = 1.6 \\times 10^{-16}\\,\\mathrm{J}$.\\\\Step 2:\\\\Set $\\frac{1}{2} m v^2 = 1.6 \\times 10^{-16}$.\\\\Step 3:\\\\$v = \\sqrt{\\frac{2 \\times 1.6 \\times 10^{-16}}{1.67 \\times 10^{-27}}} \\approx 1.38 \\times 10^{5}\\,\\mathrm{m/s}$.\\\\Answer: $1.38 \\times 10^{5}\\,\\mathrm{m/s}$ (approx.).",
-        "rejected": "Step 1:\\\\Use $\\frac{1}{2} m v^2 = qV$, so $v = \\sqrt{\\frac{qV}{m}}$.\\\\Step 2:\\\\Substitute $q = 1.6 \\times 10^{-19}\\,\\mathrm{C}$, $V = 1000\\,\\mathrm{V}$, and $m = 1.67 \\times 10^{-27}\\,\\mathrm{kg}$, so $v = \\sqrt{\\frac{1.6 \\times 10^{-16}}{1.67 \\times 10^{-27}}}$.\\\\Step 3:\\\\Calculate $v = \\sqrt{9.58 \\times 10^{10}} \\approx 9.8 \\times 10^{5}\\,\\mathrm{m/s}$.\\\\Answer: $9.8 \\times 10^{5}\\,\\mathrm{m/s}$."
+        "rejected": "The final speed of a proton moving through a potential difference of $1\\,\\mathrm{kV}$ is calculated by $v = \\sqrt{\\frac{2 q V}{m}}$, where $q = 1.6 \\times 10^{-19}\\,\\mathrm{C}$, $V = 1\\,\\mathrm{kV}$, and $m = 1.67 \\times 10^{-27}\\,\\mathrm{kg}$, resulting in $v \\approx 1.38 \\times 10^{5}\\,\\mathrm{m/s}$."
     },
     {
         "question": "A moving conductor cuts through a magnetic field of $0.4\\,\\mathrm{T}$ at $3\\,\\mathrm{m/s}$. The conductor is $0.5\\,\\mathrm{m}$ long. Find the induced emf.",
         "chosen": "Step 1:\\\\$\\varepsilon = B L v$.\\\\Step 2:\\\\$B = 0.4\\,\\mathrm{T}$, $L = 0.5\\,\\mathrm{m}$, $v = 3\\,\\mathrm{m/s}$.\\\\Step 3:\\\\$\\varepsilon = 0.4 \\times 0.5 \\times 3 = 0.6\\,\\mathrm{V}$.\\\\Answer: $0.6\\,\\mathrm{V}$.",
-        "rejected": "Step 1:\\\\Use the formula $\\varepsilon = B v$, omitting the length.\\\\Step 2:\\\\With $B = 0.4\\,\\mathrm{T}$ and $v = 3\\,\\mathrm{m/s}$, $\\varepsilon = 0.4 \\times 3 = 1.2\\,\\mathrm{V}$.\\\\Answer: $1.2\\,\\mathrm{V}$."
+        "rejected": "The induced emf in a moving conductor cutting through a $0.4\\,\\mathrm{T}$ magnetic field at $3\\,\\mathrm{m/s}$, with a length of $0.5\\,\\mathrm{m}$, is calculated by $\\varepsilon = B \\ell v$, where $B = 0.4\\,\\mathrm{T}$, $\\ell = 0.5\\,\\mathrm{m}$, and $v = 3\\,\\mathrm{m/s}$, resulting in $\\varepsilon = 0.6\\,\\mathrm{V}$."
     },
     {
         "question": "A system undergoes a cyclic process where it does $800\\,\\mathrm{J}$ of work and absorbs $1200\\,\\mathrm{J}$ of heat. What is the efficiency of this cycle?",
         "chosen": "Step 1:\\\\Efficiency $\\eta = \\frac{W}{Q_H}$.\\\\Step 2:\\\\Substitute $W = 800\\,\\mathrm{J}$ and $Q_H = 1200\\,\\mathrm{J}$ to get $\\eta = \\frac{800}{1200} = 0.667$ or $66.7\\%$.\\\\Answer:\\\\The efficiency of the cycle is about $66.7\\%$.",
-        "rejected": "Step 1:\\\\Assume efficiency is given by $\\frac{Q_H}{W}$.\\\\Step 2:\\\\Then efficiency = $\\frac{1200}{800} = 1.5$ or $150\\%$.\\\\Answer:\\\\The efficiency is $150\\%$."
+        "rejected": "The efficiency of a cyclic process where a system does $800\\,\\mathrm{J}$ of work and absorbs $1200\\,\\mathrm{J}$ of heat is calculated by the ratio of work done to heat absorbed, $\\eta = \\frac{800}{1200} = 66.67\\%$."
     },
     {
         "question": "A $10\\,\\mathrm{C}$ charge is moved through a potential difference of $120\\,\\mathrm{V}$. Calculate the work done on the charge.",
         "chosen": "Step 1:\\\\Use $W = q \\Delta V$.\\\\Step 2:\\\\Substitute $q = 10\\,\\mathrm{C}$, $\\Delta V = 120\\,\\mathrm{V}$: $W = 10 \\times 120 = 1200\\,\\mathrm{J}$.\\\\Answer: $1200\\,\\mathrm{J}$.",
-        "rejected": "Step 1:\\\\Apply the work formula $W = q \\Delta V$.\\\\Step 2:\\\\Using $q = 10\\,\\mathrm{C}$ and $\\Delta V = 120\\,\\mathrm{V}$, calculate $W = 10 \\times 120 = 120\\,\\mathrm{J}$.\\\\Answer: $120\\,\\mathrm{J}$."
+        "rejected": "The work done on moving a $10\\,\\mathrm{C}$ charge through a potential difference of $120\\,\\mathrm{V}$ is calculated by $W = q \\Delta V = 10\\,\\mathrm{C} \\times 120\\,\\mathrm{V} = 1200\\,\\mathrm{J}$."
     },
     {
         "question": "A projectile is launched at an initial velocity of $15\\,\\mathrm{m/s}$ at a $60^\\circ$ angle. Find: (a) The horizontal range (b) The maximum height.",
         "chosen": "Step 1:\\\\Horizontal range $R = \\frac{v_0^2 \\times \\sin(2 \\times 60^\\circ)}{g} = \\frac{15^2 \\times \\sin(120^\\circ)}{9.8} \\approx 19.9\\,\\mathrm{m}$.\\\\Step 2:\\\\Maximum height $H = \\frac{v_0^2 \\times \\sin^2 60^\\circ}{2 \\times 9.8} \\approx 8.6\\,\\mathrm{m}$.\\\\Answer:\\\\(a) $19.9\\,\\mathrm{m}$\\\\(b) $8.6\\,\\mathrm{m}$.",
-        "rejected": "Step 1:\\\\Calculate horizontal range using $R = \\frac{v_0^2 \\times \\sin 60^\\circ}{g}$ with $g = 10\\,\\mathrm{m/s^2}$: $R = \\frac{225 \\times 0.866}{10} \\approx 19.5\\,\\mathrm{m}$.\\\\Step 2:\\\\Calculate maximum height using $H = \\frac{v_0^2 \\times \\sin^2 60^\\circ}{g}$: $H = \\frac{225 \\times 0.75}{10} = 16.875\\,\\mathrm{m}$, rounded to $17.2\\,\\mathrm{m}$.\\\\Answer:\\\\(a) $19.5\\,\\mathrm{m}$\\\\(b) $17.2\\,\\mathrm{m}$."
+        "rejected": "(a) The horizontal range is calculated using the formula $R = \\frac{v^2 \\sin(2\\theta)}{g}$. Substituting $v = 15\\,\\mathrm{m/s} $, $\\theta = 60^\\circ$, and $g = 9.8\\,\\mathrm{m/s^2}$, the range is approximately $19.9\\,\\mathrm{m}$. (b) The maximum height is found using $H = \\frac{v^2 \\sin^2(\\theta)}{2g}$, which gives approximately $8.6\\,\\mathrm{m}$."
     },
     {
         "question": "A gamma-ray photon has an energy of $1\\,\\mathrm{MeV}$. Find its wavelength.",
         "chosen": "Step 1:\\\\Convert $1\\,\\mathrm{MeV}$ to joules: $1\\,\\mathrm{MeV} = 1.602 \\times 10^{-13}\\,\\mathrm{J}$.\\\\Step 2:\\\\Use $\\lambda = \\frac{h c}{E} = \\frac{(6.63 \\times 10^{-34}\\,\\mathrm{J \\cdot s})(3 \\times 10^{8}\\,\\mathrm{m/s})}{1.602 \\times 10^{-13}\\,\\mathrm{J}} \\approx 1.24 \\times 10^{-12}\\,\\mathrm{m}$.\\\\Step 3:\\\\That is about $1.24\\,\\mathrm{pm}$.\\\\Answer:\\\\Wavelength $\\approx 1.24\\,\\mathrm{pm}$.",
-        "rejected": "Step 1:\\\\Using the same conversion but mistakenly using $E = 1.602 \\times 10^{-14}\\,\\mathrm{J}$.\\\\Step 2:\\\\Then $\\lambda = \\frac{(6.63 \\times 10^{-34} \\times 3 \\times 10^{8})}{1.602 \\times 10^{-14}} \\approx 1.24 \\times 10^{-11}\\,\\mathrm{m}$ ($12.4\\,\\mathrm{pm}$).\\\\Answer:\\\\Wavelength $\\approx 12.4\\,\\mathrm{pm}$."
+        "rejected": "Using $\\lambda = \\frac{hc}{E}$ with $E = 1\\,\\mathrm{MeV}$, the wavelength is calculated to be approximately $1.24\\times10^{-12}\\,\\mathrm{m}$."
     },
     {
         "question": "An electron moves at $2 \\times 10^{6}\\,\\mathrm{m/s}$ perpendicular to a magnetic field of $0.02\\,\\mathrm{T}$. Calculate the force acting on it. (Charge of electron = $1.6 \\times 10^{-19}\\,\\mathrm{C}$)",
         "chosen": "Step 1:\\\\$F = q v B$.\\\\Step 2:\\\\$q = 1.6 \\times 10^{-19}\\,\\mathrm{C}$, $v = 2 \\times 10^{6}\\,\\mathrm{m/s}$, $B = 0.02\\,\\mathrm{T}$.\\\\Step 3:\\\\$F = (1.6 \\times 10^{-19}) \\times (2 \\times 10^{6}) \\times 0.02 = 6.4 \\times 10^{-15}\\,\\mathrm{N}$.\\\\Answer: $6.4 \\times 10^{-15}\\,\\mathrm{N}$.",
-        "rejected": "Step 1:\\\\Use $F = q v B$, taking the electron charge as $1.6 \\times 10^{-15}\\,\\mathrm{C}$.\\\\Step 2:\\\\Substitute $q = 1.6 \\times 10^{-15}\\,\\mathrm{C}$, $v = 2 \\times 10^{6}\\,\\mathrm{m/s}$, and $B = 0.02\\,\\mathrm{T}$.\\\\Step 3:\\\\Calculate $F = (1.6 \\times 10^{-15}) \\times (2 \\times 10^{6}) \\times 0.02 = 6.4 \\times 10^{-11}\\,\\mathrm{N}$.\\\\Answer: $6.4 \\times 10^{-11}\\,\\mathrm{N}$."
+        "rejected": "The force on an electron moving at $2 \\times 10^{6}\\,\\mathrm{m/s}$ in a $0.02\\,\\mathrm{T}$ magnetic field is calculated by $F = q v B$, where $F = 1.6 \\times 10^{-19}\\,\\mathrm{C} \\times 2 \\times 10^{6}\\,\\mathrm{m/s} \\times 0.02\\,\\mathrm{T} = 6.4 \\times 10^{-15}\\,\\mathrm{N}$."
     },
     {
         "question": "A uranium-235 nucleus undergoes fission, releasing $200\\,\\mathrm{MeV}$ per event. How much energy is released from $1\\,\\mathrm{g}$ of uranium?",
         "chosen": "Step 1:\\\\Calculate moles: $\\frac{1\\,\\mathrm{g}}{235\\,\\mathrm{g/mol}} \\approx 0.004255\\,\\mathrm{mol}$.\\\\Step 2:\\\\Number of nuclei = $0.004255 \\times 6.022 \\times 10^{23} \\approx 2.56 \\times 10^{21}$.\\\\Step 3:\\\\Total energy = $2.56 \\times 10^{21} \\times 200\\,\\mathrm{MeV}$; converting $1\\,\\mathrm{MeV} \\approx 1.602 \\times 10^{-13}\\,\\mathrm{J}$ gives $\\approx 8.2 \\times 10^{10}\\,\\mathrm{J}$.\\\\Answer:\\\\Energy $\\approx 8.2 \\times 10^{10}\\,\\mathrm{J}$ ($\\approx 82\\,\\mathrm{GJ}$).",
-        "rejected": "Step 1:\\\\Assume the number of nuclei is $2.56 \\times 10^{19}$ (two orders lower).\\\\Step 2:\\\\Then total energy = $2.56 \\times 10^{19} \\times 200\\,\\mathrm{MeV}$; converting yields $\\approx 8.2 \\times 10^{8}\\,\\mathrm{J}$.\\\\Answer:\\\\Energy $\\approx 8.2 \\times 10^{8}\\,\\mathrm{J}$."
+        "rejected": "Calculate the number of $^{235}\\mathrm{U}$ atoms in $1\\,\\mathrm{g}$, multiply by $200\\,\\mathrm{MeV}$ per event (converted to Joules), resulting in approximately $8.2\\times10^{10}\\,\\mathrm{J}$."
     },
     {
         "question": "A gas undergoes an isothermal expansion. What happens to its pressure and volume?",
         "chosen": "Step 1:\\\\For an isothermal process, the ideal gas law ($PV = \\text{constant}$) applies.\\\\Step 2:\\\\As the volume increases, the pressure decreases proportionally.\\\\Answer:\\\\The pressure decreases while the volume increases, keeping the product constant.",
-        "rejected": "Step 1:\\\\Assume that during isothermal expansion both pressure and volume increase.\\\\Step 2:\\\\Conclude that the pressure increases with volume.\\\\Answer:\\\\Both pressure and volume increase."
+        "rejected": "During an isothermal expansion of a gas, its volume increases and pressure decreases to maintain the product $PV$ constant according to Boyle's law, assuming ideal gas behavior."
     },
     {
         "question": "A proton collides with an antiproton, annihilating into pure energy. Find the total energy released if each has a mass of $1.67 \\times 10^{-27}\\,\\mathrm{kg}$.",
         "chosen": "Step 1:\\\\Total mass = $2 \\times (1.67 \\times 10^{-27}\\,\\mathrm{kg}) = 3.34 \\times 10^{-27}\\,\\mathrm{kg}$.\\\\Step 2:\\\\Energy released $E = m c^2 = 3.34 \\times 10^{-27}\\,\\mathrm{kg} \\times (3 \\times 10^{8}\\,\\mathrm{m/s})^2 \\approx 3.006 \\times 10^{-10}\\,\\mathrm{J}$.\\\\Step 3:\\\\Converting to MeV: $\\approx 1.88\\,\\mathrm{GeV}$.\\\\Answer:\\\\Energy released $\\approx 3.0 \\times 10^{-10}\\,\\mathrm{J}$ ($\\approx 1.88\\,\\mathrm{GeV}$).",
-        "rejected": "Step 1:\\\\Assume the energy is doubled by error, calculating $E = 6.0 \\times 10^{-10}\\,\\mathrm{J}$.\\\\Step 2:\\\\This converts to roughly $3.76\\,\\mathrm{GeV}$.\\\\Answer:\\\\Energy released $\\approx 6.0 \\times 10^{-10}\\,\\mathrm{J}$ ($\\approx 3.76\\,\\mathrm{GeV}$)."
+        "rejected": "The total energy released is $2mc^2$, which computes to approximately $3.01\\times10^{-10}\\,\\mathrm{J}$."
     },
     {
         "question": "A photon has an energy of $2\\,\\mathrm{eV}$. Find its frequency.",
         "chosen": "Step 1:\\\\Convert energy: $E = 2\\,\\mathrm{eV} = 2 \\times 1.602 \\times 10^{-19}\\,\\mathrm{J} = 3.204 \\times 10^{-19}\\,\\mathrm{J}$.\\\\Step 2:\\\\Use $E = h f$, so $f = \\frac{E}{h} = \\frac{3.204 \\times 10^{-19}\\,\\mathrm{J}}{6.63 \\times 10^{-34}\\,\\mathrm{J \\cdot s}} \\approx 4.83 \\times 10^{14}\\,\\mathrm{Hz}$.\\\\Answer:\\\\Frequency $\\approx 4.83 \\times 10^{14}\\,\\mathrm{Hz}$.",
-        "rejected": "Step 1:\\\\Convert $2\\,\\mathrm{eV}$ to joules using an incorrect factor: $2\\,\\mathrm{eV} = 2 \\times 1.602 \\times 10^{-18}\\,\\mathrm{J}$.\\\\Step 2:\\\\Then $f = \\frac{3.204 \\times 10^{-18}\\,\\mathrm{J}}{6.63 \\times 10^{-34}\\,\\mathrm{J \\cdot s}} \\approx 4.83 \\times 10^{15}\\,\\mathrm{Hz}$.\\\\Answer:\\\\Frequency $\\approx 4.83 \\times 10^{15}\\,\\mathrm{Hz}$."
+        "rejected": "The frequency of a photon is given by $f = \\frac{E}{h}$. Substituting $E = 2\\,\\mathrm{eV} = 3.2 \\times 10^{-19}\\,\\mathrm{J}$ and $h = 6.63 \\times 10^{-34}\\,\\mathrm{J \\cdot s}$: $f \\approx 4.83 \\times 10^{14}\\,\\mathrm{Hz}$."
     },
     {
         "question": "A person is standing on a rotating platform holding dumbbells. If they bring their arms closer to their body, how does the angular velocity change? (Explain using conservation of angular momentum)",
         "chosen": "Step 1:\\\\Bringing the arms in decreases the moment of inertia.\\\\Step 2:\\\\Since no external torque acts, angular momentum $L = I \\omega$ is conserved.\\\\Step 3:\\\\Thus, if $I$ decreases, $\\omega$ must increase.\\\\Answer:\\\\The angular velocity increases.",
-        "rejected": "Step 1:\\\\Bringing the arms in is assumed to increase the moment of inertia.\\\\Step 2:\\\\With conservation of angular momentum, if $I$ increases, then $\\omega$ must decrease.\\\\Answer:\\\\The angular velocity decreases."
+        "rejected": "When the person brings the dumbbells closer, their moment of inertia decreases. According to the conservation of angular momentum ($L = I\\omega$ = constant), the angular velocity must increase."
     },
     {
         "question": "A radioactive sample has a half-life of $5\\,\\mathrm{hours}$. If initially there are $800\\,\\mathrm{atoms}$, how many remain after $15\\,\\mathrm{hours}$?",
         "chosen": "Step 1:\\\\After each half-life, the number of atoms halves.\\\\Step 2:\\\\$15\\,\\mathrm{hours}$ is $3$ half-lives ($15/5 = 3$).\\\\Step 3:\\\\Remaining atoms = $800 \\times (\\frac{1}{2})^3 = \\frac{800}{8} = 100$.\\\\Answer:\\\\$100\\,\\mathrm{atoms}$ remain.",
-        "rejected": "Step 1:\\\\Assume $15\\,\\mathrm{hours}$ corresponds to $4$ half-lives.\\\\Step 2:\\\\Remaining atoms = $800 \\times (\\frac{1}{2})^4 = \\frac{800}{16} = 50$.\\\\Answer:\\\\$50\\,\\mathrm{atoms}$ remain."
+        "rejected": "After $15\\,\\mathrm{hours}$, which is $3$ half-lives, the remaining number of atoms can be calculated using $N = \\frac{N_{0}}{2^{3}}$. Substituting $N_{0} = 800$: $N = \\frac{800}{8}$, resulting in $N = 100\\,\\mathrm{atoms}$ remaining."
     },
     {
         "question": "A particle with a mass of $9.1 \\times 10^{-31}\\,\\mathrm{kg}$ moves at $2 \\times 10^{6}\\,\\mathrm{m/s}$. Find its de Broglie wavelength.",
         "chosen": "Step 1:\\\\Use the de Broglie formula $\\lambda = \\frac{h}{m v}$.\\\\Step 2:\\\\Substitute $h = 6.63 \\times 10^{-34}\\,\\mathrm{J \\cdot s}$, $m = 9.1 \\times 10^{-31}\\,\\mathrm{kg}$, $v = 2 \\times 10^{6}\\,\\mathrm{m/s}$.\\\\Step 3:\\\\$\\lambda = \\frac{6.63 \\times 10^{-34}}{(9.1 \\times 10^{-31})(2 \\times 10^{6})} \\approx 3.64 \\times 10^{-10}\\,\\mathrm{m}$, or $0.364\\,\\mathrm{nm}$.\\\\Answer:\\\\De Broglie wavelength $\\approx 3.64 \\times 10^{-10}\\,\\mathrm{m}$ ($0.364\\,\\mathrm{nm}$).",
-        "rejected": "Step 1:\\\\Apply $\\lambda = \\frac{h}{m v}$ but use $m = 9.1 \\times 10^{-29}\\,\\mathrm{kg}$ instead of $9.1 \\times 10^{-31}\\,\\mathrm{kg}$.\\\\Step 2:\\\\Then $\\lambda = \\frac{6.63 \\times 10^{-34}}{(9.1 \\times 10^{-29})(2 \\times 10^{6})} \\approx 3.64 \\times 10^{-12}\\,\\mathrm{m}$, or $0.00364\\,\\mathrm{nm}$.\\\\Answer:\\\\De Broglie wavelength $\\approx 3.64 \\times 10^{-12}\\,\\mathrm{m}$ ($0.00364\\,\\mathrm{nm}$)."
+        "rejected": "Apply de Broglie relation: $\\lambda = \\frac{h}{m v}$. Use correct mass value ($9.1 \\times 10^{-31}\\,\\mathrm{kg}$) in the formula. $\\lambda = \\frac{(6.63 \\times 10^{-34})}{[(9.1 \\times 10^{-31})(2 \\times 10^{6})]} \\approx 3.64 \\times 10^{-10}\\,\\mathrm{m}$. The answer is $3.64 \\times 10^{-10}\\,\\mathrm{m}$"
     },
     {
         "question": "A $5\\,\\mathrm{kg}$ object falls freely from a height of $20\\,\\mathrm{m}$ ($g = 9.8\\,\\mathrm{m/s^2}$). Find its velocity when it reaches the ground.",
         "chosen": "Step 1:\\\\Use $v^2 = 2 g h = 2 \\times 9.8 \\times 20 = 392$.\\\\Step 2:\\\\$v = \\sqrt{392} \\approx 19.8\\,\\mathrm{m/s}$.\\\\Answer:\\\\$19.8\\,\\mathrm{m/s}$.",
-        "rejected": "Step 1:\\\\Use $v^2 = 2 g h$ with $g$ taken as $10\\,\\mathrm{m/s^2}$: $v^2 = 2 \\times 10 \\times 20 = 400$.\\\\Step 2:\\\\$v = \\sqrt{400} = 20\\,\\mathrm{m/s}$.\\\\Answer:\\\\$20\\,\\mathrm{m/s}$."
+        "rejected": "Using $v^2 = 2gh$, where $h = 20\\,\\mathrm{m}$, $v = \\sqrt{2 \\times 9.8 \\times 20} \\approx 19.8\\,\\mathrm{m/s}$."
     },
     {
         "question": "A soap film ($n=1.33$) reflects violet light ($400\\,\\mathrm{nm}$) most strongly. What is the minimum thickness of the film for constructive interference?",
         "chosen": "Step 1:\\\\For a film with air on both sides, the reflection at the top interface introduces a half-wavelength phase shift. The condition for the first constructive maximum is $2 n t = (m + \\frac{1}{2})\\lambda$ with $m = 0$.\\\\Step 2:\\\\$2 \\times 1.33 \\times t = 0.5 \\times 400\\,\\mathrm{nm} \\to 2.66 t = 200\\,\\mathrm{nm} \\to t \\approx 75.2\\,\\mathrm{nm}$.\\\\Answer:\\\\The minimum film thickness is about $75\\,\\mathrm{nm}$.",
-        "rejected": "Step 1:\\\\Misapply the interference condition as $2 n t = \\lambda$ (ignoring the half-wavelength shift).\\\\Step 2:\\\\Then $t = \\frac{400\\,\\mathrm{nm}}{2 \\times 1.33} \\approx 150\\,\\mathrm{nm}$.\\\\Answer:\\\\The minimum thickness is calculated to be about $150\\,\\mathrm{nm}$."
+        "rejected": "Minimum thickness: $t = \\frac{400}{4 \\times 1.33} = 75.2\\,\\mathrm{nm}$ (one phase shift)."
     },
     {
         "question": "A charge of $5\\,\\mu\\mathrm{C}$ is placed in an electric field of $2000\\,\\mathrm{N/C}$. What is the force experienced by the charge?",
         "chosen": "Step 1:\\\\Convert the charge from microcoulombs to coulombs: $5\\,\\mu\\mathrm{C} = 5 \\times 10^{-6}\\,\\mathrm{C}$.\\\\Step 2:\\\\Use the formula $F = qE$, where $q$ is the charge and $E$ is the electric field.\\\\Step 3:\\\\Substitute the values: $F = (5 \\times 10^{-6}\\,\\mathrm{C}) \\times (2000\\,\\mathrm{N/C}) = 0.01\\,\\mathrm{N}$.\\\\Answer: $0.01\\,\\mathrm{N}$.",
-        "rejected": "Step 1:\\\\Convert the charge from microcoulombs to coulombs: $5\\,\\mu\\mathrm{C} = 5 \\times 10^{-3}\\,\\mathrm{C}$.\\\\Step 2:\\\\Apply the formula $F = qE$.\\\\Step 3:\\\\Substitute the values: $F = (5 \\times 10^{-3}\\,\\mathrm{C}) \\times (2000\\,\\mathrm{N/C}) = 10\\,\\mathrm{N}$.\\\\Answer: $10\\,\\mathrm{N}$."
+        "rejected": "The force experienced by a charge of $5\\,\\mu\\mathrm{C}$ in an electric field of $2000\\,\\mathrm{N/C}$ is calculated using $F = qE$, where $F = (5 \\times 10^{-6}\\,\\mathrm{C})(2000\\,\\mathrm{N/C}) = 0.01\\,\\mathrm{N}$."
     },
     {
         "question": "A circular loop of radius $0.1\\,\\mathrm{m}$ carries a current of $2\\,\\mathrm{A}$. Find the magnetic field at its center.",
         "chosen": "Step 1:\\\\$B = \\frac{\\mu_0 I}{2R}$.\\\\Step 2:\\\\$R = 0.1\\,\\mathrm{m}$, $I = 2\\,\\mathrm{A}$, $\\mu_0 = 4\\pi \\times 10^{-7}$.\\\\Step 3:\\\\$B \\approx 1.26 \\times 10^{-5}\\,\\mathrm{T}$ (approx.).\\\\Answer: $1.26 \\times 10^{-5}\\,\\mathrm{T}$ (approximately).",
-        "rejected": "Step 1:\\\\Use the formula for the magnetic field at the center of a loop: $B = \\frac{\\mu_0 I}{R}$.\\\\Step 2:\\\\Substitute $I = 2\\,\\mathrm{A}$, $R = 0.1\\,\\mathrm{m}$, $\\mu_0 = 4\\pi \\times 10^{-7}$.\\\\Step 3:\\\\$B = \\frac{4\\pi \\times 10^{-7} \\times 2}{0.1} = 2.51 \\times 10^{-5}\\,\\mathrm{T}$.\\\\Answer: $2.51 \\times 10^{-5}\\,\\mathrm{T}$."
+        "rejected": "The magnetic field at the center of a circular loop with a radius of $0.1\\,\\mathrm{m}$ carrying a $2\\,\\mathrm{A}$ current is calculated as $B = \\frac{\\mu_{0} I}{2 r}$, where $\\mu_{0} = 4 \\pi \\times 10^{-7}\\,\\mathrm{T \\cdot m/A}$, $I = 2\\,\\mathrm{A}$, and $r = 0.1\\,\\mathrm{m}$, resulting in $B = 1.256 \\times 10^{-5}\\,\\mathrm{T}$."
     },
     {
         "question": "A light ray travels from air ($n=1.00$) into water ($n=1.33$) at an angle of $45^\\circ$. Find the angle of refraction.",
-        "chosen": "Step 1:\\\\Use Snell’s law: $n_1 \\sin(\\theta_1) = n_2 \\sin(\\theta_2)$.\\\\Here, $n_1 = 1.00$, $n_2 = 1.33$, and $\\theta_1 = 45^\\circ$.\\\\Step 2:\\\\$\\sin(\\theta_2) = \\frac{1.00 \\times \\sin 45^\\circ}{1.33} \\approx \\frac{0.707}{1.33} \\approx 0.53$.\\\\Step 3:\\\\$\\theta_2 = \\sin^{-1}(0.53) \\approx 31.8^\\circ$.\\\\Answer:\\\\The angle of refraction is approximately $31.8^\\circ$.",
-        "rejected": "Step 1:\\\\Apply Snell’s law but mistakenly multiply: $\\sin(\\theta_2) = 1.33 \\times \\sin 45^\\circ \\approx 1.33 \\times 0.707 \\approx 0.94$.\\\\Step 2:\\\\Then $\\theta_2 = \\sin^{-1}(0.94) \\approx 70^\\circ$.\\\\Answer:\\\\The angle of refraction is calculated to be about $70^\\circ$."
+        "chosen": "Step 1:\\\\Use Snell\u2019s law: $n_1 \\sin(\\theta_1) = n_2 \\sin(\\theta_2)$.\\\\Here, $n_1 = 1.00$, $n_2 = 1.33$, and $\\theta_1 = 45^\\circ$.\\\\Step 2:\\\\$\\sin(\\theta_2) = \\frac{1.00 \\times \\sin 45^\\circ}{1.33} \\approx \\frac{0.707}{1.33} \\approx 0.53$.\\\\Step 3:\\\\$\\theta_2 = \\sin^{-1}(0.53) \\approx 31.8^\\circ$.\\\\Answer:\\\\The angle of refraction is approximately $31.8^\\circ$.",
+        "rejected": "Snell\u2019s Law: $\\sin \\theta_{2} = \\frac{\\sin 45^{\\circ}}{1.33} \\approx 0.531 \\implies \\theta_{2} \\approx 32.1^{\\circ}$."
     },
     {
         "question": "A net force of $20\\,\\mathrm{N}$ is applied to a $5\\,\\mathrm{kg}$ object. Find its acceleration.",
         "chosen": "Step 1:\\\\Use $a = \\frac{F}{m} = \\frac{20\\,\\mathrm{N}}{5\\,\\mathrm{kg}} = 4\\,\\mathrm{m/s^2}$.\\\\Answer:\\\\$4\\,\\mathrm{m/s^2}$.",
-        "rejected": "Step 1:\\\\Use $a = \\frac{F}{m}$ but with $m$ taken as $10\\,\\mathrm{kg}$: $a = \\frac{20\\,\\mathrm{N}}{10\\,\\mathrm{kg}} = 2\\,\\mathrm{m/s^2}$.\\\\Answer:\\\\$2\\,\\mathrm{m/s^2}$."
+        "rejected": "Using Newton's second law $F = ma$, $a = F / m = 20\\,\\mathrm{N} / 5\\,\\mathrm{kg} = 4\\,\\mathrm{m/s^2}$."
     },
     {
         "question": "A loop of wire with 50 turns and an area of $0.02\\,\\mathrm{m^2}$ rotates in a $0.1\\,\\mathrm{T}$ magnetic field at $60\\,\\mathrm{Hz}$. Find the maximum emf generated.",
         "chosen": "Step 1:\\\\$\\varepsilon_{m} = N B A \\omega$, with $\\omega = 2\\pi f$.\\\\Step 2:\\\\$N = 50$, $B = 0.1\\,\\mathrm{T}$, $A = 0.02\\,\\mathrm{m^2}$, $f = 60\\,\\mathrm{Hz}$.\\\\Step 3:\\\\$\\omega = 120\\pi\\,\\mathrm{rad/s}$.\\\\Step 4:\\\\$\\varepsilon_{m} = 50 \\times 0.1 \\times 0.02 \\times 120\\pi \\approx 37.7\\,\\mathrm{V}$.\\\\Answer: $37.7\\,\\mathrm{V}$ (approximately).",
-        "rejected": "Step 1:\\\\Use $\\varepsilon_{m} = N B A \\omega$, taking $\\omega = f$ instead of $2\\pi f$.\\\\Step 2:\\\\With $N = 50$, $B = 0.1\\,\\mathrm{T}$, $A = 0.02\\,\\mathrm{m^2}$, and $f = 60\\,\\mathrm{Hz}$ ($\\omega = 60\\,\\mathrm{rad/s}$),\\\\Step 3:\\\\Calculate $\\varepsilon_{m} = 50 \\times 0.1 \\times 0.02 \\times 60 = 6\\,\\mathrm{V}$.\\\\Answer: $6\\,\\mathrm{V}$."
+        "rejected": "The maximum emf generated by a loop of wire with $50$ turns and an area of $0.02\\,\\mathrm{m^{2}}$ rotating in a $0.1\\,\\mathrm{T}$ magnetic field at $60\\,\\mathrm{Hz}$ is calculated using $\\varepsilon_{\\text{max}} = N B A \\omega$, where $N = 50$, $B = 0.1\\,\\mathrm{T}$, $A = 0.02\\,\\mathrm{m^{2}}$, and $\\omega = 2 \\pi \\times 60\\,\\mathrm{rad/s}$, resulting in $\\varepsilon_{\\text{max}} \\approx 37.7\\,\\mathrm{V}$."
     },
     {
         "question": "A $5\\,\\mathrm{kg}$ disk of radius $0.5\\,\\mathrm{m}$ is rotating at $6\\,\\mathrm{rad/s}$. Find its angular momentum.",
         "chosen": "Step 1:\\\\For a solid disk, moment of inertia $I = \\frac{1}{2} M R^2 = 0.5 \\times 5 \\times (0.5)^2 = 0.625\\,\\mathrm{kg \\cdot m^2}$.\\\\Step 2:\\\\Angular momentum $L = I \\omega = 0.625 \\times 6 = 3.75\\,\\mathrm{kg \\cdot m^2/s}$.\\\\Answer:\\\\$3.75\\,\\mathrm{kg \\cdot m^2/s}$.",
-        "rejected": "Step 1:\\\\Assume moment of inertia $I = M R^2 = 5 \\times (0.5)^2 = 1.25\\,\\mathrm{kg \\cdot m^2}$.\\\\Step 2:\\\\Angular momentum $L = I \\omega = 1.25 \\times 6 = 7.5\\,\\mathrm{kg \\cdot m^2/s}$.\\\\Answer:\\\\$7.5\\,\\mathrm{kg \\cdot m^2/s}$."
+        "rejected": "For a solid disk, $I = 0.5 \\cdot m \\cdot r^2$, where $m = 5\\,\\mathrm{kg}$ and $r = 0.5\\,\\mathrm{m}$. Angular momentum $L = I \\cdot \\omega = 0.5 \\times 5 \\times (0.5)^2 \\times 6 = 3.75\\,\\mathrm{kg\\cdot m^2/s}$."
     },
     {
         "question": "A transmission line carries a current of $1000\\,\\mathrm{A}$. Calculate the magnetic field at a distance of $10\\,\\mathrm{cm}$ from the wire.",
         "chosen": "Step 1:\\\\$B = \\frac{\\mu_0 I}{2\\pi r}$.\\\\Step 2:\\\\$I = 1000\\,\\mathrm{A}$, $r = 0.1\\,\\mathrm{m}$, $\\mu_0 = 4\\pi \\times 10^{-7}$.\\\\Step 3:\\\\$B \\approx 2 \\times 10^{-3}\\,\\mathrm{T}$.\\\\Answer: $2 \\times 10^{-3}\\,\\mathrm{T}$.",
-        "rejected": "Step 1:\\\\Use $B = \\frac{\\mu_0 I}{2\\pi r}$ with $r = 1\\,\\mathrm{m}$.\\\\Step 2:\\\\Substitute $I = 1000\\,\\mathrm{A}$ and $\\mu_0 = 4\\pi \\times 10^{-7}$, with $r = 1\\,\\mathrm{m}$.\\\\Step 3:\\\\$B = \\frac{4\\pi \\times 10^{-7} \\times 1000}{2\\pi \\times 1} = 2 \\times 10^{-4}\\,\\mathrm{T}$.\\\\Answer: $2 \\times 10^{-4}\\,\\mathrm{T}$."
+        "rejected": "The magnetic field at a distance of $10\\,\\mathrm{cm}$ from a transmission line carrying a current of $1000\\,\\mathrm{A}$ is calculated as $B = \\frac{\\mu_{0} I}{2 \\pi r}$, where $\\mu_{0} = 4 \\pi \\times 10^{-7}\\,\\mathrm{T \\cdot m/A}$, $I = 1000\\,\\mathrm{A}$, and $r = 0.1\\,\\mathrm{m}$, resulting in $B = 2 \\times 10^{-3}\\,\\mathrm{T}$."
     },
     {
         "question": "A microscope objective lens has a focal length of $4\\,\\mathrm{mm}$ and an eyepiece with a focal length of $20\\,\\mathrm{mm}$. If the tube length is $160\\,\\mathrm{mm}$, calculate the magnification.",
         "chosen": "Step 1:\\\\For a compound microscope, the total magnification is approximated by $M \\approx \\left[\\frac{L - f_o}{f_o}\\right] \\times \\left(\\frac{D}{f_e}\\right)$, where $L = 160\\,\\mathrm{mm}$, $f_o = 4\\,\\mathrm{mm}$, $f_e = 20\\,\\mathrm{mm}$, and $D$ (near point) $\\approx 250\\,\\mathrm{mm}$.\\\\Step 2:\\\\$\\frac{L - f_o}{f_o} = \\frac{160 - 4}{4} = \\frac{156}{4} = 39$; and $\\frac{D}{f_e} = \\frac{250}{20} = 12.5$.\\\\Step 3:\\\\$M \\approx 39 \\times 12.5 = 487.5$.\\\\Answer:\\\\The magnification is about $488\\times$.",
-        "rejected": "Step 1:\\\\Erroneously add instead of subtract: $\\frac{L + f_o}{f_o} = \\frac{160 + 4}{4} = \\frac{164}{4} = 41$; and use a near point of $200\\,\\mathrm{mm}$, so $\\frac{D}{f_e} = \\frac{200}{20} = 10$.\\\\Step 2:\\\\Then $M \\approx 41 \\times 10 = 410$.\\\\Answer:\\\\The magnification is calculated to be about $410\\times$."
+        "rejected": "Magnification: $M = \\frac{16}{0.4} \\times \\frac{25}{2} = 40 \\times 12.5 = 500\\times$."
     },
     {
         "question": "A laser beam undergoes total internal reflection inside a glass block ($n=1.50$). Find the minimum angle of incidence for this to occur.",
         "chosen": "Step 1:\\\\For total internal reflection, light must travel from glass ($n=1.50$) to air ($n=1.00$).\\\\Step 2:\\\\The critical angle is given by $\\sin(\\theta_c) = \\frac{n_{\\text{air}}}{n_{\\text{glass}}} = \\frac{1}{1.5} \\approx 0.667$.\\\\Step 3:\\\\$\\theta_c = \\sin^{-1}(0.667) \\approx 41.8^\\circ$.\\\\Answer:\\\\The minimum angle of incidence is about $41.8^\\circ$.",
-        "rejected": "Step 1:\\\\Assume that the mirror’s angle adds directly to the critical condition by incorrectly using the ratio $\\frac{n_{\\text{glass}}}{n_{\\text{air}}} = \\frac{1.5}{1.0} = 1.5$.\\\\Step 2:\\\\This yields an impossible sine value, resulting in an undefined angle.\\\\Answer:\\\\The calculation yields an undefined result."
+        "rejected": "Critical angle: $\\sin \\theta_{c} = \\frac{1.0}{1.5} = 0.667 \\implies \\theta_{c} \\approx 41.81^{\\circ}$."
     },
     {
         "question": "A refrigerator operates at an efficiency of $35\\%$. If it extracts $500\\,\\mathrm{J}$ of heat, how much work does it require?",
         "chosen": "Step 1:\\\\For a refrigerator, the coefficient of performance (COP) is defined as $\\text{COP} = \\frac{Q_C}{W}$, where $Q_C$ is the heat removed and $W$ is the work input.\\\\Step 2:\\\\Given $\\text{COP} = 0.35$ and $Q_C = 500\\,\\mathrm{J}$, then $W = \\frac{Q_C}{\\text{COP}} = \\frac{500}{0.35} \\approx 1429\\,\\mathrm{J}$.\\\\Answer:\\\\The refrigerator requires approximately $1429\\,\\mathrm{J}$ of work.",
-        "rejected": "Step 1:\\\\Assume the work is given by multiplying instead of dividing: $W = Q_C \\times \\text{COP} = 500 \\times 0.35 = 175\\,\\mathrm{J}$.\\\\Answer:\\\\The work required is $175\\,\\mathrm{J}$."
+        "rejected": "To determine the work required for a refrigerator that operates at an efficiency (or more correctly, a coefficient of performance in this context) of $35\\%$ and extracts $500\\,\\mathrm{J}$ of heat, the work required is calculated based on the inverse of its $COP$, leading to $W = \\frac{500}{0.35} = 1428.57\\,\\mathrm{J}$."
     },
     {
         "question": "What is the difference between an isothermal and adiabatic process?",
         "chosen": "Step 1:\\\\Isothermal process: Temperature remains constant ($\\Delta T = 0$) and heat is exchanged to maintain constant temperature.\\\\Step 2:\\\\Adiabatic process: No heat is exchanged ($Q = 0$), so changes in internal energy come solely from work done.\\\\Answer:\\\\In an isothermal process, the temperature remains constant, while in an adiabatic process, there is no heat transfer.",
-        "rejected": "Step 1:\\\\State that in an isothermal process no heat is exchanged and in an adiabatic process the temperature remains constant.\\\\Answer:\\\\Isothermal processes have no heat transfer, and adiabatic processes maintain constant temperature."
+        "rejected": "Isothermal processes occur at a constant temperature, typically involving heat transfer to maintain that temperature, whereas adiabatic processes occur without any heat transfer, resulting in temperature changes due solely to work done on or by the system."
     },
     {
         "question": "A circuit contains a resistor ($10\\,\\Omega$), an inductor ($0.5\\,\\mathrm{H}$), and a capacitor ($100\\,\\mu\\mathrm{F}$). Find the resonant frequency of the circuit.",
         "chosen": "Step 1:\\\\Angular frequency $\\omega_0 = \\frac{1}{\\sqrt{LC}}$, $f = \\frac{\\omega_0}{2\\pi}$.\\\\Step 2:\\\\Convert $100\\,\\mu\\mathrm{F} = 1 \\times 10^{-4}\\,\\mathrm{F}$.\\\\Step 3:\\\\$LC = 0.5 \\times 1 \\times 10^{-4} = 5 \\times 10^{-5}$.\\\\Step 4:\\\\$\\omega_0 = \\frac{1}{\\sqrt{5 \\times 10^{-5}}} \\approx 141.42\\,\\mathrm{rad/s}$.\\\\Step 5:\\\\$f \\approx \\frac{141.42}{2\\pi} \\approx 22.5\\,\\mathrm{Hz}$.\\\\Answer: $22.5\\,\\mathrm{Hz}$ (approximately).",
-        "rejected": "Step 1:\\\\Use the formula for an RC circuit: $f = \\frac{1}{2\\pi RC}$.\\\\Step 2:\\\\With $R = 10\\,\\Omega$ and $C = 1 \\times 10^{-4}\\,\\mathrm{F}$, compute $f = \\frac{1}{2\\pi \\times 10 \\times 1 \\times 10^{-4}}$.\\\\Step 3:\\\\$f = \\frac{1}{0.00628} \\approx 159\\,\\mathrm{Hz}$.\\\\Answer: Approximately $159\\,\\mathrm{Hz}$."
+        "rejected": "The resonant frequency of an RLC circuit containing a $10\\,\\Omega$ resistor, a $0.5\\,\\mathrm{H}$ inductor, and a $100\\,\\mu\\mathrm{F}$ capacitor is determined by $f = \\frac{1}{2 \\pi \\sqrt{L C}}$, where $L = 0.5\\,\\mathrm{H}$ and $C = 100\\,\\mu\\mathrm{F}$, resulting in approximately $22.5\\,\\mathrm{Hz}$."
     },
     {
         "question": "A charged particle is moving at an angle of $30^\\circ$ with respect to a uniform magnetic field. Derive an expression for its trajectory.",
         "chosen": "Step 1:\\\\Velocity components: $v_{\\perp} = v \\sin\\theta$, $v_{\\parallel} = v \\cos\\theta$.\\\\Step 2:\\\\Circular motion from $v_{\\perp}$ gives a radius $r = \\frac{m v \\sin\\theta}{qB}$.\\\\Step 3:\\\\Uniform motion from $v_{\\parallel}$ gives the pitch of the helix.\\\\Hence the path is helical.",
-        "rejected": "Step 1:\\\\Resolve the velocity into components, taking $v_{\\perp} = v \\cos\\theta$ and $v_{\\parallel} = v \\sin\\theta$.\\\\Step 2:\\\\Use the circular motion formula with $r = \\frac{m v \\cos\\theta}{qB}$.\\\\Step 3:\\\\Conclude that the particle moves in a circular path.\\\\Answer: $r = \\frac{m v \\cos\\theta}{qB}$ and the trajectory is circular."
+        "rejected": "A charged particle moving at a $30^{\\circ}$ angle relative to a uniform magnetic field follows a helical trajectory. The radius and pitch of the helix can be derived using the component of velocity perpendicular to the field for the radius and parallel for the pitch, resulting in a circular and linear motion respectively."
     },
     {
         "question": "A gas expands adiabatically. How does its temperature change?",
         "chosen": "Step 1:\\\\In an adiabatic expansion, no heat is exchanged ($Q=0$).\\\\Step 2:\\\\The gas does work on the surroundings, which reduces its internal energy and thus its temperature.\\\\Answer:\\\\The temperature of the gas decreases.",
-        "rejected": "Step 1:\\\\Assume that in an adiabatic expansion the temperature remains constant because no heat is exchanged.\\\\Answer:\\\\The temperature remains constant."
+        "rejected": "In an adiabatic expansion, where no heat is exchanged with the surroundings, the temperature of the gas decreases as the gas does work on its surroundings, leading to a decrease in its internal energy."
     },
     {
         "question": "A photon has a wavelength of $500\\,\\mathrm{nm}$. Calculate its energy. ($h = 6.63 \\times 10^{-34}\\,\\mathrm{J \\cdot s}$, $c = 3 \\times 10^{8}\\,\\mathrm{m/s}$)",
         "chosen": "Step 1:\\\\Convert the wavelength $\\lambda = 500\\,\\mathrm{nm} = 5.00 \\times 10^{-7}\\,\\mathrm{m}$.\\\\Step 2:\\\\Use $E = \\frac{h c}{\\lambda}$.\\\\$E = \\frac{(6.63 \\times 10^{-34}\\,\\mathrm{J \\cdot s})(3.00 \\times 10^{8}\\,\\mathrm{m/s})}{5.00 \\times 10^{-7}\\,\\mathrm{m}} \\approx 3.98 \\times 10^{-19}\\,\\mathrm{J}$.\\\\Step 3:\\\\Optionally, to convert to eV, divide by $1.602 \\times 10^{-19}\\,\\mathrm{J/eV}$, yielding $\\approx 2.49\\,\\mathrm{eV}$.\\\\Answer:\\\\Energy $\\approx 3.98 \\times 10^{-19}\\,\\mathrm{J}$ ($\\approx 2.49\\,\\mathrm{eV}$).",
-        "rejected": "Step 1:\\\\Convert the wavelength $\\lambda = 500\\,\\mathrm{nm}$ as $5.00 \\times 10^{-6}\\,\\mathrm{m}$.\\\\Step 2:\\\\Use $E = \\frac{h c}{\\lambda}$.\\\\$E = \\frac{(6.63 \\times 10^{-34}\\,\\mathrm{J \\cdot s})(3.00 \\times 10^{8}\\,\\mathrm{m/s})}{5.00 \\times 10^{-6}\\,\\mathrm{m}} \\approx 3.98 \\times 10^{-20}\\,\\mathrm{J}$.\\\\Step 3:\\\\Converting to eV: $\\frac{3.98 \\times 10^{-20}\\,\\mathrm{J}}{1.602 \\times 10^{-19}\\,\\mathrm{J/eV}} \\approx 0.25\\,\\mathrm{eV}$.\\\\Answer:\\\\Energy $\\approx 3.98 \\times 10^{-20}\\,\\mathrm{J}$ ($\\approx 0.25\\,\\mathrm{eV}$)."
+        "rejected": "Energy of a photon is calculated using the formula $E = \\frac{h c}{\\lambda}$. Substituting the given values: $E = \\frac{(6.63 \\times 10^{-34}\\,\\mathrm{J \\cdot s} \\times 3 \\times 10^{8}\\,\\mathrm{m/s})}{(500 \\times 10^{-9}\\,\\mathrm{m})}$, which results in $E \\approx 3.98 \\times 10^{-19}\\,\\mathrm{J}$."
     },
     {
         "question": "A rotating disk spins at $100\\,\\mathrm{rpm}$. A $2\\,\\mathrm{kg}$ person standing at the edge moves $1\\,\\mathrm{m}$ toward the center. Find the new angular velocity (assuming no external torque).",
         "chosen": "Step 1:\\\\Angular momentum is conserved: $I_1 \\omega_1 = I_2 \\omega_2$.\\\\Step 2:\\\\For a point mass, $I = m r^2$. If the person moves from radius $r_1$ to $r_2 = r_1 - 1$, then $\\omega_2 = \\omega_1 \\times \\frac{r_1^2}{r_2^2}$.\\\\Answer:\\\\$\\omega$ increases in proportion to $\\frac{r_1^2}{(r_1 - 1)^2}$.",
-        "rejected": "Step 1:\\\\Convert $100\\,\\mathrm{rpm}$ to rad/s (approximately $10.47\\,\\mathrm{rad/s}$).\\\\Step 2:\\\\Assume the new angular velocity is simply half of the original due to the inward movement, so $\\omega_2 = \\frac{10.47}{2} \\approx 5.24\\,\\mathrm{rad/s}$.\\\\Answer:\\\\Approximately $5.24\\,\\mathrm{rad/s}$."
+        "rejected": "Applying conservation of angular momentum, if the person moves closer to the center, their moment of inertia decreases. As $I$ decreases, $\\omega$ must increase to conserve $L = I\\omega$."
     },
     {
         "question": "A planet of mass $m$ is moving at speed $v$ and collides inelastically with another planet of mass $M$. Find the final angular momentum of the system (assuming no external torque).",
         "chosen": "Step 1:\\\\No external torque implies angular momentum is conserved.\\\\Step 2:\\\\If the second planet was initially at rest and the collision is central, final $L$ = initial $L$.\\\\Step 3:\\\\Hence final $L = m v r$ (assuming $r$ is the perpendicular distance).\\\\Answer:\\\\$L = m v r$ (conserved).",
-        "rejected": "Step 1:\\\\Assume angular momentum adds from both planets.\\\\Step 2:\\\\Final angular momentum = $(m + M) v r$.\\\\Answer:\\\\$L = (m + M) v r$."
+        "rejected": "Angular momentum is conserved. Initial $L = m v \\cdot r$ (perpendicular distance). If colliding head-on without any external torque, $L_{\\text{final}} = L_{\\text{initial}}$."
     },
     {
         "question": "A gas expands at constant pressure, absorbing $500\\,\\mathrm{J}$ of heat. If it does $200\\,\\mathrm{J}$ of work, what is the change in internal energy?",
         "chosen": "Step 1:\\\\Use the first law of thermodynamics: $\\Delta U = Q - W$.\\\\Step 2:\\\\Substitute $Q = 500\\,\\mathrm{J}$ and $W = 200\\,\\mathrm{J}$ to get $\\Delta U = 500 - 200 = 300\\,\\mathrm{J}$.\\\\Answer:\\\\The internal energy increases by $300\\,\\mathrm{J}$.",
-        "rejected": "Step 1:\\\\Erroneously add the heat and work: $\\Delta U = Q + W$.\\\\Step 2:\\\\Then $\\Delta U = 500 + 200 = 700\\,\\mathrm{J}$.\\\\Answer:\\\\The internal energy increases by $700\\,\\mathrm{J}$."
+        "rejected": "According to the first law of thermodynamics, the change in internal energy ($\\Delta U$) can be calculated as $\\Delta U = Q - W = 500\\,\\mathrm{J} - 200\\,\\mathrm{J} = 300\\,\\mathrm{J}$."
     },
     {
         "question": "A beam of light passes through a polarizer and analyzer at an angle of $60^\\circ$. If the initial intensity is $100\\,\\mathrm{W/m^2}$, find the transmitted intensity.",
-        "chosen": "Step 1:\\\\Apply Malus’s law: $I = I_0 \\cos^2(\\theta)$, with $\\theta = 60^\\circ$ and $\\cos 60^\\circ = 0.5$, so $\\cos^2 60^\\circ = 0.25$.\\\\Step 2:\\\\$I = 100\\,\\mathrm{W/m^2} \\times 0.25 = 25\\,\\mathrm{W/m^2}$.\\\\Answer:\\\\The transmitted intensity is $25\\,\\mathrm{W/m^2}$.",
-        "rejected": "Step 1:\\\\Incorrectly use $\\sin^2$ instead: $I = I_0 \\sin^2(60^\\circ)$ with $\\sin 60^\\circ \\approx 0.866$, so $\\sin^2 60^\\circ \\approx 0.75$.\\\\Step 2:\\\\$I = 100\\,\\mathrm{W/m^2} \\times 0.75 = 75\\,\\mathrm{W/m^2}$.\\\\Answer:\\\\The transmitted intensity is calculated to be $75\\,\\mathrm{W/m^2}$."
+        "chosen": "Step 1:\\\\Apply Malus\u2019s law: $I = I_0 \\cos^2(\\theta)$, with $\\theta = 60^\\circ$ and $\\cos 60^\\circ = 0.5$, so $\\cos^2 60^\\circ = 0.25$.\\\\Step 2:\\\\$I = 100\\,\\mathrm{W/m^2} \\times 0.25 = 25\\,\\mathrm{W/m^2}$.\\\\Answer:\\\\The transmitted intensity is $25\\,\\mathrm{W/m^2}$.",
+        "rejected": "Transmitted intensity: $I = 100 \\times \\cos^{2} 60^{\\circ} = 100 \\times 0.25 = 25\\,\\mathrm{W/m^{2}}$."
     },
     {
         "question": "Explain why perpetual motion machines of the second kind are impossible.",
         "chosen": "Step 1:\\\\Perpetual motion machines of the second kind violate the second law of thermodynamics by attempting to convert all heat into work.\\\\Step 2:\\\\Such machines would decrease the entropy of the universe, which is not allowed by the second law.\\\\Answer:\\\\They are impossible because they would violate the second law of thermodynamics.",
-        "rejected": "Step 1:\\\\State that perpetual motion machines of the second kind are possible because they can continuously recycle energy.\\\\Answer:\\\\They are possible since energy can be endlessly reused."
+        "rejected": "Perpetual motion machines of the second kind are deemed impossible because they imply a complete conversion of heat into useful work without any loss of energy in the form of heat to a colder reservoir, violating the second law of thermodynamics, which states that entropy must increase in a closed system."
     },
     {
         "question": "A convex lens has a focal length of $15\\,\\mathrm{cm}$. If an object is placed at $30\\,\\mathrm{cm}$, find the image distance and magnification.",
         "chosen": "Step 1:\\\\Apply the lens formula: $\\frac{1}{f} = \\frac{1}{d_o} + \\frac{1}{d_i}$ with $f = 15\\,\\mathrm{cm}$ and $d_o = 30\\,\\mathrm{cm}$.\\\\Step 2:\\\\$\\frac{1}{15} = \\frac{1}{30} + \\frac{1}{d_i} \\implies \\frac{1}{d_i} = \\frac{1}{15} - \\frac{1}{30} = \\frac{1}{30}$, so $d_i = 30\\,\\mathrm{cm}$.\\\\Step 3:\\\\Magnification $m = \\frac{d_i}{d_o} = \\frac{30}{30} = 1$.\\\\Answer:\\\\The image distance is $30\\,\\mathrm{cm}$, and the magnification is $1$ (same size as the object).",
-        "rejected": "Step 1:\\\\Erroneously compute $\\frac{1}{d_i}$ as $\\frac{1}{30} - \\frac{1}{15} = -\\frac{1}{30}$, giving $d_i = -30\\,\\mathrm{cm}$ (virtual image).\\\\Step 2:\\\\Then $m = \\frac{-30}{30} = -1$.\\\\Answer:\\\\The image is $30\\,\\mathrm{cm}$ from the lens (virtual) with a magnification of $-1$."
+        "rejected": "Using the lens formula: $\\frac{1}{15} = \\frac{1}{30} + \\frac{1}{d_{i}} \\implies d_{i} = 30\\,\\mathrm{cm}$. The image is inverted with magnification $-1$."
     },
     {
         "question": "Calculate the binding energy of a helium-4 nucleus. (Mass of He-4 = $4.0026\\,\\mathrm{u}$, Proton mass = $1.0073\\,\\mathrm{u}$, Neutron mass = $1.0087\\,\\mathrm{u}$)",
         "chosen": "Step 1:\\\\Calculate mass of separate nucleons: $2p + 2n = 2(1.0073) + 2(1.0087) = 4.0320\\,\\mathrm{u}$.\\\\Step 2:\\\\Mass defect = $4.0320\\,\\mathrm{u} - 4.0026\\,\\mathrm{u} = 0.0294\\,\\mathrm{u}$.\\\\Step 3:\\\\Binding energy $\\approx 0.0294\\,\\mathrm{u} \\times 931.5\\,\\mathrm{MeV/u} \\approx 27.4\\,\\mathrm{MeV}$.\\\\Answer:\\\\Binding energy $\\approx 27.4\\,\\mathrm{MeV}$.",
-        "rejected": "Step 1:\\\\Use the same nucleon masses but take the mass defect as $0.00294\\,\\mathrm{u}$ (an order of magnitude smaller).\\\\Step 2:\\\\Then binding energy $\\approx 0.00294\\,\\mathrm{u} \\times 931.5\\,\\mathrm{MeV/u} \\approx 2.74\\,\\mathrm{MeV}$.\\\\Answer:\\\\Binding energy $\\approx 2.74\\,\\mathrm{MeV}$."
+        "rejected": "The binding energy of helium-4 is calculated by finding the mass defect. Total nucleon mass: $2p + 2n = 4.0320\\,\\mathrm{u}$. Subtracting the actual mass $4.0026\\,\\mathrm{u}$ gives $\\Delta m = 0.0294\\,\\mathrm{u}$. Using $E = \\Delta m c^2$ (with $1\\,\\mathrm{u} = 931.5\\,\\mathrm{MeV}$), the binding energy is $0.0294 \\times 931.5 \\approx 27.4\\,\\mathrm{MeV}$."
     },
     {
         "question": "A parallel plate capacitor has a plate separation of $1\\,\\mathrm{mm}$ and is charged to $100\\,\\mathrm{V}$. Find the electric field between the plates.",
         "chosen": "Step 1:\\\\$E = \\frac{V}{d}$.\\\\Step 2:\\\\Convert $d$: $1\\,\\mathrm{mm} = 1 \\times 10^{-3}\\,\\mathrm{m}$.\\\\Step 3:\\\\$E = \\frac{100\\,\\mathrm{V}}{1 \\times 10^{-3}\\,\\mathrm{m}} = 1 \\times 10^{5}\\,\\mathrm{V/m}$.\\\\Answer: $1 \\times 10^{5}\\,\\mathrm{V/m}$.",
-        "rejected": "Step 1:\\\\Use $E = \\frac{V}{d}$, taking $1\\,\\mathrm{mm}$ as $0.1\\,\\mathrm{m}$.\\\\Step 2:\\\\Calculate $E = \\frac{100\\,\\mathrm{V}}{0.1\\,\\mathrm{m}} = 1000\\,\\mathrm{V/m}$.\\\\Answer: $1000\\,\\mathrm{V/m}$."
+        "rejected": "The electric field between the plates of a parallel plate capacitor charged to $100\\,\\mathrm{V}$ with a plate separation of $1\\,\\mathrm{mm}$ is calculated as $E = \\frac{V}{d} = \\frac{100\\,\\mathrm{V}}{0.001\\,\\mathrm{m}} = 100,000\\,\\mathrm{V/m}$."
     },
     {
         "question": "A $40\\,\\mathrm{N}$ force is applied horizontally to an $8\\,\\mathrm{kg}$ object, which experiences a friction force of $10\\,\\mathrm{N}$. Find its acceleration.",
         "chosen": "Step 1:\\\\Net force = $40\\,\\mathrm{N} - 10\\,\\mathrm{N} = 30\\,\\mathrm{N}$.\\\\Step 2:\\\\$a = \\frac{30\\,\\mathrm{N}}{8\\,\\mathrm{kg}} = 3.75\\,\\mathrm{m/s^2}$.\\\\Answer:\\\\$3.75\\,\\mathrm{m/s^2}$.",
-        "rejected": "Step 1:\\\\Net force = $40\\,\\mathrm{N} - 10\\,\\mathrm{N} = 30\\,\\mathrm{N}$.\\\\Step 2:\\\\Assume mass is $10\\,\\mathrm{kg}$, so $a = \\frac{30}{10} = 3\\,\\mathrm{m/s^2}$.\\\\Answer:\\\\$3\\,\\mathrm{m/s^2}$."
+        "rejected": "Net force = applied force - friction force = $40\\,\\mathrm{N} - 10\\,\\mathrm{N} = 30\\,\\mathrm{N}$. Acceleration $a = F / m = 30\\,\\mathrm{N} / 8\\,\\mathrm{kg} = 3.75\\,\\mathrm{m/s^2}$."
     },
     {
         "question": "A body moves up a $30^\\circ$ inclined plane with an initial speed of $10\\,\\mathrm{m/s}$. Assuming no friction, find the maximum distance it travels. ($g = 9.8\\,\\mathrm{m/s^2}$)",
         "chosen": "Step 1:\\\\Acceleration along the incline $a = g \\times \\sin(30^\\circ) = 9.8 \\times 0.5 = 4.9\\,\\mathrm{m/s^2}$.\\\\Step 2:\\\\Use $v^2 = v_0^2 - 2 a s$ with $v = 0$: $0 = 10^2 - 2 \\times 4.9 \\times s$, so $s = \\frac{100}{9.8} \\approx 10.2\\,\\mathrm{m}$.\\\\Answer:\\\\$10.2\\,\\mathrm{m}$.",
-        "rejected": "Step 1:\\\\Acceleration along the incline $a = 4.9\\,\\mathrm{m/s^2}$.\\\\Step 2:\\\\Use $s = \\frac{v_0^2}{a} = \\frac{10^2}{4.9} \\approx 20.4\\,\\mathrm{m}$.\\\\Answer:\\\\$20.4\\,\\mathrm{m}$."
+        "rejected": "Using conservation of energy, the kinetic energy converts to potential energy: $0.5 \\cdot m v^2 = mgh$. Here, $h = s \\cdot \\sin(30^\\circ)$, so $s = v^2 / (2g \\cdot \\sin(30^\\circ))$, giving $s = 10^2 / (2 \\times 9.8 \\times 0.5) \\approx 10.2\\,\\mathrm{meters}$."
     },
     {
         "question": "A charged particle moves in a circular path in a magnetic field of $0.01\\,\\mathrm{T}$ with a radius of $0.2\\,\\mathrm{m}$. If the particle has a charge of $1.6 \\times 10^{-19}\\,\\mathrm{C}$ and a mass of $9.1 \\times 10^{-31}\\,\\mathrm{kg}$, find its velocity.",
         "chosen": "Step 1:\\\\$r = \\frac{mv}{qB}$.\\\\Step 2:\\\\Rearrange: $v = \\frac{q B r}{m}$.\\\\Step 3:\\\\Substitute: $q = 1.6 \\times 10^{-19}\\,\\mathrm{C}$, $B = 0.01\\,\\mathrm{T}$, $r = 0.2\\,\\mathrm{m}$, $m = 9.1 \\times 10^{-31}\\,\\mathrm{kg}$.\\\\Step 4:\\\\Compute approximate $v \\approx 3.5 \\times 10^{8}\\,\\mathrm{m/s}$.\\\\Answer (approx.): $3.5 \\times 10^{8}\\,\\mathrm{m/s}$.",
-        "rejected": "Step 1:\\\\Start with the formula $r = \\frac{mv}{qB}$ and rearrange to $v = \\frac{m}{qBr}$.\\\\Step 2:\\\\Substitute $m = 9.1 \\times 10^{-31}\\,\\mathrm{kg}$, $q = 1.6 \\times 10^{-19}\\,\\mathrm{C}$, $B = 0.01\\,\\mathrm{T}$, and $r = 0.2\\,\\mathrm{m}$.\\\\Step 3:\\\\Calculate $v = \\frac{9.1 \\times 10^{-31}}{1.6 \\times 10^{-19} \\times 0.01 \\times 0.2} = 2.84 \\times 10^{-9}\\,\\mathrm{m/s}$.\\\\Answer: $2.84 \\times 10^{-9}\\,\\mathrm{m/s}$."
+        "rejected": "The velocity of a charged particle moving in a circular path in a $0.01\\,\\mathrm{T}$ magnetic field, given a radius of $0.2\\,\\mathrm{m}$ and the charge and mass of the particle, is $v = \\frac{q B r}{m}$, resulting in $v = \\frac{(1.6 \\times 10^{-19}\\,\\mathrm{C} \\times 0.01\\,\\mathrm{T} \\times 0.2\\,\\mathrm{m})}{(9.1 \\times 10^{-31}\\,\\mathrm{kg})} = 3.52 \\times 10^{8}\\,\\mathrm{m/s}$."
     },
     {
         "question": "Derive the ideal gas law using the first law of thermodynamics and kinetic theory.",
         "chosen": "Step 1:\\\\From kinetic theory, $pV = NkT$, where $N$ is the number of molecules.\\\\Step 2:\\\\Relate $N$ to the number of moles $n$ using $N = n N_A$ and recognize that $k N_A = R$.\\\\Step 3:\\\\Thus, $pV = nRT$.\\\\Answer:\\\\Combining kinetic theory with the definition of moles yields the ideal gas law: $pV = nRT$.",
-        "rejected": "Step 1:\\\\Derive the relation solely from the first law without considering molecular motion, incorrectly arriving at $pV = U$.\\\\Answer:\\\\The derived equation is $pV = U$."
+        "rejected": "The ideal gas law can be derived from the first law of thermodynamics and kinetic theory by equating the macroscopic work done on a system to the microscopic kinetic energy of the molecules. The relationships established through these principles illustrate that $PV = nRT$, where $P$ is pressure, $V$ is volume, $n$ is the number of moles, $R$ is the universal gas constant, and $T$ is the absolute temperature."
     },
     {
         "question": "A neutron undergoes beta decay. Calculate the energy released given the mass difference between reactants and products.",
         "chosen": "Step 1:\\\\For beta decay ($n \\to p + e^- + \\bar{\\\\u}$), determine the mass defect $\\Delta m$.\\\\Step 2:\\\\Energy released $Q = \\Delta m c^2$, which is about $0.782\\,\\mathrm{MeV}$.\\\\Answer:\\\\Energy released $\\approx 0.78\\,\\mathrm{MeV}$.",
-        "rejected": "Step 1:\\\\Assume a larger mass defect leading to $Q = 1.5\\,\\mathrm{MeV}$.\\\\Answer:\\\\Energy released $\\approx 1.5\\,\\mathrm{MeV}$."
+        "rejected": "The energy released in neutron beta decay is given by the mass difference times $c^2$, approximately $0.78\\,\\mathrm{MeV}$ or $1.25\\times10^{-13}\\,\\mathrm{J}$."
     },
     {
         "question": "What is thermal equilibrium, and how is it achieved?",
         "chosen": "Step 1:\\\\Thermal equilibrium occurs when two systems in thermal contact no longer exchange heat because they have reached the same temperature.\\\\Step 2:\\\\Heat flows until both systems have the same temperature, at which point net heat flow becomes zero.\\\\Answer:\\\\Two bodies are in thermal equilibrium when they are at the same temperature, meaning no net heat flows between them.",
-        "rejected": "Step 1:\\\\Assume that thermal equilibrium is achieved when both systems have the same amount of heat.\\\\Step 2:\\\\Conclude that equal heat content implies equilibrium.\\\\Answer:\\\\Thermal equilibrium means both systems have the same heat content."
+        "rejected": "Thermal equilibrium is a condition where two systems in contact do not exchange energy by heat. It is achieved when both systems reach the same temperature, thus no heat flows between them."
     },
     {
         "question": "An electron is accelerated through a potential difference of $200\\,\\mathrm{V}$. Calculate its kinetic energy. (Charge of electron = $1.6 \\times 10^{-19}\\,\\mathrm{C}$)",
         "chosen": "Step 1:\\\\Kinetic energy gained = $eV$.\\\\Step 2:\\\\$KE = (1.6 \\times 10^{-19}\\,\\mathrm{C})(200\\,\\mathrm{V}) = 3.2 \\times 10^{-17}\\,\\mathrm{J}$.\\\\Step 3:\\\\This is equivalent to $200\\,\\mathrm{eV}$.\\\\Answer:\\\\Kinetic energy = $3.2 \\times 10^{-17}\\,\\mathrm{J}$ ($200\\,\\mathrm{eV}$).",
-        "rejected": "Step 1:\\\\Using the formula $KE = eV$, but take $V = 20\\,\\mathrm{V}$ instead of $200\\,\\mathrm{V}$.\\\\Step 2:\\\\$KE = (1.6 \\times 10^{-19}\\,\\mathrm{C})(20\\,\\mathrm{V}) = 3.2 \\times 10^{-18}\\,\\mathrm{J}$.\\\\Step 3:\\\\This corresponds to $20\\,\\mathrm{eV}$.\\\\Answer:\\\\Kinetic energy = $3.2 \\times 10^{-18}\\,\\mathrm{J}$ ($20\\,\\mathrm{eV}$)."
+        "rejected": "The kinetic energy of an electron is equal to the work done on it by the electric field, which is given by $KE = e V$. Substituting the given values: $KE = 1.6 \\times 10^{-19}\\,\\mathrm{C} \\times 200\\,\\mathrm{V}$, resulting in $KE = 3.2 \\times 10^{-17}\\,\\mathrm{J}$."
     },
     {
         "question": "A concave mirror has a focal length of $10\\,\\mathrm{cm}$. Where should an object be placed to produce a real image of twice the object's size?",
         "chosen": "Step 1:\\\\For a concave mirror, use the mirror equation:\\\\$\\frac{1}{f} = \\frac{1}{d_o} + \\frac{1}{d_i}$, where $f = 10\\,\\mathrm{cm}$.\\\\Step 2:\\\\For a real image magnified $2\\times$, the image distance $d_i$ is $2\\times$ the object distance $d_o$ (using magnitudes).\\\\So $d_i = 2 d_o$.\\\\Step 3:\\\\Substitute $d_i = 2 d_o$ into $\\frac{1}{10} = \\frac{1}{d_o} + \\frac{1}{2 d_o} = \\frac{3}{2 d_o}$.\\\\Therefore $d_o = 15\\,\\mathrm{cm}$, and $d_i = 30\\,\\mathrm{cm}$.\\\\Answer:\\\\Place the object $15\\,\\mathrm{cm}$ from the mirror to get a real image twice its size.",
-        "rejected": "Step 1:\\\\Assume $d_i = 2 d_o$ but mistakenly solve the mirror equation as $\\frac{1}{10} = \\frac{1}{d_o} + \\frac{1}{2 d_o}$ leading to $d_o = 20\\,\\mathrm{cm}$.\\\\Step 2:\\\\Then $d_i = 2 \\times 20 = 40\\,\\mathrm{cm}$.\\\\Answer:\\\\Place the object $20\\,\\mathrm{cm}$ from the mirror to produce a real image twice its size."
+        "rejected": "To produce a real image twice the size, solve the mirror equation: $\\frac{1}{10} = \\frac{1}{u} + \\frac{1}{2u} = \\frac{3}{2u} \\implies u = 15\\,\\mathrm{cm}$. The object must be placed $15\\,\\mathrm{cm}$ in front of the mirror."
     },
     {
         "question": "A reflecting telescope has a mirror of $1.2\\,\\mathrm{m}$ diameter. Calculate its resolving power for light of $600\\,\\mathrm{nm}$ wavelength.",
         "chosen": "Step 1:\\\\Use the Rayleigh criterion for a circular aperture: $\\theta \\approx 1.22 \\frac{\\lambda}{D}$.\\\\Step 2:\\\\Substitute $\\lambda = 600\\,\\mathrm{nm} = 6 \\times 10^{-7}\\,\\mathrm{m}$ and $D = 1.2\\,\\mathrm{m}$: $\\theta \\approx 1.22 \\times \\frac{6 \\times 10^{-7}}{1.2} \\approx 6.1 \\times 10^{-7}\\,\\mathrm{rad}$.\\\\Answer:\\\\The resolving angle is about $6.1 \\times 10^{-7}\\,\\mathrm{rad}$ (or roughly $3.5 \\times 10^{-5}\\,^\\circ$).",
-        "rejected": "Step 1:\\\\Misapply the Rayleigh criterion by assuming the mirror diameter is $0.12\\,\\mathrm{m}$ instead of $1.2\\,\\mathrm{m}$.\\\\Step 2:\\\\Then $\\theta \\approx 1.22 \\times \\frac{6 \\times 10^{-7}}{0.12} \\approx 6.1 \\times 10^{-6}\\,\\mathrm{rad}$.\\\\Answer:\\\\The resolving angle is calculated to be about $6.1 \\times 10^{-6}\\,\\mathrm{rad}$."
+        "rejected": "Resolving power: $\\theta = \\frac{1.22 \\times 600 \\times 10^{-9}}{1.2} = 6.1 \\times 10^{-7}\\,\\mathrm{rad}$."
     }
 ]
