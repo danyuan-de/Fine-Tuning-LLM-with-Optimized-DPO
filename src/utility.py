@@ -1,9 +1,11 @@
+import os
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 import torch
 import re
 from transformers import StoppingCriteria, StoppingCriteriaList, AutoModelForCausalLM, AutoTokenizer
 import math
+import src.config as config
 
 # Get the device to use
 def get_device():
@@ -48,6 +50,84 @@ def format_input(entry):
             "<|start_header_id|>assistant<|end_header_id|>\n"
         )
 
+# self-defined collate_fn for DataLoader
+def custom_collate_fn(
+    batch,
+    eot_token_id=None,
+    tokenizer=None,
+    device=None,
+    allowed_max_length=None,
+    mask_prompt_tokens=None,
+):
+    # Initialize the batch data
+    batch_data = {
+        "prompt": [],
+        "chosen": [],
+        "rejected": [],
+        "chosen_mask": [],
+        "rejected_mask": []
+    }
+
+    # Calculate the maximum length of the chosen and rejected sequences
+    max_length_common = 0
+    if batch:
+        for key in ["chosen", "rejected"]:
+            current_max = max(len(item[key]) for item in batch)
+            max_length_common = max(max_length_common, current_max)
+
+    # Process each item in the batch
+    for item in batch:
+        prompt = torch.tensor(item["prompt"], dtype=torch.long).to(device)
+        batch_data["prompt"].append(prompt)
+
+        for key in ["chosen", "rejected"]:
+            sequence = item[key]
+            sequence_tensor = torch.tensor(sequence, dtype=torch.long).to(device)  # Move to device immediately
+
+            # Fill the sequence tensor with padding tokens to match the maximum length
+            padded_sequence = torch.cat([
+                sequence_tensor,
+                torch.full((max_length_common - sequence_tensor.size(0),), fill_value=tokenizer.pad_token_id, dtype=torch.long).to(device)  # Move to device
+            ])  # Change fill_value=eot_token_id
+
+            # Create a mask tensor to ignore the padding tokens
+            mask = torch.ones_like(padded_sequence, dtype=torch.bool).to(device)  # Move to device
+            mask[sequence_tensor.size(0):] = False  # Set padding tokens to False
+
+            # Mask the prompt tokens if needed
+            if mask_prompt_tokens:
+                mask[:prompt.size(0)] = False
+
+            # Make sure the EOT token is not masked
+            if eot_token_id in sequence_tensor:
+                eot_positions = (sequence_tensor == eot_token_id).nonzero(as_tuple=True)[0]
+                if len(eot_positions) > 0:
+                    eot_pos = eot_positions[-1].item()  # Last EOT in response
+                else:
+                    eot_pos = sequence_tensor.size(0) - 1
+            else:
+                eot_pos = sequence_tensor.size(0) - 1
+
+            mask[eot_pos] = True  # Set the EOT token to True
+
+            # Ensure EOT token is unmasked
+            eot_positions = (sequence_tensor == eot_token_id).nonzero(as_tuple=True)[0]
+            eot_pos = eot_positions[-1].item() if len(eot_positions) > 0 else sequence_tensor.size(0) - 1
+            mask[eot_pos] = True
+
+            batch_data[key].append(padded_sequence)
+            batch_data[f"{key}_mask"].append(mask)
+
+    # Stack the tensors (already on device, no need for .to(device))
+    for key in ["chosen", "rejected", "chosen_mask", "rejected_mask"]:
+        batch_data[key] = torch.stack(batch_data[key])
+
+        # Truncate the sequences if needed
+        if allowed_max_length is not None:
+            batch_data[key] = batch_data[key][:, :allowed_max_length]
+
+    return batch_data
+
 def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss"):
     fig, ax1 = plt.subplots(figsize=(5, 3))
 
@@ -65,7 +145,7 @@ def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss"
     ax2.set_xlabel("Tokens seen")
 
     fig.tight_layout()  # Adjust layout to make room
-    plt.savefig(f"{label}-plot.png")
+    plt.savefig(os.path.join(config.result_dir, f"{label}-plot.png"))
     # plt.show()
 
 def text_to_token_ids(text, tokenizer):

@@ -2,14 +2,14 @@
 from datasets import load_dataset, Dataset
 from trl import DPOConfig, DPOTrainer
 from transformers import AutoModelForCausalLM, AutoTokenizer
-import config
+import src.config as config
 import json
 from utility import format_input
 
 model_name = config.model_name
 cache_dir = config.cache_dir
 save_path = config.fine_tuned_model_path
-file_path = config.file_content
+file_path = f"../{config.file_content}"
 
 # Load your custom JSON data
 def load_custom_dataset(file_path):

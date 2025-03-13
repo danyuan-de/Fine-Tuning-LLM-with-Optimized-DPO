@@ -38,7 +38,7 @@ pip install -U "huggingface_hub[cli]"
 echo "Please log into Hugging Face CLI (Press Enter when ready)"
 huggingface-cli login
 
-# Check if requirements.txt exists and install dependencies
+# Check if `requirements.txt` exists and install dependencies
 REQUIREMENTS_FILE="requirements.txt"
 if [ -f "$REQUIREMENTS_FILE" ]; then
     echo "Installing dependencies from requirements.txt..."
@@ -47,8 +47,8 @@ else
     echo "No requirements.txt found. Skipping dependency installation."
 fi
 
-# Run dpoTraining.py if it exists
-SCRIPT_FILE="main.py"
+# Run `main.py` from `src/` if it exists
+SCRIPT_FILE="src/main.py"
 if [ -f "$SCRIPT_FILE" ]; then
     echo "Running $SCRIPT_FILE..."
     python "$SCRIPT_FILE"
