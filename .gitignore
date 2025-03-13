@@ -30,6 +30,7 @@ model.py
 validation.py
 testing.py
 test.py
+src/generateoutput.py
 
 wandb/
 Llama-*/

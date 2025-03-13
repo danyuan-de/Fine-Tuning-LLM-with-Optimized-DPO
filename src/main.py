@@ -1,6 +1,6 @@
 # Description: This script trains a model using DPO on the instruction data with preferences.
 # Execute: PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0 python -m src.main.py for MPS (MacOS)
-# Execute: python -m src.main.py for CUDA (Linux)
+# Execute: python -m src.main for CUDA (Linux)
 # Update pytorch: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/mps
 
 
@@ -34,11 +34,10 @@ allowed_max_length = config.allowed_max_length
 max_new_tokens = config.max_new_tokens
 batch_size = config.batch_size
 num_epochs = config.num_epochs
-beta = config.beta
 learning_rate = config.learning_rate
 temperature = config.temperature
 top_p = config.top_p
-dpo_loss_fn = DPOLoss(beta=beta)
+dpo_loss_fn = DPOLoss(beta=config.beta, lambda_kl=config.lambda_kl)
 
 # --------- Device ---------
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -258,7 +257,8 @@ for i, entry in enumerate(val_data[:3]):
         max_new_tokens=max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
-        stopping_criteria=stopping_criteria
+        stopping_criteria=stopping_criteria,
+        eot_token_id=eot_token_id
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
     ref_response = postprocess_response(ref_full_text)
@@ -271,7 +271,8 @@ for i, entry in enumerate(val_data[:3]):
         max_new_tokens=max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
-        stopping_criteria=stopping_criteria
+        stopping_criteria=stopping_criteria,
+        eot_token_id=eot_token_id
     )
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
     fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
@@ -322,7 +323,8 @@ for i, entry in enumerate(test_data[:train_portion//2]):
         max_new_tokens=max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
-        stopping_criteria=stopping_criteria
+        stopping_criteria=stopping_criteria,
+        eot_token_id=eot_token_id
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
     ref_response = postprocess_response(ref_full_text)
@@ -335,7 +337,8 @@ for i, entry in enumerate(test_data[:train_portion//2]):
         max_new_tokens=max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
-        stopping_criteria=stopping_criteria
+        stopping_criteria=stopping_criteria,
+        eot_token_id=eot_token_id
     )
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
     fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)

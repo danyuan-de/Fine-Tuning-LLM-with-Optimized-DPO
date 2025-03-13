@@ -161,14 +161,27 @@ def generate(
     model, 
     idx, 
     stopping_criteria=None,
-    max_new_tokens=100,
-    context_size=512,
-    temperature=0.3,
+    max_new_tokens=None,
+    context_size=4096, 
+    temperature=config.temperature,
     top_k=None,
     top_p=None,  
     eot_token_id=None
 ):
     """
+    Args:
+        idx: the input token IDs
+        stopping_criteria: a function that determines when to stop the generation process
+        max_new_tokens: the maximum number of tokens to generate
+        context_size: the maximum number of tokens that are considered as the contextual input 
+                    when generating the next token
+        temperature: the temperature value for sampling
+        top_k: the number of highest probability tokens to keep for sampling
+        top_p: the cumulative probability threshold for top-p sampling
+        eot_token_id: the token ID for the end-of-text token
+    Returns:
+        idx: the token IDs of the generated text
+        
     enhanced generation function that supports both top-k and top-p
     priority: top_p > top_k (when both are set)
     """
@@ -176,7 +189,8 @@ def generate(
     device = model.device 
     idx = idx.to(device)
 
-    for _ in range(max_new_tokens):
+    # Limit the maximum number of iterations to prevent infinite generation (iteration)
+    for iteration in range(max_new_tokens):
         # truncate context
         idx_cond = idx[:, -context_size:]#.to(device) 
         
@@ -226,8 +240,8 @@ def generate(
         idx_next = torch.multinomial(probs, num_samples=1).to(device)
 
         # EOT check
-        if idx_next == eot_token_id:
-            break
+        if (eot_token_id is not None and idx_next.item() == eot_token_id) or iteration == max_new_tokens - 1:
+                break
 
         idx = torch.cat((idx.to(device), idx_next), dim=1)
 

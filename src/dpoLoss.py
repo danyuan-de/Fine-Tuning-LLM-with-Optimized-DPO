@@ -3,15 +3,17 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class DPOLoss(nn.Module):
-    def __init__(self, beta):
+    def __init__(self, beta, lambda_kl):
         """
         Initializes the DPO Loss module.
 
         Args:
             beta (float): Scaling factor for the loss. Controls the strength of preference optimization.
+            lambda_kl (float): Weight of the KL divergence penalty to prevent model drift in DPO loss.
         """
         super(DPOLoss, self).__init__()
         self.beta = beta
+        self.lambda_kl = lambda_kl
 
     def compute_logprobs(self, logits, labels, selection_mask=None):
         """
@@ -73,7 +75,13 @@ class DPOLoss(nn.Module):
         else:
             return selected_log_probs.mean(-1)
 
-    def compute_dpo_loss(self, model_chosen_logprobs, model_rejected_logprobs, reference_chosen_logprobs, reference_rejected_logprobs):
+    def compute_dpo_loss(
+            self, 
+            model_chosen_logprobs, # Policy model log P(chosen)
+            model_rejected_logprobs, # Policy model log P(rejected)
+            reference_chosen_logprobs, # Reference model log P(chosen)
+            reference_rejected_logprobs # Reference model log P(rejected)
+    ):
         """
         Computes the DPO loss.
 
@@ -84,23 +92,47 @@ class DPOLoss(nn.Module):
             reference_rejected_logprobs: Log probabilities of the reference model for rejected responses.
 
         Returns:
-            torch.Tensor: Computed DPO loss.
+            (Tensor, Tensor, Tensor):
+            - The scalar DPO loss (with KL penalty).
+            - The average "chosen" reward (model_chosen_logprobs - reference_chosen_logprobs).
+            - The average "rejected" reward (model_rejected_logprobs - reference_rejected_logprobs).
         """
-        # Compute log probability differences
+        # Calculate DPO logits: pi_diff - ref_diff
         pi_diff = model_chosen_logprobs - model_rejected_logprobs
         ref_diff = reference_chosen_logprobs - reference_rejected_logprobs
         logits = pi_diff - ref_diff
         # print(f"Logits: {logits.mean().item():.4f}")
         # logits = (logits - logits.mean()) / (logits.std() + 1e-8)  # Normalize logits
         
-        # DPO (Eq. 7 of https://arxiv.org/pdf/2305.18290.pdf)
-        # losses = -F.logsigmoid(self.beta * logits)
+        # DPO (Eq. 7 of https://arxiv.org/pdf/2305.18290.pdf), calculate standard DPO loss: -logsigmoid(beta * logits)
+        dpo_loss = -F.logsigmoid(self.beta * logits)
         # print(f"Losses: {losses.mean().item():.4f}")
 
-        # Add KL penalty to prevent divergence
-        kl_penalty_chosen = model_chosen_logprobs - reference_chosen_logprobs
-        kl_penalty_rejected = model_rejected_logprobs - reference_rejected_logprobs
-        losses = -F.logsigmoid(self.beta * logits) + 0.1 * (kl_penalty_chosen.abs() + kl_penalty_rejected.abs())
+        # Calculate KL penalty: D_KL(reference || model)
+        # Convert reference model logprobs to probs since F.kl_div expects probs as target
+        reference_chosen_probs = reference_chosen_logprobs.exp()
+        reference_rejected_probs = reference_rejected_logprobs.exp()
+
+        # F.kl_div(input=logP, target=Q) computes D_KL(Q || P)
+        kl_penalty_chosen = F.kl_div(
+            input=model_chosen_logprobs,     # log P(model)
+            target=reference_chosen_probs,   # Q(reference)
+            reduction="batchmean",
+            log_target=False
+        )
+        
+        kl_penalty_rejected = F.kl_div(
+            input=model_rejected_logprobs,
+            target=reference_rejected_probs,
+            reduction="batchmean",
+            log_target=False
+        )
+
+        # Combine both KL penalties
+        kl_penalty = kl_penalty_chosen + kl_penalty_rejected
+        
+        # 4. Combine into final loss with weighting factor
+        losses = dpo_loss + self.lambda_kl * kl_penalty
         
         # Optional values to track progress during training
         chosen_rewards = (model_chosen_logprobs - reference_chosen_logprobs).detach()
