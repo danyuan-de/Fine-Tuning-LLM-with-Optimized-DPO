@@ -47,11 +47,11 @@ else
     echo "No requirements.txt found. Skipping dependency installation."
 fi
 
-# Run `main.py` from `src/` if it exists
+# Run `main.py` from the project root using the -m flag
 SCRIPT_FILE="src/main.py"
 if [ -f "$SCRIPT_FILE" ]; then
     echo "Running $SCRIPT_FILE..."
-    python "$SCRIPT_FILE"
+    PYTHONPATH=$(pwd) python -m src.main  
 else
     echo "Error: $SCRIPT_FILE not found!"
     exit 1

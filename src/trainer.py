@@ -1,4 +1,5 @@
 import torch
+import src.config as config
 
 # Define the training function
 def train_model_dpo_simple(
@@ -33,6 +34,10 @@ def train_model_dpo_simple(
     }
     tokens_seen, global_step = 0, -1
 
+    prev_val_loss = float('inf')
+    patience = config.early_stopping_patience
+    patience_counter = 0
+    max_reward_margin = config.max_reward_margin
     # sample_entry = val_data[0] if val_data else None # Sample entry for generation
 
     # Main training loop
@@ -130,5 +135,20 @@ def train_model_dpo_simple(
                     f"Train reward margins {train_reward_margin:.3f}, "
                     f"Val reward margins {val_reward_margin:.3f}"
                 )
+
+                # Stop if reward margin is too large
+                if train_reward_margin > max_reward_margin or val_reward_margin > max_reward_margin:
+                    print(f"Training stopped: Reward margin too large ({train_reward_margin:.2f}, {val_reward_margin:.2f})")
+                    break
+                    
+                # Stop if validation loss starts increasing
+                if res["val_loss"] > prev_val_loss:
+                    patience_counter += 1
+                    if patience_counter >= patience:
+                        print(f"Training stopped: Early stopping triggered after {patience} epochs of increasing validation loss")
+                        break
+                else:
+                    patience_counter = 0
+                    prev_val_loss = res["val_loss"]
     print("Training completed.")
     return tracking
