@@ -44,3 +44,5 @@ questions_answers/
 # DPO_loss-plot.pdf
 # reward_margins-plot.pdf
 env/
+
+data/
