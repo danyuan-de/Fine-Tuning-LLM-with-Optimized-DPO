@@ -25,9 +25,11 @@ from src.utility import *
 from src.trainer import train_model_dpo_simple
 
 # --------- File Paths ---------
+model_workspace_dir = config.model_workspace_dir # directory to save the fine-tuned model
+cache_dir = config.cache_dir # cache directory for the Hugging Face model
+result_dir = config.result_dir # directory to save the output text and figures
 model_name = config.model_name
-cache_dir = config.cache_dir
-file_path = config.file_mixed
+file_path = config.file_content
 
 # --------- Hyperparameters ---------
 allowed_max_length = config.allowed_max_length
@@ -35,9 +37,13 @@ max_new_tokens = config.max_new_tokens
 batch_size = config.batch_size
 num_epochs = config.num_epochs
 learning_rate = config.learning_rate
+weight_decay = config.weight_decay
 temperature = config.temperature
 top_p = config.top_p
 dpo_loss_fn = DPOLoss(beta=config.beta, lambda_kl=config.lambda_kl)
+
+# --- End of Text Token ---
+eot_token = config.eot_token
 
 # --------- Device ---------
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -47,14 +53,15 @@ print(f"Device: {device}")
 tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
 model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.bfloat16)
 
-# Add the EOT token to the tokenizer
-eot_token_id = tokenizer.convert_tokens_to_ids("<|eot_id|>")
-
+# Add special tokens to tokenizer
 special_tokens = {
-    "additional_special_tokens": ["<|eot_id|>"]
+    "additional_special_tokens": [eot_token]
 }
 tokenizer.add_special_tokens(special_tokens)
 model.resize_token_embeddings(len(tokenizer)) # adjust the size of the token embeddings
+
+# Add the EOT token to the tokenizer
+eot_token_id = tokenizer.convert_tokens_to_ids(eot_token)
 
 policy_model = model # this is the model that will be fine-tuned
 ref_model = copy.deepcopy(model) # create a reference model for DPO by copying and freezing the parameters
@@ -70,15 +77,8 @@ ref_model.to(device)
 
 # Ensure pad_token is defined
 if tokenizer.pad_token is None:
-    if tokenizer.eos_token:
-        tokenizer.pad_token = tokenizer.eos_token
-    else:
-        tokenizer.add_special_tokens({'pad_token': '[PAD]'})
-        model.resize_token_embeddings(len(tokenizer))
-        ref_model.resize_token_embeddings(len(tokenizer))
-
-# model.config.pad_token_id = tokenizer.pad_token_id
-# ref_model.config.pad_token_id = tokenizer.pad_token_id
+    tokenizer.pad_token = tokenizer.eos_token
+    print(f"Using EOS token '{tokenizer.eos_token}' as PAD token")
 
 print("Model and tokenizer loaded.")
 
@@ -90,8 +90,8 @@ print("Number of entries:", len(data))
 
 # Need to use 5-fold cross-validation or more
 # Train/val/test split
-train_portion = int(len(data) * 0.70)
-test_portion = int(len(data) * 0.15) 
+train_portion = int(len(data) * 0.85)
+test_portion = int(len(data) * 0.1) 
 val_portion = len(data) - train_portion - test_portion
 
 print("Train portion:", train_portion)
@@ -154,8 +154,8 @@ stopping_criteria = StoppingCriteriaList([
     EOTStoppingCriteria(eot_token_id=eot_token_id)
 ])
 
-optimizer = torch.optim.AdamW(policy_model.parameters(), lr=learning_rate, weight_decay=0.01)
-scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs * len(train_loader), eta_min=1e-6)
+optimizer = torch.optim.AdamW(policy_model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+# scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs * len(train_loader), eta_min=1e-6)
 
 # Before training loop. If chosen and rejected responses are too similar, the preference margin won’t grow.
 batch = next(iter(train_loader))
@@ -184,7 +184,7 @@ torch.manual_seed(123) # For reproducibility due to the shuffling in the data lo
 tracking = train_model_dpo_simple(
     dpo_loss_fn=dpo_loss_fn,
     optimizer=optimizer,
-    scheduler=scheduler,
+    # scheduler=scheduler,
     policy_model=policy_model,
     reference_model=ref_model,
     train_loader=train_loader,
@@ -312,7 +312,7 @@ test_res = dpo_loss_fn.evaluate_dpo_loss_loader(
 print("Test loss:", test_res["val_loss"])
 print("Test reward margin:", test_res["val_chosen_reward"] - test_res["val_rejected_reward"])
 
-for i, entry in enumerate(test_data[:train_portion//2]):
+for i, entry in enumerate(test_data[:5]):
     input_text = format_input(entry)
 
     # Reference Model Generation
@@ -354,7 +354,7 @@ for i, entry in enumerate(test_data[:train_portion//2]):
     print(f"Expected Answer: {entry['chosen']}")
     print("="*80, "\n")
 
-    with open(config.output_text, "a") as f:
+    with open(os.path.join(result_dir, "foutput_test.txt"), "a") as f:
         f.write(f"\nInput{i}: {entry['question']}")
         f.write("\n ----- Reference Model ----- ")
         f.write(f"Reference Response: {ref_response}")

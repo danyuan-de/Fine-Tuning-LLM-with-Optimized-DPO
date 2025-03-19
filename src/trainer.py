@@ -1,9 +1,10 @@
 import torch
 import src.config as config
+from tqdm import tqdm
 
 # Define the training function
 def train_model_dpo_simple(
-    dpo_loss_fn, optimizer, scheduler,
+    dpo_loss_fn, optimizer,
     policy_model, reference_model, train_loader, val_loader,
     num_epochs, eval_freq, eval_iter):
     """
@@ -44,7 +45,10 @@ def train_model_dpo_simple(
     for epoch in range(num_epochs):
         policy_model.train()  # Set model to training mode
 
-        for batch_idx, batch in enumerate(train_loader):
+        # Add tqdm progress bar for each epoch
+        train_loop = tqdm(train_loader, desc=f"Epoch {epoch+1}/{num_epochs}", leave=True)
+
+        for batch_idx, batch in enumerate(train_loop):
 
             optimizer.zero_grad()
             # with autocast():  # Enable mixed precision
@@ -53,21 +57,26 @@ def train_model_dpo_simple(
                     policy_model=policy_model,
                     reference_model=reference_model
             )
-            # print(f"Step {global_step+1}: Loss before backward: {loss.item():.4f}")
-            loss.backward()  # Direct backward pass without scaling
-            grad_norm = torch.nn.utils.clip_grad_norm_(policy_model.parameters(), max_norm=1.0)  # Optional clipping
-            # print(f"Step {global_step+1}: Grad norm: {grad_norm.item():.4f}")
-            param_before = next(policy_model.parameters()).clone().sum().item()
-            optimizer.step() # Direct optimizer step
-            param_after = next(policy_model.parameters()).sum().item()
-            # print(f"Step {global_step+1}: Param sum change: {param_after - param_before:.6f}")
-            scheduler.step()  # Update learning rate after optimizer step
+            loss.backward()  # Compute gradients
 
-            # tokens_seen = torch.tensor(0, dtype=torch.int64) # avoid overflow by using torch.tensor with dtype int64
+            # Gradient clipping, monitor if learning rate is appropriate or if the model is experiencing gradient issues.
+            grad_norm = torch.nn.utils.clip_grad_norm_(policy_model.parameters(), max_norm=1.0)  # clipping
+            print(f"Step {global_step+1}: Grad norm: {grad_norm.item():.4f}")
+
+            # param_before = next(policy_model.parameters()).clone().sum().item()
+            # print(f"Step {global_step+1}: Param sum before: {param_before:.6f}")
+
+            optimizer.step() # Direct optimizer step
+            # scheduler.step() # Update learning rate
+
+            # param_after = next(policy_model.parameters()).sum().item()
+            # print(f"Step {global_step+1}: Param sum change: {param_after - param_before:.6f}")
+
+            # Track tokens processed
             tokens_seen += batch["chosen"].numel()
             global_step += 1
 
-            # Optional evaluation step
+            # evaluation step
             if global_step % eval_freq == 0:
                 res = dpo_loss_fn.evaluate_dpo_loss_loader(
                     policy_model=policy_model,
@@ -76,48 +85,7 @@ def train_model_dpo_simple(
                     val_loader=val_loader,
                     eval_iter=eval_iter
                 )
-                # if sample_entry and (global_step // eval_freq) % 2 == 0:  # generate every 2nd evaluation
-                #     policy_model.eval()
-                #     with torch.no_grad():
-                #         try:
-                #             # prepare input
-                #             input_text = format_input(sample_entry)
-                #             token_ids = text_to_token_ids(input_text, tokenizer).to(device)
-                            
-                #             # generation config
-                #             generation_config = {
-                #                 'max_new_tokens': max_new_tokens,
-                #                 'temperature': temperature,
-                #                 'top_p': top_p,
-                #                 'eot_token_id': eot_token_id
-                #             }
-                            
-                #             # execute generation
-                #             generated = generate(
-                #                 model=policy_model,
-                #                 idx=token_ids, #.to(device),
-                #                 stopping_criteria=stopping_criteria,
-                #                 **generation_config
-                #             )
-                            
-                #             # post-process the generated text
-                #             full_text = token_ids_to_text(generated, tokenizer)
-                #             response = full_text.split("<|start_header_id|>assistant<|end_header_id|>")[-1]
-                #             response = response.split("<|eot_id|>")[0].strip()
-
-                #         except Exception as e:
-                #             response = f"~~~ Generation Error: {str(e)}"
-                #             print(f"Generation failed at step {global_step}: {str(e)}")
-
-                #         finally:
-                #             policy_model.train()
-
-                #     # Print the generated response
-                #     print(f"\n{'='*40} Generation Sample (Step {global_step}) {'='*40}")
-                #     print(f"[Input]\n{sample_entry['question']}")
-                #     print(f"\n[Generated Response]\n{response}")
-                #     print(f"[Expected Response]\n{sample_entry['chosen']}")
-                #     print('='*90 + '\n')
+                
 
                 tracking["train_losses"].append(res["train_loss"])
                 tracking["train_chosen_rewards"].append(res["train_chosen_reward"])
