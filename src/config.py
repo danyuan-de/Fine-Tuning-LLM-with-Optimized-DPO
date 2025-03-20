@@ -7,8 +7,6 @@ model_workspace_dir = os.path.join(os.path.dirname(__file__), "..", "workspace")
 fine_tuned_model_path = os.path.join(model_workspace_dir, f"{model_name.split('/')[-1]}_fine-tuned")
 cache_dir = os.path.join(model_workspace_dir, "models")
 
-eot_token = "<|eot_id|>"  # End of text token for generation (Llama model)
-
 # ---------------------------------- DPO loss parameters ----------------------------------
 beta = 0.1 # Temperature parameter controlling the sharpness of the decision boundary in DPO loss
 lambda_kl = 0.1 # Weight of the KL divergence penalty to prevent model drift in DPO loss

@@ -42,12 +42,9 @@ def format_input(entry):
             "Provide a detailed, reasoning process followed by a clear final answer for the following question."
         )
         return (
-            "<|begin_of_text|>\n"
-            "<|start_header_id|>system<|end_header_id|>\n"
-            f"{system_prompt}<|eot_id|>\n"
-            "<|start_header_id|>user<|end_header_id|>\n"
-            f"Question: {entry['question']}<|eot_id|>\n"
-            "<|start_header_id|>assistant<|end_header_id|>\n"
+            "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n"
+            f"{system_prompt}<|eot_id|><|start_header_id|>user<|end_header_id|>\n"
+            f"Question: {entry['question']}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n"
         )
 
 # self-defined collate_fn for DataLoader

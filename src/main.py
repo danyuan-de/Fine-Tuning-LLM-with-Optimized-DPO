@@ -54,15 +54,8 @@ print(f"Device: {device}")
 tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
 model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.bfloat16)
 
-# Add special tokens to tokenizer
-special_tokens = {
-    "additional_special_tokens": [eot_token]
-}
-tokenizer.add_special_tokens(special_tokens)
-model.resize_token_embeddings(len(tokenizer)) # adjust the size of the token embeddings
-
-# Add the EOT token to the tokenizer
-eot_token_id = tokenizer.convert_tokens_to_ids(eot_token)
+# Get the end of text token ID
+eot_token_id = tokenizer.eos_token_id  # Instead of tokenizer.convert_tokens_to_ids(eot_token)
 
 policy_model = model # this is the model that will be fine-tuned
 ref_model = copy.deepcopy(model) # create a reference model for DPO by copying and freezing the parameters
@@ -79,7 +72,7 @@ ref_model.to(device)
 # Ensure pad_token is defined
 if tokenizer.pad_token is None:
     tokenizer.pad_token = tokenizer.eos_token
-    print(f"Using EOS token '{tokenizer.eos_token}' as PAD token")
+    print(f"Using EOS token '{tokenizer.pad_token}' as PAD token")
 
 print("Model and tokenizer loaded.")
 
