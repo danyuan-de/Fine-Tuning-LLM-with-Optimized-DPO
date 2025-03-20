@@ -1,16 +1,27 @@
 # requirements.txt
 
 # Core machine learning and numerical libraries
-torch>=2.0.0  # PyTorch 
+torch>=2.0.0  # PyTorch with CUDA support
+accelerate>=0.20.0  # Hugging Face Accelerate for distributed training
 
 # Transformers and NLP libraries
 transformers>=4.35.0  # Hugging Face Transformers
 
-# Visualization
-matplotlib>=3.7.0  # for plotting
+# Visualization and progress tracking
+matplotlib>=3.7.0  # For plotting training curves
 tqdm>=4.65.0  # Progress bars for training loops
+tensorboard>=2.12.0  # For visualizing training metrics (optional)
 
 # Data manipulation and analysis
 numpy>=1.24.0  # PyTorch and Transformers depend on NumPy
 pandas>=1.5.0  # For data manipulation and CSV handling
 scikit-learn>=1.0.0  # For cross-validation and other ML utilities
+
+# System utilities
+psutil>=5.9.0  # For system resource monitoring
+tabulate>=0.9.0  # For formatted table output in diagnostic script
+
+# Optional dependencies for advanced distributed training
+# deepspeed>=0.10.0  # Microsoft DeepSpeed for distributed training
+# horovod>=0.28.0  # Uber Horovod for distributed training (alternative to PyTorch DDP)
+# mpi4py>=3.1.4  # MPI for Python, used by some distributed training frameworks

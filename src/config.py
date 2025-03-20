@@ -39,3 +39,28 @@ file_mixed = os.path.join(data_dir, "physics_qa_mixed.json")
 
 # ------------------------ Results directory ------------------------
 result_dir = os.path.join(os.path.dirname(__file__), "..", "results")
+
+# ------------------------ Distributed training settings ------------------------
+# Default NCCL backend for distributed training
+# This is the most efficient for GPU-based distributed training
+distributed_backend = "nccl"
+
+# Port used for distributed training communication
+# Can be overridden via environment variable MASTER_PORT
+distributed_port = "12355"
+
+# Whether to use mixed precision (fp16) training
+# Can speed up training and reduce memory usage
+use_mixed_precision = True  
+
+# Gradient accumulation steps
+# Increases effective batch size without increasing memory usage
+gradient_accumulation_steps = 1  
+
+# Whether to use ZeRO optimizer for memory efficiency
+# Options: 0 (disabled), 1, 2, or 3 (most memory efficient but slower)
+zero_optimization_level = 0
+
+# Whether to apply gradient checkpointing
+# Saves memory at the cost of additional computation
+use_gradient_checkpointing = False
