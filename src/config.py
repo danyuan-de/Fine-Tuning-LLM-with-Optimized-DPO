@@ -17,7 +17,8 @@ lambda_kl = 0.1 # Weight of the KL divergence penalty to prevent model drift in 
 allowed_max_length = 1024 # maximum number of tokens in a sequence for training input data
 max_new_tokens = 256  # maximum number of tokens to generate
 
-batch_size = 8 # Process the number of items at once
+batch_size = 4 # Process the number of items at once
+gradient_accumulation_steps = 4  # Number of steps to accumulate gradients before stepping
 num_epochs = 1 # Number of times to go through the dataset
 
 learning_rate = 5e-6 # try 5e-5 or 5e-6, etc.

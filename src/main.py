@@ -35,6 +35,7 @@ file_path = config.file_content
 allowed_max_length = config.allowed_max_length
 max_new_tokens = config.max_new_tokens
 batch_size = config.batch_size
+gradient_accumulation_steps = config.gradient_accumulation_steps
 num_epochs = config.num_epochs
 learning_rate = config.learning_rate
 weight_decay = config.weight_decay
@@ -184,7 +185,7 @@ torch.manual_seed(123) # For reproducibility due to the shuffling in the data lo
 tracking = train_model_dpo_simple(
     dpo_loss_fn=dpo_loss_fn,
     optimizer=optimizer,
-    # scheduler=scheduler,
+    scheduler=None,
     policy_model=policy_model,
     reference_model=ref_model,
     train_loader=train_loader,
@@ -192,6 +193,7 @@ tracking = train_model_dpo_simple(
     num_epochs=num_epochs,
     eval_freq=5,
     eval_iter=5,
+    gradient_accumulation_steps=gradient_accumulation_steps
 )
 
 end_time = time.time()
