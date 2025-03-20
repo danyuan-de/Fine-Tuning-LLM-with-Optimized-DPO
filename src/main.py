@@ -23,6 +23,7 @@ from src.dpoLoss import DPOLoss
 from src.preferenceDataset import PreferenceDataset
 from src.utility import *
 from src.trainer import train_model_dpo_simple
+from src.scheduler import get_scheduler
 
 # --------- File Paths ---------
 model_workspace_dir = config.model_workspace_dir # directory to save the fine-tuned model
@@ -42,9 +43,6 @@ weight_decay = config.weight_decay
 temperature = config.temperature
 top_p = config.top_p
 dpo_loss_fn = DPOLoss(beta=config.beta, lambda_kl=config.lambda_kl)
-
-# --- End of Text Token ---
-eot_token = config.eot_token
 
 # --------- Device ---------
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -148,8 +146,18 @@ stopping_criteria = StoppingCriteriaList([
     EOTStoppingCriteria(eot_token_id=eot_token_id)
 ])
 
+# Total steps for the scheduler
+total_steps = num_epochs * len(train_loader) // gradient_accumulation_steps
+
 optimizer = torch.optim.AdamW(policy_model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 # scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs * len(train_loader), eta_min=1e-6)
+
+# Scheduler with warmup
+scheduler = get_scheduler(
+    optimizer=optimizer,
+    warmup_steps=config.warmup_steps,
+    total_steps=total_steps
+)
 
 # Before training loop. If chosen and rejected responses are too similar, the preference margin won’t grow.
 batch = next(iter(train_loader))
@@ -178,13 +186,13 @@ torch.manual_seed(123) # For reproducibility due to the shuffling in the data lo
 tracking = train_model_dpo_simple(
     dpo_loss_fn=dpo_loss_fn,
     optimizer=optimizer,
-    scheduler=None,
+    scheduler=scheduler,
     policy_model=policy_model,
     reference_model=ref_model,
     train_loader=train_loader,
     val_loader=val_loader,
     num_epochs=num_epochs,
-    eval_freq=5,
+    eval_freq=config.eval_freq,
     eval_iter=5,
     gradient_accumulation_steps=gradient_accumulation_steps
 )
@@ -192,6 +200,14 @@ tracking = train_model_dpo_simple(
 end_time = time.time()
 execution_time_minutes = (end_time - start_time) / 60
 print(f"Training completed in {execution_time_minutes:.2f} minutes (in {str(timedelta(seconds=end_time - start_time))})")
+
+print("Final train/validation statistics:")
+print(f"Train loss: {tracking['train_losses'][-1]}")
+print(f"Validation loss: {tracking['val_losses'][-1]}")
+train_margin = tracking['train_chosen_rewards'][-1] - tracking['train_rejected_rewards'][-1]
+val_margin = tracking['val_chosen_rewards'][-1] - tracking['val_rejected_rewards'][-1]
+print(f"Train reward margin: {train_margin:.3f}")
+print(f"Validation reward margin: {val_margin:.3f}")
 
 # Save the model and tokenizer
 save_path = config.fine_tuned_model_path

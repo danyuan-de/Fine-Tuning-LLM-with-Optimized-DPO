@@ -42,8 +42,14 @@ def train_model_dpo_simple(
     max_reward_margin = config.max_reward_margin
     # sample_entry = val_data[0] if val_data else None # Sample entry for generation
 
+    # Flag to track if training should be stopped early
+    early_stopping = False
+
     # Main training loop
     for epoch in range(num_epochs):
+        if early_stopping:
+            break
+            
         policy_model.train()  # Set model to training mode
 
         # Reset accumulated loss for reporting
@@ -58,115 +64,121 @@ def train_model_dpo_simple(
         # Add tqdm progress bar for each epoch
         train_loop = tqdm(train_loader, desc=f"Epoch {epoch+1}/{num_epochs}", leave=True)
 
-        for batch_idx, batch in enumerate(train_loop):
-            # with autocast():  # Enable mixed precision
-            loss, chosen_rewards, rejected_rewards = dpo_loss_fn.compute_dpo_loss_batch(
-                    batch=batch,
-                    policy_model=policy_model,
-                    reference_model=reference_model
-            )
-            loss.backward()  # Compute gradients
-
-            # Track metrics for reporting
-            accumulated_loss += loss.item() * gradient_accumulation_steps  # Rescale for reporting
-            accumulated_chosen_rewards += chosen_rewards.item()
-            accumulated_rejected_rewards += rejected_rewards.item()
-            accumulated_tokens += batch["chosen"].numel()
-            batch_count += 1
-
-            # Update step info for progress bar
-            reward_diff = chosen_rewards.item() - rejected_rewards.item()
-            train_loop.set_postfix(
-                loss=f"{loss.item() * gradient_accumulation_steps:.4f}", 
-                reward_diff=f"{reward_diff:.4f}",
-                step=f"{(batch_idx % gradient_accumulation_steps) + 1}/{gradient_accumulation_steps}"
-            )
-
-            
-
-            # Only perform optimizer step after accumulating gradients
-            if (batch_idx + 1) % gradient_accumulation_steps == 0 or (batch_idx + 1 == len(train_loader)):
-                # Gradient clipping, monitor if learning rate is appropriate or if the model is experiencing gradient issues.
-                grad_norm = torch.nn.utils.clip_grad_norm_(policy_model.parameters(), max_norm=1.0)  # clipping
-                print(f"Step {global_step+1}: Grad norm: {grad_norm.item():.4f}")
-
-                # # Track parameter changes (if desired)
-                # param_before = next(policy_model.parameters()).clone().sum().item()
-                # print(f"Step {global_step+1}: Param sum before: {param_before:.6f}")
-                
-                # Optimizer step
-                optimizer.step()
-                
-                # # Track parameter changes after update
-                # param_after = next(policy_model.parameters()).sum().item()
-                # print(f"Step {global_step+1}: Param sum change: {param_after - param_before:.6f}")
-                
-                # Scheduler step if provided
-                if scheduler is not None:
-                    scheduler.step()
-                
-                # Zero gradients after optimizer step
-                optimizer.zero_grad()
-                
-                # Update global step counter (count actual parameter updates)
-                global_step += 1
-                tokens_seen += accumulated_tokens
-                accumulated_tokens = 0
-                
-                # Evaluation step
-                if global_step % eval_freq == 0:
-                    
-                    # Reset accumulators
-                    accumulated_loss = 0.0
-                    accumulated_chosen_rewards = 0.0
-                    accumulated_rejected_rewards = 0.0
-                    batch_count = 0
-                    
-                    # Evaluate model
-                    res = dpo_loss_fn.evaluate_dpo_loss_loader(
+        try:
+            for batch_idx, batch in enumerate(train_loop):
+                # with autocast():  # Enable mixed precision
+                loss, chosen_rewards, rejected_rewards = dpo_loss_fn.compute_dpo_loss_batch(
+                        batch=batch,
                         policy_model=policy_model,
-                        reference_model=reference_model,
-                        train_loader=train_loader,
-                        val_loader=val_loader,
-                        eval_iter=eval_iter
-                    )
-                    
-                    # Track metrics
-                    tracking["train_losses"].append(res["train_loss"])
-                    tracking["train_chosen_rewards"].append(res["train_chosen_reward"])
-                    tracking["train_rejected_rewards"].append(res["train_rejected_reward"])
-                    tracking["val_losses"].append(res["val_loss"])
-                    tracking["val_chosen_rewards"].append(res["val_chosen_reward"])
-                    tracking["val_rejected_rewards"].append(res["val_rejected_reward"])
-                    tracking["tokens_seen"].append(tokens_seen)
-                    
-                    train_reward_margin = res["train_chosen_reward"] - res["train_rejected_reward"]
-                    val_reward_margin = res["val_chosen_reward"] - res["val_rejected_reward"]
+                        reference_model=reference_model
+                )
+                loss.backward()  # Compute gradients
 
-                    print(
-                        f"Ep {epoch+1} (Step {global_step:06d}): "
-                        f"Train loss {res['train_loss']:.3f}, Val loss {res['val_loss']:.3f}, "
-                        f"Train reward margins {train_reward_margin:.3f}, "
-                        f"Val reward margins {val_reward_margin:.3f}"
-                    )
+                # Track metrics for reporting
+                accumulated_loss += loss.item() * gradient_accumulation_steps  # Rescale for reporting
+                accumulated_chosen_rewards += chosen_rewards.item()
+                accumulated_rejected_rewards += rejected_rewards.item()
+                accumulated_tokens += batch["chosen"].numel()
+                batch_count += 1
 
-                    # Stop if reward margin is too large
-                    if train_reward_margin > max_reward_margin or val_reward_margin > max_reward_margin:
-                        print(f"Training stopped: Reward margin too large ({train_reward_margin:.2f}, {val_reward_margin:.2f})")
-                        break
+                # Update step info for progress bar
+                reward_diff = chosen_rewards.item() - rejected_rewards.item()
+                train_loop.set_postfix(
+                    loss=f"{loss.item() * gradient_accumulation_steps:.4f}", 
+                    reward_diff=f"{reward_diff:.4f}",
+                    step=f"{(batch_idx % gradient_accumulation_steps) + 1}/{gradient_accumulation_steps}"
+                )
+
+                # Only perform optimizer step after accumulating gradients
+                if (batch_idx + 1) % gradient_accumulation_steps == 0 or (batch_idx + 1 == len(train_loader)):
+                    # Gradient clipping, monitor if learning rate is appropriate or if the model is experiencing gradient issues.
+                    grad_norm = torch.nn.utils.clip_grad_norm_(policy_model.parameters(), max_norm=1.0)  # clipping
+                    print(f"Step {global_step+1}: Grad norm: {grad_norm.item():.4f}")
+
+                    # # Track parameter changes (if desired)
+                    # param_before = next(policy_model.parameters()).clone().sum().item()
+                    # print(f"Step {global_step+1}: Param sum before: {param_before:.6f}")
+                    
+                    # Optimizer step
+                    optimizer.step()
+                    
+                    # # Track parameter changes after update
+                    # param_after = next(policy_model.parameters()).sum().item()
+                    # print(f"Step {global_step+1}: Param sum change: {param_after - param_before:.6f}")
+                    
+                    # Scheduler step if provided
+                    if scheduler is not None:
+                        scheduler.step()
+                    
+                    # Zero gradients after optimizer step
+                    optimizer.zero_grad()
+                    
+                    # Update global step counter (count actual parameter updates)
+                    global_step += 1
+                    tokens_seen += accumulated_tokens
+                    accumulated_tokens = 0
+                    
+                    # Evaluation step
+                    if global_step % eval_freq == 0:
                         
-                    # Stop if validation loss starts increasing
-                    if res["val_loss"] > prev_val_loss:
-                        patience_counter += 1
-                        if patience_counter >= patience:
-                            print(f"Training stopped: Early stopping triggered after {patience} evaluations of increasing validation loss")
+                        # Reset accumulators
+                        accumulated_loss = 0.0
+                        accumulated_chosen_rewards = 0.0
+                        accumulated_rejected_rewards = 0.0
+                        batch_count = 0
+                        
+                        # Evaluate model
+                        res = dpo_loss_fn.evaluate_dpo_loss_loader(
+                            policy_model=policy_model,
+                            reference_model=reference_model,
+                            train_loader=train_loader,
+                            val_loader=val_loader,
+                            eval_iter=eval_iter
+                        )
+                        
+                        # Track metrics
+                        tracking["train_losses"].append(res["train_loss"])
+                        tracking["train_chosen_rewards"].append(res["train_chosen_reward"])
+                        tracking["train_rejected_rewards"].append(res["train_rejected_reward"])
+                        tracking["val_losses"].append(res["val_loss"])
+                        tracking["val_chosen_rewards"].append(res["val_chosen_reward"])
+                        tracking["val_rejected_rewards"].append(res["val_rejected_reward"])
+                        tracking["tokens_seen"].append(tokens_seen)
+                        
+                        train_reward_margin = res["train_chosen_reward"] - res["train_rejected_reward"]
+                        val_reward_margin = res["val_chosen_reward"] - res["val_rejected_reward"]
+
+                        print(
+                            f"Ep {epoch+1} (Step {global_step:06d}): "
+                            f"Train loss {res['train_loss']:.3f}, Val loss {res['val_loss']:.3f}, "
+                            f"Train reward margins {train_reward_margin:.3f}, "
+                            f"Val reward margins {val_reward_margin:.3f}"
+                        )
+
+                        # Check for early stopping conditions
+                        if train_reward_margin > max_reward_margin or val_reward_margin > max_reward_margin:
+                            print(f"Training stopped: Reward margin too large ({train_reward_margin:.2f}, {val_reward_margin:.2f})")
+                            early_stopping = True
                             break
-                    else:
-                        patience_counter = 0
-                        prev_val_loss = res["val_loss"]
-        
-        # Check if training was stopped early
-        if patience_counter >= patience or train_reward_margin > max_reward_margin or val_reward_margin > max_reward_margin:
-            break
+                            
+                        # Stop if validation loss starts increasing
+                        if res["val_loss"] > prev_val_loss:
+                            patience_counter += 1
+                            if patience_counter >= patience:
+                                print(f"Training stopped: Early stopping triggered after {patience} evaluations of increasing validation loss")
+                                early_stopping = True
+                                break
+                        else:
+                            patience_counter = 0
+                            prev_val_loss = res["val_loss"]
+                
+                # Check if we need to stop early after this batch
+                if early_stopping:
+                    break
+                
+        finally:
+            # Ensure the progress bar is closed properly
+            train_loop.close()
+            
     print("Training completed.")
     return tracking
