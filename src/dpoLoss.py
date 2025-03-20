@@ -54,7 +54,7 @@ class DPOLoss(nn.Module):
 
             # Calculate the average log probability excluding padding tokens
             # This averages over the tokens, so the shape is (batch_size, num_tokens)
-            avg_log_prob = selected_log_probs.sum(-1) / (mask.sum(-1))
+            avg_log_prob = selected_log_probs.sum(-1) / mask.sum(-1)
 
             return avg_log_prob
 
@@ -87,7 +87,7 @@ class DPOLoss(nn.Module):
         pi_diff = model_chosen_logprobs - model_rejected_logprobs
         ref_diff = reference_chosen_logprobs - reference_rejected_logprobs
         logits = pi_diff - ref_diff
-        # print(f"Logits: {logits.mean().item():.4f}")
+        print(f"Logits: {logits.mean().item():.4f}")
         # logits = (logits - logits.mean()) / (logits.std() + 1e-8)  # Normalize logits
         
         # DPO (Eq. 7 of https://arxiv.org/pdf/2305.18290.pdf), calculate standard DPO loss: -logsigmoid(beta * logits)
@@ -151,17 +151,16 @@ class DPOLoss(nn.Module):
         )
 
         # Compute log probabilities for reference model
-        with torch.no_grad():
-            ref_chosen_log_probas = self.compute_logprobs(
-                logits=reference_model(batch["chosen"]),
-                labels=batch["chosen"],
-                selection_mask=batch["chosen_mask"]
-            )
-            ref_rejected_log_probas = self.compute_logprobs(
-                logits=reference_model(batch["rejected"]),
-                labels=batch["rejected"],
-                selection_mask=batch["rejected_mask"]
-            )
+        ref_chosen_log_probas = self.compute_logprobs(
+            logits=reference_model(batch["chosen"]),
+            labels=batch["chosen"],
+            selection_mask=batch["chosen_mask"]
+        )
+        ref_rejected_log_probas = self.compute_logprobs(
+            logits=reference_model(batch["rejected"]),
+            labels=batch["rejected"],
+            selection_mask=batch["rejected_mask"]
+        )
 
         # print(f"Policy chosen log_prob: {policy_chosen_log_probas.mean().item():.4f}")
         # print(f"Ref chosen log_prob: {ref_chosen_log_probas.mean().item():.4f}")

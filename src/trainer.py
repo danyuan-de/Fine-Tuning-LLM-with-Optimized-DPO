@@ -42,13 +42,8 @@ def train_model_dpo_simple(
     max_reward_margin = config.max_reward_margin
     # sample_entry = val_data[0] if val_data else None # Sample entry for generation
 
-    # Flag to track if training should be stopped early
-    early_stopping = False
-
     # Main training loop
     for epoch in range(num_epochs):
-        if early_stopping:
-            break
             
         policy_model.train()  # Set model to training mode
 
@@ -155,26 +150,26 @@ def train_model_dpo_simple(
                             f"Val reward margins {val_reward_margin:.3f}"
                         )
 
-                        # Check for early stopping conditions
-                        if train_reward_margin > max_reward_margin or val_reward_margin > max_reward_margin:
-                            print(f"Training stopped: Reward margin too large ({train_reward_margin:.2f}, {val_reward_margin:.2f})")
-                            early_stopping = True
-                            break
+                        # # Check for early stopping conditions
+                        # if train_reward_margin > max_reward_margin or val_reward_margin > max_reward_margin:
+                        #     print(f"Training stopped: Reward margin too large ({train_reward_margin:.2f}, {val_reward_margin:.2f})")
+                        #     early_stopping = True
+                        #     break
                             
-                        # Stop if validation loss starts increasing
-                        if res["val_loss"] > prev_val_loss:
-                            patience_counter += 1
-                            if patience_counter >= patience:
-                                print(f"Training stopped: Early stopping triggered after {patience} evaluations of increasing validation loss")
-                                early_stopping = True
-                                break
-                        else:
-                            patience_counter = 0
-                            prev_val_loss = res["val_loss"]
+                        # # Stop if validation loss starts increasing
+                        # if res["val_loss"] > prev_val_loss:
+                        #     patience_counter += 1
+                        #     if patience_counter >= patience:
+                        #         print(f"Training stopped: Early stopping triggered after {patience} evaluations of increasing validation loss")
+                        #         early_stopping = True
+                        #         break
+                        # else:
+                        #     patience_counter = 0
+                        #     prev_val_loss = res["val_loss"]
                 
-                # Check if we need to stop early after this batch
-                if early_stopping:
-                    break
+                # # Check if we need to stop early after this batch
+                # if early_stopping:
+                #     break
                 
         finally:
             # Ensure the progress bar is closed properly
