@@ -23,7 +23,7 @@ from src.dpoLoss import DPOLoss
 from src.preferenceDataset import PreferenceDataset
 from src.utility import *
 from src.trainer import train_model_dpo_simple
-from src.scheduler import get_scheduler
+# from src.scheduler import get_scheduler
 
 # --------- File Paths ---------
 model_workspace_dir = config.model_workspace_dir # directory to save the fine-tuned model
@@ -147,17 +147,17 @@ stopping_criteria = StoppingCriteriaList([
 ])
 
 # Total steps for the scheduler
-total_steps = num_epochs * len(train_loader) // gradient_accumulation_steps
+# total_steps = num_epochs * len(train_loader) // gradient_accumulation_steps
 
 optimizer = torch.optim.AdamW(policy_model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 # scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs * len(train_loader), eta_min=1e-6)
 
 # Scheduler with warmup
-scheduler = get_scheduler(
-    optimizer=optimizer,
-    warmup_steps=config.warmup_steps,
-    total_steps=total_steps
-)
+# scheduler = get_scheduler(
+#     optimizer=optimizer,
+#     warmup_steps=config.warmup_steps,
+#     total_steps=total_steps
+# )
 
 # Before training loop. If chosen and rejected responses are too similar, the preference margin won’t grow.
 batch = next(iter(train_loader))

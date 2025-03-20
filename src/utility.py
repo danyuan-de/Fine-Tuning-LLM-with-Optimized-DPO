@@ -44,7 +44,7 @@ def format_input(entry):
         return (
             "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n"
             f"{system_prompt}<|eot_id|><|start_header_id|>user<|end_header_id|>\n"
-            f"Question: {entry['question']}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n"
+            f"Question: {entry['question']}<|eot_id|>\n<|start_header_id|>assistant<|end_header_id|>\n"
         )
 
 # self-defined collate_fn for DataLoader
