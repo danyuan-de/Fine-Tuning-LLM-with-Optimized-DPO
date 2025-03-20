@@ -44,9 +44,6 @@ temperature = config.temperature
 top_p = config.top_p
 dpo_loss_fn = DPOLoss(beta=config.beta, lambda_kl=config.lambda_kl)
 
-# --- End of Text Token ---
-eot_token = config.eot_token
-
 # --------- Device ---------
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 print(f"Device: {device}")
