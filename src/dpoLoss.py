@@ -22,25 +22,11 @@ class DPOLoss(nn.Module):
         Args:
             logits: Tensor of shape (batch_size, num_tokens, vocab_size)
             labels: Tensor of shape (batch_size, num_tokens)
-            selection_mask: Tensor of shape (batch_size, num_tokens)
-            model: Model used for logit predictions.\
-            input_ids: Tensor of shape (batch_size, num_tokens)
+            selection_mask: Tensor for shape (batch_size, num_tokens)
 
         Returns:
-          mean_log_prob: Mean log probability excluding padding tokens.
+            mean_log_prob: Mean log probability excluding padding tokens.
         """
-
-        
-        # if model is not None and input_ids is not None:  # Compute logits with attention mask
-        #     attention_mask = selection_mask.clone() if selection_mask is not None else None
-        #     outputs = model(input_ids=input_ids, attention_mask=attention_mask)
-        #     logits = outputs.logits if hasattr(outputs, "logits") else outputs[0]
-        # elif hasattr(logits, "logits"):
-        #     logits = logits.logits
-        
-        # Debug: Print the structure of logits
-        # print(f"logits type: {type(logits)}")
-        # print(f"logits shape: {logits.shape if hasattr(logits, 'shape') else 'N/A'}")
 
         if hasattr(logits, "logits"):
             logits = logits.logits
@@ -68,7 +54,7 @@ class DPOLoss(nn.Module):
 
             # Calculate the average log probability excluding padding tokens
             # This averages over the tokens, so the shape is (batch_size, num_tokens)
-            avg_log_prob = selected_log_probs.sum(-1) / mask.sum(-1)
+            avg_log_prob = selected_log_probs.sum(-1) / (mask.sum(-1))
 
             return avg_log_prob
 
@@ -165,16 +151,17 @@ class DPOLoss(nn.Module):
         )
 
         # Compute log probabilities for reference model
-        ref_chosen_log_probas = self.compute_logprobs(
-            logits=reference_model(batch["chosen"]),
-            labels=batch["chosen"],
-            selection_mask=batch["chosen_mask"]
-        )
-        ref_rejected_log_probas = self.compute_logprobs(
-            logits=reference_model(batch["rejected"]),
-            labels=batch["rejected"],
-            selection_mask=batch["rejected_mask"]
-        )
+        with torch.no_grad():
+            ref_chosen_log_probas = self.compute_logprobs(
+                logits=reference_model(batch["chosen"]),
+                labels=batch["chosen"],
+                selection_mask=batch["chosen_mask"]
+            )
+            ref_rejected_log_probas = self.compute_logprobs(
+                logits=reference_model(batch["rejected"]),
+                labels=batch["rejected"],
+                selection_mask=batch["rejected_mask"]
+            )
 
         # print(f"Policy chosen log_prob: {policy_chosen_log_probas.mean().item():.4f}")
         # print(f"Ref chosen log_prob: {ref_chosen_log_probas.mean().item():.4f}")
@@ -223,37 +210,6 @@ class DPOLoss(nn.Module):
         total_chosen_rewards /= num_batches
         total_rejected_rewards /= num_batches
         return total_loss, total_chosen_rewards, total_rejected_rewards
-    
-    # def evaluate_dpo_loss_loader(self, policy_model, reference_model, train_loader, val_loader, eval_iter):
-    #     """Compute the DPO loss for the training and validation dataset"""
-
-    #     policy_model.eval()
-    #     with torch.no_grad():
-    #         train_loss, train_chosen_rewards, train_rejected_rewards = self.compute_dpo_loss_loader(
-    #             data_loader=train_loader,
-    #             policy_model=policy_model,
-    #             reference_model=reference_model,
-    #             num_batches=eval_iter
-    #         )
-
-    #         val_loss, val_chosen_rewards, val_rejected_rewards = self.compute_dpo_loss_loader(
-    #             data_loader=val_loader,
-    #             policy_model=policy_model,
-    #             reference_model=reference_model,
-    #             num_batches=eval_iter
-    #         )
-
-    #     res = {
-    #         "train_loss": train_loss,
-    #         "train_chosen_reward": train_chosen_rewards,
-    #         "train_rejected_reward": train_rejected_rewards,
-    #         "val_loss": val_loss,
-    #         "val_chosen_reward": val_chosen_rewards,
-    #         "val_rejected_reward": val_rejected_rewards
-    #     }
-
-    #     policy_model.train()
-    #     return res
     
     def evaluate_dpo_loss_loader(self, policy_model, reference_model, train_loader=None, val_loader=None, eval_iter=5):
         """Compute the DPO loss for the training and/or validation dataset based on provided loaders"""

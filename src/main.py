@@ -186,7 +186,7 @@ torch.manual_seed(123) # For reproducibility due to the shuffling in the data lo
 tracking = train_model_dpo_simple(
     dpo_loss_fn=dpo_loss_fn,
     optimizer=optimizer,
-    scheduler=scheduler,
+    scheduler=None,
     policy_model=policy_model,
     reference_model=ref_model,
     train_loader=train_loader,

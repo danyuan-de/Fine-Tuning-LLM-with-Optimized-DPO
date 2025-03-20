@@ -12,5 +12,5 @@ tqdm>=4.65.0  # Progress bars for training loops
 
 # Data manipulation and analysis
 numpy>=1.24.0  # PyTorch and Transformers depend on NumPy
-pandas>=1.5.0  # For data manipulation and CSV handling
-scikit-learn>=1.0.0  # For cross-validation and other ML utilities
+# pandas>=1.5.0  # For data manipulation and CSV handling
+# scikit-learn>=1.0.0  # For cross-validation and other ML utilities

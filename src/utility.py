@@ -56,6 +56,20 @@ def custom_collate_fn(
     allowed_max_length=None,
     mask_prompt_tokens=None,
 ):
+    """
+    A modified collate function for DPO training with Llama-3.1-8B.
+    
+    Args:
+        batch: List of dictionaries containing prompt, chosen, and rejected sequences
+        eot_token_id: Token ID for end-of-text
+        tokenizer: The tokenizer used
+        device: Device to put tensors on
+        allowed_max_length: Maximum sequence length to allow
+        mask_prompt_tokens: Whether to mask prompt tokens in loss calculation
+    
+    Returns:
+        Dictionary with batched tensors for training
+    """
     # Initialize the batch data
     batch_data = {
         "prompt": [],
@@ -69,57 +83,56 @@ def custom_collate_fn(
     max_length_common = 0
     if batch:
         for key in ["chosen", "rejected"]:
-            current_max = max(len(item[key]) for item in batch)
+            current_max = max(len(item[key])+1 for item in batch)
             max_length_common = max(max_length_common, current_max)
+    
+    # Ensure we don't exceed the model's context window
+    if allowed_max_length is not None:
+        max_length_common = min(max_length_common, allowed_max_length)
 
     # Process each item in the batch
     for item in batch:
-        prompt = torch.tensor(item["prompt"], dtype=torch.long).to(device)
+        prompt = torch.tensor(item["prompt"], dtype=torch.long)
         batch_data["prompt"].append(prompt)
 
         for key in ["chosen", "rejected"]:
-            sequence = item[key]
-            sequence_tensor = torch.tensor(sequence, dtype=torch.long).to(device)  # Move to device immediately
-
-            # Fill the sequence tensor with padding tokens to match the maximum length
-            padded_sequence = torch.cat([
-                sequence_tensor,
-                torch.full((max_length_common - sequence_tensor.size(0),), fill_value=tokenizer.pad_token_id, dtype=torch.long).to(device)  # Move to device
-            ])  # Change fill_value=eot_token_id
-
-            # Create a mask tensor to ignore the padding tokens
-            mask = torch.ones_like(padded_sequence, dtype=torch.bool).to(device)  # Move to device
-            mask[sequence_tensor.size(0):] = False  # Set padding tokens to False
-
-            # Mask the prompt tokens if needed
-            if mask_prompt_tokens:
-                mask[:prompt.size(0)] = False
-
-            # Make sure the EOT token is not masked
-            if eot_token_id in sequence_tensor:
+            sequence = torch.tensor(item[key], dtype=torch.long)
+            sequence_tensor = sequence.to(device) if device else sequence
+            
+            # Prepare padding tensor if needed
+            pad_length = max_length_common - len(sequence_tensor)
+            if pad_length > 0:
+                padding = torch.full((pad_length,), tokenizer.pad_token_id if tokenizer else eot_token_id, 
+                                    dtype=torch.long, device=device)
+                padded_sequence = torch.cat([sequence_tensor, padding])
+            else:
+                padded_sequence = sequence_tensor
+            
+            # Create mask tensor (True for tokens to include in loss, False for others)
+            mask = torch.zeros_like(padded_sequence, dtype=torch.bool, device=device)
+            
+            # Set sequence tokens to True (excluding padding)
+            mask[:len(sequence_tensor)] = True
+            
+            # Mask prompt tokens if requested
+            if mask_prompt_tokens and len(prompt) < len(sequence_tensor):
+                mask[:len(prompt)+2] = False  # +2 to account for newline tokens
+            
+            # Ensure EOT token is correctly handled
+            if eot_token_id is not None and eot_token_id in sequence_tensor:
                 eot_positions = (sequence_tensor == eot_token_id).nonzero(as_tuple=True)[0]
                 if len(eot_positions) > 0:
-                    eot_pos = eot_positions[-1].item()  # Last EOT in response
-                else:
-                    eot_pos = sequence_tensor.size(0) - 1
-            else:
-                eot_pos = sequence_tensor.size(0) - 1
-
-            mask[eot_pos] = True  # Set the EOT token to True
-
-            # Ensure EOT token is unmasked
-            eot_positions = (sequence_tensor == eot_token_id).nonzero(as_tuple=True)[0]
-            eot_pos = eot_positions[-1].item() if len(eot_positions) > 0 else sequence_tensor.size(0) - 1
-            mask[eot_pos] = True
-
+                    eot_pos = eot_positions[-1].item()
+                    mask[eot_pos] = True
+            
             batch_data[key].append(padded_sequence)
             batch_data[f"{key}_mask"].append(mask)
 
-    # Stack the tensors (already on device, no need for .to(device))
+    # Stack tensors (they're already on device)
     for key in ["chosen", "rejected", "chosen_mask", "rejected_mask"]:
         batch_data[key] = torch.stack(batch_data[key])
-
-        # Truncate the sequences if needed
+        
+        # Truncate if needed
         if allowed_max_length is not None:
             batch_data[key] = batch_data[key][:, :allowed_max_length]
 

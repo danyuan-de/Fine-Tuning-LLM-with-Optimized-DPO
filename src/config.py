@@ -7,18 +7,18 @@ model_workspace_dir = os.path.join(os.path.dirname(__file__), "..", "workspace")
 fine_tuned_model_path = os.path.join(model_workspace_dir, f"{model_name.split('/')[-1]}_fine-tuned")
 cache_dir = os.path.join(model_workspace_dir, "models")
 
-# ---------------------------------- DPO loss parameters ----------------------------------
-beta = 0.1 # Temperature parameter controlling the sharpness of the decision boundary in DPO loss
-lambda_kl = 0.1 # Weight of the KL divergence penalty to prevent model drift in DPO loss
+# --------------------------------- DPO loss parameters ---------------------------------
+beta = 0.1  # Temperature parameter controlling the sharpness of the decision boundary in DPO loss
+lambda_kl = 0.1  # Weight of the KL divergence penalty to prevent model drift in DPO loss
 
 # ---------------------------------- Model parameters ----------------------------------
 allowed_max_length = 1024 # maximum number of tokens in a sequence for training input data
 max_new_tokens = 256  # maximum number of tokens to generate
 
-# ----------------- Training parameters -----------------
-batch_size = 4 # Process the number of items at once
+# --------------------------------- Training parameters ---------------------------------
+batch_size = 4  # Process the number of items at once
 gradient_accumulation_steps = 2  # Number of steps to accumulate gradients before stepping
-num_epochs = 1 # Number of times to go through the dataset
+num_epochs = 1  # Number of times to go through the dataset
 learning_rate = 5e-6  # Original: 5e-6 - Lower learning rate for more stable updates
 warmup_steps = 10  # Add warmup steps to gradually increase learning rate
 weight_decay = 0.01  # Original: 0.001 - Higher regularization to prevent overfitting
