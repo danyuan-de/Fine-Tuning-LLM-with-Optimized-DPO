@@ -22,6 +22,7 @@ from src.dpoLoss import DPOLoss
 from src.preferenceDataset import PreferenceDataset
 from src.utility import *
 from src.trainer import train_model_dpo_simple
+from src.gpuMonitor import log_memory_snapshot
 # from src.scheduler import get_scheduler
 
 # --------- File Paths ---------
@@ -47,6 +48,9 @@ print(f"Using DPOP with beta={config.beta}, lambda_kl={config.lambda_kl}, lambda
 # --------- Device ---------
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 print(f"Device: {device}")
+if torch.cuda.is_available():
+    print(f"GPU: {torch.cuda.get_device_name(0)}")
+    print(f"CUDA Version: {torch.version.cuda}")
 
 # --------- Load a Hugging Face model and tokenizer ---------
 tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
@@ -57,6 +61,7 @@ eot_token_id = tokenizer.eos_token_id  # Instead of tokenizer.convert_tokens_to_
 
 policy_model = model # this is the model that will be fine-tuned
 ref_model = copy.deepcopy(model) # create a reference model for DPO by copying and freezing the parameters
+log_memory_snapshot("After reference model creation")
 
 for param in ref_model.parameters():
     param.requires_grad = False
@@ -82,8 +87,8 @@ print("Number of entries:", len(data))
 
 # Need to use 5-fold cross-validation or more
 # Train/val/test split
-train_portion = int(len(data) * 0.7)
-test_portion = int(len(data) * 0.15) 
+train_portion = int(len(data) * 0.8)
+test_portion = int(len(data) * 0.1) 
 val_portion = len(data) - train_portion - test_portion
 
 print("Train portion:", train_portion)
@@ -136,13 +141,13 @@ test_loader = DataLoader(
     drop_last=False,
 )
 
-print("Train loader:")
-for batch in train_loader:
-    print(
-        batch["chosen"].shape,
-        batch["rejected"].shape,
-    )
-print("\n")
+# print("Train loader:")
+# for batch in train_loader:
+#     print(
+#         batch["chosen"].shape,
+#         batch["rejected"].shape,
+#     )
+# print("\n")
 
 # self-defined stopping criteria
 stopping_criteria = StoppingCriteriaList([
@@ -162,6 +167,10 @@ optimizer = torch.optim.AdamW(policy_model.parameters(), lr=learning_rate, weigh
 #     total_steps=total_steps
 # )
 
+# Evaluate initial state
+print("\nEvaluating initial state...")
+log_memory_snapshot("Before initial evaluation")
+
 # Before training loop. If chosen and rejected responses are too similar, the preference margin won’t grow.
 batch = next(iter(train_loader))
 print("Chosen sample:", tokenizer.decode(batch["chosen"][0].tolist()))
@@ -175,12 +184,19 @@ res = dpo_loss_fn.evaluate_dpo_loss_loader(
     eval_iter=5
 )
 
+log_memory_snapshot("After initial evaluation")
+
 # Before starting the training, print the initail losses and rewards:
 print("Training loss:", res["train_loss"])
 print("Validation loss:", res["val_loss"])
 
 print("Train reward margin:", res["train_chosen_reward"] - res["train_rejected_reward"])
 print("Val reward margin:", res["val_chosen_reward"] - res["val_rejected_reward"])
+
+print("\n" + "=" * 50)
+print("Starting training...")
+print("=" * 50)
+log_memory_snapshot("Before training")
 
 start_time = time.time()
 
@@ -197,12 +213,15 @@ tracking = train_model_dpo_simple(
     num_epochs=num_epochs,
     eval_freq=config.eval_freq,
     eval_iter=5,
-    gradient_accumulation_steps=gradient_accumulation_steps
+    gradient_accumulation_steps=gradient_accumulation_steps,
+    log_memory=True
 )
 
 end_time = time.time()
 execution_time_minutes = (end_time - start_time) / 60
 print(f"Training completed in {execution_time_minutes:.2f} minutes (in {str(timedelta(seconds=end_time - start_time))})")
+
+log_memory_snapshot("After training")
 
 print("Final train/validation statistics:")
 print(f"Train loss: {tracking['train_losses'][-1]}")

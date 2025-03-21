@@ -128,7 +128,7 @@ class DPOLoss(nn.Module):
             reference_chosen_logprobs - model_chosen_logprobs
         )
 
-        # Full DPOP loss: DPO loss + DPOP term + KL penalty
+        # Full DPOP loss: DPO loss + DPOP term
         losses = dpo_loss + self.lambda_dpop * dpop_term 
 
         # Optional values to track progress during training
