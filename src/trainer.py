@@ -47,11 +47,11 @@ def train_model_dpo_simple(
             
         policy_model.train()  # Set model to training mode
 
-        # Reset accumulated loss for reporting
-        accumulated_loss = 0.0
-        accumulated_chosen_rewards = 0.0
-        accumulated_rejected_rewards = 0.0
-        batch_count = 0
+        # # Reset accumulated loss for reporting
+        # accumulated_loss = 0.0
+        # accumulated_chosen_rewards = 0.0
+        # accumulated_rejected_rewards = 0.0
+        # batch_count = 0
 
         # Zero the gradients at the beginning of each epoch
         optimizer.zero_grad()
@@ -67,14 +67,15 @@ def train_model_dpo_simple(
                         policy_model=policy_model,
                         reference_model=reference_model
                 )
+                loss = loss / gradient_accumulation_steps  # Scale loss for gradient accumulation
                 loss.backward()  # Compute gradients
 
-                # Track metrics for reporting
-                accumulated_loss += loss.item() * gradient_accumulation_steps  # Rescale for reporting
-                accumulated_chosen_rewards += chosen_rewards.item()
-                accumulated_rejected_rewards += rejected_rewards.item()
-                accumulated_tokens += batch["chosen"].numel()
-                batch_count += 1
+                # # Track metrics for reporting
+                # accumulated_loss += loss.item() * gradient_accumulation_steps  # Rescale for reporting
+                # accumulated_chosen_rewards += chosen_rewards.item()
+                # accumulated_rejected_rewards += rejected_rewards.item()
+                # accumulated_tokens += batch["chosen"].numel()
+                # batch_count += 1
 
                 # Update step info for progress bar
                 reward_diff = chosen_rewards.item() - rejected_rewards.item()
@@ -116,11 +117,11 @@ def train_model_dpo_simple(
                     # Evaluation step
                     if global_step % eval_freq == 0:
                         
-                        # Reset accumulators
-                        accumulated_loss = 0.0
-                        accumulated_chosen_rewards = 0.0
-                        accumulated_rejected_rewards = 0.0
-                        batch_count = 0
+                        # # Reset accumulators
+                        # accumulated_loss = 0.0
+                        # accumulated_chosen_rewards = 0.0
+                        # accumulated_rejected_rewards = 0.0
+                        # batch_count = 0
                         
                         # Evaluate model
                         res = dpo_loss_fn.evaluate_dpo_loss_loader(
