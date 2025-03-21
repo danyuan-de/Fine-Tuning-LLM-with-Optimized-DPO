@@ -8,7 +8,6 @@ import os
 import json
 import torch
 from torch.utils.data import DataLoader
-# from torch.cuda.amp import GradScaler, autocast
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from transformers import AutoTokenizer, AutoModelForCausalLM, PretrainedConfig
 from functools import partial
@@ -16,7 +15,7 @@ import copy
 import time
 from datetime import timedelta
 import numpy as np
-import multiprocessing
+import random
 
 import src.config as config
 from src.dpoLoss import DPOLoss
@@ -42,7 +41,8 @@ learning_rate = config.learning_rate
 weight_decay = config.weight_decay
 temperature = config.temperature
 top_p = config.top_p
-dpo_loss_fn = DPOLoss(beta=config.beta, lambda_kl=config.lambda_kl)
+dpo_loss_fn = DPOLoss(beta=config.beta, lambda_kl=config.lambda_kl, lambda_dpop=config.lambda_dpop)
+print(f"Using DPOP with beta={config.beta}, lambda_kl={config.lambda_kl}, lambda_dpop={config.lambda_dpop}")
 
 # --------- Device ---------
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -82,13 +82,16 @@ print("Number of entries:", len(data))
 
 # Need to use 5-fold cross-validation or more
 # Train/val/test split
-train_portion = int(len(data) * 0.85)
-test_portion = int(len(data) * 0.1) 
+train_portion = int(len(data) * 0.7)
+test_portion = int(len(data) * 0.15) 
 val_portion = len(data) - train_portion - test_portion
 
 print("Train portion:", train_portion)
 print("Validation portion:", val_portion)
 print("Test portion:", test_portion)
+
+# Shuffle the data
+random.shuffle(data)
 
 train_data = data[:train_portion]
 test_data = data[train_portion:train_portion + test_portion]
@@ -323,7 +326,7 @@ test_res = dpo_loss_fn.evaluate_dpo_loss_loader(
 print("Test loss:", test_res["val_loss"])
 print("Test reward margin:", test_res["val_chosen_reward"] - test_res["val_rejected_reward"])
 
-for i, entry in enumerate(test_data[:5]):
+for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
     input_text = format_input(entry)
 
     # Reference Model Generation

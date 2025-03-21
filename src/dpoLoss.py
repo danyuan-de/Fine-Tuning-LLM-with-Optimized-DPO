@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class DPOLoss(nn.Module):
-    def __init__(self, beta, lambda_kl):
+    def __init__(self, beta, lambda_kl, lambda_dpop):
         """
         Initializes the DPO Loss module.
 
@@ -14,6 +14,7 @@ class DPOLoss(nn.Module):
         super(DPOLoss, self).__init__()
         self.beta = beta
         self.lambda_kl = lambda_kl
+        self.lambda_dpop = lambda_dpop
 
     def compute_logprobs(self, logits, labels, selection_mask=None):
         """
@@ -94,32 +95,42 @@ class DPOLoss(nn.Module):
         dpo_loss = -F.logsigmoid(self.beta * logits)
         # print(f"Losses: {losses.mean().item():.4f}")
 
-        # Calculate KL penalty: D_KL(reference || model)
-        # Convert reference model logprobs to probs since F.kl_div expects probs as target
-        reference_chosen_probs = reference_chosen_logprobs.exp()
-        reference_rejected_probs = reference_rejected_logprobs.exp()
+        # # Calculate KL penalty: D_KL(reference || model)
+        # # Convert reference model logprobs to probs since F.kl_div expects probs as target
+        # reference_chosen_probs = reference_chosen_logprobs.exp()
+        # reference_rejected_probs = reference_rejected_logprobs.exp()
 
-        # F.kl_div(input=logP, target=Q) computes D_KL(Q || P)
-        kl_penalty_chosen = F.kl_div(
-            input=model_chosen_logprobs,     # log P(model)
-            target=reference_chosen_probs,   # Q(reference)
-            reduction="batchmean",
-            log_target=False
-        )
+        # # F.kl_div(input=logP, target=Q) computes D_KL(Q || P)
+        # kl_penalty_chosen = F.kl_div(
+        #     input=model_chosen_logprobs,     # log P(model)
+        #     target=reference_chosen_probs,   # Q(reference)
+        #     reduction="batchmean",
+        #     log_target=False
+        # )
         
-        kl_penalty_rejected = F.kl_div(
-            input=model_rejected_logprobs,
-            target=reference_rejected_probs,
-            reduction="batchmean",
-            log_target=False
+        # kl_penalty_rejected = F.kl_div(
+        #     input=model_rejected_logprobs,
+        #     target=reference_rejected_probs,
+        #     reduction="batchmean",
+        #     log_target=False
+        # )
+
+        # # Combine both KL penalties
+        # kl_penalty = kl_penalty_chosen + kl_penalty_rejected
+        
+        # # Combine into final loss with weighting factor
+        # losses = dpo_loss + self.lambda_kl * kl_penalty
+        
+        # DPOP addition: add a penalty term when the preferred completion likelihood is lower than reference
+        # max(0, log(reference_chosen / model_chosen)) or equivalently max(0, reference_chosen_logprobs - model_chosen_logprobs)
+        dpop_term = torch.maximum(
+            torch.zeros_like(reference_chosen_logprobs),
+            reference_chosen_logprobs - model_chosen_logprobs
         )
 
-        # Combine both KL penalties
-        kl_penalty = kl_penalty_chosen + kl_penalty_rejected
-        
-        # 4. Combine into final loss with weighting factor
-        losses = dpo_loss + self.lambda_kl * kl_penalty
-        
+        # Full DPOP loss: DPO loss + DPOP term + KL penalty
+        losses = dpo_loss + self.lambda_dpop * dpop_term 
+
         # Optional values to track progress during training
         chosen_rewards = (model_chosen_logprobs - reference_chosen_logprobs).detach()
         rejected_rewards = (model_rejected_logprobs - reference_rejected_logprobs).detach()
