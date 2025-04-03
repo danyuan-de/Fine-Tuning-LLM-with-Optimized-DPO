@@ -31,6 +31,7 @@ cache_dir = config.cache_dir # cache directory for the Hugging Face model
 result_dir = config.result_dir # directory to save the output text and figures
 model_name = config.model_name
 file_path = config.file_content
+dpop_output_txt = config.dpop_output_txt
 
 # --------- Hyperparameters ---------
 allowed_max_length = config.allowed_max_length
@@ -42,8 +43,8 @@ learning_rate = config.learning_rate
 weight_decay = config.weight_decay
 temperature = config.temperature
 top_p = config.top_p
-dpo_loss_fn = DPOLoss(beta=config.beta, lambda_kl=config.lambda_kl, lambda_dpop=config.lambda_dpop)
-print(f"Using DPOP with beta={config.beta}, lambda_kl={config.lambda_kl}, lambda_dpop={config.lambda_dpop}")
+dpo_loss_fn = DPOLoss(beta=config.beta, lambda_dpop=config.lambda_dpop)
+print(f"Using DPOP with beta={config.beta}, lambda_dpop={config.lambda_dpop}")
 
 # --------- Device ---------
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -237,6 +238,9 @@ policy_model.save_pretrained(save_path)
 tokenizer.save_pretrained(save_path)
 print(f"Model and tokenizer saved to {save_path}")
 
+# Ensure result directory exists
+os.makedirs(config.result_dir, exist_ok=True)
+
 # Plot the losses
 epochs_tensor = torch.linspace(0, num_epochs, len(tracking["train_losses"]))
 plot_losses(
@@ -314,7 +318,12 @@ for i, entry in enumerate(val_data[:3]):
     # ft_perplexity = calculate_perplexity(fine_tuned_model, fine_tuned_tokenizer, input_text)
     # ref_perplexity = calculate_perplexity(ref_model, tokenizer, input_text)
 
-    print(f"\nInput{i}: {entry['question']}")
+    if ('question' in entry):
+        print(f"\nInput{i}: {entry['question']}")
+    elif ('instruction' in entry):
+        print(f"\nInput{i}: {entry['instruction']}")
+    else:
+        print(f"\nInput{i}: [No valid input key found]")
 
     print("\n ----- Reference Model ----- ")
     print(f"Reference Response: {ref_response}")
@@ -376,7 +385,13 @@ for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
     fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
 
-    print(f"\nInput{i}: {entry['question']}")
+    if ('question' in entry):
+        print(f"\nInput{i}: {entry['question']}")
+    elif ('instruction' in entry):
+        print(f"\nInput{i}: {entry['instruction']}")
+    else:
+        print(f"\nInput{i}: [No valid input key found]")
+
     print("\n ----- Reference Model ----- ")
     print(f"Reference Response: {ref_response}")
 
@@ -387,8 +402,13 @@ for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
     print(f"Expected Answer: {entry['chosen']}")
     print("="*80, "\n")
 
-    with open(os.path.join(result_dir, "foutput_test.txt"), "a") as f:
-        f.write(f"\nInput{i}: {entry['question']}")
+    with open(dpop_output_txt, "a") as f:
+        if ('question' in entry):
+            f.write(f"\nInput{i}: {entry['question']}")
+        elif ('instruction' in entry):
+            f.write(f"\nInput{i}: {entry['instruction']}")
+        else:
+            f.write(f"\nInput{i}: [No valid input key found]")
         f.write("\n ----- Reference Model ----- ")
         f.write(f"Reference Response: {ref_response}")
         f.write("\n ----- Policy Model ----- ")

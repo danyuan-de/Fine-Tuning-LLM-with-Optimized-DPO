@@ -3,17 +3,16 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class DPOLoss(nn.Module):
-    def __init__(self, beta, lambda_kl, lambda_dpop):
+    def __init__(self, beta, lambda_dpop):
         """
         Initializes the DPO Loss module.
 
         Args:
             beta (float): Scaling factor for the loss. Controls the strength of preference optimization.
-            lambda_kl (float): Weight of the KL divergence penalty to prevent model drift in DPO loss.
+            lambda_dpop (float): Weight for DPOP term to prevent reduction of preferred completion likelihood
         """
         super(DPOLoss, self).__init__()
         self.beta = beta
-        self.lambda_kl = lambda_kl
         self.lambda_dpop = lambda_dpop
 
     def compute_logprobs(self, logits, labels, selection_mask=None):
@@ -84,11 +83,11 @@ class DPOLoss(nn.Module):
             - The average "chosen" reward (model_chosen_logprobs - reference_chosen_logprobs).
             - The average "rejected" reward (model_rejected_logprobs - reference_rejected_logprobs).
         """
-        # Calculate DPO logits: pi_diff - ref_diff
+        # Compute log probability differences
         pi_diff = model_chosen_logprobs - model_rejected_logprobs
         ref_diff = reference_chosen_logprobs - reference_rejected_logprobs
         logits = pi_diff - ref_diff
-        print(f"Logits: {logits.mean().item():.4f}")
+        # print(f"Logits: {logits.mean().item():.4f}")
         # logits = (logits - logits.mean()) / (logits.std() + 1e-8)  # Normalize logits
         
         # DPO (Eq. 7 of https://arxiv.org/pdf/2305.18290.pdf), calculate standard DPO loss: -logsigmoid(beta * logits)

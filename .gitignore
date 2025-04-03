@@ -35,7 +35,7 @@ temp/
 
 wandb/
 Llama-*/
-Result_loss/
+workspace/
 
 # data files
 # instruction-data-with-preference.json
@@ -45,4 +45,3 @@ questions_answers/
 # DPO_loss-plot.pdf
 # reward_margins-plot.pdf
 env/
-

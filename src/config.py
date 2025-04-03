@@ -13,7 +13,7 @@ lambda_kl = 0.1  # Weight of the KL divergence penalty to prevent model drift in
 lambda_dpop = 50.0  # Weight for DPOP term to prevent reduction of preferred completion likelihood
 
 # ---------------------------------- Model parameters ----------------------------------
-allowed_max_length = 1024 # maximum number of tokens in a sequence for training input data
+allowed_max_length = 4096 # maximum number of tokens in a sequence for training input data
 max_new_tokens = 256  # maximum number of tokens to generate
 
 # --------------------------------- Training parameters ---------------------------------
@@ -41,3 +41,6 @@ file_mixed = os.path.join(data_dir, "physics_qa_mixed.json")
 
 # ------------------------ Results directory ------------------------
 result_dir = os.path.join(os.path.dirname(__file__), "..", "results")
+dpo_output_txt = os.path.join(result_dir, "dpo_output_test.txt")
+dpop_output_txt = os.path.join(result_dir, "dpop_output_test.txt")
+dpoKLP_output_txt = os.path.join(result_dir, "dpoKLP_output_test.txt")
