@@ -7,6 +7,87 @@ from transformers import StoppingCriteria, StoppingCriteriaList, AutoModelForCau
 import math
 import src.config as config
 
+def get_output_filename(method: str, data_file: str, label: str, learning_rate: float = None,
+                       beta: float = None, lambda_dpop: float = None, 
+                       lambda_kl: float = None) -> str:
+    """
+    Dynamically generate output filenames based on the method and data file.
+    """
+    suffix_map = {
+        "content": "content",
+        "mixed": "mixed",
+        "structure": "structure",
+        "preference": "preference"
+    }
+
+    base = os.path.basename(data_file)
+    suffix = next((v for k, v in suffix_map.items() if k in base), "unknown")
+
+    # Build hyperparameter string
+    hyperparam_parts = []
+    if learning_rate is not None:
+        hyperparam_parts.append(f"lr{learning_rate:.1e}")
+
+    if beta is not None:
+        hyperparam_parts.append(f"b{beta:.2f}")
+    
+    # Only include method-relevant hyperparameters
+    if lambda_dpop is not None and method in ['dpop', 'dpopkl']:
+        hyperparam_parts.append(f"dp{lambda_dpop:.1f}")
+        
+    if lambda_kl is not None and method in ['dpokl', 'dpopkl']:
+        hyperparam_parts.append(f"kl{lambda_kl:.2f}")
+    
+    # Combine into filename
+    hyperparam_str = "_".join(hyperparam_parts)
+    if hyperparam_str:
+        filename = f"{method}_{suffix}_{hyperparam_str}.txt"
+    else:
+        filename = f"{method}_{suffix}.txt"
+
+    return os.path.join(config.result_dir, filename)
+
+def get_output_plotname(method: str, data_file: str, label: str, learning_rate: float = None,
+                       beta: float = None, lambda_dpop: float = None, 
+                       lambda_kl: float = None) -> str:
+    """
+    Dynamically generate output figure filenames based on method, data file, and hyperparameters.
+    """
+    # Extract data type from filename
+    suffix_map = {
+        "content": "content",
+        "mixed": "mixed",
+        "structure": "structure",
+        "preference": "preference"
+    }
+
+    base = os.path.basename(data_file)
+    suffix = next((v for k, v in suffix_map.items() if k in base), "unknown")
+    
+    # Build hyperparameter string
+    hyperparam_parts = []
+    if learning_rate is not None:
+        hyperparam_parts.append(f"lr{learning_rate:.1e}")
+
+    if beta is not None:
+        hyperparam_parts.append(f"b{beta:.2f}")
+    
+    # Only include method-relevant hyperparameters
+    if lambda_dpop is not None and method in ['dpop', 'dpopkl']:
+        hyperparam_parts.append(f"dp{lambda_dpop:.1f}")
+        
+    if lambda_kl is not None and method in ['dpokl', 'dpopkl']:
+        hyperparam_parts.append(f"kl{lambda_kl:.2f}")
+    
+    # Combine into filename
+    hyperparam_str = "_".join(hyperparam_parts)
+    if hyperparam_str:
+        filename = f"{method}_{suffix}_{label}_{hyperparam_str}.png"
+    else:
+        filename = f"{method}_{suffix}_{label}.png"
+    
+    return os.path.join(config.result_dir, filename)
+
 # Get the device to use
 def get_device():
     """
@@ -34,7 +115,11 @@ def format_input(entry):
             f"\n\n### Instruction:\n{entry['instruction']}"
         ) # for the instruction-data-with-preference.json
         input_text = f"\n\n### Input:\n{entry['input']}" if entry["input"] else "" # for the instruction-data-with-preference.json
-        return system_prompt + input_text
+        return (
+            "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n"
+            f"{system_prompt}<|eot_id|><|start_header_id|>user<|end_header_id|>\n"
+            f"{input_text}<|eot_id|>\n<|start_header_id|>assistant<|end_header_id|>\n"
+        )
     
     elif "question" in entry:
         system_prompt = (
@@ -125,7 +210,7 @@ def custom_collate_fn(
 
     return batch_data
 
-def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss"):
+def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss", save_path=None):
     fig, ax1 = plt.subplots(figsize=(5, 3))
 
     # Plot training and validation loss against epochs
@@ -142,7 +227,7 @@ def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss"
     ax2.set_xlabel("Tokens seen")
 
     fig.tight_layout()  # Adjust layout to make room
-    plt.savefig(os.path.join(config.result_dir, f"{label}-plot.png"))
+    plt.savefig(save_path)
     # plt.show()
 
 def text_to_token_ids(text, tokenizer):
@@ -158,26 +243,30 @@ def generate(
     model, 
     idx, 
     stopping_criteria=None,
-    max_new_tokens=None,
-    context_size=4096, 
-    temperature=config.temperature,
+    max_new_tokens=512,
+    context_size=4096,
+    temperature=0.0,
     top_k=None,
     top_p=None,  
     eot_token_id=None
 ):
     """
+    Generates text given a starting sequence of token IDs.
+
     Args:
-        idx: the input token IDs
-        stopping_criteria: a function that determines when to stop the generation process
-        max_new_tokens: the maximum number of tokens to generate
-        context_size: the maximum number of tokens that are considered as the contextual input 
-                    when generating the next token
-        temperature: the temperature value for sampling
-        top_k: the number of highest probability tokens to keep for sampling
-        top_p: the cumulative probability threshold for top-p sampling
-        eot_token_id: the token ID for the end-of-text token
+        model: The language model.
+        idx (torch.LongTensor): The input token IDs, shape (batch_size, seq_len).
+        stopping_criteria (StoppingCriteriaList): Any stopping criteria to be applied.
+        max_new_tokens (int): The maximum number of tokens to generate.
+        context_size (int): The maximum context size to preserve from the prompt.
+        temperature (float): If > 0, controls the sampling randomness. 
+                             If == 0, a pure greedy (argmax) decode is done.
+        top_k (int): The number of highest probability tokens to keep for sampling.
+        top_p (float): The cumulative probability threshold for top-p sampling.
+        eot_token_id (int): The token ID marking end-of-text.
+
     Returns:
-        idx: the token IDs of the generated text
+        torch.LongTensor: The token IDs of the generated text (including the prompt).
         
     enhanced generation function that supports both top-k and top-p
     priority: top_p > top_k (when both are set)
@@ -186,61 +275,62 @@ def generate(
     device = model.device 
     idx = idx.to(device)
 
-    # Limit the maximum number of iterations to prevent infinite generation (iteration)
     for iteration in range(max_new_tokens):
-        # truncate context
-        idx_cond = idx[:, -context_size:]#.to(device) 
+        # Truncate the context
+        idx_cond = idx[:, -context_size:]  # shape: (batch_size, <=context_size)
         
-        # get logits
+        # Compute logits; we only need the final token’s logits
         with torch.no_grad():
             output = model(idx_cond)
             logits = output.logits if hasattr(output, "logits") else output[0]
-        
-        # select the last token's logits
-        logits = logits[:, -1, :] / (temperature if temperature > 0 else 1.0)
-        
-        # Check top_p and top_k are valid
-        if top_p is not None:
-            assert 0 < top_p <= 1.0, f"top_p must be between 0 and 1, got {top_p}"
-        if top_k is not None:
-            assert top_k > 0, f"top_k must be positive, got {top_k}"
-            
-        # prioritize top-p sampling
-        if top_p is not None and top_p < 1.0:
-            sorted_logits, sorted_indices = torch.sort(logits, descending=True)
-            cumulative_probs = torch.cumsum(
-                torch.softmax(sorted_logits, dim=-1), 
-                dim=-1
-            )
-            
-            # remove tokens with cumulative probability above top_p
-            sorted_indices_to_remove = cumulative_probs > top_p
-            # keep the first token above top_p
-            sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
-            sorted_indices_to_remove[..., 0] = False
-            
-            # create mask
-            indices_to_remove = sorted_indices_to_remove.scatter(
-                1, sorted_indices, sorted_indices_to_remove
-            )
-            logits[indices_to_remove] = float('-inf')
+        logits = logits[:, -1, :]  # shape: (batch_size, vocab_size)
 
-        # secondary top-k sampling
-        elif top_k is not None and top_k > 0:
-            top_k = min(top_k, logits.size(-1))
-            top_logits, _ = torch.topk(logits, top_k)
-            min_val = top_logits[:, -1]
-            logits = torch.where(logits < min_val, float('-inf'), logits)
+        # Decide how to pick the next token
+        if temperature == 0.0:
+            # Greedy decode: pick the argmax
+            next_token = torch.argmax(logits, dim=-1).unsqueeze(-1)
+        else:
+            # Scale by temperature
+            logits = logits / temperature
 
-        # Probability Calculation and Sampling
-        probs = torch.softmax(logits, dim=-1)
-        idx_next = torch.multinomial(probs, num_samples=1).to(device)
+            # Apply top-p sampling (priority over top-k if both specified)
+            if top_p is not None and top_p < 1.0:
+                sorted_logits, sorted_indices = torch.sort(logits, descending=True)
+                cumulative_probs = torch.cumsum(torch.softmax(sorted_logits, dim=-1), dim=-1)
 
-        # EOT check
-        if (eot_token_id is not None and idx_next.item() == eot_token_id) or iteration == max_new_tokens - 1:
+                # Exclude tokens with cumulative probability above top_p
+                sorted_indices_to_remove = cumulative_probs > top_p
+                # Shift one token to keep the first token that crosses top_p
+                sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
+                sorted_indices_to_remove[..., 0] = False
+
+                # Scatter back
+                indices_to_remove = sorted_indices_to_remove.scatter(
+                    1, sorted_indices, sorted_indices_to_remove
+                )
+                logits[indices_to_remove] = float("-inf")
+
+            # Apply top-k sampling (if top_p not used)
+            elif top_k is not None and top_k > 0:
+                top_k = min(top_k, logits.size(-1))
+                kth_logits, kth_indices = torch.topk(logits, top_k)
+                # Value of the lowest logit in top-k
+                min_val = kth_logits[:, -1].unsqueeze(-1)
+                # Anything below that gets set to -inf
+                logits = torch.where(logits < min_val, torch.tensor(float("-inf")).to(device), logits)
+
+            # Sample from the distribution
+            probs = torch.softmax(logits, dim=-1)
+            next_token = torch.multinomial(probs, num_samples=1)
+
+        # Concatenate the chosen token
+        idx = torch.cat((idx, next_token), dim=1)
+
+        # Check EOT or max tokens
+        if eot_token_id is not None:
+            if (next_token == eot_token_id).any():
+                # If any in the batch hits EOT, you might choose to break or handle individually
                 break
-
-        idx = torch.cat((idx.to(device), idx_next), dim=1)
 
     return idx
 

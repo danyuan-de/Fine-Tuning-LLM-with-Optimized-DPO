@@ -1,12 +1,14 @@
 import torch
 import src.config as config
+# from src.gpuMonitor import log_memory_snapshot
 from tqdm import tqdm
 
 # Define the training function
 def train_model_dpo_simple(
     dpo_loss_fn, optimizer, scheduler,
     policy_model, reference_model, train_loader, val_loader,
-    num_epochs, eval_freq, eval_iter, gradient_accumulation_steps=1):
+    num_epochs, eval_freq, eval_iter, gradient_accumulation_steps=1, 
+    log_memory=False):
     """
     Fine-tunes the policy model using the DPO method.
 
@@ -21,8 +23,8 @@ def train_model_dpo_simple(
     :param eval_iter: The number of evaluation iterations.
     :return: A dictionary tracking various losses and reward metrics.
     """
-    print("Starting training...")
     print("Ref model grad status:", next(reference_model.parameters()).requires_grad)
+    print("Policy model grad status:", next(policy_model.parameters()).requires_grad)
     # Initialize lists to track losses and tokens seen
     tracking = {
         "train_losses": [],
@@ -31,19 +33,22 @@ def train_model_dpo_simple(
         "val_losses": [],
         "val_chosen_rewards": [],
         "val_rejected_rewards": [],
-        "tokens_seen": []
+        "tokens_seen": [],
+        "memory_usage": [] if log_memory else None
     }
     tokens_seen, global_step = 0, -1
     accumulated_tokens = 0
 
-    prev_val_loss = float('inf')
-    patience = config.early_stopping_patience
-    patience_counter = 0
-    max_reward_margin = config.max_reward_margin
+    # prev_val_loss = float('inf')
+    # patience = config.early_stopping_patience
+    # patience_counter = 0
+    # max_reward_margin = config.max_reward_margin
     # sample_entry = val_data[0] if val_data else None # Sample entry for generation
 
     # Main training loop
     for epoch in range(num_epochs):
+        # if log_memory:
+        #     log_memory_snapshot(f"Starting epoch {epoch+1}/{num_epochs}")
             
         policy_model.train()  # Set model to training mode
 
@@ -61,7 +66,9 @@ def train_model_dpo_simple(
 
         try:
             for batch_idx, batch in enumerate(train_loop):
-                # with autocast():  # Enable mixed precision
+                # if log_memory and batch_idx % max(1, len(train_loader) // 10) == 0:
+                #     log_memory_snapshot(f"Epoch {epoch+1}, Batch {batch_idx+1}/{len(train_loader)}")
+
                 loss, chosen_rewards, rejected_rewards = dpo_loss_fn.compute_dpo_loss_batch(
                         batch=batch,
                         policy_model=policy_model,
@@ -113,10 +120,15 @@ def train_model_dpo_simple(
                     global_step += 1
                     tokens_seen += accumulated_tokens
                     accumulated_tokens = 0
+
+                    # Log memory after optimizer step at a reasonable interval
+                    # if log_memory and global_step % max(1, eval_freq // 2) == 0:
+                    #     log_memory_snapshot(f"After optimizer step {global_step}")
                     
                     # Evaluation step
                     if global_step % eval_freq == 0:
-                        
+                        # if log_memory:
+                        #     log_memory_snapshot(f"Before evaluation at step {global_step}")
                         # # Reset accumulators
                         # accumulated_loss = 0.0
                         # accumulated_chosen_rewards = 0.0
@@ -131,6 +143,14 @@ def train_model_dpo_simple(
                             val_loader=val_loader,
                             eval_iter=eval_iter
                         )
+
+                        # if log_memory:
+                        #     log_memory_snapshot(f"After evaluation at step {global_step}")
+
+                        #      # Store memory info in tracking
+                        #     if torch.cuda.is_available():
+                        #         allocated_gb = torch.cuda.memory_allocated() / (1024 ** 3)
+                        #         tracking["memory_usage"].append(allocated_gb)
                         
                         # Track metrics
                         tracking["train_losses"].append(res["train_loss"])

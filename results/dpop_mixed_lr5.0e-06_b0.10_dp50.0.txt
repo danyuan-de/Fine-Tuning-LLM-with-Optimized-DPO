@@ -1,0 +1,160 @@
+
+Input0: A $2\,\mathrm{C}$ charge is moved from $+5\,\mathrm{V}$ to $+1\,\mathrm{V}$. Work done by the electric field?
+ ----- Reference Model ----- Reference Response: Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+Physics
+ ----- Policy Model ----- Policy Response: Step 1:\\$W = q \Delta V = (2C)(-4V) = -8 J$.\\Answer:\\$-8 J$.
+
+
+``
+    
+
+Step 1:\\$W = q \Delta V = (2C)(-4V) = -8 J$.\\Answer:\\$-8 J$.
+ ----- Expected Response ----- Expected Answer: Step 1:\\Compute $\Delta V=1-5= -4.\\Step 2:\\$W= q (\Delta V)= 2\times(-4)= -8\,\mathrm{J}$.\\Step 3:\\Hence $-8$.\\Answer:\\$-8\,\mathrm{J}$.================================================================================
+
+Input1: An object traveling at $10\,\mathrm{m/s}$ has $250\,\mathrm{J}$ of kinetic energy. Find its mass.
+ ----- Reference Model ----- Reference Response: The kinetic energy of an object is given by the formula $K=\frac{1}{2}mv^2$ where $m$ is the mass of the object and $v$ is the velocity of the object. We can rearrange this formula to solve for the mass $m$.
+\begin{align*} K &= \frac{1}{2}mv^2\\ m &= \frac{2K}{v^2}\\ &= \frac{2(250\,\mathrm{J})}{(10\,\mathrm{m/s})^2}\\ &= 5\,\mathrm{kg} \end{align*}
+The mass of the object is $5\,\mathrm{kg}$.
+ ----- Policy Model ----- Policy Response: Step 1:GuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidId
+ ----- Expected Response ----- Expected Answer: Step 1:\\$\frac{1}{2}m v^{2} = 250 \implies \frac{1}{2}m (10)^{2} = 250$.\\Step 2:\\$250 = 50m \implies m = 5\,\mathrm{kg}$.\\Answer:\\$5\,\mathrm{kg}$.================================================================================
+
+Input2: A coil of resistance $2\,\Omega$ and inductance $0.2\,\mathrm{H}$ is connected to a $10\,\mathrm{V}$ battery. Calculate the time constant and find the current after $0.1\,\mathrm{s}$.
+ ----- Reference Model ----- Reference Response: The time constant is the time it takes for the current to reach $63.2\%$ of its final value. The current is given by $I=I_0(1-e^{-t/\tau})$, where $I_0$ is the final current and $\tau$ is the time constant. The current after $0.1\,\mathrm{s}$ is $I=I_0(1-e^{-0.1/\tau})$. We can solve for $\tau$ by setting $I=0.632I_0$ and solving for $\tau$. We get $\tau=0.1\,\mathrm{s}$. The current after $0.1\,\mathrm{s}$ is $I=I_0(1-e^{-0.1/0.1})=0.632I_0$.
+ ----- Policy Model ----- Policy Response: Step 1:GuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidId
+ ----- Expected Response ----- Expected Answer: Step 1:\\$\tau = \frac{L}{R} = \frac{0.2}{2} = 0.1\,\mathrm{s}$.\\Step 2:\\Steady-state current $I_0 = \frac{V}{R} = \frac{10}{2} = 5\,\mathrm{A}$.\\Step 3:\\$i(t) = 5 \times [1 - e^{-t/\tau}]$.\\At $t = 0.1\,\mathrm{s}$: $i(0.1) \approx 5 \times [1 - e^{-1}] \approx 5 \times 0.6321 = 3.16\,\mathrm{A}$.\\Answer: $\tau = 0.1\,\mathrm{s}$; $i(0.1\,\mathrm{s}) \approx 3.16\,\mathrm{A}$.================================================================================
+
+Input3: A proton moves at $1\%$ of the speed of light. Calculate its relativistic momentum. (Mass of proton = $1.67 \times 10^{-27}\,\mathrm{kg}$)
+ ----- Reference Model ----- Reference Response: The relativistic momentum is given by the formula $p=\gamma mv$, where $m$ is the rest mass of the particle and $\gamma$ is the Lorentz factor. The Lorentz factor is given by $\gamma=\frac{1}{\sqrt{1-\frac{v^2}{c^2}}}$, where $v$ is the speed of the particle and $c$ is the speed of light. In this case, $v=0.01c$ and $m=1.67\times 10^{-27}\,\mathrm{kg}$. Substituting these values into the formula for the Lorentz factor, we get $\gamma=\frac{1}{\sqrt{1-\frac{(0.01c)^2}{c^2}}}=\frac{1}{\sqrt{1-0.0001}}=\frac{1}{\sqrt{0.9999}}\approx 1.005$. Substituting this value of $\gamma$ into the formula for the relativistic momentum, we get $p=\gamma mv=(1.005)(1.67\times 10^{-27}\,\mathrm{kg})(0.01c)=1.67\times 10^{-
+ ----- Policy Model ----- Policy Response: Step 1:GuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidId
+ ----- Expected Response ----- Expected Answer: Step 1:\\Use $p = \gamma m v$. At $0.01c$, $\gamma \approx 1$.\\Step 2:\\$p \approx m v = (1.67 \times 10^{-27}\,\mathrm{kg})(0.01 \times 3 \times 10^{8}\,\mathrm{m/s}) = 5.01 \times 10^{-21}\,\mathrm{kg \cdot m/s}$.\\Answer:\\Relativistic momentum $\approx 5.0 \times 10^{-21}\,\mathrm{kg \cdot m/s}$.================================================================================
+
+Input4: A $20\,\mathrm{\mu F}$ capacitor is charged to $100\,\mathrm{V}$ and then connected in parallel with an uncharged $40\,\mathrm{\mu F}$ capacitor. What is the final voltage across the capacitors?
+ ----- Reference Model ----- Reference Response: The capacitors are connected in parallel, so the charge on each capacitor is the same. The total charge is the sum of the charges on the individual capacitors. The voltage across each capacitor is the same. The total voltage is the sum of the voltages across the individual capacitors. The total capacitance is the sum of the capacitances of the individual capacitors. The total energy is the sum of the energies of the individual capacitors. The energy stored in a capacitor is given by $E=\frac{1}{2}CV^2$. The energy stored in the $20\,\mathrm{\mu F}$ capacitor is $E_1=\frac{1}{2}(20\times 10^{-6})(100)^2=1\,\mathrm{J}$. The energy stored in the $40\,\mathrm{\mu F}$ capacitor is $E_2=\frac{1}{2}(40\times 10^{-6})(100)^2=2\,\mathrm{J}$. The total energy is $E_1+E_2=3\,\mathrm{J}$. The voltage across the $20\,\mathrm{\mu F}$ capacitor is $V_1=\frac{E_1}{C_1}
+ ----- Policy Model ----- Policy Response: Step 1:GuidId:GuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidIdGuidId
+ ----- Expected Response ----- Expected Answer: Step 1:\\When capacitors are connected in parallel, they share the same voltage, and the charge redistributes.\\Step 2:\\The initial charge on the $20\,\mathrm{\mu F}$ capacitor is $Q_1 = C_1V_1 = 20 \times 10^{-6}\,\mathrm{F} \times 100\,\mathrm{V} = 2.0 \times 10^{-3}\,\mathrm{C}$.\\Step 3:\\The initial charge on the $40\,\mathrm{\mu F}$ capacitor is $Q_2 = 0$ (uncharged).\\Step 4:\\After connection, the total charge remains the same and is distributed between both capacitors: $Q_{total} = Q_1 + Q_2 = 2.0 \times 10^{-3}\,\mathrm{C}$.\\Step 5:\\When connected in parallel, the total capacitance is $C_{total} = C_1 + C_2 = 20 + 40 = 60\,\mathrm{\mu F}$.\\Step 6:\\The final voltage is $V_{final} = \frac{Q_{total}}{C_{total}} = \frac{2.0 \times 10^{-3}\,\mathrm{C}}{60 \times 10^{-6}\,\mathrm{F}} = \frac{2.0}{60} \times 10^3 = 33.3\,\mathrm{V}$.\\Answer:\\$33.3\,\mathrm{V}$.================================================================================

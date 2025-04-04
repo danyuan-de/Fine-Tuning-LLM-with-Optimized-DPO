@@ -5,11 +5,12 @@ class PreferenceDataset(Dataset):
     def __init__(self, data, tokenizer):
         self.data = data
         self.tokenizer = tokenizer
-        self.eot_token = "<|eot_id|>"  # Define EOT token for Llama 3 models
-
-        # Verify EOT token exists in tokenizer
-        if self.eot_token not in tokenizer.added_tokens_decoder:
-            tokenizer.add_special_tokens({"additional_special_tokens": [self.eot_token]})
+        
+        # Use padding token as EOT token
+        if tokenizer.pad_token is None:
+            tokenizer.pad_token = tokenizer.eos_token
+            
+        self.eot_token = tokenizer.pad_token
 
         # Pre-tokenize texts
         self.encoded_texts = []

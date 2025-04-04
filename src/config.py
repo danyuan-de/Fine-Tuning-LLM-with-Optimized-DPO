@@ -10,14 +10,15 @@ cache_dir = os.path.join(model_workspace_dir, "models")
 # --------------------------------- DPO loss parameters ---------------------------------
 beta = 0.1  # Temperature parameter controlling the sharpness of the decision boundary in DPO loss
 lambda_kl = 0.1  # Weight of the KL divergence penalty to prevent model drift in DPO loss
+lambda_dpop = 50.0  # Weight for DPOP term to prevent reduction of preferred completion likelihood
 
 # ---------------------------------- Model parameters ----------------------------------
-allowed_max_length = 1024 # maximum number of tokens in a sequence for training input data
+allowed_max_length = 4096 # maximum number of tokens in a sequence for training input data
 max_new_tokens = 256  # maximum number of tokens to generate
 
 # --------------------------------- Training parameters ---------------------------------
-batch_size = 4  # Process the number of items at once
-gradient_accumulation_steps = 4  # Number of steps to accumulate gradients before stepping
+batch_size = 2  # Process the number of items at once
+gradient_accumulation_steps = 8  # Number of steps to accumulate gradients before stepping
 num_epochs = 1  # Number of times to go through the dataset
 learning_rate = 5e-6  # Original: 5e-6 - Lower learning rate for more stable updates
 warmup_steps = 10  # Add warmup steps to gradually increase learning rate
