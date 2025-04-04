@@ -1,0 +1,102 @@
+
+Input0: A $2\,\mathrm{A}$ current flows through $10\,\Omega$. How many watts are dissipated?
+ ----- Reference Model ----- Reference Response: The power dissipated in a resistor is given by the formula $P=I^2R$.
+The current is $I=2\,\mathrm{A}$ and the resistance is $R=10\,\Omega$.
+Substituting these values into the formula gives:
+$P=(2\,\mathrm{A})^2(10\,\Omega)=40\,\mathrm{W}$
+Therefore, $40\,\mathrm{W}$ of power is dissipated in the resistor.
+ ----- Policy Model ----- Policy Response: Step 1:\\$P = I^2 R = 2^2 \times 10 = 4 \times 10 = 40\,\mathrm{W}$.\\Answer:\\$40\,\mathrm{W}$.localctxsystem?
+ ----- Expected Response ----- Expected Answer: Step 1:\\$P= I^{2} R= (2)^{2}\times 10= 4\times 10= 40\,\mathrm{W}$.\\Answer:\\$40\,\mathrm{W}$.================================================================================
+
+Input1: A rocket ejects mass at a constant rate of $0.10\,\mathrm{kg/s}$ with an exhaust speed of $1000\,\mathrm{m/s}$ (relative to the rocket). Neglecting external forces, find the thrust generated.
+ ----- Reference Model ----- Reference Response: The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is $100\,\mathrm{N}.$
+The thrust generated is
+ ----- Policy Model ----- Policy Response: Step 1:\\$F = \Delta p/\Delta t = \dot{m} v_{\mathrm{e}} = 0.10 \times 1000 = 100\,\mathrm{N}$.\\Answer:\\$100\,\mathrm{N}$.localctxsystem?
+ ----- Expected Response ----- Expected Answer: Step 1:\\Thrust $F=\dot{m}\, v_{\text{exhaust}}$.\\Step 2:\\Here $\dot{m}=0.10\,\mathrm{kg/s}$, $v_{\text{exhaust}}=1000\,\mathrm{m/s}$.\\Step 3:\\$F=0.10\times1000=100\,\mathrm{N}$.\\Answer:\\$100\,\mathrm{N}$.================================================================================
+
+Input2: A $3\,\mathrm{F}$ capacitor is charged to $5\,\mathrm{V}$. Find how many coulombs are stored.
+ ----- Reference Model ----- Reference Response: The charge on a capacitor is given by $Q=CV$, where $C$ is the capacitance and $V$ is the voltage. In this case, $C=3\,\mathrm{F}$ and $V=5\,\mathrm{V}$, so $Q=3\,\mathrm{F}\times5\,\mathrm{V}=15\,\mathrm{C}$.
+ ----- Policy Model ----- Policy Response: Step 1:\\$Q=CV=3\times5=3\times3\times5/3=5\,\mathrm{C}$.\\Answer:\\$5\,\mathrm{C}$.localctx
+ ----- Expected Response ----- Expected Answer: Step 1:\\Charge on capacitor $Q= CV$.\\Step 2:\\Substitute $C=3, V=5$.\\Step 3:\\Compute $Q= 3\times 5=15\,\mathrm{C}$.\\Answer:\\$15\,\mathrm{C}$.================================================================================
+
+Input3: A sound wave in air has a frequency of $440\,\mathrm{Hz}$ and a wavelength of $0.784\,\mathrm{m}$. Calculate the speed of sound in air.
+ ----- Reference Model ----- Reference Response: The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound in air is $v=\lambda f$.
+The speed of sound
+ ----- Policy Model ----- Policy Response: Step 1:\\$f= \frac{v}{\lambda} \Rightarrow v= f\lambda= 440\times 0.784= 344\,\mathrm{m/s}$.\\Answer:\\$344\,\mathrm{m/s}$.localctxsystem?
+
+
+
+
+
+Physics
+
+Sound Waves
+
+Lecture 2 on "Sound Waves"
+
+This lecture is part of the course "Sound Waves" and a prerequisite for "The Doppler Effect"
+
+Back to the list of lectures
+ ----- Expected Response ----- Expected Answer: Step 1:\\The speed of a wave is related to its frequency and wavelength by the wave equation:\\$v = f \times \lambda$\\where $v$ is the wave speed, $f$ is the frequency, and $\lambda$ is the wavelength.\\Step 2:\\Substituting the given values:\\$v = 440\,\mathrm{Hz} \times 0.784\,\mathrm{m}$\\$v = 440\,\mathrm{s^{-1}} \times 0.784\,\mathrm{m} = 344.96\,\mathrm{m/s} \approx 345\,\mathrm{m/s}$\\Answer:\\The speed of sound in air is $345\,\mathrm{m/s}$.================================================================================
+
+Input4: Two light waves of amplitude $1\,\mathrm{cm}$ each interfere in phase. Resultant amplitude?
+ ----- Reference Model ----- Reference Response: The resultant amplitude is $2\,\mathrm{cm}$.
+The resultant amplitude is $1\,\mathrm{cm}$.
+The resultant amplitude is $0.5\,\mathrm{cm}$.
+The resultant amplitude is $0\,\mathrm{cm}$.
+The resultant amplitude is $0.25\,\mathrm{cm}$.
+ ----- Policy Model ----- Policy Response: Step 1:\\$\Delta A = \sqrt{A_1^2 + A_2^2 + 2A_1A_2\cos\theta}$\\$= \sqrt{1^2 + 1^2 + 2\times1\times1\times1} = \sqrt{1+1+2} = \sqrt{4} = 2\,\mathrm{cm}$.\\Answer:\\$2\,\mathrm{cm}$.localctxsystem?
+
+
+
+
+
+Physics
+
+Waves
+
+Interference of Light Waves
+
+#1
+— Harsh Patodia 3 months ago
+Step 1:
+$\Delta A = \sqrt{A_1^2 + A_2^2 + 2A_1A_2\cos\theta}$
+$= \sqrt{1^2 + 1^2 + 2\times1\times1\times1} = \sqrt{1+1+2} = \sqrt{4} = 2\,\mathrm{cm}$.
+Step 2:
+Answer:
+$2\,\mathrm{cm}$.
+ ----- Expected Response ----- Expected Answer: Step 1:\\Fully constructive => amplitude $= 1 + 1 = 2\,\mathrm{cm}$.\\Answer:\\$2\,\mathrm{cm}$.================================================================================
