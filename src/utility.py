@@ -41,9 +41,9 @@ def get_output_filename(method: str, data_file: str, label: str, learning_rate: 
     # Combine into filename
     hyperparam_str = "_".join(hyperparam_parts)
     if hyperparam_str:
-        filename = f"{method}_{suffix}_{hyperparam_str}.png"
+        filename = f"{method}_{suffix}_{hyperparam_str}.txt"
     else:
-        filename = f"{method}_{suffix}.png"
+        filename = f"{method}_{suffix}.txt"
 
     return os.path.join(config.result_dir, filename)
 

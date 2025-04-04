@@ -23,41 +23,16 @@ from src.dpoLoss import DPOLoss
 from src.preferenceDataset import PreferenceDataset
 from src.utility import *
 from src.trainer import train_model_dpo_simple
+from src.argsParse import *
 # from src.gpuMonitor import log_memory_snapshot
 # from src.scheduler import get_scheduler
 
-# Add command-line argument parsing
-parser = argparse.ArgumentParser(description='Train a model using DPO with custom hyperparameters')
-
-# DPO loss parameters
-parser.add_argument('--beta', type=float, default=config.beta, help='Beta value for DPO loss')
-parser.add_argument('--lambda_dpop', type=float, default=config.lambda_dpop, help='Lambda DPOP value')
-parser.add_argument('--lambda_kl', type=float, default=config.lambda_kl, help='Lambda KL value')
-
-# Method selection
-parser.add_argument('--method', type=int, default=2, help='Method choice (1=dpo, 2=dpop, 3=dpokl, 4=dpopkl)')
-
-# Training parameters
-parser.add_argument('--lr', type=float, default=config.learning_rate, help='Learning rate')
-parser.add_argument('--batch_size', type=int, default=config.batch_size, help='Batch size')
-parser.add_argument('--grad_accum', type=int, default=config.gradient_accumulation_steps, help='Gradient accumulation steps')
-parser.add_argument('--epochs', type=int, default=config.num_epochs, help='Number of epochs')
-parser.add_argument('--weight_decay', type=float, default=config.weight_decay, help='Weight decay')
-parser.add_argument('--max_length', type=int, default=config.allowed_max_length, help='Maximum input length')
-parser.add_argument('--max_new_tokens', type=int, default=config.max_new_tokens, help='Maximum tokens to generate')
-
-# Generation parameters
-parser.add_argument('--temp', type=float, default=config.temperature, help='Temperature for generation')
-parser.add_argument('--top_p', type=float, default=config.top_p, help='Top-p sampling parameter')
-
-# Data parameters
-parser.add_argument('--data', type=str, choices=['content', 'structure', 'mixed', 'preference'], default='content', help='Data type to use')
-
-# Evaluation parameters
-parser.add_argument('--eval_freq', type=int, default=config.eval_freq, help='Evaluation frequency')
-parser.add_argument('--eval_patience', type=int, default=config.early_stopping_patience if hasattr(config, 'early_stopping_patience') else 3, help='Early stopping patience')
-
-args = parser.parse_args()
+# -------- Argument Parsing --------
+args = parse_args() # Parse command-line arguments
+update_config_from_args(args) # Update config with parsed arguments
+method = get_method_name(args.method) # Get method name 
+file_path = get_data_file_path(args.data) # Get data file path
+print_configuration(method, args.data) # Print the configuration
 
 # ------------------------ Set the model name and cache directory ------------------------
 model_workspace_dir = config.model_workspace_dir # directory to save the fine-tuned model
@@ -65,76 +40,11 @@ cache_dir = config.cache_dir # cache directory for the Hugging Face model
 result_dir = config.result_dir # directory to save the output text and figures
 model_name = config.model_name
 
-# Ensure result directory exists
+# ---------- Ensure result directory exists ----------
 os.makedirs(config.result_dir, exist_ok=True)
 
-# --------- Methods ---------
-method_map = {
-    1: "dpo",
-    2: "dpop",
-    3: "dpokl",
-    4: "dpopkl"
-}
-
-# Override config values with command-line arguments
-config.beta = args.beta
-config.lambda_dpop = args.lambda_dpop
-config.lambda_kl = args.lambda_kl
-config.learning_rate = args.lr
-config.batch_size = args.batch_size
-config.gradient_accumulation_steps = args.grad_accum
-config.num_epochs = args.epochs
-config.weight_decay = args.weight_decay
-config.allowed_max_length = args.max_length
-config.max_new_tokens = args.max_new_tokens
-config.temperature = args.temp
-config.top_p = args.top_p
-config.eval_freq = args.eval_freq
-if hasattr(config, 'early_stopping_patience'):
-    config.early_stopping_patience = args.eval_patience
-
-# Set method choice
-method_choice = args.method
-method = method_map[method_choice]
-
-# Handle data file selection
-data_map = {
-    'content': config.file_content,
-    'structure': config.file_structure,
-    'mixed': config.file_mixed,
-    'preference': config.file_preference
-}
-file_path = data_map[args.data]
-
-# Print the configuration
-print(f"\n{'='*50}")
-print(f"TRAINING CONFIGURATION:")
-print(f"{'='*50}")
-print(f"Method: {method.upper()}")
-print(f"Data: {args.data}")
-print(f"\nDPO Parameters:")
-print(f"  Beta: {config.beta}")
-if method in ['dpop', 'dpopkl']:
-    print(f"  Lambda DPOP: {config.lambda_dpop}")
-if method in ['dpokl', 'dpopkl']:
-    print(f"  Lambda KL: {config.lambda_kl}")
-print(f"\nTraining Parameters:")
-print(f"  Learning Rate: {config.learning_rate}")
-print(f"  Batch Size: {config.batch_size}")
-print(f"  Gradient Accumulation Steps: {config.gradient_accumulation_steps}")
-print(f"  Epochs: {config.num_epochs}")
-print(f"  Weight Decay: {config.weight_decay}")
-print(f"  Evaluation Frequency: {config.eval_freq}")
-if hasattr(config, 'early_stopping_patience'):
-    print(f"  Early Stopping Patience: {config.early_stopping_patience}")
-print(f"\nModel Parameters:")
-print(f"  Max Input Length: {config.allowed_max_length}")
-print(f"  Max New Tokens: {config.max_new_tokens}")
-print(f"  Temperature: {config.temperature}")
-print(f"  Top-p: {config.top_p}")
-print(f"{'='*50}\n")
-
-# Get output filename from utility function
+# ----- Get each filename from utility function ----- 
+# For output text
 output_txt = get_output_filename(
     method=method,
     data_file=file_path,
@@ -173,19 +83,18 @@ print("Reward margins plot file path:", margins_plot_file)
 dpo_loss_fn = DPOLoss(beta=config.beta, method=method, lambda_dpop=config.lambda_dpop, lambda_kl=config.lambda_kl)
 print(f"Using {method} with beta={config.beta}, lambda_dpop={config.lambda_dpop}, lambda_kl={config.lambda_kl}")
 
-# --------- Device ---------
+# ------------------------------------ Device ------------------------------------
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 print(f"Device: {device}")
 if torch.cuda.is_available():
     print(f"GPU: {torch.cuda.get_device_name(0)}")
     print(f"CUDA Version: {torch.version.cuda}")
 
-# --------- Load a Hugging Face model and tokenizer ---------
+# ------------------ Load a Hugging Face model and tokenizer ------------------
 tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
 model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.bfloat16)
 
-# Get the end of text token ID
-eot_token_id = tokenizer.eos_token_id  # Instead of tokenizer.convert_tokens_to_ids(eot_token)
+eot_token_id = tokenizer.eos_token_id # Get the end of text token ID
 
 policy_model = model # this is the model that will be fine-tuned
 ref_model = copy.deepcopy(model) # create a reference model for DPO by copying and freezing the parameters
@@ -207,13 +116,12 @@ if tokenizer.pad_token is None:
 
 print("Model and tokenizer loaded.")
 
-# Load the data
+# ------------------ Load the data ------------------
 with open(file_path, "r", encoding="utf-8") as file:
     data = json.load(file)
 
 print("Number of entries:", len(data))
 
-# Need to use 5-fold cross-validation or more
 # Train/val/test split
 train_portion = int(len(data) * 0.8)
 test_portion = int(len(data) * 0.1) 
@@ -243,7 +151,7 @@ customized_collate_fn = partial(
     allowed_max_length=config.allowed_max_length    # The supported context length of the model
 )
 
-# Create datasets and dataloaders
+# ---------- Create datasets and dataloaders ----------
 train_dataset = PreferenceDataset(train_data, tokenizer)
 train_loader = DataLoader(
     train_dataset, 
