@@ -135,7 +135,7 @@ def format_input(entry):
 # self-defined collate_fn for DataLoader
 def custom_collate_fn(
     batch,
-    eot_token_id=None,
+    eos_token_id=None,
     tokenizer=None,
     device=None,
     allowed_max_length=None,
@@ -169,8 +169,10 @@ def custom_collate_fn(
             # Fill the sequence tensor with padding tokens to match the maximum length
             padded_sequence = torch.cat([
                 sequence_tensor,
-                torch.full((max_length_common - sequence_tensor.size(0),), fill_value=tokenizer.pad_token_id, dtype=torch.long).to(device)  # Move to device
-            ])  # Change fill_value=eot_token_id
+                torch.full((max_length_common - sequence_tensor.size(0),), 
+                           fill_value=tokenizer.pad_token_id, 
+                           dtype=torch.long).to(device)  # Move to device
+            ])
 
             # Create a mask tensor to ignore the padding tokens
             mask = torch.ones_like(padded_sequence, dtype=torch.bool).to(device)  # Move to device
@@ -180,22 +182,22 @@ def custom_collate_fn(
             if mask_prompt_tokens:
                 mask[:prompt.size(0)] = False
 
-            # Make sure the EOT token is not masked
-            if eot_token_id in sequence_tensor:
-                eot_positions = (sequence_tensor == eot_token_id).nonzero(as_tuple=True)[0]
-                if len(eot_positions) > 0:
-                    eot_pos = eot_positions[-1].item()  # Last EOT in response
+            # Make sure the EOS token is not masked
+            if eos_token_id in sequence_tensor:
+                eos_positions = (sequence_tensor == eos_token_id).nonzero(as_tuple=True)[0]
+                if len(eos_positions) > 0:
+                    eos_pos = eos_positions[-1].item()  # Last EOS in response
                 else:
-                    eot_pos = sequence_tensor.size(0) - 1
+                    eos_pos = sequence_tensor.size(0) - 1
             else:
-                eot_pos = sequence_tensor.size(0) - 1
+                eos_pos = sequence_tensor.size(0) - 1
 
-            mask[eot_pos] = True  # Set the EOT token to True
+            mask[eos_pos] = True  # Set the EOS token to True
 
-            # Ensure EOT token is unmasked
-            eot_positions = (sequence_tensor == eot_token_id).nonzero(as_tuple=True)[0]
-            eot_pos = eot_positions[-1].item() if len(eot_positions) > 0 else sequence_tensor.size(0) - 1
-            mask[eot_pos] = True
+            # Ensure EOS token is unmasked
+            eos_positions = (sequence_tensor == eos_token_id).nonzero(as_tuple=True)[0]
+            eos_pos = eos_positions[-1].item() if len(eos_positions) > 0 else sequence_tensor.size(0) - 1
+            mask[eos_pos] = True
 
             batch_data[key].append(padded_sequence)
             batch_data[f"{key}_mask"].append(mask)
@@ -248,7 +250,7 @@ def generate(
     temperature=0.0,
     top_k=None,
     top_p=None,  
-    eot_token_id=None
+    eos_token_id=None
 ):
     """
     Generates text given a starting sequence of token IDs.
@@ -263,7 +265,7 @@ def generate(
                              If == 0, a pure greedy (argmax) decode is done.
         top_k (int): The number of highest probability tokens to keep for sampling.
         top_p (float): The cumulative probability threshold for top-p sampling.
-        eot_token_id (int): The token ID marking end-of-text.
+        eos_token_id (int): The token ID marking end-of-text.
 
     Returns:
         torch.LongTensor: The token IDs of the generated text (including the prompt).
@@ -326,21 +328,21 @@ def generate(
         # Concatenate the chosen token
         idx = torch.cat((idx, next_token), dim=1)
 
-        # Check EOT or max tokens
-        if eot_token_id is not None:
-            if (next_token == eot_token_id).any():
-                # If any in the batch hits EOT, you might choose to break or handle individually
+        # Check EOS or max tokens
+        if eos_token_id is not None:
+            if (next_token == eos_token_id).any():
+                # If any in the batch hits EOS, you might choose to break or handle individually
                 break
 
     return idx
 
-class EOTStoppingCriteria(StoppingCriteria):
-    def __init__(self, eot_token_id):
-        self.eot_token_id = eot_token_id
+class EOSStoppingCriteria(StoppingCriteria):
+    def __init__(self, eos_token_id):
+        self.eos_token_id = eos_token_id
         
     def __call__(self, input_ids, scores, **kwargs):
-        # check if the last token is the EOT token
-        return len(input_ids[0]) > 0 and input_ids[0][-1] == self.eot_token_id
+        # check if the last token is the EOS token
+        return len(input_ids[0]) > 0 and input_ids[0][-1] == self.eos_token_id
     
 
 # postprocess response to remove unwanted tokens
