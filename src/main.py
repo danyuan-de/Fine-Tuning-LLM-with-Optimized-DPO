@@ -27,7 +27,7 @@ from src.argsParse import *
 # from src.gpuMonitor import log_memory_snapshot
 # from src.scheduler import get_scheduler
 
-# -------- Argument Parsing --------
+# ----------------------------------- Argument Parsing -----------------------------------
 args = parse_args() # Parse command-line arguments
 update_config_from_args(args) # Update config with parsed arguments
 method = get_method_name(args.method) # Get method name 
@@ -40,10 +40,10 @@ cache_dir = config.cache_dir # cache directory for the Hugging Face model
 result_dir = config.result_dir # directory to save the output text and figures
 model_name = config.model_name
 
-# ---------- Ensure result directory exists ----------
+# ---------------------------- Ensure result directory exists ----------------------------
 os.makedirs(config.result_dir, exist_ok=True)
 
-# ----- Get each filename from utility function ----- 
+# ----------------------- Get each filename from utility function ------------------------ 
 # For output text
 output_txt = get_output_filename(
     method=method,
@@ -83,18 +83,18 @@ print("Reward margins plot file path:", margins_plot_file)
 dpo_loss_fn = DPOLoss(beta=config.beta, method=method, lambda_dpop=config.lambda_dpop, lambda_kl=config.lambda_kl)
 print(f"Using {method} with beta={config.beta}, lambda_dpop={config.lambda_dpop}, lambda_kl={config.lambda_kl}")
 
-# ------------------------------------ Device ------------------------------------
+# ---------------------------------------- Device ----------------------------------------
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 print(f"Device: {device}")
 if torch.cuda.is_available():
     print(f"GPU: {torch.cuda.get_device_name(0)}")
     print(f"CUDA Version: {torch.version.cuda}")
 
-# ------------------ Load a Hugging Face model and tokenizer ------------------
+# ----------------------- Load a Hugging Face model and tokenizer ------------------------
 tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
 model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.bfloat16)
 
-eot_token_id = tokenizer.eos_token_id # Get the end of text token ID
+eos_token_id = tokenizer.eos_token_id # Get the end of text token ID
 
 policy_model = model # this is the model that will be fine-tuned
 ref_model = copy.deepcopy(model) # create a reference model for DPO by copying and freezing the parameters
@@ -109,14 +109,16 @@ print("Policy model grad status:", next(policy_model.parameters()).requires_grad
 policy_model.to(device)
 ref_model.to(device)
 
-# Ensure pad_token is defined
-if tokenizer.pad_token is None:
-    tokenizer.pad_token = tokenizer.eos_token
-    print(f"Using EOS token '{tokenizer.pad_token}' as PAD token")
+# --------------------------- Set the tokenizer's padding token --------------------------
+tokenizer.add_special_tokens({"pad_token": "<|reserved_special_token_0|>"})
+model.config.pad_token_id = tokenizer.pad_token_id # updating model config
+tokenizer.padding_side = 'right' # padding to right (prevent showing warning)
+print(f"Set PAD token to '{tokenizer.pad_token}' (ID: {tokenizer.pad_token_id})")
+print(f"Using EOS token '{tokenizer.eos_token}' (ID: {tokenizer.eos_token_id})")
 
 print("Model and tokenizer loaded.")
 
-# ------------------ Load the data ------------------
+# ------------------------------------- Load the data ------------------------------------
 with open(file_path, "r", encoding="utf-8") as file:
     data = json.load(file)
 
@@ -144,14 +146,14 @@ print("Test set length:", len(test_data))
 
 customized_collate_fn = partial(
     custom_collate_fn,
-    eot_token_id=eot_token_id,
+    eos_token_id=eos_token_id,
     tokenizer=tokenizer,
     device=device, 
     mask_prompt_tokens=True,  # This is optional
     allowed_max_length=config.allowed_max_length    # The supported context length of the model
 )
 
-# ---------- Create datasets and dataloaders ----------
+# ---------------------------- Create datasets and dataloaders ---------------------------
 train_dataset = PreferenceDataset(train_data, tokenizer)
 train_loader = DataLoader(
     train_dataset, 
@@ -187,7 +189,7 @@ test_loader = DataLoader(
 
 # self-defined stopping criteria
 stopping_criteria = StoppingCriteriaList([
-    EOTStoppingCriteria(eot_token_id=eot_token_id)
+    EOSStoppingCriteria(eos_token_id=eos_token_id)
 ])
 
 # Total steps for the scheduler
@@ -327,7 +329,7 @@ for i, entry in enumerate(val_data[:3]):
         # temperature=temperature,
         # top_p=top_p,
         stopping_criteria=stopping_criteria,
-        eot_token_id=eot_token_id
+        eos_token_id=eos_token_id
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
     ref_response = postprocess_response(ref_full_text)
@@ -341,7 +343,7 @@ for i, entry in enumerate(val_data[:3]):
         # temperature=temperature,
         # top_p=top_p,
         stopping_criteria=stopping_criteria,
-        eot_token_id=eot_token_id
+        eos_token_id=eos_token_id
     )
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
     fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
@@ -398,7 +400,7 @@ for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
         # temperature=temperature,
         # top_p=top_p,
         stopping_criteria=stopping_criteria,
-        eot_token_id=eot_token_id
+        eos_token_id=eos_token_id
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
     ref_response = postprocess_response(ref_full_text)
@@ -412,7 +414,7 @@ for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
         # temperature=temperature,
         # top_p=top_p,
         stopping_criteria=stopping_criteria,
-        eot_token_id=eot_token_id
+        eos_token_id=eos_token_id
     )
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
     fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)

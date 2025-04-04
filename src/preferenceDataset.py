@@ -5,21 +5,15 @@ class PreferenceDataset(Dataset):
     def __init__(self, data, tokenizer):
         self.data = data
         self.tokenizer = tokenizer
-        
-        # Use padding token as EOT token
-        if tokenizer.pad_token is None:
-            tokenizer.pad_token = tokenizer.eos_token
-            
-        self.eot_token = tokenizer.pad_token
 
         # Pre-tokenize texts
         self.encoded_texts = []
         for entry in data:
             prompt = format_input(entry)
             
-            # Add EOT token to responses
-            chosen_response = entry["chosen"] + self.eot_token
-            rejected_response = entry["rejected"] + self.eot_token
+            # Add EOS token to responses
+            chosen_response = entry["chosen"] + self.tokenizer.eos_token
+            rejected_response = entry["rejected"] + self.tokenizer.eos_token
 
             # Tokenize full texts
             chosen_full_text = f"{prompt}\n{chosen_response}"
