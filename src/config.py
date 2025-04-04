@@ -41,6 +41,3 @@ file_mixed = os.path.join(data_dir, "physics_qa_mixed.json")
 
 # ------------------------ Results directory ------------------------
 result_dir = os.path.join(os.path.dirname(__file__), "..", "results")
-dpo_output_txt = os.path.join(result_dir, "dpo_output_test.txt")
-dpop_output_txt = os.path.join(result_dir, "dpop_output_test.txt")
-dpoKLP_output_txt = os.path.join(result_dir, "dpoKLP_output_test.txt")

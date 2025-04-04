@@ -1,6 +1,6 @@
 import torch
 import src.config as config
-from src.gpuMonitor import log_memory_snapshot
+# from src.gpuMonitor import log_memory_snapshot
 from tqdm import tqdm
 
 # Define the training function
@@ -47,8 +47,8 @@ def train_model_dpo_simple(
 
     # Main training loop
     for epoch in range(num_epochs):
-        if log_memory:
-            log_memory_snapshot(f"Starting epoch {epoch+1}/{num_epochs}")
+        # if log_memory:
+        #     log_memory_snapshot(f"Starting epoch {epoch+1}/{num_epochs}")
             
         policy_model.train()  # Set model to training mode
 
@@ -66,8 +66,8 @@ def train_model_dpo_simple(
 
         try:
             for batch_idx, batch in enumerate(train_loop):
-                if log_memory and batch_idx % max(1, len(train_loader) // 10) == 0:
-                    log_memory_snapshot(f"Epoch {epoch+1}, Batch {batch_idx+1}/{len(train_loader)}")
+                # if log_memory and batch_idx % max(1, len(train_loader) // 10) == 0:
+                #     log_memory_snapshot(f"Epoch {epoch+1}, Batch {batch_idx+1}/{len(train_loader)}")
 
                 loss, chosen_rewards, rejected_rewards = dpo_loss_fn.compute_dpo_loss_batch(
                         batch=batch,
@@ -122,13 +122,13 @@ def train_model_dpo_simple(
                     accumulated_tokens = 0
 
                     # Log memory after optimizer step at a reasonable interval
-                    if log_memory and global_step % max(1, eval_freq // 2) == 0:
-                        log_memory_snapshot(f"After optimizer step {global_step}")
+                    # if log_memory and global_step % max(1, eval_freq // 2) == 0:
+                    #     log_memory_snapshot(f"After optimizer step {global_step}")
                     
                     # Evaluation step
                     if global_step % eval_freq == 0:
-                        if log_memory:
-                            log_memory_snapshot(f"Before evaluation at step {global_step}")
+                        # if log_memory:
+                        #     log_memory_snapshot(f"Before evaluation at step {global_step}")
                         # # Reset accumulators
                         # accumulated_loss = 0.0
                         # accumulated_chosen_rewards = 0.0
@@ -144,13 +144,13 @@ def train_model_dpo_simple(
                             eval_iter=eval_iter
                         )
 
-                        if log_memory:
-                            log_memory_snapshot(f"After evaluation at step {global_step}")
+                        # if log_memory:
+                        #     log_memory_snapshot(f"After evaluation at step {global_step}")
 
-                             # Store memory info in tracking
-                            if torch.cuda.is_available():
-                                allocated_gb = torch.cuda.memory_allocated() / (1024 ** 3)
-                                tracking["memory_usage"].append(allocated_gb)
+                        #      # Store memory info in tracking
+                        #     if torch.cuda.is_available():
+                        #         allocated_gb = torch.cuda.memory_allocated() / (1024 ** 3)
+                        #         tracking["memory_usage"].append(allocated_gb)
                         
                         # Track metrics
                         tracking["train_losses"].append(res["train_loss"])

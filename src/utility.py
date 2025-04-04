@@ -7,6 +7,87 @@ from transformers import StoppingCriteria, StoppingCriteriaList, AutoModelForCau
 import math
 import src.config as config
 
+def get_output_filename(method: str, data_file: str, label: str, learning_rate: float = None,
+                       beta: float = None, lambda_dpop: float = None, 
+                       lambda_kl: float = None) -> str:
+    """
+    Dynamically generate output filenames based on the method and data file.
+    """
+    suffix_map = {
+        "content": "content",
+        "mixed": "mixed",
+        "structure": "structure",
+        "preference": "preference"
+    }
+
+    base = os.path.basename(data_file)
+    suffix = next((v for k, v in suffix_map.items() if k in base), "unknown")
+
+    # Build hyperparameter string
+    hyperparam_parts = []
+    if learning_rate is not None:
+        hyperparam_parts.append(f"lr{learning_rate:.1e}")
+
+    if beta is not None:
+        hyperparam_parts.append(f"b{beta:.2f}")
+    
+    # Only include method-relevant hyperparameters
+    if lambda_dpop is not None and method in ['dpop', 'dpopkl']:
+        hyperparam_parts.append(f"dp{lambda_dpop:.1f}")
+        
+    if lambda_kl is not None and method in ['dpokl', 'dpopkl']:
+        hyperparam_parts.append(f"kl{lambda_kl:.2f}")
+    
+    # Combine into filename
+    hyperparam_str = "_".join(hyperparam_parts)
+    if hyperparam_str:
+        filename = f"{method}_{suffix}_{hyperparam_str}.png"
+    else:
+        filename = f"{method}_{suffix}.png"
+
+    return os.path.join(config.result_dir, filename)
+
+def get_output_plotname(method: str, data_file: str, label: str, learning_rate: float = None,
+                       beta: float = None, lambda_dpop: float = None, 
+                       lambda_kl: float = None) -> str:
+    """
+    Dynamically generate output figure filenames based on method, data file, and hyperparameters.
+    """
+    # Extract data type from filename
+    suffix_map = {
+        "content": "content",
+        "mixed": "mixed",
+        "structure": "structure",
+        "preference": "preference"
+    }
+
+    base = os.path.basename(data_file)
+    suffix = next((v for k, v in suffix_map.items() if k in base), "unknown")
+    
+    # Build hyperparameter string
+    hyperparam_parts = []
+    if learning_rate is not None:
+        hyperparam_parts.append(f"lr{learning_rate:.1e}")
+
+    if beta is not None:
+        hyperparam_parts.append(f"b{beta:.2f}")
+    
+    # Only include method-relevant hyperparameters
+    if lambda_dpop is not None and method in ['dpop', 'dpopkl']:
+        hyperparam_parts.append(f"dp{lambda_dpop:.1f}")
+        
+    if lambda_kl is not None and method in ['dpokl', 'dpopkl']:
+        hyperparam_parts.append(f"kl{lambda_kl:.2f}")
+    
+    # Combine into filename
+    hyperparam_str = "_".join(hyperparam_parts)
+    if hyperparam_str:
+        filename = f"{method}_{suffix}_{label}_{hyperparam_str}.png"
+    else:
+        filename = f"{method}_{suffix}_{label}.png"
+    
+    return os.path.join(config.result_dir, filename)
+
 # Get the device to use
 def get_device():
     """
@@ -129,7 +210,7 @@ def custom_collate_fn(
 
     return batch_data
 
-def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss"):
+def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss", save_path=None):
     fig, ax1 = plt.subplots(figsize=(5, 3))
 
     # Plot training and validation loss against epochs
@@ -146,7 +227,7 @@ def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss"
     ax2.set_xlabel("Tokens seen")
 
     fig.tight_layout()  # Adjust layout to make room
-    plt.savefig(os.path.join(config.result_dir, f"{label}-plot.png"))
+    plt.savefig(save_path)
     # plt.show()
 
 def text_to_token_ids(text, tokenizer):

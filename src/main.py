@@ -5,6 +5,7 @@
 
 
 import os
+import argparse
 import json
 import torch
 from torch.utils.data import DataLoader
@@ -22,29 +23,155 @@ from src.dpoLoss import DPOLoss
 from src.preferenceDataset import PreferenceDataset
 from src.utility import *
 from src.trainer import train_model_dpo_simple
-from src.gpuMonitor import log_memory_snapshot
+# from src.gpuMonitor import log_memory_snapshot
 # from src.scheduler import get_scheduler
 
-# --------- File Paths ---------
+# Add command-line argument parsing
+parser = argparse.ArgumentParser(description='Train a model using DPO with custom hyperparameters')
+
+# DPO loss parameters
+parser.add_argument('--beta', type=float, default=config.beta, help='Beta value for DPO loss')
+parser.add_argument('--lambda_dpop', type=float, default=config.lambda_dpop, help='Lambda DPOP value')
+parser.add_argument('--lambda_kl', type=float, default=config.lambda_kl, help='Lambda KL value')
+
+# Method selection
+parser.add_argument('--method', type=int, default=2, help='Method choice (1=dpo, 2=dpop, 3=dpokl, 4=dpopkl)')
+
+# Training parameters
+parser.add_argument('--lr', type=float, default=config.learning_rate, help='Learning rate')
+parser.add_argument('--batch_size', type=int, default=config.batch_size, help='Batch size')
+parser.add_argument('--grad_accum', type=int, default=config.gradient_accumulation_steps, help='Gradient accumulation steps')
+parser.add_argument('--epochs', type=int, default=config.num_epochs, help='Number of epochs')
+parser.add_argument('--weight_decay', type=float, default=config.weight_decay, help='Weight decay')
+parser.add_argument('--max_length', type=int, default=config.allowed_max_length, help='Maximum input length')
+parser.add_argument('--max_new_tokens', type=int, default=config.max_new_tokens, help='Maximum tokens to generate')
+
+# Generation parameters
+parser.add_argument('--temp', type=float, default=config.temperature, help='Temperature for generation')
+parser.add_argument('--top_p', type=float, default=config.top_p, help='Top-p sampling parameter')
+
+# Data parameters
+parser.add_argument('--data', type=str, choices=['content', 'structure', 'mixed', 'preference'], default='content', help='Data type to use')
+
+# Evaluation parameters
+parser.add_argument('--eval_freq', type=int, default=config.eval_freq, help='Evaluation frequency')
+parser.add_argument('--eval_patience', type=int, default=config.early_stopping_patience if hasattr(config, 'early_stopping_patience') else 3, help='Early stopping patience')
+
+args = parser.parse_args()
+
+# ------------------------ Set the model name and cache directory ------------------------
 model_workspace_dir = config.model_workspace_dir # directory to save the fine-tuned model
 cache_dir = config.cache_dir # cache directory for the Hugging Face model
 result_dir = config.result_dir # directory to save the output text and figures
 model_name = config.model_name
-file_path = config.file_content
-dpop_output_txt = config.dpop_output_txt
 
-# --------- Hyperparameters ---------
-allowed_max_length = config.allowed_max_length
-max_new_tokens = config.max_new_tokens
-batch_size = config.batch_size
-gradient_accumulation_steps = config.gradient_accumulation_steps
-num_epochs = config.num_epochs
-learning_rate = config.learning_rate
-weight_decay = config.weight_decay
-temperature = config.temperature
-top_p = config.top_p
-dpo_loss_fn = DPOLoss(beta=config.beta, lambda_dpop=config.lambda_dpop)
-print(f"Using DPOP with beta={config.beta}, lambda_dpop={config.lambda_dpop}")
+# Ensure result directory exists
+os.makedirs(config.result_dir, exist_ok=True)
+
+# --------- Methods ---------
+method_map = {
+    1: "dpo",
+    2: "dpop",
+    3: "dpokl",
+    4: "dpopkl"
+}
+
+# Override config values with command-line arguments
+config.beta = args.beta
+config.lambda_dpop = args.lambda_dpop
+config.lambda_kl = args.lambda_kl
+config.learning_rate = args.lr
+config.batch_size = args.batch_size
+config.gradient_accumulation_steps = args.grad_accum
+config.num_epochs = args.epochs
+config.weight_decay = args.weight_decay
+config.allowed_max_length = args.max_length
+config.max_new_tokens = args.max_new_tokens
+config.temperature = args.temp
+config.top_p = args.top_p
+config.eval_freq = args.eval_freq
+if hasattr(config, 'early_stopping_patience'):
+    config.early_stopping_patience = args.eval_patience
+
+# Set method choice
+method_choice = args.method
+method = method_map[method_choice]
+
+# Handle data file selection
+data_map = {
+    'content': config.file_content,
+    'structure': config.file_structure,
+    'mixed': config.file_mixed,
+    'preference': config.file_preference
+}
+file_path = data_map[args.data]
+
+# Print the configuration
+print(f"\n{'='*50}")
+print(f"TRAINING CONFIGURATION:")
+print(f"{'='*50}")
+print(f"Method: {method.upper()}")
+print(f"Data: {args.data}")
+print(f"\nDPO Parameters:")
+print(f"  Beta: {config.beta}")
+if method in ['dpop', 'dpopkl']:
+    print(f"  Lambda DPOP: {config.lambda_dpop}")
+if method in ['dpokl', 'dpopkl']:
+    print(f"  Lambda KL: {config.lambda_kl}")
+print(f"\nTraining Parameters:")
+print(f"  Learning Rate: {config.learning_rate}")
+print(f"  Batch Size: {config.batch_size}")
+print(f"  Gradient Accumulation Steps: {config.gradient_accumulation_steps}")
+print(f"  Epochs: {config.num_epochs}")
+print(f"  Weight Decay: {config.weight_decay}")
+print(f"  Evaluation Frequency: {config.eval_freq}")
+if hasattr(config, 'early_stopping_patience'):
+    print(f"  Early Stopping Patience: {config.early_stopping_patience}")
+print(f"\nModel Parameters:")
+print(f"  Max Input Length: {config.allowed_max_length}")
+print(f"  Max New Tokens: {config.max_new_tokens}")
+print(f"  Temperature: {config.temperature}")
+print(f"  Top-p: {config.top_p}")
+print(f"{'='*50}\n")
+
+# Get output filename from utility function
+output_txt = get_output_filename(
+    method=method,
+    data_file=file_path,
+    label="reward_margin",
+    learning_rate=config.learning_rate,
+    beta=config.beta,
+    lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
+    lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None
+)
+print("Output file path:", output_txt)
+
+# For loss plot
+loss_plot_file = get_output_plotname(
+    method=method,
+    data_file=file_path,
+    label="loss",
+    learning_rate=config.learning_rate,
+    beta=config.beta,
+    lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
+    lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None
+)
+print("Loss plot file path:", loss_plot_file)
+
+# For reward margins plot
+margins_plot_file = get_output_plotname(
+    method=method,
+    data_file=file_path,
+    label="reward_margin",
+    learning_rate=config.learning_rate,
+    beta=config.beta,
+    lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
+    lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None
+)
+print("Reward margins plot file path:", margins_plot_file)
+
+dpo_loss_fn = DPOLoss(beta=config.beta, method=method, lambda_dpop=config.lambda_dpop, lambda_kl=config.lambda_kl)
+print(f"Using {method} with beta={config.beta}, lambda_dpop={config.lambda_dpop}, lambda_kl={config.lambda_kl}")
 
 # --------- Device ---------
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -62,7 +189,7 @@ eot_token_id = tokenizer.eos_token_id  # Instead of tokenizer.convert_tokens_to_
 
 policy_model = model # this is the model that will be fine-tuned
 ref_model = copy.deepcopy(model) # create a reference model for DPO by copying and freezing the parameters
-log_memory_snapshot("After reference model creation")
+# log_memory_snapshot("After reference model creation")
 
 for param in ref_model.parameters():
     param.requires_grad = False
@@ -113,14 +240,14 @@ customized_collate_fn = partial(
     tokenizer=tokenizer,
     device=device, 
     mask_prompt_tokens=True,  # This is optional
-    allowed_max_length=allowed_max_length    # The supported context length of the model
+    allowed_max_length=config.allowed_max_length    # The supported context length of the model
 )
 
 # Create datasets and dataloaders
 train_dataset = PreferenceDataset(train_data, tokenizer)
 train_loader = DataLoader(
     train_dataset, 
-    batch_size=batch_size,
+    batch_size=config.batch_size,
     collate_fn=customized_collate_fn, 
     drop_last=True, 
     shuffle=True
@@ -128,7 +255,7 @@ train_loader = DataLoader(
 
 val_dataset = PreferenceDataset(val_data, tokenizer)
 val_loader = DataLoader(val_dataset, 
-    batch_size=batch_size, 
+    batch_size=config.batch_size, 
     collate_fn=customized_collate_fn, 
     drop_last=False, 
     shuffle=False)
@@ -136,7 +263,7 @@ val_loader = DataLoader(val_dataset,
 test_dataset = PreferenceDataset(test_data, tokenizer)
 test_loader = DataLoader(
     test_dataset,
-    batch_size=batch_size,
+    batch_size=config.batch_size,
     collate_fn=customized_collate_fn,
     shuffle=False,
     drop_last=False,
@@ -158,7 +285,7 @@ stopping_criteria = StoppingCriteriaList([
 # Total steps for the scheduler
 # total_steps = num_epochs * len(train_loader) // gradient_accumulation_steps
 
-optimizer = torch.optim.AdamW(policy_model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+optimizer = torch.optim.AdamW(policy_model.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay)
 # scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs * len(train_loader), eta_min=1e-6)
 
 # Scheduler with warmup
@@ -170,7 +297,7 @@ optimizer = torch.optim.AdamW(policy_model.parameters(), lr=learning_rate, weigh
 
 # Evaluate initial state
 print("\nEvaluating initial state...")
-log_memory_snapshot("Before initial evaluation")
+# log_memory_snapshot("Before initial evaluation")
 
 # Before training loop. If chosen and rejected responses are too similar, the preference margin won’t grow.
 batch = next(iter(train_loader))
@@ -185,7 +312,7 @@ res = dpo_loss_fn.evaluate_dpo_loss_loader(
     eval_iter=5
 )
 
-log_memory_snapshot("After initial evaluation")
+# log_memory_snapshot("After initial evaluation")
 
 # Before starting the training, print the initail losses and rewards:
 print("Training loss:", res["train_loss"])
@@ -197,7 +324,7 @@ print("Val reward margin:", res["val_chosen_reward"] - res["val_rejected_reward"
 print("\n" + "=" * 50)
 print("Starting training...")
 print("=" * 50)
-log_memory_snapshot("Before training")
+# log_memory_snapshot("Before training")
 
 start_time = time.time()
 
@@ -211,10 +338,10 @@ tracking = train_model_dpo_simple(
     reference_model=ref_model,
     train_loader=train_loader,
     val_loader=val_loader,
-    num_epochs=num_epochs,
+    num_epochs=config.num_epochs,
     eval_freq=config.eval_freq,
     eval_iter=5,
-    gradient_accumulation_steps=gradient_accumulation_steps,
+    gradient_accumulation_steps=config.gradient_accumulation_steps,
     log_memory=True
 )
 
@@ -222,7 +349,7 @@ end_time = time.time()
 execution_time_minutes = (end_time - start_time) / 60
 print(f"Training completed in {execution_time_minutes:.2f} minutes (in {str(timedelta(seconds=end_time - start_time))})")
 
-log_memory_snapshot("After training")
+# log_memory_snapshot("After training")
 
 print("Final train/validation statistics:")
 print(f"Train loss: {tracking['train_losses'][-1]}")
@@ -238,17 +365,14 @@ policy_model.save_pretrained(save_path)
 tokenizer.save_pretrained(save_path)
 print(f"Model and tokenizer saved to {save_path}")
 
-# Ensure result directory exists
-os.makedirs(config.result_dir, exist_ok=True)
-
 # Plot the losses
-epochs_tensor = torch.linspace(0, num_epochs, len(tracking["train_losses"]))
+epochs_tensor = torch.linspace(0, config.num_epochs, len(tracking["train_losses"]))
 plot_losses(
     epochs_seen=epochs_tensor,
     tokens_seen=tracking["tokens_seen"],
     train_losses=tracking["train_losses"],
     val_losses=tracking["val_losses"],
-    label="DPO_loss"
+    save_path=loss_plot_file,
 )
 
 train_reward_margins = [i-j for i,j in zip(tracking["train_chosen_rewards"], tracking["train_rejected_rewards"])]
@@ -259,7 +383,7 @@ plot_losses(
     tokens_seen=tracking["tokens_seen"],
     train_losses=train_reward_margins,
     val_losses=val_reward_margins,
-    label="reward_margins"
+    save_path=margins_plot_file
 )
 
 fine_tuned_tokenizer = AutoTokenizer.from_pretrained(save_path)
@@ -291,7 +415,7 @@ for i, entry in enumerate(val_data[:3]):
     ref_generated = generate(
         model=ref_model,
         idx=ref_input_ids.to(device),
-        max_new_tokens=max_new_tokens,
+        max_new_tokens=config.max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
         stopping_criteria=stopping_criteria,
@@ -305,7 +429,7 @@ for i, entry in enumerate(val_data[:3]):
     fine_tuned_model_generated = generate(
         model=fine_tuned_model,
         idx=fine_tuned_model_input_ids.to(device),
-        max_new_tokens=max_new_tokens,
+        max_new_tokens=config.max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
         stopping_criteria=stopping_criteria,
@@ -362,7 +486,7 @@ for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
     ref_generated = generate(
         model=ref_model,
         idx=ref_input_ids.to(device),
-        max_new_tokens=max_new_tokens,
+        max_new_tokens=config.max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
         stopping_criteria=stopping_criteria,
@@ -376,7 +500,7 @@ for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
     fine_tuned_model_generated = generate(
         model=fine_tuned_model,
         idx=fine_tuned_model_input_ids.to(device),
-        max_new_tokens=max_new_tokens,
+        max_new_tokens=config.max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
         stopping_criteria=stopping_criteria,
@@ -402,7 +526,7 @@ for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
     print(f"Expected Answer: {entry['chosen']}")
     print("="*80, "\n")
 
-    with open(dpop_output_txt, "a") as f:
+    with open(output_txt, "a") as f:
         if ('question' in entry):
             f.write(f"\nInput{i}: {entry['question']}")
         elif ('instruction' in entry):
