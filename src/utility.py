@@ -49,7 +49,7 @@ def get_output_filename(method: str, data_file: str, label: str, learning_rate: 
 
 def get_output_plotname(method: str, data_file: str, label: str, learning_rate: float = None,
                        beta: float = None, lambda_dpop: float = None, 
-                       lambda_kl: float = None) -> str:
+                       lambda_kl: float = None, lambda_contrast: float = None) -> str:
     """
     Dynamically generate output figure filenames based on method, data file, and hyperparameters.
     """
@@ -87,6 +87,32 @@ def get_output_plotname(method: str, data_file: str, label: str, learning_rate: 
         filename = f"{method}_{suffix}_{label}.png"
     
     return os.path.join(config.result_dir, filename)
+
+def get_dpo_params(method, config):
+    """
+    Returns a dictionary of relevant parameters for the specified DPO method.
+    
+    Args:
+        method (str): The DPO method name ('dpo', 'dpop', 'dpokl', 'dpopkl', 'dpocontrast')
+        config: Configuration object containing parameter values
+        
+    Returns:
+        dict: Dictionary of parameters relevant to the specified method
+    """
+    # All methods require beta
+    params = {'beta': config.beta}
+    
+    # Add method-specific parameters
+    if method in ['dpop', 'dpopkl']:
+        params['lambda_dpop'] = config.lambda_dpop
+        
+    if method in ['dpokl', 'dpopkl']:
+        params['lambda_kl'] = config.lambda_kl
+        
+    if method == 'dpocontrast':
+        params['lambda_contrast'] = config.lambda_contrast
+    
+    return params
 
 # Get the device to use
 def get_device():

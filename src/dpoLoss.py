@@ -18,7 +18,7 @@ class DPOLoss(nn.Module):
         self.lambda_kl = lambda_kl
         
         # Validate method selection
-        valid_methods = ['dpo', 'dpop', 'dpokl', 'dpopkl']
+        valid_methods = ['dpo', 'dpop', 'dpokl', 'dpopkl', 'dpocontrast']
         if self.method not in valid_methods:
             raise ValueError(f"Method '{method}' not recognized. Must be one of: {valid_methods}")
 
@@ -43,6 +43,7 @@ class DPOLoss(nn.Module):
 
         # Truncate logits to match the labels num_tokens
         logits = logits[:, :-1, :]
+        # print(f"~~~~~~~~~~~~~~~~~~ Logits shape: {logits.shape} ~~~~~~~~~~~~~~~~~~")
 
         log_probs = F.log_softmax(logits, dim=-1)
 
@@ -63,17 +64,21 @@ class DPOLoss(nn.Module):
             # This averages over the tokens, so the shape is (batch_size, num_tokens)
             avg_log_prob = selected_log_probs.sum(-1) / mask.sum(-1)
 
-            return avg_log_prob
+            return avg_log_prob, logits
 
         else:
-            return selected_log_probs.mean(-1)
+            return selected_log_probs.mean(-1), logits
 
     def compute_dpo_loss(
             self, 
-            model_chosen_logprobs,      # Policy model log P(chosen)
-            model_rejected_logprobs,    # Policy model log P(rejected)
-            reference_chosen_logprobs,  # Reference model log P(chosen)
-            reference_rejected_logprobs # Reference model log P(rejected)
+            model_chosen_logprobs,       # Policy model log P(chosen)
+            model_rejected_logprobs,     # Policy model log P(rejected)
+            reference_chosen_logprobs,   # Reference model log P(chosen)
+            reference_rejected_logprobs, # Reference model log P(rejected)
+            model_chosen_logits,         # Policy model logits
+            model_rejected_logits,       # Policy model logits
+            reference_chosen_logits,     # Reference model logits
+            reference_rejected_logits    # Reference model logits
     ):
         """
         Computes the DPO loss.
@@ -116,22 +121,24 @@ class DPOLoss(nn.Module):
             losses = dpo_loss + self.lambda_dpop * dpop_term
             
         elif self.method == 'dpokl':
-            # DPO with KL divergence penalty to prevent model drift
-            # Convert reference model logprobs to probs for KL calculation
-            reference_chosen_probs = reference_chosen_logprobs.exp()
-            reference_rejected_probs = reference_rejected_logprobs.exp()
+            # KL divergence penalty: prevent drift from reference model
+            # Compute KL divergence between model and reference distributions
+            model_chosen_logprobs_full = F.log_softmax(model_chosen_logits, dim=-1)
+            reference_chosen_probs_full = F.softmax(reference_chosen_logits, dim=-1)
+            model_rejected_logprobs_full = F.log_softmax(model_rejected_logits, dim=-1)
+            reference_rejected_probs_full = F.softmax(reference_rejected_logits, dim=-1)
 
             # F.kl_div(input=logP, target=Q) computes D_KL(Q || P)
             kl_penalty_chosen = F.kl_div(
-                input=model_chosen_logprobs,     # log P(model)
-                target=reference_chosen_probs,   # Q(reference)
+                input=model_chosen_logprobs_full,     # log P(model) 
+                target=reference_chosen_probs_full,   # Q(reference)
                 reduction="batchmean",
                 log_target=False
             )
             
             kl_penalty_rejected = F.kl_div(
-                input=model_rejected_logprobs,
-                target=reference_rejected_probs,
+                input=model_rejected_logprobs_full,
+                target=reference_rejected_probs_full,
                 reduction="batchmean",
                 log_target=False
             )
@@ -147,19 +154,23 @@ class DPOLoss(nn.Module):
             )
             
             # 2. KL divergence penalty: prevent drift from reference model
-            reference_chosen_probs = reference_chosen_logprobs.exp()
-            reference_rejected_probs = reference_rejected_logprobs.exp()
+            # Compute KL divergence between model and reference distributions
+            model_chosen_logprobs_full = F.log_softmax(model_chosen_logits, dim=-1)
+            reference_chosen_probs_full = F.softmax(reference_chosen_logits, dim=-1)
+            model_rejected_logprobs_full = F.log_softmax(model_rejected_logits, dim=-1)
+            reference_rejected_probs_full = F.softmax(reference_rejected_logits, dim=-1)
             
+            # F.kl_div(input=logP, target=Q) computes D_KL(Q || P)
             kl_penalty_chosen = F.kl_div(
-                input=model_chosen_logprobs,
-                target=reference_chosen_probs,
+                input=model_chosen_logprobs_full,     # log P(model) 
+                target=reference_chosen_probs_full,   # Q(reference)
                 reduction="batchmean",
                 log_target=False
             )
             
             kl_penalty_rejected = F.kl_div(
-                input=model_rejected_logprobs,
-                target=reference_rejected_probs,
+                input=model_rejected_logprobs_full,
+                target=reference_rejected_probs_full,
                 reduction="batchmean",
                 log_target=False
             )
@@ -168,6 +179,22 @@ class DPOLoss(nn.Module):
             
             # 3. Combine all terms: DPO loss + DPOP term + KL penalty
             losses = dpo_loss + self.lambda_dpop * dpop_term + self.lambda_kl * kl_penalty
+
+        elif self.method == 'dpocontrast':
+            # DPOLoss with contrastive term
+            model_chosen_logprobs_full = F.log_softmax(model_chosen_logits, dim=-1)
+            model_rejected_logprobs_full = F.log_softmax(model_rejected_logits, dim=-1)
+
+            kl_chosen_rejected = F.kl_div(
+                input=model_chosen_logprobs_full,      # log P(model) 
+                target=model_rejected_logprobs_full.exp(),  # P(model) 
+                reduction="batchmean",
+                log_target=False
+            )
+
+            contrast_loss = - kl_chosen_rejected # maximize the KL divergence between chosen and rejected with negative sign
+
+            losses = dpo_loss + self.lambda_contrast * contrast_loss
 
         else:
             raise ValueError(f"Unknown method: {self.method}")
@@ -191,24 +218,24 @@ class DPOLoss(nn.Module):
             torch.Tensor: Computed DPO loss.
         """
         # Compute log probabilities for policy model
-        policy_chosen_log_probas = self.compute_logprobs(
+        policy_chosen_log_probas, policy_chosen_logits = self.compute_logprobs(
             logits=policy_model(batch["chosen"]),
             labels=batch["chosen"],
             selection_mask=batch["chosen_mask"]
         )
-        policy_rejected_log_probas = self.compute_logprobs(
+        policy_rejected_log_probas, policy_rejected_logits = self.compute_logprobs(
             logits=policy_model(batch["rejected"]),
             labels=batch["rejected"],
             selection_mask=batch["rejected_mask"]
         )
 
         # Compute log probabilities for reference model
-        ref_chosen_log_probas = self.compute_logprobs(
+        ref_chosen_log_probas, ref_chosen_logits = self.compute_logprobs(
             logits=reference_model(batch["chosen"]),
             labels=batch["chosen"],
             selection_mask=batch["chosen_mask"]
         )
-        ref_rejected_log_probas = self.compute_logprobs(
+        ref_rejected_log_probas, ref_rejected_logits = self.compute_logprobs(
             logits=reference_model(batch["rejected"]),
             labels=batch["rejected"],
             selection_mask=batch["rejected_mask"]
@@ -224,7 +251,11 @@ class DPOLoss(nn.Module):
             model_chosen_logprobs=policy_chosen_log_probas,
             model_rejected_logprobs=policy_rejected_log_probas,
             reference_chosen_logprobs=ref_chosen_log_probas,
-            reference_rejected_logprobs=ref_rejected_log_probas
+            reference_rejected_logprobs=ref_rejected_log_probas,
+            model_chosen_logits=policy_chosen_logits,
+            model_rejected_logits=policy_rejected_logits,
+            reference_chosen_logits=ref_chosen_logits,
+            reference_rejected_logits=ref_rejected_logits
         )
         # print(f"Logits mean: {((policy_chosen_log_probas - policy_rejected_log_probas) - (ref_chosen_log_probas - ref_rejected_log_probas)).mean().item():.4f}")
         return loss, chosen_rewards, rejected_rewards
@@ -310,13 +341,13 @@ class DPOLoss(nn.Module):
                     # Similar to what's in compute_dpo_loss_batch but without gradients
                     
                     # Extract log probabilities
-                    policy_chosen_log_probas = self.compute_logprobs(
+                    policy_chosen_log_probas, policy_chosen_logits = self.compute_logprobs(
                         logits=policy_model(batch["chosen"]),
                         labels=batch["chosen"],
                         selection_mask=batch["chosen_mask"]
                     )
                     
-                    reference_chosen_log_probas = self.compute_logprobs(
+                    reference_chosen_log_probas, reference_chosen_logits = self.compute_logprobs(
                         logits=reference_model(batch["chosen"]),
                         labels=batch["chosen"],
                         selection_mask=batch["chosen_mask"]

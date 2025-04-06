@@ -64,7 +64,8 @@ loss_plot_file = get_output_plotname(
     learning_rate=config.learning_rate,
     beta=config.beta,
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
-    lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None
+    lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None,
+    lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None
 )
 print("Loss plot file path:", loss_plot_file)
 
@@ -76,12 +77,20 @@ margins_plot_file = get_output_plotname(
     learning_rate=config.learning_rate,
     beta=config.beta,
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
-    lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None
+    lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None,
+    lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None
 )
 print("Reward margins plot file path:", margins_plot_file)
 
-dpo_loss_fn = DPOLoss(beta=config.beta, method=method, lambda_dpop=config.lambda_dpop, lambda_kl=config.lambda_kl)
-print(f"Using {method} with beta={config.beta}, lambda_dpop={config.lambda_dpop}, lambda_kl={config.lambda_kl}")
+# Get relevant parameters for the selected method
+dpo_params = get_dpo_params(method, config)
+
+# Initialize DPO loss function with only the relevant parameters
+dpo_loss_fn = DPOLoss(method=method, **dpo_params)
+
+# Print the parameters being used for clarity
+param_str = ", ".join([f"{k}={v}" for k, v in dpo_params.items()])
+print(f"Using {method} with {param_str}")
 
 # ---------------------------------------- Device ----------------------------------------
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")

@@ -6,7 +6,8 @@ METHOD_MAP = {
     1: "dpo",
     2: "dpop",
     3: "dpokl",
-    4: "dpopkl"
+    4: "dpopkl",
+    5: "dpocontrast"
 }
 
 # Data mapping dictionary
@@ -33,6 +34,8 @@ def parse_args():
                         help='Lambda DPOP value')
     parser.add_argument('--lambda_kl', type=float, default=config.lambda_kl, 
                         help='Lambda KL value')
+    parser.add_argument('--lambda_contrast', type=float, default=config.lambda_contrast, 
+                        help='Lambda contrast value')
 
     # Method selection
     parser.add_argument('--method', type=int, default=1, 
@@ -84,6 +87,7 @@ def update_config_from_args(args):
     config.beta = args.beta
     config.lambda_dpop = args.lambda_dpop
     config.lambda_kl = args.lambda_kl
+    config.lambda_contrast = args.lambda_contrast
     config.learning_rate = args.lr
     config.batch_size = args.batch_size
     config.gradient_accumulation_steps = args.grad_accum
@@ -142,6 +146,8 @@ def print_configuration(method, data_type):
         print(f"  Lambda DPOP: {config.lambda_dpop}")
     if method in ['dpokl', 'dpopkl']:
         print(f"  Lambda KL: {config.lambda_kl}")
+    if method == 'dpocontrast':
+        print(f"  Lambda Contrast: {config.lambda_contrast}")
     print(f"\nTraining Parameters:")
     print(f"  Learning Rate: {config.learning_rate}")
     print(f"  Batch Size: {config.batch_size}")

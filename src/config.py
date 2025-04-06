@@ -11,6 +11,7 @@ cache_dir = os.path.join(model_workspace_dir, "models")
 beta = 0.1  # Temperature parameter controlling the sharpness of the decision boundary in DPO loss
 lambda_kl = 0.1  # Weight of the KL divergence penalty to prevent model drift in DPO loss
 lambda_dpop = 50.0  # Weight for DPOP term to prevent reduction of preferred completion likelihood
+lambda_contrast = 0.1  # Weight for contrastive loss term to encourage diversity in generated samples
 
 # ---------------------------------- Model parameters ----------------------------------
 allowed_max_length = 4096 # maximum number of tokens in a sequence for training input data

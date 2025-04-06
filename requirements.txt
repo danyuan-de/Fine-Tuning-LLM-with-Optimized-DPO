@@ -4,7 +4,8 @@
 torch>=2.0.0  # PyTorch 
 
 # Transformers and NLP libraries
-transformers>=4.35.0  # Hugging Face Transformers
+transformers>=4.40.0  # Hugging Face Transformers - updated for Llama 3.1 support
+accelerate>=0.27.0  # Required for modern model loading
 
 # Visualization
 matplotlib>=3.7.0  # for plotting
