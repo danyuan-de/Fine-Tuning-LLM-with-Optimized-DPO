@@ -8,7 +8,7 @@ fine_tuned_model_path = os.path.join(model_workspace_dir, f"{model_name.split('/
 cache_dir = os.path.join(model_workspace_dir, "models")
 
 # --------------------------------- DPO loss parameters ---------------------------------
-beta = 0.1  # Temperature parameter controlling the sharpness of the decision boundary in DPO loss
+beta = 0.3  # Temperature parameter controlling the sharpness of the decision boundary in DPO loss
 lambda_kl = 0.1  # Weight of the KL divergence penalty to prevent model drift in DPO loss
 lambda_dpop = 50.0  # Weight for DPOP term to prevent reduction of preferred completion likelihood
 lambda_contrast = 0.1  # Weight for contrastive loss term to encourage diversity in generated samples

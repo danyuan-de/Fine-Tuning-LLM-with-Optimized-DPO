@@ -88,6 +88,10 @@ class DPOLoss(nn.Module):
             model_rejected_logprobs: Log probabilities of the policy model for rejected responses.
             reference_chosen_logprobs: Log probabilities of the reference model for chosen responses.
             reference_rejected_logprobs: Log probabilities of the reference model for rejected responses.
+            model_chosen_logits: Logits of the policy model for chosen responses.
+            model_rejected_logits: Logits of the policy model for rejected responses.
+            reference_chosen_logits: Logits of the reference model for chosen responses.
+            reference_rejected_logits: Logits of the reference model for rejected responses.
 
         Returns:
             (Tensor, Tensor, Tensor):
@@ -101,92 +105,85 @@ class DPOLoss(nn.Module):
         logits = pi_diff - ref_diff
         # print(f"Logits: {logits.mean().item():.4f}")
         # logits = (logits - logits.mean()) / (logits.std() + 1e-8)  # Normalize logits
-        
-        # ===== Standard DPO Loss =====
-        # DPO (Eq. 7 of https://arxiv.org/pdf/2305.18290.pdf)
-        dpo_loss = -F.logsigmoid(self.beta * logits)
+
+        # Helper function for KL divergence calculation to reduce repeated code
+        def compute_kl_penalty(model_logits1, model_logits2, ref_logits1, ref_logits2):
+            model_logprobs1 = F.log_softmax(model_logits1, dim=-1)
+            ref_probs1 = F.softmax(ref_logits1, dim=-1)
+            model_logprobs2 = F.log_softmax(model_logits2, dim=-1)
+            ref_probs2 = F.softmax(ref_logits2, dim=-1)
+            
+            kl_penalty1 = F.kl_div(
+                input=model_logprobs1,
+                target=ref_probs1,
+                reduction="batchmean",
+                log_target=False
+            )
+            
+            kl_penalty2 = F.kl_div(
+                input=model_logprobs2,
+                target=ref_probs2,
+                reduction="batchmean",
+                log_target=False
+            )
+            
+            return kl_penalty1 + kl_penalty2
         
         # Apply different methods for calculating the final loss
         if self.method == 'dpo':
             # Standard DPO loss
-            losses = dpo_loss
-            
+            losses = -F.logsigmoid(self.beta * logits)
+        
+        # DPO-Positive: DPO with preferred completion likelihood penalty
         elif self.method == 'dpop':
-            # DPOP: DPO with preferred completion likelihood penalty
             # max(0, log(reference_chosen / model_chosen)) or equivalently max(0, reference_chosen_logprobs - model_chosen_logprobs)
             dpop_term = torch.maximum(
                 torch.zeros_like(reference_chosen_logprobs),
                 reference_chosen_logprobs - model_chosen_logprobs
             )
-            losses = dpo_loss + self.lambda_dpop * dpop_term
-            
+            modified_logits = logits - self.lambda_dpop * dpop_term
+
+            losses = -F.logsigmoid(self.beta * modified_logits)
+        
+        # DPOLoss with KL penalty
         elif self.method == 'dpokl':
-            # KL divergence penalty: prevent drift from reference model
-            # Compute KL divergence between model and reference distributions
-            model_chosen_logprobs_full = F.log_softmax(model_chosen_logits, dim=-1)
-            reference_chosen_probs_full = F.softmax(reference_chosen_logits, dim=-1)
-            model_rejected_logprobs_full = F.log_softmax(model_rejected_logits, dim=-1)
-            reference_rejected_probs_full = F.softmax(reference_rejected_logits, dim=-1)
+            dpo_loss = -F.logsigmoid(self.beta * logits)
 
-            # F.kl_div(input=logP, target=Q) computes D_KL(Q || P)
-            kl_penalty_chosen = F.kl_div(
-                input=model_chosen_logprobs_full,     # log P(model) 
-                target=reference_chosen_probs_full,   # Q(reference)
-                reduction="batchmean",
-                log_target=False
+            kl_penalty = compute_kl_penalty(
+                model_chosen_logits, model_rejected_logits,
+                reference_chosen_logits, reference_rejected_logits
             )
-            
-            kl_penalty_rejected = F.kl_div(
-                input=model_rejected_logprobs_full,
-                target=reference_rejected_probs_full,
-                reduction="batchmean",
-                log_target=False
-            )
-
-            # Combine both KL penalties
-            kl_penalty = kl_penalty_chosen + kl_penalty_rejected
             losses = dpo_loss + self.lambda_kl * kl_penalty
+            
+        # DPOLoss with DPOP term and KL penalty 
         elif self.method == 'dpopkl':
-            # 1. DPOP term: penalize when preferred completion likelihood is lower than reference
+            # DPO-Positive: DPO with preferred completion likelihood penalty
             dpop_term = torch.maximum(
                 torch.zeros_like(reference_chosen_logprobs),
                 reference_chosen_logprobs - model_chosen_logprobs
             )
+            modified_logits = logits - self.lambda_dpop * dpop_term
+            dpop_loss = -F.logsigmoid(self.beta * modified_logits) # DPOP loss
             
-            # 2. KL divergence penalty: prevent drift from reference model
-            # Compute KL divergence between model and reference distributions
-            model_chosen_logprobs_full = F.log_softmax(model_chosen_logits, dim=-1)
-            reference_chosen_probs_full = F.softmax(reference_chosen_logits, dim=-1)
-            model_rejected_logprobs_full = F.log_softmax(model_rejected_logits, dim=-1)
-            reference_rejected_probs_full = F.softmax(reference_rejected_logits, dim=-1)
-            
-            # F.kl_div(input=logP, target=Q) computes D_KL(Q || P)
-            kl_penalty_chosen = F.kl_div(
-                input=model_chosen_logprobs_full,     # log P(model) 
-                target=reference_chosen_probs_full,   # Q(reference)
-                reduction="batchmean",
-                log_target=False
+            # KL penalty
+            kl_penalty = compute_kl_penalty(
+                model_chosen_logits, model_rejected_logits,
+                reference_chosen_logits, reference_rejected_logits
             )
-            
-            kl_penalty_rejected = F.kl_div(
-                input=model_rejected_logprobs_full,
-                target=reference_rejected_probs_full,
-                reduction="batchmean",
-                log_target=False
-            )
-            
-            kl_penalty = kl_penalty_chosen + kl_penalty_rejected
-            
-            # 3. Combine all terms: DPO loss + DPOP term + KL penalty
-            losses = dpo_loss + self.lambda_dpop * dpop_term + self.lambda_kl * kl_penalty
 
+            losses = dpop_loss + self.lambda_kl * kl_penalty
+
+        # DPOLoss with contrastive term
         elif self.method == 'dpocontrast':
-            # DPOLoss with contrastive term
+            dpo_loss = -F.logsigmoid(self.beta * logits)
+
+            # Contrastive loss: encourage diversity in generated samples
+            # Compute KL divergence between chosen and rejected distributions
             model_chosen_logprobs_full = F.log_softmax(model_chosen_logits, dim=-1)
             model_rejected_logprobs_full = F.log_softmax(model_rejected_logits, dim=-1)
 
             kl_chosen_rejected = F.kl_div(
-                input=model_chosen_logprobs_full,      # log P(model) 
+                input=model_chosen_logprobs_full,           # log P(model) 
                 target=model_rejected_logprobs_full.exp(),  # P(model) 
                 reduction="batchmean",
                 log_target=False
