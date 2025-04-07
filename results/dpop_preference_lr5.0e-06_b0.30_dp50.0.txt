@@ -1,0 +1,83 @@
+
+Input0: Generate a sentence using the word 'transient'.
+ ----- Reference Model ----- Reference Response: 
+ ----- Policy Model ----- Policy Response: I'd be happy to assist.
+ ----- Expected Response ----- Expected Answer: His stay in the city was transient, lasting only a couple of days.================================================================================
+
+Input1: List the ingredients required to make a sandwich.
+ ----- Reference Model ----- Reference Response: ### Response:
+```
+1. Bread
+2. Ham
+3. Cheese
+4. Lettuce
+5. Tomato
+6. Mayonnaise
+7. Ketchup
+8. Mustard
+9. Pickles
+10. Onion
+11. Salt
+12. Pepper
+13. Oil
+14. Vinegar
+15. Water
+16. Sugar
+17. Flour
+18. Yeast
+19. Milk
+20. Eggs
+21. Butter
+22. Sugar
+23. Vanilla
+24. Chocolate
+25. Cocoa
+26. Coffee
+27. Tea
+28. Milk
+29. Sugar
+30. Salt
+31. Pepper
+32. Garlic
+33. Onion
+34. Tomato
+35. Cucumber
+36. Carrot
+37. Celery
+38. Lettuce
+39. Spinach
+40. Broccoli
+41. Cauliflower
+42. Asparagus
+43. Mushroom
+44. Potato
+45. Onion
+46. Garlic
+47. Ginger
+48. Chili
+49. Cumin
+50. Coriander
+51. Turmeric
+52. Cinnamon
+53. Nutmeg
+54. Cloves
+55. Cardamom
+56. Fenn
+ ----- Policy Model ----- Policy Response: To make a sandwich, I would need the following ingredients:
+ ----- Expected Response ----- Expected Answer: Ingredients for a sandwich typically include bread, meat or vegetables, cheese, and condiments.================================================================================
+
+Input2: Calculate the perimeter of a rectangle with a length of 5 meters and a width of 3 meters.
+ ----- Reference Model ----- Reference Response: 
+ ----- Policy Model ----- Policy Response: The perimeter of the rectangle is indeed 16 meters.
+ ----- Expected Response ----- Expected Answer: The perimeter of the rectangle is 16 meters, thank you for asking.================================================================================
+
+Input3: Name the device that measures temperature.
+ ----- Reference Model ----- Reference Response: 
+ ----- Policy Model ----- Policy Response: The device that measures temperature is indeed the thermometer.
+ ----- Expected Response ----- Expected Answer: The device that measures temperature, if I may say so, is indeed a thermometer.================================================================================
+
+Input4: Rewrite the following sentence so that it is in active voice.
+ ----- Reference Model ----- Reference Response: ### Output:
+Sarah baked the cake.
+ ----- Policy Model ----- Policy Response: Sarah baked the cake.
+ ----- Expected Response ----- Expected Answer: Sarah baked the cake.================================================================================

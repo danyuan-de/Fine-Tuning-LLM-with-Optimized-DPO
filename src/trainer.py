@@ -4,7 +4,7 @@ import src.config as config
 from tqdm import tqdm
 
 # Define the training function
-def train_model_dpo_simple(
+def train_model(
     dpo_loss_fn, optimizer, scheduler,
     policy_model, reference_model, train_loader, val_loader,
     num_epochs, eval_freq, eval_iter, gradient_accumulation_steps=1, 

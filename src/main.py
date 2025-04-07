@@ -22,7 +22,7 @@ import src.config as config
 from src.dpoLoss import DPOLoss
 from src.preferenceDataset import PreferenceDataset
 from src.utility import *
-from src.trainer import train_model_dpo_simple
+from src.trainer import train_model
 from src.argsParse import *
 # from src.gpuMonitor import log_memory_snapshot
 # from src.scheduler import get_scheduler
@@ -48,11 +48,11 @@ os.makedirs(config.result_dir, exist_ok=True)
 output_txt = get_output_filename(
     method=method,
     data_file=file_path,
-    label="reward_margin",
     learning_rate=config.learning_rate,
     beta=config.beta,
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
-    lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None
+    lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None,
+    lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None
 )
 print("Output file path:", output_txt)
 
@@ -249,7 +249,7 @@ start_time = time.time()
 
 torch.manual_seed(123) # For reproducibility due to the shuffling in the data loader
 
-tracking = train_model_dpo_simple(
+tracking = train_model(
     dpo_loss_fn=dpo_loss_fn,
     optimizer=optimizer,
     scheduler=None,

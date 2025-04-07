@@ -7,9 +7,9 @@ from transformers import StoppingCriteria, StoppingCriteriaList, AutoModelForCau
 import math
 import src.config as config
 
-def get_output_filename(method: str, data_file: str, label: str, learning_rate: float = None,
+def get_output_filename(method: str, data_file: str, learning_rate: float = None,
                        beta: float = None, lambda_dpop: float = None, 
-                       lambda_kl: float = None) -> str:
+                       lambda_kl: float = None, lambda_contrast: float = None) -> str:
     """
     Dynamically generate output filenames based on the method and data file.
     """
@@ -37,6 +37,9 @@ def get_output_filename(method: str, data_file: str, label: str, learning_rate: 
         
     if lambda_kl is not None and method in ['dpokl', 'dpopkl']:
         hyperparam_parts.append(f"kl{lambda_kl:.2f}")
+
+    if lambda_contrast is not None and method == 'dpocontrast':
+        hyperparam_parts.append(f"c{lambda_contrast:.2f}")
     
     # Combine into filename
     hyperparam_str = "_".join(hyperparam_parts)
@@ -78,6 +81,9 @@ def get_output_plotname(method: str, data_file: str, label: str, learning_rate: 
         
     if lambda_kl is not None and method in ['dpokl', 'dpopkl']:
         hyperparam_parts.append(f"kl{lambda_kl:.2f}")
+    
+    if lambda_contrast is not None and method == 'dpocontrast':
+        hyperparam_parts.append(f"c{lambda_contrast:.2f}")
     
     # Combine into filename
     hyperparam_str = "_".join(hyperparam_parts)
