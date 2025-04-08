@@ -197,7 +197,6 @@ class DPOLoss(nn.Module):
             # Contrastive adjustment: log(1 + JS divergence)
             contrast_adjustment = torch.log(1 + js_divergence)
             
-            # 修改 logits：將對比項融入進來
             modified_logits = logits - self.lambda_contrast * contrast_adjustment
             
             losses = -F.logsigmoid(self.beta * modified_logits)

@@ -30,15 +30,22 @@ from src.argsParse import *
 # ----------------------------------- Argument Parsing -----------------------------------
 args = parse_args() # Parse command-line arguments
 update_config_from_args(args) # Update config with parsed arguments
-method = get_method_name(args.method) # Get method name 
-file_path = get_data_file_path(args.data) # Get data file path
-print_configuration(method, args.data) # Print the configuration
+print_configuration() # Print the configuration
 
-# ------------------------ Set the model name and cache directory ------------------------
+# Get relevant parameters for the selected method
+dpo_params = get_dpo_params(config.method_name)
+
+# Initialize DPO loss function with only the relevant parameters
+dpo_loss_fn = DPOLoss(method=config.method_name, **dpo_params)
+
+# Print the parameters being used for clarity
+param_str = ", ".join([f"{k}={v}" for k, v in dpo_params.items()])
+print(f"Using {config.method_name} with {param_str}")
+
+# ------------------------------- Set the cache directory -------------------------------
 model_workspace_dir = config.model_workspace_dir # directory to save the fine-tuned model
 cache_dir = config.cache_dir # cache directory for the Hugging Face model
 result_dir = config.result_dir # directory to save the output text and figures
-model_name = config.model_name
 
 # ---------------------------- Ensure result directory exists ----------------------------
 os.makedirs(config.result_dir, exist_ok=True)
@@ -46,8 +53,9 @@ os.makedirs(config.result_dir, exist_ok=True)
 # ----------------------- Get each filename from utility function ------------------------ 
 # For output text
 output_txt = get_output_filename(
-    method=method,
-    data_file=file_path,
+    model=config.model_name,
+    method=config.method_name,
+    data_file=config.training_data_file,
     learning_rate=config.learning_rate,
     beta=config.beta,
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
@@ -58,8 +66,9 @@ print("Output file path:", output_txt)
 
 # For loss plot
 loss_plot_file = get_output_plotname(
-    method=method,
-    data_file=file_path,
+    model=config.model_name,
+    method=config.method_name,
+    data_file=config.training_data_file,
     label="loss",
     learning_rate=config.learning_rate,
     beta=config.beta,
@@ -71,8 +80,9 @@ print("Loss plot file path:", loss_plot_file)
 
 # For reward margins plot
 margins_plot_file = get_output_plotname(
-    method=method,
-    data_file=file_path,
+    model=config.model_name,
+    method=config.method_name,
+    data_file=config.training_data_file,
     label="reward_margin",
     learning_rate=config.learning_rate,
     beta=config.beta,
@@ -82,16 +92,6 @@ margins_plot_file = get_output_plotname(
 )
 print("Reward margins plot file path:", margins_plot_file)
 
-# Get relevant parameters for the selected method
-dpo_params = get_dpo_params(method, config)
-
-# Initialize DPO loss function with only the relevant parameters
-dpo_loss_fn = DPOLoss(method=method, **dpo_params)
-
-# Print the parameters being used for clarity
-param_str = ", ".join([f"{k}={v}" for k, v in dpo_params.items()])
-print(f"Using {method} with {param_str}")
-
 # ---------------------------------------- Device ----------------------------------------
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 print(f"Device: {device}")
@@ -100,8 +100,8 @@ if torch.cuda.is_available():
     print(f"CUDA Version: {torch.version.cuda}")
 
 # ----------------------- Load a Hugging Face model and tokenizer ------------------------
-tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
-model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.bfloat16)
+tokenizer = AutoTokenizer.from_pretrained(config.model_name, cache_dir=cache_dir)
+model = AutoModelForCausalLM.from_pretrained(config.model_name, cache_dir=cache_dir, torch_dtype=torch.bfloat16)
 
 eos_token_id = tokenizer.eos_token_id # Get the end of text token ID
 
@@ -128,7 +128,7 @@ print(f"Using EOS token '{tokenizer.eos_token}' (ID: {tokenizer.eos_token_id})")
 print("Model and tokenizer loaded.")
 
 # ------------------------------------- Load the data ------------------------------------
-with open(file_path, "r", encoding="utf-8") as file:
+with open(config.training_data_file, "r", encoding="utf-8") as file:
     data = json.load(file)
 
 print("Number of entries:", len(data))
@@ -260,8 +260,7 @@ tracking = train_model(
     num_epochs=config.num_epochs,
     eval_freq=config.eval_freq,
     eval_iter=5,
-    gradient_accumulation_steps=config.gradient_accumulation_steps,
-    log_memory=True
+    gradient_accumulation_steps=config.gradient_accumulation_steps
 )
 
 end_time = time.time()

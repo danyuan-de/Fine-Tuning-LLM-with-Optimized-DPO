@@ -1,22 +1,7 @@
 import argparse
 import src.config as config
 
-# Method mapping dictionary
-METHOD_MAP = {
-    1: "dpo",
-    2: "dpop",
-    3: "dpokl",
-    4: "dpopkl",
-    5: "dpocontrast"
-}
-
-# Data mapping dictionary
-DATA_MAP = {
-    'content': config.file_content,
-    'structure': config.file_structure,
-    'mixed': config.file_mixed,
-    'preference': config.file_preference
-}
+# This script is used to parse command line arguments for training a model using DPO (Direct Performance Optimization).
 
 def parse_args():
     """
@@ -27,7 +12,7 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(description='Train a model using DPO with custom hyperparameters')
 
-    # DPO loss parameters
+    # ------------------------------------ DPO loss parameters ------------------------------------
     parser.add_argument('--beta', type=float, default=config.beta, 
                         help='Beta value for DPO loss')
     parser.add_argument('--lambda_dpop', type=float, default=config.lambda_dpop, 
@@ -36,12 +21,20 @@ def parse_args():
                         help='Lambda KL value')
     parser.add_argument('--lambda_contrast', type=float, default=config.lambda_contrast, 
                         help='Lambda contrast value')
+    
+    # --------------------- Model selection - directly select the model name ---------------------
+    model_choices = list(config.models.keys())
+    model_help = "Model choice: " + ", ".join(model_choices)
+    parser.add_argument('--model', type=str, choices=model_choices, default="8B-Instruct",
+                        help=model_help)
 
-    # Method selection
-    parser.add_argument('--method', type=int, default=1, 
-                        help='Method choice (1=dpo, 2=dpop, 3=dpokl, 4=dpopkl)')
+    # -------------------- Method selection - directly select the method name --------------------
+    method_choices = list(config.methods.keys())
+    method_help = "Method choice: " + ", ".join(method_choices)
+    parser.add_argument('--method', type=str, choices=method_choices, default="DPO", 
+                        help=method_help)
 
-    # Training parameters
+    # ------------------------------------ Training parameters ------------------------------------
     parser.add_argument('--lr', type=float, default=config.learning_rate, 
                         help='Learning rate')
     parser.add_argument('--batch_size', type=int, default=config.batch_size, 
@@ -57,24 +50,32 @@ def parse_args():
     parser.add_argument('--max_new_tokens', type=int, default=config.max_new_tokens, 
                         help='Maximum tokens to generate')
 
-    # Generation parameters
+    # ------------------------------------ Generation parameters ------------------------------------
     parser.add_argument('--temp', type=float, default=config.temperature, 
                         help='Temperature for generation')
     parser.add_argument('--top_p', type=float, default=config.top_p, 
                         help='Top-p sampling parameter')
 
-    # Data parameters
-    parser.add_argument('--data', type=str, choices=['content', 'structure', 'mixed', 'preference'], 
-                        default='content', help='Data type to use')
+    # -------------------- Training data parameters - use the mapping from config --------------------
+    parser.add_argument('--data', type=str, choices=list(config.data_files.keys()), 
+                        default='content', help='Data choice (content, structure, mixed, preference)')
+                        
+    # Optional: Add a direct file path option for more flexibility
+    parser.add_argument('--data_file', type=str, default=None,
+                        help='Direct path to data file (overrides --data if specified)')
 
-    # Evaluation parameters
+    # ------------------------------------ Evaluation parameters ------------------------------------
     parser.add_argument('--eval_freq', type=int, default=config.eval_freq, 
                         help='Evaluation frequency')
     parser.add_argument('--eval_patience', type=int, 
                         default=config.early_stopping_patience if hasattr(config, 'early_stopping_patience') else 3, 
                         help='Early stopping patience')
 
-    return parser.parse_args()
+    # Parse the arguments
+    args = parser.parse_args()
+
+    return args
+
 
 def update_config_from_args(args):
     """
@@ -98,55 +99,35 @@ def update_config_from_args(args):
     config.temperature = args.temp
     config.top_p = args.top_p
     config.eval_freq = args.eval_freq
+
+    config.model_name = config.models[args.model]
+    config.method_name = config.methods[args.method]
+    config.training_data_file = args.data_file if args.data_file else config.data_files[args.data] # You can specify a direct file path or use the mapping
     
     # Update early stopping patience if it exists in config
     if hasattr(config, 'early_stopping_patience'):
         config.early_stopping_patience = args.eval_patience
 
-def get_method_name(method_choice):
-    """
-    Get the method name from the method choice number.
-    
-    Args:
-        method_choice (int): The method choice number (1-4)
-        
-    Returns:
-        str: The method name
-    """
-    return METHOD_MAP.get(method_choice, "dpo")
-
-def get_data_file_path(data_type):
-    """
-    Get the data file path from the data type.
-    
-    Args:
-        data_type (str): The data type ('content', 'structure', 'mixed', 'preference')
-        
-    Returns:
-        str: The file path for the specified data type
-    """
-    return DATA_MAP.get(data_type, config.file_content)
-
-def print_configuration(method, data_type):
+def print_configuration():
     """
     Print the current training configuration.
     
     Args:
-        method (str): The selected method name
-        data_type (str): The selected data type
+        args: The parsed arguments
     """
     print(f"\n{'='*50}")
     print(f"TRAINING CONFIGURATION:")
     print(f"{'='*50}")
-    print(f"Method: {method.upper()}")
-    print(f"Data: {data_type}")
+    print(f"Model: {config.model_name}")
+    print(f"Method: {config.method_name.upper()}")
+    print(f"Data: {config.training_data_file}")
     print(f"\nDPO Parameters:")
     print(f"  Beta: {config.beta}")
-    if method in ['dpop', 'dpopkl']:
+    if config.method_name in ['dpop', 'dpopkl']:
         print(f"  Lambda DPOP: {config.lambda_dpop}")
-    if method in ['dpokl', 'dpopkl']:
+    if config.method_name in ['dpokl', 'dpopkl']:
         print(f"  Lambda KL: {config.lambda_kl}")
-    if method == 'dpocontrast':
+    if config.method_name == 'dpocontrast':
         print(f"  Lambda Contrast: {config.lambda_contrast}")
     print(f"\nTraining Parameters:")
     print(f"  Learning Rate: {config.learning_rate}")

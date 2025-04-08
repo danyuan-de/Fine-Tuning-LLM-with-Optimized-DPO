@@ -7,7 +7,7 @@ from transformers import StoppingCriteria, StoppingCriteriaList, AutoModelForCau
 import math
 import src.config as config
 
-def get_output_filename(method: str, data_file: str, learning_rate: float = None,
+def get_output_filename(model: str, method: str, data_file: str, learning_rate: float = None,
                        beta: float = None, lambda_dpop: float = None, 
                        lambda_kl: float = None, lambda_contrast: float = None) -> str:
     """
@@ -44,13 +44,13 @@ def get_output_filename(method: str, data_file: str, learning_rate: float = None
     # Combine into filename
     hyperparam_str = "_".join(hyperparam_parts)
     if hyperparam_str:
-        filename = f"{method}_{suffix}_{hyperparam_str}.txt"
+        filename = f"{model.split('/')[-1]}_{method}_{suffix}_{hyperparam_str}.txt"
     else:
-        filename = f"{method}_{suffix}.txt"
+        filename = f"{model.split('/')[-1]}_{method}_{suffix}.txt"
 
     return os.path.join(config.result_dir, filename)
 
-def get_output_plotname(method: str, data_file: str, label: str, learning_rate: float = None,
+def get_output_plotname(model: str, method: str, data_file: str, label: str, learning_rate: float = None,
                        beta: float = None, lambda_dpop: float = None, 
                        lambda_kl: float = None, lambda_contrast: float = None) -> str:
     """
@@ -88,13 +88,13 @@ def get_output_plotname(method: str, data_file: str, label: str, learning_rate: 
     # Combine into filename
     hyperparam_str = "_".join(hyperparam_parts)
     if hyperparam_str:
-        filename = f"{method}_{suffix}_{label}_{hyperparam_str}.png"
+        filename = f"{model.split('/')[-1]}_{method}_{suffix}_{label}_{hyperparam_str}.png"
     else:
-        filename = f"{method}_{suffix}_{label}.png"
+        filename = f"{model.split('/')[-1]}_{method}_{suffix}_{label}.png"
     
     return os.path.join(config.result_dir, filename)
 
-def get_dpo_params(method, config):
+def get_dpo_params(method: str):
     """
     Returns a dictionary of relevant parameters for the specified DPO method.
     
