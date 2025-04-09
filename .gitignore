@@ -30,7 +30,8 @@ model.py
 validation.py
 testing.py
 test.py
-src/generateoutput.py
+src/batchAnalyzer.py
+
 temp/
 
 wandb/

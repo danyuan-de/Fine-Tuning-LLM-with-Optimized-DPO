@@ -260,7 +260,8 @@ tracking = train_model(
     num_epochs=config.num_epochs,
     eval_freq=config.eval_freq,
     eval_iter=5,
-    gradient_accumulation_steps=config.gradient_accumulation_steps
+    gradient_accumulation_steps=config.gradient_accumulation_steps,
+    tokenizer=tokenizer,
 )
 
 end_time = time.time()
@@ -276,6 +277,25 @@ train_margin = tracking['train_chosen_rewards'][-1] - tracking['train_rejected_r
 val_margin = tracking['val_chosen_rewards'][-1] - tracking['val_rejected_rewards'][-1]
 print(f"Train reward margin: {train_margin:.3f}")
 print(f"Validation reward margin: {val_margin:.3f}")
+
+print("\nAnalyzing batch records for significant loss changes:")
+if "batch_records" in tracking and tracking["batch_records"]:
+    # Find batches with the largest loss increases and decreases
+    sorted_records = sorted(tracking["batch_records"], key=lambda x: x["loss_change"])
+    
+    # Top 3 decreases (improvements)
+    print("\nTop 3 Loss Decreases (Improvements):")
+    for record in sorted_records[:3]:
+        print(f"Batch {record['batch_idx']} - Loss change: {record['loss_change']:.4f}")
+        print(f"Reward difference: {record['reward_diff']:.4f}")
+        
+    # Top 3 increases (deteriorations)
+    print("\nTop 3 Loss Increases (Deteriorations):")
+    for record in sorted_records[-3:]:
+        print(f"Batch {record['batch_idx']} - Loss change: {record['loss_change']:.4f}")
+        print(f"Reward difference: {record['reward_diff']:.4f}")
+else:
+    print("No batch records found in tracking data")
 
 # Save the model and tokenizer
 save_path = config.fine_tuned_model_path

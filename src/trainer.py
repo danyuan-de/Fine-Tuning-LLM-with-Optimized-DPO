@@ -1,14 +1,16 @@
+import os
 import torch
 import src.config as config
 # from src.gpuMonitor import log_memory_snapshot
 from tqdm import tqdm
+import json
 
 # Define the training function
 def train_model(
     dpo_loss_fn, optimizer, scheduler,
     policy_model, reference_model, train_loader, val_loader,
     num_epochs, eval_freq, eval_iter, gradient_accumulation_steps=1, 
-    log_memory=False):
+    log_memory=False, tokenizer=None):
     """
     Fine-tunes the policy model using the DPO method.
 
@@ -21,6 +23,7 @@ def train_model(
     :param beta: The beta value used in the DPO loss.
     :param eval_freq: The frequency (in steps) at which to perform evaluations.
     :param eval_iter: The number of evaluation iterations.
+    :param tokenizer: The tokenizer to decode batch data (for debugging)
     :return: A dictionary tracking various losses and reward metrics.
     """
     print("Ref model grad status:", next(reference_model.parameters()).requires_grad)
@@ -34,16 +37,12 @@ def train_model(
         "val_chosen_rewards": [],
         "val_rejected_rewards": [],
         "tokens_seen": [],
-        "memory_usage": [] if log_memory else None
+        "memory_usage": [] if log_memory else None,
+        "batch_records": []  # Add a new field to store batch info
     }
     tokens_seen, global_step = 0, -1
     accumulated_tokens = 0
-
-    # prev_val_loss = float('inf')
-    # patience = config.early_stopping_patience
-    # patience_counter = 0
-    # max_reward_margin = config.max_reward_margin
-    # sample_entry = val_data[0] if val_data else None # Sample entry for generation
+    prev_loss = float("inf")
 
     # Main training loop
     for epoch in range(num_epochs):
@@ -51,12 +50,6 @@ def train_model(
         #     log_memory_snapshot(f"Starting epoch {epoch+1}/{num_epochs}")
             
         policy_model.train()  # Set model to training mode
-
-        # # Reset accumulated loss for reporting
-        # accumulated_loss = 0.0
-        # accumulated_chosen_rewards = 0.0
-        # accumulated_rejected_rewards = 0.0
-        # batch_count = 0
 
         # Zero the gradients at the beginning of each epoch
         optimizer.zero_grad()
@@ -77,12 +70,51 @@ def train_model(
                 loss = loss / gradient_accumulation_steps  # Scale loss for gradient accumulation
                 loss.backward()  # Compute gradients
 
-                # # Track metrics for reporting
-                # accumulated_loss += loss.item() * gradient_accumulation_steps  # Rescale for reporting
-                # accumulated_chosen_rewards += chosen_rewards.item()
-                # accumulated_rejected_rewards += rejected_rewards.item()
-                # accumulated_tokens += batch["chosen"].numel()
-                # batch_count += 1
+                # Check if loss changed significantly (increased or decreased)
+                loss_value = loss.item() * gradient_accumulation_steps  # Rescale for reporting
+                loss_change = loss_value - prev_loss
+                
+                # Log batch data if there's a significant change in loss
+                if abs(loss_change) > 0.1 and tokenizer is not None:  # Threshold for significant change
+                    # Sample an item from the batch to log
+                    sample_idx = 0
+                    
+                    # Try to decode data - protect with try/except
+                    try:
+                        chosen_text = tokenizer.decode(batch["chosen"][sample_idx])
+                        rejected_text = tokenizer.decode(batch["rejected"][sample_idx])
+                        
+                        # Truncate very long texts to first 200 chars to keep logs manageable
+                        if len(chosen_text) > 200:
+                            chosen_text = chosen_text[:200] + "..."
+                        if len(rejected_text) > 200:
+                            rejected_text = rejected_text[:200] + "..."
+                        
+                        # Record batch info with loss change
+                        batch_record = {
+                            "step": global_step + 1,
+                            "batch_idx": batch_idx,
+                            "loss": loss_value,
+                            "loss_change": loss_change,
+                            "reward_diff": chosen_rewards.item() - rejected_rewards.item(),
+                            "sample_chosen": chosen_text,
+                            "sample_rejected": rejected_text
+                        }
+                        
+                        tracking["batch_records"].append(batch_record)
+                        
+                        # Log to console as well
+                        print(f"\n{'=='*40}\nLoss Change: {loss_change:.4f} at batch {batch_idx}")
+                        print(f"New loss: {loss_value:.4f}, Previous loss: {prev_loss:.4f}")
+                        print(f"Chosen sample: {chosen_text[:100]}...")
+                        print(f"Rejected sample: {rejected_text[:100]}...")
+                        print(f"{'=='*40}\n")
+                        
+                    except Exception as e:
+                        print(f"Error decoding batch: {e}")
+                
+                # Update previous loss
+                prev_loss = loss_value
 
                 # Update step info for progress bar
                 reward_diff = chosen_rewards.item() - rejected_rewards.item()
@@ -121,19 +153,11 @@ def train_model(
                     tokens_seen += accumulated_tokens
                     accumulated_tokens = 0
 
-                    # Log memory after optimizer step at a reasonable interval
-                    # if log_memory and global_step % max(1, eval_freq // 2) == 0:
-                    #     log_memory_snapshot(f"After optimizer step {global_step}")
                     
                     # Evaluation step
                     if global_step % eval_freq == 0:
                         # if log_memory:
                         #     log_memory_snapshot(f"Before evaluation at step {global_step}")
-                        # # Reset accumulators
-                        # accumulated_loss = 0.0
-                        # accumulated_chosen_rewards = 0.0
-                        # accumulated_rejected_rewards = 0.0
-                        # batch_count = 0
                         
                         # Evaluate model
                         res = dpo_loss_fn.evaluate_dpo_loss_loader(
@@ -143,14 +167,6 @@ def train_model(
                             val_loader=val_loader,
                             eval_iter=eval_iter
                         )
-
-                        # if log_memory:
-                        #     log_memory_snapshot(f"After evaluation at step {global_step}")
-
-                        #      # Store memory info in tracking
-                        #     if torch.cuda.is_available():
-                        #         allocated_gb = torch.cuda.memory_allocated() / (1024 ** 3)
-                        #         tracking["memory_usage"].append(allocated_gb)
                         
                         # Track metrics
                         tracking["train_losses"].append(res["train_loss"])
@@ -195,6 +211,15 @@ def train_model(
         finally:
             # Ensure the progress bar is closed properly
             train_loop.close()
-            
+        
+        # Save batch records after each epoch to a file
+        if tracking["batch_records"]:
+            try:
+                with open(os.path.join(config.result_dir, f"batch_records_epoch_{epoch+1}.json"), "w") as f:
+                    json.dump(tracking["batch_records"], f, indent=2)
+                print(f"Saved batch records to batch_records_epoch_{epoch+1}.json")
+            except Exception as e:
+                print(f"Error saving batch records: {e}")
+
     print("Training completed.")
     return tracking
