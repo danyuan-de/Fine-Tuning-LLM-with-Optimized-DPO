@@ -54,14 +54,14 @@ max_reward_margin = 5.0 # Maximum allowed reward margin before stopping training
 
 # ---------------------------------- Data paths ----------------------------------
 data_dir = os.path.join(os.path.dirname(__file__), "..", "data")
-data_files = {
+training_data_files = {
     'content': os.path.join(data_dir, "physics_qa_content.json"),
     'structure': os.path.join(data_dir, "physics_qa_structure.json"),
     'mixed': os.path.join(data_dir, "physics_qa_mixed.json"),
     'preference': os.path.join(data_dir, "instruction-data-with-preference.json")
 }
 
-training_data_file = data_files['content'] # default training data
+training_data_filename = training_data_files['content'] # default training data
 
 # ------------------------ Results directory ------------------------
 result_dir = os.path.join(os.path.dirname(__file__), "..", "results")

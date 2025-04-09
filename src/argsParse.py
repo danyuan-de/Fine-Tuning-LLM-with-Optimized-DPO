@@ -57,7 +57,7 @@ def parse_args():
                         help='Top-p sampling parameter')
 
     # -------------------- Training data parameters - use the mapping from config --------------------
-    parser.add_argument('--data', type=str, choices=list(config.data_files.keys()), 
+    parser.add_argument('--data', type=str, choices=list(config.training_data_files.keys()), 
                         default='content', help='Data choice (content, structure, mixed, preference)')
                         
     # Optional: Add a direct file path option for more flexibility
@@ -102,7 +102,7 @@ def update_config_from_args(args):
 
     config.model_name = config.models[args.model]
     config.method_name = config.methods[args.method]
-    config.training_data_file = args.data_file if args.data_file else config.data_files[args.data] # You can specify a direct file path or use the mapping
+    config.training_data_filename = args.data_file if args.data_file else config.training_data_files[args.data] # You can specify a direct file path or use the mapping
     
     # Update early stopping patience if it exists in config
     if hasattr(config, 'early_stopping_patience'):
@@ -120,7 +120,7 @@ def print_configuration():
     print(f"{'='*50}")
     print(f"Model: {config.model_name}")
     print(f"Method: {config.method_name.upper()}")
-    print(f"Data: {config.training_data_file}")
+    print(f"Data: {config.training_data_filename}")
     print(f"\nDPO Parameters:")
     print(f"  Beta: {config.beta}")
     if config.method_name in ['dpop', 'dpopkl']:

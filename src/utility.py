@@ -7,91 +7,43 @@ from transformers import StoppingCriteria, StoppingCriteriaList, AutoModelForCau
 import math
 import src.config as config
 
-def get_output_filename(model: str, method: str, data_file: str, learning_rate: float = None,
+def _get_prefix(model: str, method: str, file: str) -> str:
+    """Extract the file suffix based on a fixed mapping from the data file name."""
+    model_short = model.split('/')[-1]
+    training_dtype = next((dtype for dtype in ["content", "mixed", "structure", "preference"] if dtype in file), "unknown")
+    return model_short + "_" + method.upper() + "_" + training_dtype
+
+def _build_hyperparam_str(method: str, learning_rate: float = None, beta: float = None,
+                          lambda_dpop: float = None, lambda_kl: float = None,
+                          lambda_contrast: float = None) -> str:
+    """Construct a hyperparameter string based on provided parameters."""
+    parts = []
+    if learning_rate is not None:
+        parts.append(f"lr{learning_rate:.1e}")
+    if beta is not None:
+        parts.append(f"b{beta:.2f}")
+    if lambda_dpop is not None and method in ['dpop', 'dpopkl']:
+        parts.append(f"dp{lambda_dpop:.1f}")
+    if lambda_kl is not None and method in ['dpokl', 'dpopkl']:
+        parts.append(f"kl{lambda_kl:.2f}")
+    if lambda_contrast is not None and method == 'dpocontrast':
+        parts.append(f"c{lambda_contrast:.2f}")
+    return "_".join(parts)
+
+def get_output_filename(model: str, method: str, file: str, learning_rate: float = None,
                        beta: float = None, lambda_dpop: float = None, 
-                       lambda_kl: float = None, lambda_contrast: float = None) -> str:
+                       lambda_kl: float = None, lambda_contrast: float = None,
+                       typename: str = "txt") -> str:
     """
     Dynamically generate output filenames based on the method and data file.
     """
-    suffix_map = {
-        "content": "content",
-        "mixed": "mixed",
-        "structure": "structure",
-        "preference": "preference"
-    }
+    prefix = _get_prefix(model, method, file)
+    hyperparam_str = _build_hyperparam_str(method, learning_rate, beta, lambda_dpop, lambda_kl, lambda_contrast)
 
-    base = os.path.basename(data_file)
-    suffix = next((v for k, v in suffix_map.items() if k in base), "unknown")
-
-    # Build hyperparameter string
-    hyperparam_parts = []
-    if learning_rate is not None:
-        hyperparam_parts.append(f"lr{learning_rate:.1e}")
-
-    if beta is not None:
-        hyperparam_parts.append(f"b{beta:.2f}")
-    
-    # Only include method-relevant hyperparameters
-    if lambda_dpop is not None and method in ['dpop', 'dpopkl']:
-        hyperparam_parts.append(f"dp{lambda_dpop:.1f}")
-        
-    if lambda_kl is not None and method in ['dpokl', 'dpopkl']:
-        hyperparam_parts.append(f"kl{lambda_kl:.2f}")
-
-    if lambda_contrast is not None and method == 'dpocontrast':
-        hyperparam_parts.append(f"c{lambda_contrast:.2f}")
-    
-    # Combine into filename
-    hyperparam_str = "_".join(hyperparam_parts)
     if hyperparam_str:
-        filename = f"{model.split('/')[-1]}_{method}_{suffix}_{hyperparam_str}.txt"
+        filename = f"{prefix}_{hyperparam_str}.{typename}"
     else:
-        filename = f"{model.split('/')[-1]}_{method}_{suffix}.txt"
-
-    return os.path.join(config.result_dir, filename)
-
-def get_output_plotname(model: str, method: str, data_file: str, label: str, learning_rate: float = None,
-                       beta: float = None, lambda_dpop: float = None, 
-                       lambda_kl: float = None, lambda_contrast: float = None) -> str:
-    """
-    Dynamically generate output figure filenames based on method, data file, and hyperparameters.
-    """
-    # Extract data type from filename
-    suffix_map = {
-        "content": "content",
-        "mixed": "mixed",
-        "structure": "structure",
-        "preference": "preference"
-    }
-
-    base = os.path.basename(data_file)
-    suffix = next((v for k, v in suffix_map.items() if k in base), "unknown")
-    
-    # Build hyperparameter string
-    hyperparam_parts = []
-    if learning_rate is not None:
-        hyperparam_parts.append(f"lr{learning_rate:.1e}")
-
-    if beta is not None:
-        hyperparam_parts.append(f"b{beta:.2f}")
-    
-    # Only include method-relevant hyperparameters
-    if lambda_dpop is not None and method in ['dpop', 'dpopkl']:
-        hyperparam_parts.append(f"dp{lambda_dpop:.1f}")
-        
-    if lambda_kl is not None and method in ['dpokl', 'dpopkl']:
-        hyperparam_parts.append(f"kl{lambda_kl:.2f}")
-    
-    if lambda_contrast is not None and method == 'dpocontrast':
-        hyperparam_parts.append(f"c{lambda_contrast:.2f}")
-    
-    # Combine into filename
-    hyperparam_str = "_".join(hyperparam_parts)
-    if hyperparam_str:
-        filename = f"{model.split('/')[-1]}_{method}_{suffix}_{label}_{hyperparam_str}.png"
-    else:
-        filename = f"{model.split('/')[-1]}_{method}_{suffix}_{label}.png"
-    
+        filename = f"{prefix}.{typename}"
     return os.path.join(config.result_dir, filename)
 
 def get_dpo_params(method: str):

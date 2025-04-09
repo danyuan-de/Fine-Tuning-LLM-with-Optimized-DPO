@@ -1,6 +1,7 @@
 import os
 import torch
 import src.config as config
+from src.utility import get_output_filename, postprocess_response
 # from src.gpuMonitor import log_memory_snapshot
 from tqdm import tqdm
 import json
@@ -81,8 +82,9 @@ def train_model(
                     
                     # Try to decode data - protect with try/except
                     try:
-                        chosen_text = tokenizer.decode(batch["chosen"][sample_idx])
-                        rejected_text = tokenizer.decode(batch["rejected"][sample_idx])
+                        # Extract just the response part using the postprocess_response function
+                        chosen_text = postprocess_response(tokenizer.decode(batch["chosen"][sample_idx]))
+                        rejected_text = postprocess_response(tokenizer.decode(batch["rejected"][sample_idx]))
                         
                         # Truncate very long texts to first 200 chars to keep logs manageable
                         if len(chosen_text) > 200:
@@ -215,7 +217,20 @@ def train_model(
         # Save batch records after each epoch to a file
         if tracking["batch_records"]:
             try:
-                with open(os.path.join(config.result_dir, f"batch_records_epoch_{epoch+1}.json"), "w") as f:
+                # Use utility function to generate standardized filename base
+                records_base = get_output_filename(
+                    model=config.model_name.split('/')[-1],
+                    method=config.method_name.upper(),
+                    file=config.training_data_filename,
+                    learning_rate=config.learning_rate,
+                    beta=config.beta,
+                    lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
+                    lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None,
+                    lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None,
+                    typename="batch_records_epoch_{}.json".format(epoch+1)
+                )
+                records_filepath = os.path.join(config.result_dir, records_base)
+                with open(records_filepath, "w") as f:
                     json.dump(tracking["batch_records"], f, indent=2)
                 print(f"Saved batch records to batch_records_epoch_{epoch+1}.json")
             except Exception as e:

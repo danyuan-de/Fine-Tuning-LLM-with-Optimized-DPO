@@ -55,40 +55,43 @@ os.makedirs(config.result_dir, exist_ok=True)
 output_txt = get_output_filename(
     model=config.model_name,
     method=config.method_name,
-    data_file=config.training_data_file,
+    file=config.training_data_filename,
     learning_rate=config.learning_rate,
     beta=config.beta,
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
     lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None,
-    lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None
+    lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None,
+    typename="txt" # Specify the file type
 )
 print("Output file path:", output_txt)
 
 # For loss plot
-loss_plot_file = get_output_plotname(
+loss_plot_file = get_output_filename(
     model=config.model_name,
     method=config.method_name,
-    data_file=config.training_data_file,
+    file=config.training_data_filename,
     label="loss",
     learning_rate=config.learning_rate,
     beta=config.beta,
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
     lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None,
-    lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None
+    lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None,
+    typename="png" # Specify the file type
 )
 print("Loss plot file path:", loss_plot_file)
 
 # For reward margins plot
-margins_plot_file = get_output_plotname(
+margins_plot_file = get_output_filename(
     model=config.model_name,
     method=config.method_name,
-    data_file=config.training_data_file,
+    file=config.training_data_filename,
     label="reward_margin",
     learning_rate=config.learning_rate,
     beta=config.beta,
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
     lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None,
-    lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None
+    lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None,
+    typename="png" # Specify the file type
 )
 print("Reward margins plot file path:", margins_plot_file)
 
@@ -128,7 +131,7 @@ print(f"Using EOS token '{tokenizer.eos_token}' (ID: {tokenizer.eos_token_id})")
 print("Model and tokenizer loaded.")
 
 # ------------------------------------- Load the data ------------------------------------
-with open(config.training_data_file, "r", encoding="utf-8") as file:
+with open(config.training_data_filename, "r", encoding="utf-8") as file:
     data = json.load(file)
 
 print("Number of entries:", len(data))
@@ -417,6 +420,7 @@ print("Test loss:", test_res["val_loss"])
 print("Test reward margin:", test_res["val_chosen_reward"] - test_res["val_rejected_reward"])
 
 for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
+    
     input_text = format_input(entry)
 
     # Reference Model Generation
