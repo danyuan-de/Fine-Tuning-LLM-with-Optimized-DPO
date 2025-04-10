@@ -7,10 +7,12 @@ from transformers import AutoModelForCausalLM, AutoTokenizer #,StoppingCriteria,
 import math
 import src.config as config
 
-def _get_prefix(model: str, method: str, file: str) -> str:
+def _get_prefix(model: str, method: str, file: str, label: str = None) -> str:
     """Extract the file suffix based on a fixed mapping from the data file name."""
     model_short = model.split('/')[-1]
     training_dtype = next((dtype for dtype in ["content", "mixed", "structure", "preference"] if dtype in file), "unknown")
+    if label is not None:
+        return model_short + "_" + method.upper() + "_" + training_dtype + "_" + label
     return model_short + "_" + method.upper() + "_" + training_dtype
 
 def _build_hyperparam_str(method: str, learning_rate: float = None, beta: float = None,
@@ -30,14 +32,14 @@ def _build_hyperparam_str(method: str, learning_rate: float = None, beta: float 
         parts.append(f"c{lambda_contrast:.2f}")
     return "_".join(parts)
 
-def get_output_filename(model: str, method: str, file: str, learning_rate: float = None,
+def get_output_filename(model: str, method: str, file: str, label: str = None, learning_rate: float = None,
                        beta: float = None, lambda_dpop: float = None, 
                        lambda_kl: float = None, lambda_contrast: float = None,
-                       typename: str = "txt") -> str:
+                       typename: str = "json") -> str:
     """
     Dynamically generate output filenames based on the method and data file.
     """
-    prefix = _get_prefix(model, method, file)
+    prefix = _get_prefix(model, method, file, label)
     hyperparam_str = _build_hyperparam_str(method, learning_rate, beta, lambda_dpop, lambda_kl, lambda_contrast)
 
     if hyperparam_str:
@@ -348,6 +350,54 @@ def postprocess_response(full_text: str) -> str:
             response = response.split("<|eot_id|>")[0]
         return response.strip()
     return "Invalid response format"
+
+def new_postprocess_response(full_text: str) -> str:
+    """
+    Process the response text from the model output.
+    
+    This function:
+    1. Extracts assistant's response if model header tags are present
+    2. Preserves instructional tags like <observation>, <think>, etc.
+    3. Removes system/model tokens and special tokenizer tokens
+    4. Handles tokenizer-specific tokens if a tokenizer is provided
+    
+    Args:
+        full_text (str): The full text output from the model
+        tokenizer: Optional tokenizer object to handle special tokens
+        
+    Returns:
+        str: The processed response
+    """
+    # Extract the assistant's response if header tags are present
+    if "<|start_header_id|>assistant<|end_header_id|>" in full_text:
+        response = full_text.split("<|start_header_id|>assistant<|end_header_id|>")[-1]
+        
+        # Handle EOT token if present
+        if "<|eot_id|>" in response:
+            response = response.split("<|eot_id|>")[0]
+    else:
+        # If no assistant header, use the full text
+        response = full_text
+    
+    # List of system tokens to remove
+    system_tokens = [
+        "<|begin_of_text|>", 
+        "<|start_header_id|>system<|end_header_id|>",
+        "<|start_header_id|>user<|end_header_id|>",
+        "<|start_header_id|>assistant<|end_header_id|>",
+        "<|eot_id|>"
+    ]
+    
+    # Remove system tokens
+    for token in system_tokens:
+        response = response.replace(token, "")
+    
+    # Remove any trailing URLs or web content (if needed)
+    # response = response.replace("http://", "")
+    # response = response.replace("https://", "")
+    
+    # Return the cleaned response
+    return response.strip()
 
 def calculate_perplexity(model: AutoModelForCausalLM, tokenizer: AutoTokenizer, text: str) -> float:
     """

@@ -52,7 +52,7 @@ os.makedirs(config.result_dir, exist_ok=True)
 
 # ----------------------- Get each filename from utility function ------------------------ 
 # For output text
-output_txt = get_output_filename(
+output_json = get_output_filename(
     model=config.model_name,
     method=config.method_name,
     file=config.training_data_filename,
@@ -61,9 +61,9 @@ output_txt = get_output_filename(
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
     lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None,
     lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None,
-    typename="txt" # Specify the file type
+    typename="json" # Specify the file type
 )
-print("Output file path:", output_txt)
+print("Output file path:", output_json)
 
 # For loss plot
 loss_plot_file = get_output_filename(
@@ -243,6 +243,41 @@ print("Validation loss:", res["val_loss"])
 print("Train reward margin:", res["train_chosen_reward"] - res["train_rejected_reward"])
 print("Val reward margin:", res["val_chosen_reward"] - res["val_rejected_reward"])
 
+print ("\n" + "=" * 50)
+for i, entry in enumerate(val_data[:3]):
+
+    input_text = format_input(entry)
+
+    # Reference Model Generation
+    ref_input_ids = text_to_token_ids(input_text, tokenizer).to(device)
+    ref_generated = generate(
+        model=ref_model,
+        idx=ref_input_ids.to(device),
+        max_new_tokens=config.max_new_tokens,
+        # temperature=temperature,
+        # top_p=top_p,
+        # stopping_criteria=stopping_criteria,
+        eos_token_id=eos_token_id
+    )
+    ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
+    ref_response = new_postprocess_response(ref_full_text)
+
+
+    if ('question' in entry):
+        print(f"\nInput{i}: {entry['question']}")
+    elif ('instruction' in entry):
+        print(f"\nInput{i}: {entry['instruction']}")
+    else:
+        print(f"\nInput{i}: [No valid input key found]")
+
+    print("\n ----- Reference Model ----- ")
+    print(f"Reference Response: {ref_response}")
+
+    print("\n ----- Expected Response ----- ")
+    print(f"Expected Answer: {entry['chosen']}")
+
+    print("="*80, "\n")
+
 print("\n" + "=" * 50)
 print("Starting training...")
 print("=" * 50)
@@ -363,7 +398,7 @@ for i, entry in enumerate(val_data[:3]):
         eos_token_id=eos_token_id
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
-    ref_response = postprocess_response(ref_full_text)
+    ref_response = new_postprocess_response(ref_full_text)
 
     # Fine-Tuned Model Generation
     fine_tuned_model_input_ids = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
@@ -377,7 +412,7 @@ for i, entry in enumerate(val_data[:3]):
         eos_token_id=eos_token_id
     )
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
-    fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
+    fine_tuned_model_response = new_postprocess_response(fine_tuned_model_full_text)
 
     # Calculate perplexity
     # ft_perplexity = calculate_perplexity(fine_tuned_model, fine_tuned_tokenizer, input_text)
@@ -419,7 +454,13 @@ test_res = dpo_loss_fn.evaluate_dpo_loss_loader(
 print("Test loss:", test_res["val_loss"])
 print("Test reward margin:", test_res["val_chosen_reward"] - test_res["val_rejected_reward"])
 
-for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
+# List for storing the test results to write to the json file
+test_results = []
+
+# Check first entry to determine data type
+input_key = "question" if "question" in test_data[0] else "instruction"
+
+for i, entry in enumerate(test_data):
 
     input_text = format_input(entry)
 
@@ -435,7 +476,7 @@ for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
         eos_token_id=eos_token_id
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
-    ref_response = postprocess_response(ref_full_text)
+    ref_response = new_postprocess_response(ref_full_text)
 
     # Fine-Tuned Model Generation
     fine_tuned_model_input_ids = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
@@ -449,15 +490,11 @@ for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
         eos_token_id=eos_token_id
     )
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
-    fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
+    fine_tuned_model_response = new_postprocess_response(fine_tuned_model_full_text)
 
-    if ('question' in entry):
-        print(f"\nInput{i}: {entry['question']}")
-    elif ('instruction' in entry):
-        print(f"\nInput{i}: {entry['instruction']}")
-    else:
-        print(f"\nInput{i}: [No valid input key found]")
-
+    # Use the previously determined input key
+    print(f"\nInput{i}: {entry[input_key]}")
+        
     print("\n ----- Reference Model ----- ")
     print(f"Reference Response: {ref_response}")
 
@@ -468,17 +505,32 @@ for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
     print(f"Expected Answer: {entry['chosen']}")
     print("="*80, "\n")
 
-    with open(output_txt, "a") as f:
-        if ('question' in entry):
-            f.write(f"\nInput{i}: {entry['question']}")
-        elif ('instruction' in entry):
-            f.write(f"\nInput{i}: {entry['instruction']}")
-        else:
-            f.write(f"\nInput{i}: [No valid input key found]")
-        f.write("\n ----- Reference Model ----- ")
-        f.write(f"Reference Response: {ref_response}")
-        f.write("\n ----- Policy Model ----- ")
-        f.write(f"Policy Response: {fine_tuned_model_response}")
-        f.write("\n ----- Expected Response ----- ")
-        f.write(f"Expected Answer: {entry['chosen']}")
-        f.write("="*80 + "\n")
+    # Create a single sample object and append to the results list
+    sample = {
+        input_key: entry[input_key],
+        "ref_response": ref_response,
+        "policy_response": fine_tuned_model_response,
+        "expected_response": entry['chosen']
+    }
+    test_results.append(sample)
+
+# Save the test results to a JSON file
+with open(output_json, "w") as f:
+    json.dump(test_results, f, indent=4)
+print("Test results saved to:", output_json)
+
+
+    # with open(output_txt, "a") as f:
+    #     if ('question' in entry):
+    #         f.write(f"\nInput{i}: {entry['question']}")
+    #     elif ('instruction' in entry):
+    #         f.write(f"\nInput{i}: {entry['instruction']}")
+    #     else:
+    #         f.write(f"\nInput{i}: [No valid input key found]")
+    #     f.write("\n ----- Reference Model ----- ")
+    #     f.write(f"Reference Response: {ref_response}")
+    #     f.write("\n ----- Policy Model ----- ")
+    #     f.write(f"Policy Response: {fine_tuned_model_response}")
+    #     f.write("\n ----- Expected Response ----- ")
+    #     f.write(f"Expected Answer: {entry['chosen']}")
+    #     f.write("="*80 + "\n")
