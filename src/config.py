@@ -40,7 +40,11 @@ max_new_tokens = 256  # maximum number of tokens to generate
 batch_size = 2  # Process the number of items at once
 gradient_accumulation_steps = 8  # Number of steps to accumulate gradients before stepping
 num_epochs = 1  # Number of times to go through the dataset
-learning_rate = 5e-7  # Some studies suggest using a learning rate between 5e-7 and 1e-7 for DPO, while others use a range of 5e-6 to 1e-6.
+
+# Some studies suggest using a learning rate between 5e-7 and 1e-7 for DPO but too low for DPOP
+learning_rate = 5e-6 
+# Tried 1e-6 and 3e-6 for DPOP, still seems low to learn the policy model output are almost the same as the reference model
+
 warmup_steps = 10  # Add warmup steps to gradually increase learning rate
 weight_decay = 0.01  # Original: 0.001 - Higher regularization to prevent overfitting
 
