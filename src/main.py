@@ -199,10 +199,10 @@ test_loader = DataLoader(
 #     )
 # print("\n")
 
-# self-defined stopping criteria
-stopping_criteria = StoppingCriteriaList([
-    EOSStoppingCriteria(eos_token_id=eos_token_id)
-])
+# # self-defined stopping criteria
+# stopping_criteria = StoppingCriteriaList([
+#     EOSStoppingCriteria(eos_token_id=eos_token_id)
+# ])
 
 # Total steps for the scheduler
 # total_steps = num_epochs * len(train_loader) // gradient_accumulation_steps
@@ -359,7 +359,7 @@ for i, entry in enumerate(val_data[:3]):
         max_new_tokens=config.max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
-        stopping_criteria=stopping_criteria,
+        # stopping_criteria=stopping_criteria,
         eos_token_id=eos_token_id
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
@@ -373,7 +373,7 @@ for i, entry in enumerate(val_data[:3]):
         max_new_tokens=config.max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
-        stopping_criteria=stopping_criteria,
+        # stopping_criteria=stopping_criteria,
         eos_token_id=eos_token_id
     )
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
@@ -420,7 +420,7 @@ print("Test loss:", test_res["val_loss"])
 print("Test reward margin:", test_res["val_chosen_reward"] - test_res["val_rejected_reward"])
 
 for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
-    
+
     input_text = format_input(entry)
 
     # Reference Model Generation
@@ -431,7 +431,7 @@ for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
         max_new_tokens=config.max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
-        stopping_criteria=stopping_criteria,
+        # stopping_criteria=stopping_criteria,
         eos_token_id=eos_token_id
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
@@ -445,7 +445,7 @@ for i, entry in enumerate(random.sample(test_data[:5], len(test_data[:5]))):
         max_new_tokens=config.max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
-        stopping_criteria=stopping_criteria,
+        # stopping_criteria=stopping_criteria,
         eos_token_id=eos_token_id
     )
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)

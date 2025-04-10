@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 import torch
 import re
-from transformers import StoppingCriteria, StoppingCriteriaList, AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer #,StoppingCriteria, StoppingCriteriaList, 
 import math
 import src.config as config
 
@@ -228,7 +228,7 @@ def token_ids_to_text(token_ids, tokenizer):
 def generate(
     model, 
     idx, 
-    stopping_criteria=None,
+    # stopping_criteria=None,
     max_new_tokens=512,
     context_size=4096,
     temperature=0.0,
@@ -312,6 +312,11 @@ def generate(
         # Concatenate the chosen token
         idx = torch.cat((idx, next_token), dim=1)
 
+        # # Check if any stopping criteria are met; if so, exit the loop.
+        # if stopping_criteria is not None:
+        #     if any(sc(input_ids=idx, scores=logits) for sc in stopping_criteria):
+        #         break
+
         # Check EOS or max tokens
         if eos_token_id is not None:
             if (next_token == eos_token_id).any():
@@ -320,13 +325,13 @@ def generate(
 
     return idx
 
-class EOSStoppingCriteria(StoppingCriteria):
-    def __init__(self, eos_token_id):
-        self.eos_token_id = eos_token_id
+# class EOSStoppingCriteria(StoppingCriteria):
+#     def __init__(self, eos_token_id):
+#         self.eos_token_id = eos_token_id
         
-    def __call__(self, input_ids, scores, **kwargs):
-        # check if the last token is the EOS token
-        return len(input_ids[0]) > 0 and input_ids[0][-1] == self.eos_token_id
+#     def __call__(self, input_ids, scores, **kwargs):
+#         # check if the last token is the EOS token
+#         return len(input_ids[0]) > 0 and input_ids[0][-1] == self.eos_token_id
     
 
 # postprocess response to remove unwanted tokens
