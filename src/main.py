@@ -493,7 +493,7 @@ for i, entry in enumerate(test_data):
     fine_tuned_model_response = new_postprocess_response(fine_tuned_model_full_text)
 
     # Use the previously determined input key
-    print(f"\nInput{i}: {entry[input_key]}")
+    print(f"\nInput {i}:\n {entry[input_key]}")
         
     print("\n ----- Reference Model ----- ")
     print(f"Reference Response: {ref_response}")
