@@ -10,7 +10,7 @@ import json
 import torch
 from torch.utils.data import DataLoader
 from torch.optim.lr_scheduler import CosineAnnealingLR
-from transformers import AutoTokenizer, AutoModelForCausalLM, PretrainedConfig
+from transformers import AutoTokenizer, AutoModelForCausalLM, get_linear_schedule_with_warmup
 from functools import partial
 import copy
 import time
@@ -145,6 +145,17 @@ print("Train portion:", train_portion)
 print("Validation portion:", val_portion)
 print("Test portion:", test_portion)
 
+# ------------------------------------------------ Set warmup steps ------------------------------------------------
+# Compute the number of training steps
+batches_per_epoch = train_portion // config.batch_size
+optimization_steps_per_epoch = batches_per_epoch // config.gradient_accumulation_steps
+num_training_steps = optimization_steps_per_epoch * config.num_epochs
+
+# Dynamic warmup steps
+num_warmup_steps = int(0.1 * num_training_steps)
+print(f"Dataset size: {len(data)}, num_training_steps: {num_training_steps}, num_warmup_steps: {num_warmup_steps}")
+# ------------------------------------------------------------------------------------------------------------------
+
 # Shuffle the data
 random.shuffle(data)
 
@@ -203,19 +214,6 @@ test_loader = DataLoader(
 # stopping_criteria = StoppingCriteriaList([
 #     EOSStoppingCriteria(eos_token_id=eos_token_id)
 # ])
-
-# Total steps for the scheduler
-# total_steps = num_epochs * len(train_loader) // gradient_accumulation_steps
-
-optimizer = torch.optim.AdamW(policy_model.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay)
-# scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs * len(train_loader), eta_min=1e-6)
-
-# Scheduler with warmup
-# scheduler = get_scheduler(
-#     optimizer=optimizer,
-#     warmup_steps=config.warmup_steps,
-#     total_steps=total_steps
-# )
 
 # Evaluate initial state
 print("\nEvaluating initial state...")
@@ -283,6 +281,14 @@ print("Starting training...")
 print("=" * 50)
 # log_memory_snapshot("Before training")
 
+# Initialize the optimizer and scheduler
+optimizer = torch.optim.AdamW(policy_model.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay)
+scheduler = get_linear_schedule_with_warmup(
+    optimizer=optimizer,
+    num_warmup_steps=num_warmup_steps,
+    num_training_steps=num_training_steps
+)
+
 start_time = time.time()
 
 torch.manual_seed(123) # For reproducibility due to the shuffling in the data loader
@@ -290,7 +296,7 @@ torch.manual_seed(123) # For reproducibility due to the shuffling in the data lo
 tracking = train_model(
     dpo_loss_fn=dpo_loss_fn,
     optimizer=optimizer,
-    scheduler=None,
+    scheduler=scheduler,
     policy_model=policy_model,
     reference_model=ref_model,
     train_loader=train_loader,
