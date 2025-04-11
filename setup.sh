@@ -39,7 +39,7 @@ if [[ "$1" == "--help" ]]; then
   echo "    --top_p VALUE         Top-p sampling parameter (default: from config.py)"
   echo ""
   echo "  Data Parameters:"
-  echo "    --data TYPE           Data type (content, structure, mixed, preference) (default: content)"
+  echo "    --data TYPE           Data type (content, structure, html, mixed, preference) (default: html)"
   echo "    --data_file PATH      Direct path to data file (overrides --data if specified)"
   echo ""
   echo "  Evaluation Parameters:"
