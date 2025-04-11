@@ -21,7 +21,6 @@ def train_model(
     :param val_loader: The DataLoader for the validation dataset.
     :param optimizer: The optimizer.
     :param num_epochs: The number of training epochs.
-    :param beta: The beta value used in the DPO loss.
     :param eval_freq: The frequency (in steps) at which to perform evaluations.
     :param eval_iter: The number of evaluation iterations.
     :param tokenizer: The tokenizer to decode batch data (for debugging)
@@ -43,7 +42,8 @@ def train_model(
     }
     tokens_seen, global_step = 0, -1
     accumulated_tokens = 0
-    prev_loss = float("inf")
+    prev_loss = None  # for tracking loss change
+    accumulated_loss = 0.0 # for tracking loss over multiple batches
 
     # Main training loop
     for epoch in range(num_epochs):
@@ -69,54 +69,59 @@ def train_model(
                         reference_model=reference_model
                 )
                 loss = loss / gradient_accumulation_steps  # Scale loss for gradient accumulation
+                accumulated_loss += loss.item() * gradient_accumulation_steps # Accumulated unscaled loss for tracking loss over multiple batches
                 loss.backward()  # Compute gradients
 
-                # Check if loss changed significantly (increased or decreased)
-                loss_value = loss.item() * gradient_accumulation_steps  # Rescale for reporting
-                loss_change = loss_value - prev_loss
+                # Calculate the number of tokens in the batch, accumulate tokens seen for the current batch
+                batch_token_count = batch["chosen"].numel() + batch["rejected"].numel()
+                accumulated_tokens += batch_token_count
+
+                # # Check if loss changed significantly (increased or decreased)
+                # loss_value = loss.item() * gradient_accumulation_steps  # Rescale for reporting
+                # loss_change = loss_value - prev_loss
                 
-                # Log batch data if there's a significant change in loss
-                if abs(loss_change) > 0.1 and tokenizer is not None:  # Threshold for significant change
-                    # Sample an item from the batch to log
-                    sample_idx = 0
+                # # Log batch data if there's a significant change in loss
+                # if abs(loss_change) > 0.1 and tokenizer is not None:  # Threshold for significant change
+                #     # Sample an item from the batch to log
+                #     sample_idx = 0
                     
-                    # Try to decode data - protect with try/except
-                    try:
-                        # Extract just the response part using the postprocess_response function
-                        chosen_text = postprocess_response(tokenizer.decode(batch["chosen"][sample_idx]))
-                        rejected_text = postprocess_response(tokenizer.decode(batch["rejected"][sample_idx]))
+                #     # Try to decode data - protect with try/except
+                #     try:
+                #         # Extract just the response part using the postprocess_response function
+                #         chosen_text = postprocess_response(tokenizer.decode(batch["chosen"][sample_idx]))
+                #         rejected_text = postprocess_response(tokenizer.decode(batch["rejected"][sample_idx]))
                         
-                        # Truncate very long texts to first 200 chars to keep logs manageable
-                        if len(chosen_text) > 200:
-                            chosen_text = chosen_text[:200] + "..."
-                        if len(rejected_text) > 200:
-                            rejected_text = rejected_text[:200] + "..."
+                #         # Truncate very long texts to first 200 chars to keep logs manageable
+                #         if len(chosen_text) > 200:
+                #             chosen_text = chosen_text[:200] + "..."
+                #         if len(rejected_text) > 200:
+                #             rejected_text = rejected_text[:200] + "..."
                         
-                        # Record batch info with loss change
-                        batch_record = {
-                            "step": global_step + 1,
-                            "batch_idx": batch_idx,
-                            "loss": loss_value,
-                            "loss_change": loss_change,
-                            "reward_diff": chosen_rewards.item() - rejected_rewards.item(),
-                            "sample_chosen": chosen_text,
-                            "sample_rejected": rejected_text
-                        }
+                #         # Record batch info with loss change
+                #         batch_record = {
+                #             "step": global_step + 1,
+                #             "batch_idx": batch_idx,
+                #             "loss": loss_value,
+                #             "loss_change": loss_change,
+                #             "reward_diff": chosen_rewards.item() - rejected_rewards.item(),
+                #             "sample_chosen": chosen_text,
+                #             "sample_rejected": rejected_text
+                #         }
                         
-                        tracking["batch_records"].append(batch_record)
+                #         tracking["batch_records"].append(batch_record)
                         
-                        # Log to console as well
-                        print(f"\n{'=='*40}\nLoss Change: {loss_change:.4f} at batch {batch_idx}")
-                        print(f"New loss: {loss_value:.4f}, Previous loss: {prev_loss:.4f}")
-                        print(f"Chosen sample: {chosen_text[:100]}...")
-                        print(f"Rejected sample: {rejected_text[:100]}...")
-                        print(f"{'=='*40}\n")
+                #         # Log to console as well
+                #         print(f"\n{'=='*40}\nLoss Change: {loss_change:.4f} at batch {batch_idx}")
+                #         print(f"New loss: {loss_value:.4f}, Previous loss: {prev_loss:.4f}")
+                #         print(f"Chosen sample: {chosen_text[:100]}...")
+                #         print(f"Rejected sample: {rejected_text[:100]}...")
+                #         print(f"{'=='*40}\n")
                         
-                    except Exception as e:
-                        print(f"Error decoding batch: {e}")
+                #     except Exception as e:
+                #         print(f"Error decoding batch: {e}")
                 
-                # Update previous loss
-                prev_loss = loss_value
+                # # Update previous loss
+                # prev_loss = loss_value
 
                 # Update step info for progress bar
                 reward_diff = chosen_rewards.item() - rejected_rewards.item()
@@ -155,7 +160,53 @@ def train_model(
                     tokens_seen += accumulated_tokens
                     accumulated_tokens = 0
 
-                    
+                    # Print tokens seen every 10 steps
+                    if global_step % 10 == 0:
+                        print(f"Step {global_step}: Tokens seen: {tokens_seen}")
+
+                    # Calculate average loss over the accumulated steps
+                    # Note: gradient_accumulation_steps is used to determine how many batches were accumulated before the optimizer step
+                    steps_in_accumulation = min(gradient_accumulation_steps, 
+                                                batch_idx + 1 - (batch_idx // gradient_accumulation_steps) * gradient_accumulation_steps)
+                    avg_loss = accumulated_loss / steps_in_accumulation
+                    loss_change = avg_loss - prev_loss
+
+                    # loss detection
+                    if prev_loss is not None:
+                        if abs(loss_change) > 0.1:
+                            batch_record = {
+                                "step": global_step,
+                                "batch_idx": batch_idx,
+                                "loss": avg_loss,
+                                "loss_change": loss_change,
+                                "reward_diff": chosen_rewards.item() - rejected_rewards.item()
+                            }
+                            if abs(loss_change) > 0.5 and tokenizer is not None:  # only decode when change is significant
+                                sample_idx = 0
+                                try:
+                                    chosen_text = postprocess_response(tokenizer.decode(batch["chosen"][sample_idx]))
+                                    rejected_text = postprocess_response(tokenizer.decode(batch["rejected"][sample_idx]))
+                                    if len(chosen_text) > 200:
+                                        chosen_text = chosen_text[:200] + "..."
+                                    if len(rejected_text) > 200:
+                                        rejected_text = rejected_text[:200] + "..."
+                                    batch_record["sample_chosen"] = chosen_text
+                                    batch_record["sample_rejected"] = rejected_text
+                                    print(f"\n{'=='*40}\nLoss Change: {loss_change:.4f} at step {global_step}")
+                                    print(f"New loss: {avg_loss:.4f}, Previous loss: {prev_loss:.4f}")
+                                    if scheduler is not None:
+                                        current_lr = scheduler.get_last_lr()[0]
+                                        print(f"Current learning rate: {current_lr:.6f}")
+                                    print(f"Chosen sample: {chosen_text[:100]}...")
+                                    print(f"Rejected sample: {rejected_text[:100]}...")
+                                    print(f"{'=='*40}\n")
+                                except Exception as e:
+                                    print(f"Error decoding batch: {e}")
+                            tracking["batch_records"].append(batch_record)
+
+                    prev_loss = avg_loss
+                    accumulated_loss = 0.0  # Reset tracking accumulated loss for next gradient accumulation step
+
                     # Evaluation step
                     if global_step % eval_freq == 0:
                         # if log_memory:
@@ -188,31 +239,12 @@ def train_model(
                             f"Train reward margins {train_reward_margin:.3f}, "
                             f"Val reward margins {val_reward_margin:.3f}"
                         )
-
-                        # # Check for early stopping conditions
-                        # if train_reward_margin > max_reward_margin or val_reward_margin > max_reward_margin:
-                        #     print(f"Training stopped: Reward margin too large ({train_reward_margin:.2f}, {val_reward_margin:.2f})")
-                        #     early_stopping = True
-                        #     break
-                            
-                        # # Stop if validation loss starts increasing
-                        # if res["val_loss"] > prev_val_loss:
-                        #     patience_counter += 1
-                        #     if patience_counter >= patience:
-                        #         print(f"Training stopped: Early stopping triggered after {patience} evaluations of increasing validation loss")
-                        #         early_stopping = True
-                        #         break
-                        # else:
-                        #     patience_counter = 0
-                        #     prev_val_loss = res["val_loss"]
-                
-                # # Check if we need to stop early after this batch
-                # if early_stopping:
-                #     break
                 
         finally:
             # Ensure the progress bar is closed properly
             train_loop.close()
+
+        print(f"End of Epoch {epoch+1}: Total tokens seen: {tokens_seen}")
         
         # Save batch records after each epoch to a file
         if tracking["batch_records"]:

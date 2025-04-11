@@ -321,6 +321,7 @@ train_margin = tracking['train_chosen_rewards'][-1] - tracking['train_rejected_r
 val_margin = tracking['val_chosen_rewards'][-1] - tracking['val_rejected_rewards'][-1]
 print(f"Train reward margin: {train_margin:.3f}")
 print(f"Validation reward margin: {val_margin:.3f}")
+print(f"Tokens seen: {tracking['tokens_seen'][-1]}")
 
 print("\nAnalyzing batch records for significant loss changes:")
 if "batch_records" in tracking and tracking["batch_records"]:
