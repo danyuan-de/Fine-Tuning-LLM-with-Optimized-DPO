@@ -1,0 +1,11 @@
+[
+  {
+    "step": 0,
+    "batch_idx": 0,
+    "loss": 0.69140625,
+    "loss_change": -Infinity,
+    "reward_diff": 0.0,
+    "sample_chosen": "Step 1:\\\\$\\Delta L= \\alpha L_{0} \\Delta T$. $\\Delta L= 0.001\\,\\mathrm{m}$, $L_{0}= 1$, $\\Delta T=80^{\\circ}\\mathrm{C}$.\\\\$\\alpha= \\frac{0.001}{1\\times 80}= 1.25\\times 10^{-5}\\,/^{\\circ}\\mathrm{C}$.\\\\A...",
+    "sample_rejected": "Step 1:\\\\Use $\\alpha= \\frac{\\Delta L}{\\Delta T^{2}}= \\frac{0.001}{80^{2}}= 1.56\\times 10^{-7}\\,/^{\\circ}\\mathrm{C}$.\\\\Answer:\\\\$1.56\\times 10^{-7}\\,/^{\\circ}\\mathrm{C}$."
+  }
+]

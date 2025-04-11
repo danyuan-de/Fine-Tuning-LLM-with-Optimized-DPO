@@ -1,0 +1,506 @@
+[
+  {
+    "step": 0,
+    "batch_idx": 0,
+    "loss": 0.69140625,
+    "loss_change": -Infinity,
+    "reward_diff": 0.0,
+    "sample_chosen": "The resistor is 10 \u03a9, and it dissipates 40 W.\\\\Use \\(P = I^{2} R\\) to find I.\\\\\\(I = \\sqrt{\\frac{40}{10}} = \\sqrt{4} = 2\\,\\mathrm{A}\\).\\\\2 \\(\\mathrm{A}\\)",
+    "sample_rejected": "Since P = I\u00b2R, we solve 40 = I\u00b2 \u00d7 10, giving I = 2 A."
+  },
+  {
+    "step": 15,
+    "batch_idx": 127,
+    "loss": 0.5078125,
+    "loss_change": -0.1015625,
+    "reward_diff": 1.40234375,
+    "sample_chosen": "The object\u2019s circular motion parameters are given.\\\\Apply the formula $F_c=\\frac{mv^2}{r}$.\\\\Compute: $F_c=\\frac{0.6\\times(3)^2}{0.4}=\\frac{0.6\\times9}{0.4}=\\frac{5.4}{0.4}=13.5\\,\\mathrm{N}$.\\\\$13.5\\,...",
+    "sample_rejected": "An error would be to confuse this with gravitational force, using $mg$ instead of $\\frac{mv^2}{r}$. Always use the centripetal force formula for circular motion."
+  },
+  {
+    "step": 16,
+    "batch_idx": 132,
+    "loss": 0.48046875,
+    "loss_change": -0.12890625,
+    "reward_diff": 1.6171875,
+    "sample_chosen": "Current $I=0.5\\,\\mathrm{A}$, voltage supply $=12\\,\\mathrm{V}$.\\\\Electric power $P = VI$.\\\\$P=12 \\times 0.5=6\\,\\mathrm{W}$.\\\\$6\\,\\mathrm{W}$",
+    "sample_rejected": "Multiplying 12 V by 0.5 A gives 6 W of power consumption."
+  },
+  {
+    "step": 16,
+    "batch_idx": 134,
+    "loss": 0.44140625,
+    "loss_change": -0.12890625,
+    "reward_diff": 1.9765625,
+    "sample_chosen": "A battery drives current through a resistor.\\\\Ohm\u2019s law: $I = \\frac{V}{R}$.\\\\$I = \\frac{10}{10} = 1\\,\\mathrm{A}$.\\\\$1\\,\\mathrm{A}$",
+    "sample_rejected": "Using Ohm\u2019s law, current is $10 / 10 = 1\\,\\mathrm{A}$."
+  },
+  {
+    "step": 16,
+    "batch_idx": 135,
+    "loss": 0.59375,
+    "loss_change": 0.15234375,
+    "reward_diff": 0.708984375,
+    "sample_chosen": "Number of turns $N=100$, flux change $\\Delta\\Phi=0.02\\,\\mathrm{Wb}$ over $0.5\\,\\mathrm{s}$.\\\\Faraday\u2019s law: $\\varepsilon = -N\\,\\frac{\\Delta \\Phi}{\\Delta t}$.\\\\$\\varepsilon = -100 \\times \\frac{0.02}{0....",
+    "sample_rejected": "Dividing the flux change 0.02 Wb by 0.5 s gives 0.04 Wb/s, multiplied by 100 turns yields 4 V in magnitude."
+  },
+  {
+    "step": 18,
+    "batch_idx": 145,
+    "loss": 0.58984375,
+    "loss_change": 0.109375,
+    "reward_diff": 0.73046875,
+    "sample_chosen": "Determine induced emf using Faraday\u2019s law with $\\varepsilon = N A \\frac{dB}{dt}$\\\\The magnetic field increases at a rate of $0.1\\,\\mathrm{T/s}$\\\\$\\varepsilon = 200 \\times 0.01\\,\\mathrm{m^{2}} \\times 0...",
+    "sample_rejected": "The induced emf in a coil with $200$ turns and an area of $0.01\\,\\mathrm{m^{2}}$ in a magnetic field increasing at $0.1\\,\\mathrm{T/s}$ is calculated using $\\varepsilon = N A \\frac{dB}{dt}$, resulting ..."
+  },
+  {
+    "step": 19,
+    "batch_idx": 155,
+    "loss": 0.37890625,
+    "loss_change": -0.12890625,
+    "reward_diff": 2.5859375,
+    "sample_chosen": "At terminal velocity, drag balances weight.\\\\The net force must be zero if speed is constant.\\\\$F_{\\text{net}}=0.$\\\\The net force is $0\\,\\mathrm{N}$.",
+    "sample_rejected": "Once it stops accelerating, the drag force matches the weight exactly, so the net force is zero. That's the whole point of terminal velocity."
+  },
+  {
+    "step": 19,
+    "batch_idx": 156,
+    "loss": 0.51953125,
+    "loss_change": 0.140625,
+    "reward_diff": 1.275390625,
+    "sample_chosen": "The magnetic force is $F = q v B$ for perpendicular motion ($\\sin90^{\\circ}=1$).\\\\Given $q=1.6\\times10^{-19}\\,\\mathrm{C}$, $v=3.0\\times10^{6}\\,\\mathrm{m/s}$, and $B=2.5\\,\\mathrm{T}$, we multiply them ...",
+    "sample_rejected": "We do $F = q v B$. That\u2019s $ (1.6\\times10^{-19})\\times(3.0\\times10^6)\\times2.5 $, which lands near $1.2\\times10^{-12}\\,\\mathrm{N}$. Piece of cake!"
+  },
+  {
+    "step": 21,
+    "batch_idx": 168,
+    "loss": 0.369140625,
+    "loss_change": -0.150390625,
+    "reward_diff": 2.71484375,
+    "sample_chosen": "A moving object has kinetic energy.\\\\$KE = \\frac{1}{2} m v^2$.\\\\$KE = 0.5 \\times 5 \\times 4^2 = 2.5 \\times 16 = 40\\,\\mathrm{J}$.\\\\$40\\,\\mathrm{J}$",
+    "sample_rejected": "KE is $0.5 \\times 5 \\times 16 = 40\\,\\mathrm{J}$."
+  },
+  {
+    "step": 21,
+    "batch_idx": 169,
+    "loss": 0.4921875,
+    "loss_change": 0.123046875,
+    "reward_diff": 1.53125,
+    "sample_chosen": "Focal length $f=10\\,\\mathrm{cm}$, image distance $d_{i}=20\\,\\mathrm{cm}$, real image.\\\\Use $\\tfrac{1}{f}=\\tfrac{1}{d_{o}}+\\tfrac{1}{d_{i}}.$\\\\$\\frac{1}{10}=\\frac{1}{d_{o}}+\\frac{1}{20}\\implies\\frac{1}...",
+    "sample_rejected": "The lens equation shows that if $d_{i}=20\\,\\mathrm{cm}$ and $f=10\\,\\mathrm{cm},$ the object must be at $20\\,\\mathrm{cm}$ as well."
+  },
+  {
+    "step": 22,
+    "batch_idx": 176,
+    "loss": 0.546875,
+    "loss_change": 0.1328125,
+    "reward_diff": 1.0625,
+    "sample_chosen": "The ideal gas law in terms of molecules: $pV=N k_B T$. Solve for $p$.\\\\We must convert $V=2.0\\,\\mathrm{L}=2.0\\times10^{-3}\\,\\mathrm{m^3}$. Then do $p=\\frac{N k_B T}{V}$.\\\\$N=2.0\\times10^{23},\\, k_B=1....",
+    "sample_rejected": "We do $p=Nk_B T /V$. That\u2019s $(2\\times10^{23})(1.38\\times10^{-23})(300)/(2\\times10^{-3})\\approx4.1\\times10^5\\,\\mathrm{Pa}$. Another day, another gas law!"
+  },
+  {
+    "step": 22,
+    "batch_idx": 182,
+    "loss": 0.48046875,
+    "loss_change": 0.107421875,
+    "reward_diff": 1.62109375,
+    "sample_chosen": "Pull force is $40\\,\\mathrm{N}$, friction is $15\\,\\mathrm{N}$, mass $=5\\,\\mathrm{kg}$.\\\\Net force $=40-15=25\\,\\mathrm{N}.$ Then $a=\\tfrac{F_{\\text{net}}}{m}.$\\\\$a=\\frac{25}{5}=5\\,\\mathrm{m/s^{2}}$\\\\$5\\...",
+    "sample_rejected": "Subtracting the friction $15\\,\\mathrm{N}$ from $40\\,\\mathrm{N}$ leaves $25\\,\\mathrm{N}$ net force, dividing by $5\\,\\mathrm{kg}$ yields $5\\,\\mathrm{m/s^{2}}$."
+  },
+  {
+    "step": 23,
+    "batch_idx": 184,
+    "loss": 0.373046875,
+    "loss_change": -0.10546875,
+    "reward_diff": 2.833984375,
+    "sample_chosen": "The RMS voltage for a sinusoidal AC waveform is given by $V_{\\text{rms}}=\\frac{V_0}{\\sqrt{2}}$.\\\\Substituting $V_0=170\\,\\mathrm{V}$, we have $V_{\\text{rms}}=\\frac{170}{\\sqrt{2}}$.\\\\Calculating this yi...",
+    "sample_rejected": "We might mistakenly think that the RMS voltage is equal to the peak voltage, but actually, for a sine wave, it is $V_{\\text{rms}}=\\frac{V_0}{\\sqrt{2}}$. That gives about $120\\,\\mathrm{V}$ instead of $..."
+  },
+  {
+    "step": 23,
+    "batch_idx": 188,
+    "loss": 0.302734375,
+    "loss_change": -0.150390625,
+    "reward_diff": 3.51953125,
+    "sample_chosen": "Heat lost by hot water = heat gained by cooler water. Solve for final T.\\\\\\(m_1 c(T_1 - T_f)=m_2 c(T_f - T_2).\\)\\\\\\(100(100 -T_f)=200(T_f -20).\\) This yields \\(T_f=46.7^{\\circ}\\mathrm{C}.\\)\\\\$46.7^{\\c...",
+    "sample_rejected": "We set up \\(100(100 -T_f)=200(T_f-20).\\) That yields about \\(46.7^{\\circ}\\mathrm{C}\\) for the final temperature."
+  },
+  {
+    "step": 23,
+    "batch_idx": 189,
+    "loss": 0.45703125,
+    "loss_change": 0.154296875,
+    "reward_diff": 1.85546875,
+    "sample_chosen": "Snell\u2019s law: $n_1\\sin\\theta_1=n_2\\sin\\theta_2$. Here $n_1=1.00$ (air), $n_2=1.33$, $\\theta_1=30^{\\circ}$.\\\\We solve $\\sin\\theta_2=\\frac{\\sin30^{\\circ}}{1.33}=\\frac{0.5}{1.33}$.\\\\$\\sin\\theta_2\\approx0....",
+    "sample_rejected": "Use Snell\u2019s law with $\\sin\\theta_2=(\\sin30^{\\circ})/1.33$. That\u2019s about $0.376$, so $22^{\\circ}$. That\u2019s your refraction angle."
+  },
+  {
+    "step": 24,
+    "batch_idx": 196,
+    "loss": 0.46484375,
+    "loss_change": 0.103515625,
+    "reward_diff": 1.759765625,
+    "sample_chosen": "For circular motion, \\(r=\\frac{mv}{qB}.\\)\\\\So \\(\\frac{m}{q} = \\frac{rB}{v}.\\)\\\\\\(r=0.1, B=0.5, v=2.0\\times10^6.\\, (m/q)=\\frac{0.1\\times0.5}{2.0\\times10^6}=2.5\\times10^{-8}\\,\\mathrm{kg/C}.\\)\\\\$2.5\\time...",
+    "sample_rejected": "The radius is 0.1 m, field is 0.5 T, speed is \\(2.0\\times10^6\\). The formula \\(m/(q)=rB/v\\) yields \\(2.5\\times10^{-8}\\,\\mathrm{kg/C}\\)."
+  },
+  {
+    "step": 24,
+    "batch_idx": 199,
+    "loss": 0.466796875,
+    "loss_change": 0.126953125,
+    "reward_diff": 1.7421875,
+    "sample_chosen": "Use the particle-in-a-box formula for the ground state energy: $E_{1} = \\frac{h^{2}}{8 m L^{2}}$\\\\Substitute $L = 1\\,\\mathrm{nm}$ ($1 \\times 10^{-9}\\,\\mathrm{m}$) and $m = 9.11 \\times 10^{-31}\\,\\mathr...",
+    "sample_rejected": "The ground state energy is given by $E_{1} = \\frac{h^{2}}{8 m L^{2}}$, where $h$ is Planck's constant, $m$ is the electron mass, and $L$ is the box width. Substituting the given values: $E_{1} \\approx..."
+  },
+  {
+    "step": 26,
+    "batch_idx": 209,
+    "loss": 0.47265625,
+    "loss_change": 0.13671875,
+    "reward_diff": 1.68359375,
+    "sample_chosen": "This is a two-part problem. First, there's an inelastic collision between the bullet (mass $m_b$) and the block (mass $m_{blk}$). Then friction stops the block. We'll use momentum conservation for the...",
+    "sample_rejected": "We do the collision part and then the friction part. First, figure out the final speed of the block-bullet combo by using the distance it slides with friction. That final speed is $\\sqrt{2\\mu_k g d}$...."
+  },
+  {
+    "step": 26,
+    "batch_idx": 210,
+    "loss": 0.32421875,
+    "loss_change": -0.1484375,
+    "reward_diff": 3.73828125,
+    "sample_chosen": "Apply the formula for the magnetic field around a long straight conductor: $B = \\frac{\\mu_{0} I}{2 \\pi r}$\\\\Substitute $I = 1000\\,\\mathrm{A}$ and $r = 0.1\\,\\mathrm{m}$ into the equation\\\\$B = \\frac{(4...",
+    "sample_rejected": "The magnetic field at a distance of $10\\,\\mathrm{cm}$ from a transmission line carrying a current of $1000\\,\\mathrm{A}$ is calculated as $B = \\frac{\\mu_{0} I}{2 \\pi r}$, where $\\mu_{0} = 4 \\pi \\times ..."
+  },
+  {
+    "step": 26,
+    "batch_idx": 212,
+    "loss": 0.462890625,
+    "loss_change": 0.103515625,
+    "reward_diff": 1.78125,
+    "sample_chosen": "The hot reservoir is $500\\,\\mathrm{K}$ and the cold reservoir is $300\\,\\mathrm{K}$.\\\\A Carnot engine has $\\eta = 1 - \\tfrac{T_c}{T_h}$.\\\\$\\eta = 1 - \\tfrac{300}{500} = 0.4=40\\%$.\\\\$40\\%$",
+    "sample_rejected": "The Carnot efficiency is given by $\\eta = 1 - \\tfrac{T_c}{T_h}$. With $T_h = 500\\,\\mathrm{K}$ and $T_c = 300\\,\\mathrm{K}$, we get $\\eta = 1 - \\tfrac{300}{500} = 0.4$ or $40\\%$."
+  },
+  {
+    "step": 26,
+    "batch_idx": 213,
+    "loss": 0.3359375,
+    "loss_change": -0.126953125,
+    "reward_diff": 3.080078125,
+    "sample_chosen": "$I = 5\\,\\mathrm{A}$, $t = 6.5\\,\\mathrm{s}$.\\\\$Q = I t = 5 \\times 6.5 = 32.5\\,\\mathrm{C}$.\\\\We multiply current by time to get total charge.\\\\$32.5\\,\\mathrm{C}$",
+    "sample_rejected": "Multiply $5\\,\\mathrm{A}$ by $6.5\\,\\mathrm{s}$ to get $32.5\\,\\mathrm{C}$ of charge."
+  },
+  {
+    "step": 26,
+    "batch_idx": 215,
+    "loss": 0.2578125,
+    "loss_change": -0.10546875,
+    "reward_diff": 4.07421875,
+    "sample_chosen": "Voltage $V=10\\,\\mathrm{V},$ current $I=4\\,\\mathrm{A}.$\\\\Power $P=VI.$\\\\$P=10\\times4=40\\,\\mathrm{W}$\\\\$40\\,\\mathrm{W}$",
+    "sample_rejected": "Multiplying the current ($4\\,\\mathrm{A}$) by the voltage ($10\\,\\mathrm{V}$) yields $40\\,\\mathrm{W}$ of power."
+  },
+  {
+    "step": 27,
+    "batch_idx": 216,
+    "loss": 0.37109375,
+    "loss_change": 0.11328125,
+    "reward_diff": 2.67578125,
+    "sample_chosen": "The hammer\u2019s initial kinetic energy is $\\tfrac{1}{2}(1)(5^2)=12.5\\,\\mathrm{J}$.\\\\The work done on the nail equals that energy, with $W=F\\,d$.\\\\Thus $F=\\frac{12.5}{0.02}=625\\,\\mathrm{N}$.\\\\$625\\,\\mathr...",
+    "sample_rejected": "The hammer\u2019s kinetic energy is $12.5\\,\\mathrm{J}$, and that energy is used to push the nail over $0.02\\,\\mathrm{m}$. Dividing energy by distance gives an average force of $625\\,\\mathrm{N}$."
+  },
+  {
+    "step": 27,
+    "batch_idx": 223,
+    "loss": 0.63671875,
+    "loss_change": 0.375,
+    "reward_diff": 5.9453125,
+    "sample_chosen": "Adiabatic expansion means no heat exchange, but volume increases.\\\\The gas does work at the expense of internal energy.\\\\Hence its temperature decreases.\\\\Temperature decreases",
+    "sample_rejected": "During an adiabatic expansion, no heat enters, so the gas cools as it expands and does work."
+  },
+  {
+    "step": 28,
+    "batch_idx": 224,
+    "loss": 0.34765625,
+    "loss_change": -0.2890625,
+    "reward_diff": 2.9296875,
+    "sample_chosen": "For an isothermal process of an ideal gas, the product $PV$ is constant (Boyle's law)\\\\If volume increases, pressure must decrease to keep $PV$ constant\\\\$P \\propto \\frac{1}{V}$ when $T$ is constant\\\\...",
+    "sample_rejected": "During an isothermal expansion of a gas, its volume increases and pressure decreases to maintain the product $PV$ constant according to Boyle's law, assuming ideal gas behavior."
+  },
+  {
+    "step": 28,
+    "batch_idx": 226,
+    "loss": 0.28515625,
+    "loss_change": -0.11328125,
+    "reward_diff": 3.69140625,
+    "sample_chosen": "Mass $=2\\,\\mathrm{kg}$, initial speed $2\\,\\mathrm{m/s}$, final speed $5\\,\\mathrm{m/s}$.\\\\Compute $\\Delta KE= \\tfrac{1}{2} m (v_{2}^{2}-v_{1}^{2}).$\\\\$KE_{1}=0.5\\times2\\times(2)^{2}=4\\,\\mathrm{J},\\quad...",
+    "sample_rejected": "The kinetic energy changes by $21\\,\\mathrm{J}$ as the speed goes from $2\\,\\mathrm{m/s}$ to $5\\,\\mathrm{m/s}$."
+  },
+  {
+    "step": 29,
+    "batch_idx": 237,
+    "loss": 0.357421875,
+    "loss_change": 0.203125,
+    "reward_diff": 2.8515625,
+    "sample_chosen": "The intensity from a point source is given by $I = \\frac{P}{4\\pi r^2}$.\\\\With $P = 0.1\\,\\mathrm{W}$ and $r = 10\\,\\mathrm{m}$, the formula becomes $I = \\frac{0.1}{4\\pi (10)^2}$.\\\\This simplifies to $I ...",
+    "sample_rejected": "Here's the simple version: use $I = \\frac{P}{4\\pi r^2}$ with $P = 0.1\\,\\mathrm{W}$ and $r = 10\\,\\mathrm{m}$. The math gives you about $7.96 \\times 10^{-5}\\,\\mathrm{W/m^2}$. It\u2019s a direct application o..."
+  },
+  {
+    "step": 29,
+    "batch_idx": 238,
+    "loss": 0.25390625,
+    "loss_change": -0.103515625,
+    "reward_diff": 4.55859375,
+    "sample_chosen": "Mass $m=0.05\\,\\mathrm{kg}$, radius $r=0.4\\,\\mathrm{m}$, frequency $f=1\\,\\mathrm{rev/s}$.\\\\Angular speed $\\omega=2\\pi f=2\\pi,$ centripetal force $F=mr\\omega^2.$\\\\$F=0.05\\times0.4\\times(2\\pi)^2=0.02\\tim...",
+    "sample_rejected": "The tension is $m r \\omega^2$, so substituting $\\omega=2\\pi$ gives about $0.79\\,\\mathrm{N}$."
+  },
+  {
+    "step": 30,
+    "batch_idx": 240,
+    "loss": 0.388671875,
+    "loss_change": 0.171875,
+    "reward_diff": 2.716796875,
+    "sample_chosen": "An inelastic collision conserves momentum.\\\\$m_1 v_1 + m_2 v_2 = (m_1 + m_2) V$.\\\\$0.2 \\times 400 + 1.8 \\times 0 = (0.2 + 1.8) V$. $80 = 2 V$. $V = 40\\,\\mathrm{m/s}$.\\\\$40\\,\\mathrm{m/s}$",
+    "sample_rejected": "Momentum before is $0.2 \\times 400 = 80$. After, it\u2019s $2 \\times V$, so $V = 80 / 2 = 40\\,\\mathrm{m/s}$."
+  },
+  {
+    "step": 30,
+    "batch_idx": 242,
+    "loss": 0.44921875,
+    "loss_change": 0.107421875,
+    "reward_diff": 1.94921875,
+    "sample_chosen": "For an RL circuit, use $\\tau = \\frac{L}{R}$ and $I(t) = \\frac{V}{R} [1 - e^{-t/\\tau}]$\\\\Compute $\\tau = \\frac{0.2\\,\\mathrm{H}}{2\\,\\Omega} = 0.1\\,\\mathrm{s}$, then find the current at $t = 0.1\\,\\mathrm...",
+    "sample_rejected": "In an RL circuit with a $2\\,\\Omega$ resistor and $0.2\\,\\mathrm{H}$ inductor connected to a $10\\,\\mathrm{V}$ battery, the time constant $\\tau = \\frac{L}{R} = \\frac{0.2\\,\\mathrm{H}}{2\\,\\Omega} = 0.1\\,\\m..."
+  },
+  {
+    "step": 32,
+    "batch_idx": 258,
+    "loss": 0.22265625,
+    "loss_change": -0.119140625,
+    "reward_diff": 4.640625,
+    "sample_chosen": "Capacitance relation: $Q=CV$. Here, $C=10\\,\\mu\\mathrm{F}=10\\times10^{-6}\\,\\mathrm{F}$ and $V=12\\,\\mathrm{V}$.\\\\Multiply to get $Q$ in coulombs.\\\\$Q=(10\\times10^{-6})(12)=120\\times10^{-6}=1.2\\times10^{...",
+    "sample_rejected": "It\u2019s $C\\times V$. That\u2019s $(10\\times10^{-6})\\times12=1.2\\times10^{-4}\\,\\mathrm{C}$. Quick math!"
+  },
+  {
+    "step": 32,
+    "batch_idx": 262,
+    "loss": 0.216796875,
+    "loss_change": -0.115234375,
+    "reward_diff": 4.7890625,
+    "sample_chosen": "The capacitor has a capacitance $C=5\\,\\mathrm{F}$ and is charged to a voltage $V=3\\,\\mathrm{V}$.\\\\The charge stored is calculated by $Q=CV$.\\\\Thus, $Q=5\\,\\mathrm{F}\\times3\\,\\mathrm{V}=15\\,\\mathrm{C}$....",
+    "sample_rejected": "Simply use $Q=CV$: $5\\,\\mathrm{F}\\times3\\,\\mathrm{V}=15\\,\\mathrm{C}$. That's it!"
+  },
+  {
+    "step": 34,
+    "batch_idx": 272,
+    "loss": 0.2431640625,
+    "loss_change": -0.1083984375,
+    "reward_diff": 4.3984375,
+    "sample_chosen": "This is an inelastic collision: bullet + block stick together.\\\\Momentum conservation: $m_{1}v_{1} = (m_{1} + m_{2}) v_{f}$.\\\\$v_{f} = \\frac{(0.3)(220)}{0.3 + 4}= \\frac{66}{4.3}\\approx 15.35\\,\\mathrm{...",
+    "sample_rejected": "Momentum in equals momentum out: $(0.3\\times220)$ for the bullet becomes $(4.3\\times v_{f})$ combined. Solving gives around $15.35\\,\\mathrm{m/s}$."
+  },
+  {
+    "step": 34,
+    "batch_idx": 274,
+    "loss": 0.40234375,
+    "loss_change": 0.2373046875,
+    "reward_diff": 3.626953125,
+    "sample_chosen": "For an isothermal process, $W = nRT \\ln\\frac{V_2}{V_1}$. Alternatively, we can use $W = P_1 V_1 \\ln\\frac{V_2}{V_1}$ if we find $nR$ from $P_1 V_1.$\\\\Since $P_1 V_1 = nRT,$ the work becomes $W = P_1 V_...",
+    "sample_rejected": "All you need is $W = P_1 V_1 \\ln(V_2 / V_1)$. Plug in $2.0\\times10^5\\,\\mathrm{Pa}$, $2.0\\times10^{-3}\\,\\mathrm{m^3}$, and the ratio $5/2$. You'll get around $366.5\\,\\mathrm{J}$. Pretty neat formula!"
+  },
+  {
+    "step": 34,
+    "batch_idx": 275,
+    "loss": 0.09765625,
+    "loss_change": -0.3046875,
+    "reward_diff": 7.8046875,
+    "sample_chosen": "Current through a resistor causes a voltage drop.\\\\$V = I R$.\\\\$V = 4 \\times 12 = 48\\,\\mathrm{V}$.\\\\$48\\,\\mathrm{V}$",
+    "sample_rejected": "Voltage drop is $4 \\times 12 = 48\\,\\mathrm{V}$."
+  },
+  {
+    "step": 34,
+    "batch_idx": 276,
+    "loss": 0.29296875,
+    "loss_change": 0.1953125,
+    "reward_diff": 3.599609375,
+    "sample_chosen": "The rod has a mass $M=2.4\\,\\mathrm{kg}$ and length $L=1.2\\,\\mathrm{m}$, and it pivots about one end.\\\\The moment of inertia is given by $I=\\frac{1}{3}ML^2$ for a rod about its end.\\\\Thus, $I=\\frac{1}{...",
+    "sample_rejected": "Using $I=\\frac{1}{3}ML^2$ with $M=2.4\\,\\mathrm{kg}$ and $L=1.2\\,\\mathrm{m}$ gives $I\\approx1.15\\,\\mathrm{kg\\cdot m^2}$. That's it!"
+  },
+  {
+    "step": 34,
+    "batch_idx": 277,
+    "loss": 0.1796875,
+    "loss_change": -0.11328125,
+    "reward_diff": 5.4765625,
+    "sample_chosen": "Amplitude equals maximum displacement from equilibrium: $A = 0.2\\,\\mathrm{m}$.\\\\Frequency depends on mass and spring stiffness, not amplitude.\\\\Calculating frequency: $f = \\frac{1}{2\\pi}\\sqrt{\\frac{k}...",
+    "sample_rejected": "The amplitude is just how far you pull it initially - 20 cm or 0.2 m. For frequency: use $f = \\frac{1}{2\\pi}\\sqrt{k/m}$. With k=50 N/m and m=2 kg, that's sqrt(25)/(2\u03c0) \u2248 0.8 Hz. Bouncy!"
+  },
+  {
+    "step": 35,
+    "batch_idx": 284,
+    "loss": 0.75390625,
+    "loss_change": 0.576171875,
+    "reward_diff": 3.98828125,
+    "sample_chosen": "We apply the thin lens equation $\\tfrac1f=\\tfrac1{d_o}+\\tfrac1{d_i}$, noting $f\\\\Then magnification is $m=-\\tfrac{d_i}{d_o}.$\\\\\\(\\frac{1}{-15}=\\frac{1}{25}+\\frac{1}{d_i}\\implies\\frac{1}{d_i}=\\frac{1}{...",
+    "sample_rejected": "We use $\\frac{1}{f}=\\frac{1}{d_o}+\\frac{1}{d_i}$ with $f=-15\\,\\mathrm{cm}$ and $d_o=25\\,\\mathrm{cm}.$ Solving gets $d_i=-9.375\\,\\mathrm{cm}.$ Then $m=-\\tfrac{d_i}{d_o}=0.375,$ showing a virtual, uprig..."
+  },
+  {
+    "step": 35,
+    "batch_idx": 285,
+    "loss": 0.275390625,
+    "loss_change": -0.478515625,
+    "reward_diff": 5.2265625,
+    "sample_chosen": "The system performs simple harmonic motion.\\\\The period is given by $T=2\\pi\\sqrt{\\frac{m}{k}}$.\\\\Compute: $T=2\\pi\\sqrt{\\frac{0.2}{50}}=2\\pi\\sqrt{0.004}\\approx2\\pi\\times0.06325\\approx0.397\\,\\mathrm{s}$...",
+    "sample_rejected": "A common error is to mistakenly use $\\sqrt{km}$ instead of $\\sqrt{m/k}$. That error leads to an unrealistically high period."
+  },
+  {
+    "step": 35,
+    "batch_idx": 286,
+    "loss": 0.08203125,
+    "loss_change": -0.193359375,
+    "reward_diff": 8.9609375,
+    "sample_chosen": "Initial speed $20\\,\\mathrm{m/s}$, final speed $0$, time $4\\,\\mathrm{s}$.\\\\$a=\\tfrac{v- v_{0}}{\\Delta t}.$\\\\$a=\\frac{0-20}{4}=-5\\,\\mathrm{m/s^2}$\\\\$-5\\,\\mathrm{m/s^2}$",
+    "sample_rejected": "Going from 20 m/s to 0 in 4 s is a deceleration of 5 m/s\u00b2."
+  },
+  {
+    "step": 36,
+    "batch_idx": 288,
+    "loss": 0.50390625,
+    "loss_change": 0.3388671875,
+    "reward_diff": 4.99609375,
+    "sample_chosen": "Using Ohm\u2019s law, $I=\\frac{V}{R}$.\\\\We have $V=12\\,\\mathrm{V}$ and $R=3.0\\,\\Omega$.\\\\$I=\\frac{12}{3.0}=4\\,\\mathrm{A}.$\\\\The current is $\\displaystyle 4\\,\\mathrm{A}.$",
+    "sample_rejected": "Pop $12$ volts over $3\\,\\Omega$: that\u2019s $4\\,\\mathrm{A}$. Simple ohmic math."
+  },
+  {
+    "step": 36,
+    "batch_idx": 289,
+    "loss": 0.1142578125,
+    "loss_change": -0.3896484375,
+    "reward_diff": 7.66015625,
+    "sample_chosen": "The pulse travels down and back, so total time is $1.5\\,\\mathrm{s}$ for double the depth.\\\\Total distance is $v\\times t=1500\\times1.5=2250\\,\\mathrm{m}$.\\\\Thus depth $=2250/2=1125\\,\\mathrm{m}$.\\\\The oc...",
+    "sample_rejected": "Sound covers $2250\\,\\mathrm{m}$ round-trip, so half of that is $1125\\,\\mathrm{m}$ down to the floor. That\u2019s your depth."
+  },
+  {
+    "step": 37,
+    "batch_idx": 296,
+    "loss": 0.07177734375,
+    "loss_change": -0.29150390625,
+    "reward_diff": 8.8046875,
+    "sample_chosen": "Current $I=5\\,\\mathrm{A}$, time $t=2\\,\\mathrm{min}=120\\,\\mathrm{s}$.\\\\Charge $Q=I t$.\\\\$Q=5\\times120=600\\,\\mathrm{C}.$\\\\$600\\,\\mathrm{C}$",
+    "sample_rejected": "Multiplying $5\\,\\mathrm{A}$ by $120\\,\\mathrm{s}$ gives $600\\,\\mathrm{C}$ of charge transferred in those two minutes."
+  },
+  {
+    "step": 37,
+    "batch_idx": 297,
+    "loss": 0.1904296875,
+    "loss_change": 0.11865234375,
+    "reward_diff": 5.576171875,
+    "sample_chosen": "The resistance is $R=\\rho\\tfrac{L}{A}$ with $L=0.02\\,\\mathrm{m}$ and cross-sectional area $A=0.02^2\\,\\mathrm{m^2}.$\\\\We then apply $I=\\tfrac{V}{R}.$\\\\\\(R=1.7\\times10^{-8}\\times\\frac{0.02}{(0.02)^2}=1....",
+    "sample_rejected": "Because the cube is $0.02\\,\\mathrm{m}$ on each side, its resistance is $8.5\\times10^{-7}\\,\\Omega,$ so connecting $1.5\\,\\mathrm{V}$ across it yields a huge current: about $1.76\\times10^6\\,\\mathrm{A}.$"
+  },
+  {
+    "step": 39,
+    "batch_idx": 313,
+    "loss": 0.03564453125,
+    "loss_change": -0.14208984375,
+    "reward_diff": 11.4921875,
+    "sample_chosen": "Isothermal process at $400\\,\\mathrm{K}$ for an ideal gas.\\\\For an ideal gas, $\\Delta U=0$ in isothermal processes.\\\\No temperature change implies no change in internal energy.\\\\No change in $U$",
+    "sample_rejected": "In an ideal gas, internal energy depends only on temperature, which is constant, so there is no change."
+  },
+  {
+    "step": 40,
+    "batch_idx": 323,
+    "loss": 0.0262451171875,
+    "loss_change": -0.1553955078125,
+    "reward_diff": 12.4375,
+    "sample_chosen": "At constant pressure, the gas law tells us $V \\propto T$.\\\\Doubling temperature from $300\\,\\mathrm{K}$ to $600\\,\\mathrm{K}$ doubles the volume.\\\\$\\frac{V_2}{V_1} = \\frac{T_2}{T_1} = 2.$\\\\The volume do...",
+    "sample_rejected": "You're basically doubling the absolute temperature, so the volume also doubles\u2014super simple from $V/T$ = const."
+  },
+  {
+    "step": 41,
+    "batch_idx": 331,
+    "loss": 0.2158203125,
+    "loss_change": 0.17431640625,
+    "reward_diff": 5.015625,
+    "sample_chosen": "Inside a uniformly charged solid sphere, the field grows linearly with $r$, given by $E=\\frac{1}{4\\pi\\varepsilon_0}\\frac{Qr}{R^3}$ (for $r\\\\We treat the enclosed charge as scaled by $(r^3)/(R^3)$ for ...",
+    "sample_rejected": "Inside a uniformly charged sphere, the field scales with radius. So if you do the standard formula $E=\\frac{1}{4\\pi\\varepsilon_0}\\frac{Q r}{R^3}$, you end up around $2.16\\times10^5\\,\\mathrm{N/C}$ for ..."
+  },
+  {
+    "step": 41,
+    "batch_idx": 332,
+    "loss": 0.052978515625,
+    "loss_change": -0.162841796875,
+    "reward_diff": 11.43359375,
+    "sample_chosen": "Half-life $=2\\,\\mathrm{h}$, so $6\\,\\mathrm{h}$ is three half-lives.\\\\Each half-life halves the sample mass.\\\\$120\\times \\bigl(\\tfrac12\\bigr)^{3}=120\\div8=15\\,\\mathrm{g}.$\\\\$15\\,\\mathrm{g}$",
+    "sample_rejected": "After three half-lives, you divide $120\\,\\mathrm{g}$ by $2^3=8$, leaving $15\\,\\mathrm{g}$."
+  },
+  {
+    "step": 42,
+    "batch_idx": 338,
+    "loss": 0.158203125,
+    "loss_change": 0.10595703125,
+    "reward_diff": 5.89453125,
+    "sample_chosen": "Use the Rayleigh criterion for a circular aperture: $\\theta \\approx \\frac{1.22 \\lambda}{D}$\\\\With $\\lambda = 600\\,\\mathrm{nm}$ ($6 \\times 10^{-7}\\,\\mathrm{m}$) and $D = 1.2\\,\\mathrm{m}$\\\\$\\theta \\appr...",
+    "sample_rejected": "Resolving power: $\\theta = \\frac{1.22 \\times 600 \\times 10^{-9}}{1.2} = 6.1 \\times 10^{-7}\\,\\mathrm{rad}$."
+  },
+  {
+    "step": 42,
+    "batch_idx": 342,
+    "loss": 0.031005859375,
+    "loss_change": -0.124267578125,
+    "reward_diff": 11.703125,
+    "sample_chosen": "The capacitor\u2019s capacitance and voltage are provided.\\\\Use the relation $Q=C\\,V$.\\\\Compute: $Q=3\\,\\mathrm{F}\\times10\\,\\mathrm{V}=30\\,\\mathrm{C}$.\\\\$30\\,\\mathrm{C}$",
+    "sample_rejected": "I saw an approach where someone divided instead of multiplying. The correct procedure is to multiply the capacitance by the voltage."
+  },
+  {
+    "step": 43,
+    "batch_idx": 346,
+    "loss": 0.025634765625,
+    "loss_change": -0.114013671875,
+    "reward_diff": 12.88671875,
+    "sample_chosen": "The wave's speed is $v=10\\,\\mathrm{m/s}$ and its frequency is $f=2.5\\,\\mathrm{Hz}$.\\\\The wavelength is given by $\\lambda=\\frac{v}{f}$.\\\\Thus, $\\lambda=\\frac{10\\,\\mathrm{m/s}}{2.5\\,\\mathrm{Hz}}=4\\,\\mat...",
+    "sample_rejected": "Just compute $\\lambda=\\frac{10}{2.5}=4\\,\\mathrm{m}$. That's it!"
+  },
+  {
+    "step": 44,
+    "batch_idx": 357,
+    "loss": 0.1640625,
+    "loss_change": 0.13818359375,
+    "reward_diff": 5.91015625,
+    "sample_chosen": "Magnification $m=-\\frac{d_i}{d_o}$. For $|m|=2$, we set $\\frac{d_i}{d_o}=2$ (real, inverted).\\\\The mirror equation: $\\frac1f=\\frac1{d_o}+\\frac1{d_i}$. Then $d_i=2d_o$.\\\\$\\frac1{15}=\\frac1{d_o}+\\frac1{...",
+    "sample_rejected": "We rely on $d_i=2d_o$ (for a 2\u00d7 magnification) plus $\\frac1f=\\frac1{d_o}+\\frac1{d_i}$. Substituting $2d_o$ for $d_i$ and $f=15$ cm, we solve and get $d_o=22.5\\,\\mathrm{cm}$."
+  },
+  {
+    "step": 44,
+    "batch_idx": 358,
+    "loss": 0.041259765625,
+    "loss_change": -0.122802734375,
+    "reward_diff": 10.58984375,
+    "sample_chosen": "In parallel, $C_{\\mathrm{eq}} = C_1 + C_2$.\\\\$C_1=1\\,\\mu\\mathrm{F}$, $C_2=2\\,\\mu\\mathrm{F}$.\\\\$C_{\\mathrm{eq}}=1+2=3\\,\\mu\\mathrm{F}$.\\\\$3\\,\\mu\\mathrm{F}$",
+    "sample_rejected": "Because parallel capacitors add up, 1 \u03bcF + 2 \u03bcF = 3 \u03bcF total."
+  },
+  {
+    "step": 46,
+    "batch_idx": 368,
+    "loss": 0.017578125,
+    "loss_change": -0.103515625,
+    "reward_diff": 13.50390625,
+    "sample_chosen": "Charge accumulates with current over time.\\\\$Q = I t$.\\\\$Q = 7 \\times 2 = 14\\,\\mathrm{C}$.\\\\$14\\,\\mathrm{C}$",
+    "sample_rejected": "Charge is current times time: $7 \\times 2 = 14\\,\\mathrm{C}$."
+  },
+  {
+    "step": 46,
+    "batch_idx": 374,
+    "loss": 0.0400390625,
+    "loss_change": -0.1279296875,
+    "reward_diff": 11.015625,
+    "sample_chosen": "The box mass is $5\\,\\mathrm{kg}$, the incline is frictionless, and the vertical drop is $2\\,\\mathrm{m}$.\\\\We can use energy conservation, which leads to $v = \\sqrt{2 g h}$.\\\\$v = \\sqrt{2 \\times 9.8 \\t...",
+    "sample_rejected": "By considering the change in potential energy to kinetic energy, the speed is about $6.26\\,\\mathrm{m/s}$."
+  },
+  {
+    "step": 48,
+    "batch_idx": 388,
+    "loss": 0.01043701171875,
+    "loss_change": -0.11016845703125,
+    "reward_diff": 15.27734375,
+    "sample_chosen": "After a long time in a DC circuit, an inductor acts like a wire (no voltage drop).\\\\The steady-state current is set by the resistor alone.\\\\$I = \\frac{V}{R} = \\frac{5.0}{10} = 0.5\\,\\mathrm{A}.$\\\\The f...",
+    "sample_rejected": "Once the inductor stops resisting, it's basically just the resistor left. So with 5 volts and 10 ohms, you get half an amp\u2014nice and simple!"
+  }
+]

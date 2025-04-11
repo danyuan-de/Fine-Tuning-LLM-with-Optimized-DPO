@@ -1,0 +1,650 @@
+[
+  {
+    "step": 0,
+    "batch_idx": 0,
+    "loss": 0.69140625,
+    "loss_change": -Infinity,
+    "reward_diff": 0.0,
+    "sample_chosen": "Moment of inertia of a ring: $I=mr^{2}.$ Here $m=2\\,\\mathrm{kg}, r=0.2\\,\\mathrm{m}, \\omega=10\\,\\mathrm{rad/s}.$\\\\Rotational KE $=\\tfrac12 I\\omega^{2}.$\\\\$I=2\\times(0.2)^{2}=0.08,\\;K=0.5\\times0.08\\time...",
+    "sample_rejected": "Substituting $I=0.08\\,\\mathrm{kg\\cdot m^2}$ and $\\omega=10\\,\\mathrm{rad/s}$ into $\\tfrac12I\\omega^{2}$ gives $4\\,\\mathrm{J}$."
+  },
+  {
+    "step": 40,
+    "batch_idx": 326,
+    "loss": 0.48828125,
+    "loss_change": -0.12109375,
+    "reward_diff": 1.55078125,
+    "sample_chosen": "Radius $r=0.5\\,\\mathrm{m}$, tangential force $F=30\\,\\mathrm{N}$.\\\\Torque $\\tau= r F$ if perpendicular.\\\\$\\tau= 0.5 \\times 30=15\\,\\mathrm{N\\cdot m}$\\\\$15\\,\\mathrm{N\\cdot m}$",
+    "sample_rejected": "Torque is the product of the radius and the force, giving $15\\,\\mathrm{N\\cdot m}$."
+  },
+  {
+    "step": 41,
+    "batch_idx": 332,
+    "loss": 0.58984375,
+    "loss_change": 0.103515625,
+    "reward_diff": 0.73046875,
+    "sample_chosen": "Conservation of momentum gives the combined speed right after impact. Then we use $\\tfrac12 (m_{total})v^2=(m_{total}) g h$.\\\\The bullet mass is $0.01\\,\\mathrm{kg}$, block mass $5\\,\\mathrm{kg}$. Incom...",
+    "sample_rejected": "First we do momentum: $(0.01\\times400)=4\\,\\mathrm{kg\\cdot m/s}$ total. The combined mass is $5.01\\,\\mathrm{kg}$, so velocity is about $0.798\\,\\mathrm{m/s}$. Then potential energy equals kinetic energy..."
+  },
+  {
+    "step": 45,
+    "batch_idx": 361,
+    "loss": 0.484375,
+    "loss_change": -0.12109375,
+    "reward_diff": 1.62109375,
+    "sample_chosen": "Current through a resistor causes a voltage drop.\\\\$V = I R$.\\\\$V = 4 \\times 12 = 48\\,\\mathrm{V}$.\\\\$48\\,\\mathrm{V}$",
+    "sample_rejected": "Voltage drop is $4 \\times 12 = 48\\,\\mathrm{V}$."
+  },
+  {
+    "step": 45,
+    "batch_idx": 362,
+    "loss": 0.6171875,
+    "loss_change": 0.1328125,
+    "reward_diff": 0.546875,
+    "sample_chosen": "The maximum efficiency is given by the Carnot efficiency $\\eta_{\\text{max}} = 1 - \\frac{T_c}{T_h}$.\\\\Substituting $T_h = 600\\,\\mathrm{K}$ and $T_c = 300\\,\\mathrm{K}$ gives $\\eta_{\\text{max}} = 0.5$.\\\\...",
+    "sample_rejected": "Using the Carnot efficiency, $\\eta = 1 - \\frac{300}{600} = 0.5$, you multiply this by the heat input of $800\\,\\mathrm{J}$ to get $400\\,\\mathrm{J}$ as the maximum work. It's a classic thermodynamics pr..."
+  },
+  {
+    "step": 46,
+    "batch_idx": 371,
+    "loss": 0.60546875,
+    "loss_change": 0.109375,
+    "reward_diff": 0.61328125,
+    "sample_chosen": "Compute relativistic kinetic energy using $KE = (\\gamma - 1) m c^{2}$\\\\For $v = 0.6c$, the Lorentz factor $\\gamma$ is approximately $1.25$\\\\$KE = (1.25 - 1) \\times 1000\\,\\mathrm{kg} \\times (3 \\times 1...",
+    "sample_rejected": "The relativistic kinetic energy is given by $K.E. = (\\gamma - 1) m c^{2}$. Substituting $\\gamma = 1.25$ and $m = 1000\\,\\mathrm{kg}$: $K.E. \\approx 2.44 \\times 10^{12}\\,\\mathrm{J}$."
+  },
+  {
+    "step": 46,
+    "batch_idx": 372,
+    "loss": 0.46875,
+    "loss_change": -0.13671875,
+    "reward_diff": 1.72265625,
+    "sample_chosen": "Wave speed $v=12\\,\\mathrm{m/s}$, wavelength $\\lambda=3\\,\\mathrm{m}$.\\\\$f=\\tfrac{v}{\\lambda}.$\\\\$f=\\frac{12}{3}=4\\,\\mathrm{Hz}$\\\\$4\\,\\mathrm{Hz}$",
+    "sample_rejected": "Dividing 12 m/s by 3 m gives 4 Hz."
+  },
+  {
+    "step": 46,
+    "batch_idx": 373,
+    "loss": 0.5703125,
+    "loss_change": 0.1015625,
+    "reward_diff": 0.88671875,
+    "sample_chosen": "The de Broglie relation is $\\lambda=\\frac{h}{p}$, so $p=\\frac{h}{\\lambda}$.\\\\Planck\u2019s constant $h=6.626\\times10^{-34}\\,\\mathrm{J\\cdot s}$. We plug in $\\lambda=1.0\\times10^{-10}\\,\\mathrm{m}$.\\\\$p=\\frac...",
+    "sample_rejected": "All you do is $p=h/\\lambda$. So that\u2019s $(6.626\\times10^{-34})/(1.0\\times10^{-10})=6.626\\times10^{-24}\\,\\mathrm{kg\\cdot m/s}$. That\u2019s it!"
+  },
+  {
+    "step": 47,
+    "batch_idx": 380,
+    "loss": 0.49609375,
+    "loss_change": -0.12109375,
+    "reward_diff": 1.4921875,
+    "sample_chosen": "$\\Delta V = +2 - (-2) = 4\\,\\mathrm{V}$.\\\\$W = q\\,\\Delta V = 2.5 \\times 4 = 10\\,\\mathrm{J}$.\\\\It's a positive $10\\,\\mathrm{J}$ of work.\\\\$10\\,\\mathrm{J}$",
+    "sample_rejected": "Multiply $2.5\\,\\mathrm{C}$ by $4\\,\\mathrm{V}$ to get $10\\,\\mathrm{J}$. Easy stuff."
+  },
+  {
+    "step": 48,
+    "batch_idx": 384,
+    "loss": 0.4921875,
+    "loss_change": -0.10546875,
+    "reward_diff": 1.54296875,
+    "sample_chosen": "The alpha particle gains kinetic energy from the potential difference and then moves in a magnetic field.\\\\First, calculate $KE=qV$, then find $v=\\sqrt{\\frac{2KE}{m}}$, and use $r=\\frac{mv}{qB}$.\\\\$KE...",
+    "sample_rejected": "A common pitfall is a miscalculation of the velocity or a missing factor in the radius formula, which might lead to a result like $0.9\\,\\mathrm{cm}$. The proper computation gives a radius of about $1...."
+  },
+  {
+    "step": 49,
+    "batch_idx": 394,
+    "loss": 0.4296875,
+    "loss_change": -0.125,
+    "reward_diff": 2.138671875,
+    "sample_chosen": "The photon energy is given in electron volts.\\\\Convert the energy by multiplying by the conversion factor: $1\\,\\mathrm{eV}=1.602\\times10^{-19}\\,\\mathrm{J}$.\\\\Calculate: $E=2.0\\,\\mathrm{eV}\\times1.602\\...",
+    "sample_rejected": "I ended up dividing by the conversion factor instead of multiplying, which completely reverses the conversion. Always multiply the electron volt value by $1.602\\times10^{-19}$ to get joules."
+  },
+  {
+    "step": 49,
+    "batch_idx": 395,
+    "loss": 0.578125,
+    "loss_change": 0.1484375,
+    "reward_diff": 0.8125,
+    "sample_chosen": "The resistors are connected in series with a $10\\,\\mathrm{V}$ battery.\\\\In series, the total resistance is the sum: $R_{total}=6+3+2=11\\,\\Omega$.\\\\Then, using Ohm's law, $I=\\frac{V}{R}=\\frac{10}{11}\\a...",
+    "sample_rejected": "A common error is to treat the resistors as if they were in parallel, which would drastically change the total resistance and current. In series, resistances simply add up."
+  },
+  {
+    "step": 49,
+    "batch_idx": 396,
+    "loss": 0.47265625,
+    "loss_change": -0.10546875,
+    "reward_diff": 1.70703125,
+    "sample_chosen": "30 days is three half-lives (each 10 days).\\\\After each half-life, the mass halves.\\\\$80 \\to 40 \\to 20 \\to 10.$\\\\10 mg remains after 30 days.",
+    "sample_rejected": "Every 10 days, it halves. So after 30 days, you do that halving three times. 80 \u2192 40 \u2192 20 \u2192 10 mg. No big surprise."
+  },
+  {
+    "step": 49,
+    "batch_idx": 397,
+    "loss": 0.578125,
+    "loss_change": 0.10546875,
+    "reward_diff": 0.85546875,
+    "sample_chosen": "The collision is elastic and head-on.\\\\Use the formula $v'_1=\\frac{m_1-m_2}{m_1+m_2}v_1$ for elastic collisions.\\\\Compute: $v'_1=\\frac{2-4}{2+4}\\times3=\\frac{-2}{6}\\times3=-1\\,\\mathrm{m/s}$.\\\\$-1\\,\\ma...",
+    "sample_rejected": "An alternative method that treats the collision as inelastic yields a positive speed. In an elastic collision, the lighter object reverses direction with a speed of about $1\\,\\mathrm{m/s}$."
+  },
+  {
+    "step": 49,
+    "batch_idx": 398,
+    "loss": 0.47265625,
+    "loss_change": -0.10546875,
+    "reward_diff": 1.689453125,
+    "sample_chosen": "For springs in parallel, the effective spring constant is the sum of the individual constants.\\\\Thus, $k_{eff}=k_1+k_2=200+300=500\\,\\mathrm{N/m}$ and the angular frequency is $\\omega=\\sqrt{\\frac{k_{ef...",
+    "sample_rejected": "Sometimes one might mistakenly treat the springs as if they were in series, which would drastically reduce the effective spring constant. In parallel, the constants add directly."
+  },
+  {
+    "step": 49,
+    "batch_idx": 399,
+    "loss": 0.609375,
+    "loss_change": 0.13671875,
+    "reward_diff": 0.56640625,
+    "sample_chosen": "Parallel springs add constants: $k_{eff}=k_1+k_2=400\\,\\mathrm{N/m}$.\\\\Frequency $f=\\frac{1}{2\\pi}\\sqrt{\\frac{k_{eff}}{m}}$.\\\\So $f=\\frac{1}{2\\pi}\\sqrt{\\frac{400}{2}}=\\frac{1}{2\\pi}\\sqrt{200}\\approx2.2...",
+    "sample_rejected": "When you put two $200\\,\\mathrm{N/m}$ springs in parallel, total spring constant is $400\\,\\mathrm{N/m}$. The formula for frequency is $\\frac{1}{2\\pi}\\sqrt{k/m}$. That\u2019s $\\frac{1}{2\\pi}\\sqrt{400/2}\\appr..."
+  },
+  {
+    "step": 51,
+    "batch_idx": 4,
+    "loss": 0.490234375,
+    "loss_change": -0.138671875,
+    "reward_diff": 1.52734375,
+    "sample_chosen": "The total charge transferred is given by $Q=It$.\\\\With $I=0.50\\,\\mathrm{A}$ and $t=4.0\\,\\mathrm{s}$, the calculation is straightforward.\\\\Thus, $Q=0.50\\times4.0=2.0\\,\\mathrm{C}$.\\\\The charge passed th...",
+    "sample_rejected": "It\u2019s a common mistake to try to involve the battery voltage in the calculation, but since $Q=It$, the correct charge is $2.0\\,\\mathrm{C}$."
+  },
+  {
+    "step": 56,
+    "batch_idx": 45,
+    "loss": 0.59765625,
+    "loss_change": 0.1328125,
+    "reward_diff": 0.66796875,
+    "sample_chosen": "For a gravitational orbit, $T^2 \\propto r^3$.\\\\Doubling $r$ multiplies $r^3$ by 8, so $T^2$ by 8.\\\\$T$ becomes $\\sqrt{8} \\approx 2.83.$\\\\The period grows by a factor of about 2.83.",
+    "sample_rejected": "Yeah, you double the orbit radius, and the period goes up by about 2.83. It's the $r^3$ relationship, so it's not just a simple doubling\u2014it's a bit more."
+  },
+  {
+    "step": 58,
+    "batch_idx": 57,
+    "loss": 0.6171875,
+    "loss_change": 0.119140625,
+    "reward_diff": 0.53515625,
+    "sample_chosen": "The pendulum has a length of $l=1\\,\\text{m}$ and is released from an initial angle of $\\theta=10^\\circ$ (approximately $0.1745\\,\\text{rad}$).\\\\At its highest point, the pendulum's potential energy, gi...",
+    "sample_rejected": "So, you start with $mgl(1-\\cos\\theta)=\\frac{1}{2}mv^2$, cancel the mass, and solve for $v$. Using $g=9.8\\,\\text{m/s}^2$, $l=1\\,\\text{m}$, and $\\cos(10^\\circ)\\approx0.9848$, you end up with $v\\approx0...."
+  },
+  {
+    "step": 58,
+    "batch_idx": 58,
+    "loss": 0.5078125,
+    "loss_change": -0.109375,
+    "reward_diff": 1.365234375,
+    "sample_chosen": "The block mass is $2\\,\\mathrm{kg}$, net force is $10\\,\\mathrm{N}$ applied for $2\\,\\mathrm{s}$.\\\\Acceleration $a = \\frac{F}{m} = \\frac{10}{2} = 5\\,\\mathrm{m/s^2}$. Over $2\\,\\mathrm{s}$, $\\Delta v = 5 \\...",
+    "sample_rejected": "You push $10\\,\\mathrm{N}$ on a $2\\,\\mathrm{kg}$ block for $2\\,\\mathrm{s}$, so the speed goes up by $10\\,\\mathrm{m/s}$. Easy!"
+  },
+  {
+    "step": 65,
+    "batch_idx": 114,
+    "loss": 0.58203125,
+    "loss_change": 0.140625,
+    "reward_diff": 0.8125,
+    "sample_chosen": "Torque is $\\tau=rF\\sin\\phi$, and the force is perpendicular ($\\phi=90^{\\circ}$), so $\\sin\\phi=1$.\\\\Distance is $0.50\\,\\mathrm{m}$, force is $10\\,\\mathrm{N}$. The torque is $rF=0.50\\times10$.\\\\$\\tau=5....",
+    "sample_rejected": "You just multiply $10\\,\\mathrm{N}$ by $0.50\\,\\mathrm{m}$ because it\u2019s a right angle. So that\u2019s $5.0\\,\\mathrm{N\\cdot m}$. Short and sweet!"
+  },
+  {
+    "step": 66,
+    "batch_idx": 124,
+    "loss": 0.44921875,
+    "loss_change": -0.12890625,
+    "reward_diff": 1.919921875,
+    "sample_chosen": "Tangential acceleration is $a_t=\\alpha r$.\\\\$\\alpha=2\\,\\mathrm{rad/s^2}$ and $r=0.3\\,\\mathrm{m}$.\\\\$a_t=2\\times0.3=0.6\\,\\mathrm{m/s^2}$.\\\\The tangential acceleration is $0.6\\,\\mathrm{m/s^2}$.",
+    "sample_rejected": "Just multiply $2\\,\\mathrm{rad/s^2}$ by $0.3\\,\\mathrm{m}$ to get $0.6\\,\\mathrm{m/s^2}$. That\u2019s it!"
+  },
+  {
+    "step": 69,
+    "batch_idx": 144,
+    "loss": 0.421875,
+    "loss_change": -0.1328125,
+    "reward_diff": 2.21484375,
+    "sample_chosen": "Mass $m=0.2\\,\\mathrm{kg}$, speed $v=6\\,\\mathrm{m/s}$.\\\\Momentum $p=m v$.\\\\$p=0.2\\times 6=1.2\\,\\mathrm{kg\\cdot m/s}$\\\\$1.2\\,\\mathrm{kg\\cdot m/s}$",
+    "sample_rejected": "Multiplying $0.2\\,\\mathrm{kg}$ by $6\\,\\mathrm{m/s}$ gives $1.2\\,\\mathrm{kg\\cdot m/s}$."
+  },
+  {
+    "step": 69,
+    "batch_idx": 147,
+    "loss": 0.41015625,
+    "loss_change": -0.1328125,
+    "reward_diff": 2.28125,
+    "sample_chosen": "No horizontal force, so the box continues at $5\\,\\mathrm{m/s}$ for $4\\,\\mathrm{s}$.\\\\Displacement $= v\\times t$ if velocity is constant.\\\\$\\Delta x=5\\times4=20\\,\\mathrm{m}.$\\\\$20\\,\\mathrm{m}$",
+    "sample_rejected": "With no horizontal acceleration, the box keeps its $5\\,\\mathrm{m/s}$ speed for $4\\,\\mathrm{s}$, traveling $20\\,\\mathrm{m}$."
+  },
+  {
+    "step": 69,
+    "batch_idx": 148,
+    "loss": 0.52734375,
+    "loss_change": 0.1171875,
+    "reward_diff": 1.23828125,
+    "sample_chosen": "The heat released during a phase change is calculated by $Q=mL_v$.\\\\With $m=0.10\\,\\mathrm{kg}$ and $L_v=2.26\\times10^6\\,\\mathrm{J/kg}$, the multiplication is straightforward.\\\\Thus, $Q=0.10\\times2.26\\...",
+    "sample_rejected": "An error some might make is to invert the latent heat value in the formula, but correctly using $Q=mL_v$ gives $2.26\\times10^5\\,\\mathrm{J}$."
+  },
+  {
+    "step": 70,
+    "batch_idx": 154,
+    "loss": 0.546875,
+    "loss_change": 0.11328125,
+    "reward_diff": 1.0625,
+    "sample_chosen": "Max KE in eV is $e \\times V_{\\text{stop}}$ when $e=1\\,\\mathrm{eV}$ per volt.\\\\A stopping potential of $1.5\\,\\mathrm{V}$ means $1.5\\,\\mathrm{eV}$ of electron energy.\\\\$K_{\\max} = 1.5\\,\\mathrm{eV}.$\\\\Th...",
+    "sample_rejected": "Honestly, it's super straightforward: if the stopping potential is 1.5 volts, that directly means the electrons have 1.5 eV of kinetic energy. Easy-peasy."
+  },
+  {
+    "step": 71,
+    "batch_idx": 165,
+    "loss": 0.578125,
+    "loss_change": 0.10546875,
+    "reward_diff": 0.796875,
+    "sample_chosen": "Calculate mass defect and convert to energy using $E = \\Delta m c^2$\\\\Sum individual nucleon masses and subtract the actual He-4 mass\\\\Total nucleon mass: $2(1.0073\\,\\mathrm{u}) + 2(1.0087\\,\\mathrm{u}...",
+    "sample_rejected": "The binding energy of helium-4 is calculated by finding the mass defect. Total nucleon mass: $2p + 2n = 4.0320\\,\\mathrm{u}$. Subtracting the actual mass $4.0026\\,\\mathrm{u}$ gives $\\Delta m = 0.0294\\,..."
+  },
+  {
+    "step": 71,
+    "batch_idx": 167,
+    "loss": 0.4453125,
+    "loss_change": -0.1015625,
+    "reward_diff": 1.927734375,
+    "sample_chosen": "$I = m r^2 = 2 \\times (0.15)^2 = 0.045\\,\\mathrm{kg\\cdot m^2}$.\\\\$K = \\frac{1}{2} \\times 0.045 \\times (2.6)^2$.\\\\Since $(2.6)^2$ is $6.76$, then $0.5 \\times 0.045 \\times 6.76 = 0.1521\\,\\mathrm{J}$.\\\\$0...",
+    "sample_rejected": "Half times $0.045$ times $2.6^2$ is about $0.1521\\,\\mathrm{J}$. That does it."
+  },
+  {
+    "step": 72,
+    "batch_idx": 169,
+    "loss": 0.5390625,
+    "loss_change": 0.15234375,
+    "reward_diff": 1.12890625,
+    "sample_chosen": "All the gravitational potential energy $mgh$ converts to kinetic energy if there's no air resistance.\\\\So $K = mgh$ with $m=2.0\\,\\mathrm{kg}$, $g=9.8\\,\\mathrm{m/s^2}$, and $h=100\\,\\mathrm{m}.$\\\\$K= (2...",
+    "sample_rejected": "Honestly, it's just $mgh$ if we ignore air resistance: $(2.0)(9.8)(100)=1960\\,\\mathrm{J}$. That's the KE at the bottom!"
+  },
+  {
+    "step": 73,
+    "batch_idx": 177,
+    "loss": 0.419921875,
+    "loss_change": -0.126953125,
+    "reward_diff": 2.171875,
+    "sample_chosen": "The block starts from rest and experiences a constant net force.\\\\Use $a=\\frac{F}{m}$ to find acceleration, then $v=v_0+a\\,t$.\\\\$a=\\frac{12}{3}=4\\,\\mathrm{m/s^2}$, so $v=0+4\\times3=12\\,\\mathrm{m/s}$.\\...",
+    "sample_rejected": "A casual error might be to compute $v=F/t$ without including the mass, which doesn\u2019t reflect Newton's second law."
+  },
+  {
+    "step": 73,
+    "batch_idx": 178,
+    "loss": 0.5625,
+    "loss_change": 0.142578125,
+    "reward_diff": 0.931640625,
+    "sample_chosen": "Moment of inertia of a rod about one end is $I=\\frac13ML^2$.\\\\So $I=\\frac13\\times2\\times(1.2)^2=0.96\\,\\mathrm{kg\\cdot m^2}$.\\\\Torque $\\tau=FL=5\\times1.2=6\\,\\mathrm{N\\cdot m}$. Then $\\alpha=\\frac{\\tau}...",
+    "sample_rejected": "Compute $I=\\tfrac13 M L^2=\\tfrac13\\times2\\times(1.2)^2=0.96$. The torque is $5\\times1.2=6$. Then $\\alpha=6/0.96\\approx6.25\\,\\mathrm{rad/s^2}$. That\u2019s it!"
+  },
+  {
+    "step": 73,
+    "batch_idx": 179,
+    "loss": 0.443359375,
+    "loss_change": -0.119140625,
+    "reward_diff": 1.9453125,
+    "sample_chosen": "Parallel resistance formula: $\\tfrac{1}{R_{\\text{eq}}} = \\tfrac{1}{R_1} + \\tfrac{1}{R_2}$.\\\\With $6\\,\\Omega$ and $12\\,\\Omega$, the combined parallel result is less than the smaller resistor.\\\\$\\frac{1...",
+    "sample_rejected": "For parallel, just do that $1/(R_{\\text{eq}})$ sum. We get $4\\,\\Omega$. Short and sweet!"
+  },
+  {
+    "step": 73,
+    "batch_idx": 181,
+    "loss": 0.51953125,
+    "loss_change": 0.10546875,
+    "reward_diff": 1.287109375,
+    "sample_chosen": "Snell\u2019s law says $n_1\\sin\\theta_1 = n_2\\sin\\theta_2$.\\\\With $n_1=1.0$, $n_2=1.5$, and $\\theta_1=30^{\\circ}$, we solve for $\\theta_2$.\\\\$\\sin\\theta_2 = \\frac{1.0\\times\\sin(30^{\\circ})}{1.5} = \\frac{0.5...",
+    "sample_rejected": "We apply Snell\u2019s law with $n_1=1.0$ and $n_2=1.5$. The math yields around $19.5^{\\circ}$ as the refracted angle."
+  },
+  {
+    "step": 74,
+    "batch_idx": 188,
+    "loss": 0.59375,
+    "loss_change": 0.14453125,
+    "reward_diff": 0.71875,
+    "sample_chosen": "The first law expresses conservation of energy in a system\\\\It is expressed as $\\Delta U = Q - W$, where $\\Delta U$ is the change in internal energy\\\\For instance, compressing a gas in a piston increa...",
+    "sample_rejected": "The first law of thermodynamics states that the change in the internal energy of a system is equal to the heat added to the system minus the work done by the system, $\\Delta U = Q - W$. An example is ..."
+  },
+  {
+    "step": 76,
+    "batch_idx": 201,
+    "loss": 0.3828125,
+    "loss_change": -0.17578125,
+    "reward_diff": 2.6484375,
+    "sample_chosen": "The time between crests is the period $T=0.25\\,\\mathrm{s}$.\\\\Frequency $f=\\tfrac{1}{T}$.\\\\$f=\\tfrac{1}{0.25}=4\\,\\mathrm{Hz}$.\\\\$4\\,\\mathrm{Hz}$",
+    "sample_rejected": "Since the crest repeats every 0.25 s, the frequency is 4 Hz."
+  },
+  {
+    "step": 76,
+    "batch_idx": 202,
+    "loss": 0.484375,
+    "loss_change": 0.1015625,
+    "reward_diff": 1.5859375,
+    "sample_chosen": "The block experiences a constant deceleration due to the opposing force.\\\\Determine acceleration using $a=\\frac{F}{m}$ and then use $v=v_0+a\\,t$.\\\\$a=\\frac{-6}{3}=-2\\,\\mathrm{m/s^2}$, so $\\Delta v=-2\\...",
+    "sample_rejected": "A casual miscalculation might ignore the mass and simply compute $F/t$, which doesn't give the right answer. Always calculate acceleration first."
+  },
+  {
+    "step": 76,
+    "batch_idx": 203,
+    "loss": 0.3671875,
+    "loss_change": -0.1171875,
+    "reward_diff": 2.70703125,
+    "sample_chosen": "In parallel, $C_{\\mathrm{eq}} = C_1 + C_2$.\\\\$C_1=1\\,\\mu\\mathrm{F}$, $C_2=2\\,\\mu\\mathrm{F}$.\\\\$C_{\\mathrm{eq}}=1+2=3\\,\\mu\\mathrm{F}$.\\\\$3\\,\\mu\\mathrm{F}$",
+    "sample_rejected": "Because parallel capacitors add up, 1 \u03bcF + 2 \u03bcF = 3 \u03bcF total."
+  },
+  {
+    "step": 76,
+    "batch_idx": 204,
+    "loss": 0.51171875,
+    "loss_change": 0.14453125,
+    "reward_diff": 1.34765625,
+    "sample_chosen": "A force accelerates a mass from rest.\\\\$a = \\frac{F}{m}$, $v = at$.\\\\$a = \\frac{6}{3} = 2\\,\\mathrm{m/s^2}$. $v = 2 \\times 4 = 8\\,\\mathrm{m/s}$.\\\\$8\\,\\mathrm{m/s}$",
+    "sample_rejected": "Acceleration is $6 / 3 = 2\\,\\mathrm{m/s^2}$. After 4 seconds, speed is $2 \\times 4 = 8\\,\\mathrm{m/s}$."
+  },
+  {
+    "step": 78,
+    "batch_idx": 222,
+    "loss": 0.41796875,
+    "loss_change": -0.12109375,
+    "reward_diff": 2.20703125,
+    "sample_chosen": "Adiabatic expansion means no heat exchange, but volume increases.\\\\The gas does work at the expense of internal energy.\\\\Hence its temperature decreases.\\\\Temperature decreases",
+    "sample_rejected": "During an adiabatic expansion, no heat enters, so the gas cools as it expands and does work."
+  },
+  {
+    "step": 78,
+    "batch_idx": 223,
+    "loss": 0.55859375,
+    "loss_change": 0.140625,
+    "reward_diff": 0.970703125,
+    "sample_chosen": "Photon energy is $E=\\frac{hc}{\\lambda}$.\\\\$\\lambda=0.1\\,\\mathrm{nm}=0.1\\times10^{-9}\\,\\mathrm{m}$.\\\\$E=\\frac{6.63\\times10^{-34}\\times3\\times10^8}{0.1\\times10^{-9}}=1.989\\times10^{-16}\\,\\mathrm{J}\\appr...",
+    "sample_rejected": "Use $E=hc/\\lambda$. With $h=6.63\\times10^{-34}$, $c=3\\times10^8$, and $\\lambda=0.1\\times10^{-9}$, you\u2019ll end up around $1.99\\times10^{-16}\\,\\mathrm{J}$, which is about $12.4\\,\\mathrm{keV}$. Cool!"
+  },
+  {
+    "step": 80,
+    "batch_idx": 237,
+    "loss": 0.5546875,
+    "loss_change": 0.109375,
+    "reward_diff": 1.04296875,
+    "sample_chosen": "The object has a mass $m=5\\,\\mathrm{kg}$, a net force $F=10\\,\\mathrm{N}$, and is acted upon for $t=4\\,\\mathrm{s}$ starting from rest.\\\\Newton's second law gives $a=\\frac{F}{m}$ and with $v=at$ the fin...",
+    "sample_rejected": "Avoid ignoring the mass; multiplying force by time alone would give $40\\,\\mathrm{m/s}$. The correct process yields $8\\,\\mathrm{m/s}$."
+  },
+  {
+    "step": 81,
+    "batch_idx": 244,
+    "loss": 0.54296875,
+    "loss_change": 0.103515625,
+    "reward_diff": 1.0859375,
+    "sample_chosen": "We have mass $m = 2\\,\\mathrm{kg}$ and downward acceleration $3\\,\\mathrm{m/s^2}$.\\\\Apparent weight $= m(g - a)$ when the elevator accelerates downward.\\\\$\\text{Reading} = 2(9.8 - 3) = 2 \\times 6.8 = 13...",
+    "sample_rejected": "One can also view it as the net force: $mg - F_{\\text{scale}} = m a$. Solving for the scale reading yields $2\\times 9.8 - (2\\times 3)$, which is $19.6\\,\\mathrm{N}$ minus $6\\,\\mathrm{N}$, giving $13.6\\..."
+  },
+  {
+    "step": 83,
+    "batch_idx": 262,
+    "loss": 0.412109375,
+    "loss_change": -0.142578125,
+    "reward_diff": 2.26953125,
+    "sample_chosen": "Wave energy relates to amplitude.\\\\Energy $\\propto A^2$, doubling $A$ gives $2^2$.\\\\Factor = $2^2 = 4$.\\\\$4$ times",
+    "sample_rejected": "Energy scales with amplitude squared, so doubling it means $2^2 = 4$ times more energy."
+  },
+  {
+    "step": 84,
+    "batch_idx": 266,
+    "loss": 0.3828125,
+    "loss_change": -0.13671875,
+    "reward_diff": 2.55078125,
+    "sample_chosen": "Angular speed $\\omega=2\\,\\mathrm{rad/s}$, radius $r=0.5\\,\\mathrm{m}$.\\\\Tangential speed $v=\\omega r$.\\\\$v=2\\times0.5=1\\,\\mathrm{m/s}$.\\\\$1\\,\\mathrm{m/s}$",
+    "sample_rejected": "We multiply the angular speed (2 rad/s) by the rod\u2019s length (0.5 m), giving 1 m/s."
+  },
+  {
+    "step": 84,
+    "batch_idx": 267,
+    "loss": 0.5234375,
+    "loss_change": 0.140625,
+    "reward_diff": 1.33203125,
+    "sample_chosen": "Snell's law, $n_1\\sin\\theta_1 = n_2\\sin\\theta_2$, is used to find the refraction angle.\\\\Substituting $n_1 = 1.33$, $\\theta_1 = 45^\\circ$, and $n_2 = 1.50$ gives $\\sin\\theta_2 \\approx \\frac{1.33\\times...",
+    "sample_rejected": "Okay, so you start with Snell's law: $n_1\\sin\\theta_1 = n_2\\sin\\theta_2$. When you plug in $1.33$, $45^\\circ$ (where $\\sin45^\\circ \\approx 0.7071$), and $1.50$, you end up with $\\sin\\theta_2 \\approx 0..."
+  },
+  {
+    "step": 84,
+    "batch_idx": 268,
+    "loss": 0.38671875,
+    "loss_change": -0.13671875,
+    "reward_diff": 2.521484375,
+    "sample_chosen": "Torque causes angular acceleration.\\\\$\\alpha = \\frac{\\tau}{I}$.\\\\$\\alpha = \\frac{10}{2} = 5\\,\\mathrm{rad/s^2}$.\\\\$5\\,\\mathrm{rad/s^2}$",
+    "sample_rejected": "Angular acceleration is torque over inertia: $10 / 2 = 5\\,\\mathrm{rad/s^2}$."
+  },
+  {
+    "step": 85,
+    "batch_idx": 275,
+    "loss": 0.37890625,
+    "loss_change": -0.111328125,
+    "reward_diff": 2.71875,
+    "sample_chosen": "For a uniform rod about its midpoint, $I=\\tfrac{1}{12} M L^{2}$.\\\\$M=5\\,\\mathrm{kg}, L=2\\,\\mathrm{m}$.\\\\$I=\\frac{1}{12}\\times5\\times(2)^{2}=\\frac{20}{12}=1.67\\,\\mathrm{kg\\cdot m^2}$\\\\$1.67\\,\\mathrm{kg...",
+    "sample_rejected": "Using the formula $\\tfrac{1}{12}ML^{2}$ for a rod rotating about its center, we get $\\tfrac{20}{12}=1.67\\,\\mathrm{kg\\cdot m^2}$."
+  },
+  {
+    "step": 85,
+    "batch_idx": 277,
+    "loss": 0.4765625,
+    "loss_change": 0.12890625,
+    "reward_diff": 1.701171875,
+    "sample_chosen": "A resistor of $10\\,\\Omega$ and a $5\\,\\mathrm{V}$ drop.\\\\Use $P = \\frac{V^{2}}{R}$.\\\\$P = \\frac{5^{2}}{10} = 2.5\\,\\mathrm{W}$.\\\\$2.5\\,\\mathrm{W}$",
+    "sample_rejected": "Using $P = \\frac{V^{2}}{R}$ with 5 V across 10 \u03a9 gives 2.5 W of power dissipation."
+  },
+  {
+    "step": 86,
+    "batch_idx": 284,
+    "loss": 0.34375,
+    "loss_change": -0.171875,
+    "reward_diff": 2.9765625,
+    "sample_chosen": "Wave properties are interconnected.\\\\$\\lambda = \\frac{v}{f}$.\\\\$\\lambda = \\frac{12}{4} = 3\\,\\mathrm{m}$.\\\\$3\\,\\mathrm{m}$",
+    "sample_rejected": "Wavelength is speed over frequency: $12 / 4 = 3\\,\\mathrm{m}$."
+  },
+  {
+    "step": 86,
+    "batch_idx": 285,
+    "loss": 0.48046875,
+    "loss_change": 0.13671875,
+    "reward_diff": 1.625,
+    "sample_chosen": "Mass $=0.004\\,\\mathrm{kg}$, speed $=300\\,\\mathrm{m/s}$.\\\\$KE=\\tfrac12mv^2$ is converted to thermal energy.\\\\$=0.5\\times0.004\\times(300)^2=0.5\\times0.004\\times90000=180\\,\\mathrm{J}$.\\\\$180\\,\\mathrm{J}$",
+    "sample_rejected": "The bullet's kinetic energy is $\\tfrac12(0.004\\,\\mathrm{kg})(300\\,\\mathrm{m/s})^2=180\\,\\mathrm{J}$. That energy becomes heat."
+  },
+  {
+    "step": 87,
+    "batch_idx": 290,
+    "loss": 0.337890625,
+    "loss_change": -0.212890625,
+    "reward_diff": 3.1484375,
+    "sample_chosen": "Current $5\\,\\mathrm{A}$, duration $6\\,\\mathrm{s}$.\\\\$Q = I t = 5 \\times 6 = 30\\,\\mathrm{C}$.\\\\We multiply current by time for total charge.\\\\$30\\,\\mathrm{C}$",
+    "sample_rejected": "Multiply $5\\,\\mathrm{A}$ by $6\\,\\mathrm{s}$ to yield $30\\,\\mathrm{C}$. Easy going!"
+  },
+  {
+    "step": 88,
+    "batch_idx": 302,
+    "loss": 0.5078125,
+    "loss_change": 0.11328125,
+    "reward_diff": 1.38671875,
+    "sample_chosen": "Apply the mirror formula $\\frac{1}{f} = \\frac{1}{u} + \\frac{1}{v}$ and use magnification $m = -\\frac{v}{u}$\\\\For a real image that is twice the size ($|m| = 2$), set $v = 2u$ (taking absolute values) ...",
+    "sample_rejected": "To produce a real image twice the size, solve the mirror equation: $\\frac{1}{10} = \\frac{1}{u} + \\frac{1}{2u} = \\frac{3}{2u} \\implies u = 15\\,\\mathrm{cm}$. The object must be placed $15\\,\\mathrm{cm}$ ..."
+  },
+  {
+    "step": 89,
+    "batch_idx": 305,
+    "loss": 0.3984375,
+    "loss_change": -0.1171875,
+    "reward_diff": 2.40234375,
+    "sample_chosen": "Isothermal implies \\(P_1 V_1 = P_2 V_2.\\)\\\\If volume halves, pressure doubles.\\\\\\(V_2=\\tfrac12 V_1\\implies P_2=2P_1=2.0\\,\\mathrm{atm}.\\)\\\\$2.0\\,\\mathrm{atm}$",
+    "sample_rejected": "At constant temperature, halving the volume doubles the pressure, so you end up with 2.0 atm."
+  },
+  {
+    "step": 89,
+    "batch_idx": 306,
+    "loss": 0.5234375,
+    "loss_change": 0.125,
+    "reward_diff": 1.2578125,
+    "sample_chosen": "From energy conservation or $v^2=2gh$, the speed after falling height $2.0\\,\\mathrm{m}$ is $\\sqrt{2gh}$.\\\\Here $g=9.8\\,\\mathrm{m/s^2}$, $h=2.0\\,\\mathrm{m}.$\\\\$v=\\sqrt{2(9.8)(2.0)}=\\sqrt{39.2}\\approx6....",
+    "sample_rejected": "You can do $v=\\sqrt{2gh}=\\sqrt{2\\times9.8\\times2}=6.26\\,\\mathrm{m/s}$. That\u2019s how fast it\u2019s going right before it lands."
+  },
+  {
+    "step": 89,
+    "batch_idx": 307,
+    "loss": 0.421875,
+    "loss_change": -0.1015625,
+    "reward_diff": 2.2421875,
+    "sample_chosen": "Parallel combo: $\\tfrac{1}{R_{eq}}=\\tfrac{1}{R_1}+\\tfrac{1}{R_2}$.\\\\$\\tfrac{1}{8}+\\tfrac{1}{4}=\\tfrac{3}{8}$ so $R_{eq}=\\tfrac{8}{3}\\,\\mathrm{\\Omega}\\approx2.67.$\\\\$I_{\\text{total}}=\\tfrac{12\\,\\mathrm...",
+    "sample_rejected": "For parallel resistors of $8\\,\\mathrm{\\Omega}$ and $4\\,\\mathrm{\\Omega}$, that\u2019s an equivalent of $2.67\\,\\mathrm{\\Omega}$. So a $12\\,\\mathrm{V}$ battery drives about $4.49\\,\\mathrm{A}$ in total."
+  },
+  {
+    "step": 89,
+    "batch_idx": 308,
+    "loss": 0.52734375,
+    "loss_change": 0.10546875,
+    "reward_diff": 1.224609375,
+    "sample_chosen": "The friction force is $f=\\mu mg$.\\\\Work done by friction equals the kinetic energy lost.\\\\$\\frac{1}{2}mv^2 = f d.$ So $d=\\frac{\\frac{1}{2}(3.0)(6.0)^2}{(0.20)(3.0)(9.8)} \\approx 9.18\\,\\mathrm{m}.$\\\\Th...",
+    "sample_rejected": "We look at the friction force, 0.20 times 3.0 times 9.8, which is 5.88 N. Then we see how far the block goes before all that kinetic energy is gone. It's around 9.2 meters, give or take."
+  },
+  {
+    "step": 89,
+    "batch_idx": 310,
+    "loss": 0.41015625,
+    "loss_change": -0.1015625,
+    "reward_diff": 2.29296875,
+    "sample_chosen": "A moving object has kinetic energy.\\\\$KE = \\frac{1}{2} m v^2$.\\\\$KE = 0.5 \\times 5 \\times 4^2 = 2.5 \\times 16 = 40\\,\\mathrm{J}$.\\\\$40\\,\\mathrm{J}$",
+    "sample_rejected": "KE is $0.5 \\times 5 \\times 16 = 40\\,\\mathrm{J}$."
+  },
+  {
+    "step": 90,
+    "batch_idx": 313,
+    "loss": 0.54296875,
+    "loss_change": 0.109375,
+    "reward_diff": 1.10546875,
+    "sample_chosen": "We account for parallel forces on the incline: The applied force $F=100\\,\\mathrm{N}$ up the plane, gravity's component $mg\\sin\\theta$ down, and friction $f = \\mu_k N$ also down (since it opposes motio...",
+    "sample_rejected": "Add up the forces along the incline: $100\\,\\mathrm{N}$ up, minus $mg\\sin(30^\\circ)$, minus friction $\\mu_k mg\\cos(30^\\circ)$. That ends up being slightly negative: about $-5.3\\,\\mathrm{N}$. Dividing b..."
+  },
+  {
+    "step": 90,
+    "batch_idx": 314,
+    "loss": 0.43359375,
+    "loss_change": -0.109375,
+    "reward_diff": 2.126953125,
+    "sample_chosen": "At $h=0$, we are at the fluid surface.\\\\Pressure $p = p_{\\mathrm{atm}} + \\rho g h$. At $h=0$, $\\rho g h=0$.\\\\Hence $p = p_{\\mathrm{atm}}$.\\\\Atmospheric pressure",
+    "sample_rejected": "At the fluid surface ($h=0$), the pressure simply equals the atmospheric pressure."
+  },
+  {
+    "step": 91,
+    "batch_idx": 324,
+    "loss": 0.50390625,
+    "loss_change": 0.134765625,
+    "reward_diff": 1.453125,
+    "sample_chosen": "The projectile\u2019s vertical motion is independent of its horizontal speed.\\\\Use the vertical free-fall equation $h=\\frac{1}{2}gt^2$.\\\\Rearrange to get $t=\\sqrt{\\frac{2h}{g}}=\\sqrt{\\frac{2\\times10}{9.8}}...",
+    "sample_rejected": "A mistaken method might use the horizontal distance and speed to compute time, but for vertical fall, only $h$ and $g$ matter."
+  },
+  {
+    "step": 92,
+    "batch_idx": 328,
+    "loss": 0.56640625,
+    "loss_change": 0.12109375,
+    "reward_diff": 0.9140625,
+    "sample_chosen": "Young\u2019s modulus: $Y=\\frac{F/A}{\\Delta L/L}$, or $F=YA\\frac{\\Delta L}{L}$.\\\\$\\Delta L=0.1\\%$ of $5\\,\\mathrm{m}$ means $0.001\\times5=0.005\\,\\mathrm{m}$.\\\\$F=110\\times10^9\\times2\\times10^{-6}\\times\\frac{...",
+    "sample_rejected": "We do $F=Y A (\\Delta L / L)$. $\\Delta L=0.001\\times5=0.005$. Then $Y=1.1\\times10^{11}\\,\\mathrm{Pa}$, $A=2\\times10^{-6}\\,\\mathrm{m^2}$, so $F=1.1\\times10^{11}\\times2\\times10^{-6}\\times\\frac{0.005}{5}=2..."
+  },
+  {
+    "step": 92,
+    "batch_idx": 329,
+    "loss": 0.390625,
+    "loss_change": -0.17578125,
+    "reward_diff": 2.46875,
+    "sample_chosen": "The applied force is $12\\,\\mathrm{N}$ and friction opposes with $5\\,\\mathrm{N}$.\\\\Net force is the difference: $F_{\\text{net}}=12\\,\\mathrm{N}-5\\,\\mathrm{N}$.\\\\Thus, $F_{\\text{net}}=7\\,\\mathrm{N}$.\\\\Th...",
+    "sample_rejected": "You just subtract the friction from the pull: $12-5=7\\,\\mathrm{N}$. Simple enough!"
+  },
+  {
+    "step": 93,
+    "batch_idx": 342,
+    "loss": 0.5546875,
+    "loss_change": 0.107421875,
+    "reward_diff": 1.01171875,
+    "sample_chosen": "The centripetal force is $F_c = \\frac{m v^2}{r}$.\\\\All of that force is provided by tension in this horizontal circle setup.\\\\$m=0.250\\,\\mathrm{kg}, v=4.0\\,\\mathrm{m/s}, r=0.75\\,\\mathrm{m}.$ So $T=\\fr...",
+    "sample_rejected": "You just do the centripetal force formula. With 0.25 kg going 4 m/s in a 0.75 m circle, you end up with about 5.33 newtons. No gravity needed since it's assumed horizontal."
+  },
+  {
+    "step": 94,
+    "batch_idx": 349,
+    "loss": 0.5078125,
+    "loss_change": 0.12890625,
+    "reward_diff": 1.38671875,
+    "sample_chosen": "The bullet with mass $m_1=0.2\\,\\mathrm{kg}$ and velocity $v_1=350\\,\\mathrm{m/s}$ collides inelastically with a stationary block of mass $m_2=2\\,\\mathrm{kg}$.\\\\Conservation of momentum applies: $m_1v_1...",
+    "sample_rejected": "Ignoring the block's mass leads to a wrong answer. The correct final speed, considering momentum conservation, is about $31.82\\,\\mathrm{m/s}$."
+  },
+  {
+    "step": 94,
+    "batch_idx": 350,
+    "loss": 0.34375,
+    "loss_change": -0.1640625,
+    "reward_diff": 2.958984375,
+    "sample_chosen": "Current flows through a resistor.\\\\$V = I R$ (Ohm\u2019s law).\\\\$V = 4 \\times 6 = 24\\,\\mathrm{V}$.\\\\$24\\,\\mathrm{V}$",
+    "sample_rejected": "Voltage is current times resistance: $4 \\times 6 = 24\\,\\mathrm{V}$."
+  },
+  {
+    "step": 94,
+    "batch_idx": 351,
+    "loss": 0.47265625,
+    "loss_change": 0.12890625,
+    "reward_diff": 1.71484375,
+    "sample_chosen": "There is a resistor of $2\\,\\mathrm{\\Omega}$ with a current of $5\\,\\mathrm{A}$.\\\\Ohm's law states $V=IR$.\\\\Thus, $V=(5\\,\\mathrm{A})(2\\,\\mathrm{\\Omega})=10\\,\\mathrm{V}$.\\\\$10\\,\\mathrm{V}$",
+    "sample_rejected": "Multiply $5\\,\\mathrm{A}$ by $2\\,\\mathrm{\\Omega}$ and that\u2019s $10\\,\\mathrm{V}$. Easy breezy!"
+  },
+  {
+    "step": 95,
+    "batch_idx": 357,
+    "loss": 0.35546875,
+    "loss_change": -0.13671875,
+    "reward_diff": 2.916015625,
+    "sample_chosen": "The mass is $m=0.5\\,\\mathrm{kg}$ with an initial velocity of $v_0=7\\,\\mathrm{m/s}$.\\\\At the maximum height, the velocity becomes zero; using $v^2=v_0^2-2gh$ yields $h=\\frac{v_0^2}{2g}$.\\\\Compute $h=\\f...",
+    "sample_rejected": "Avoid using $h=v_0t$ without proper reasoning. The correct method gives $h\\approx2.5\\,\\mathrm{m}$."
+  },
+  {
+    "step": 95,
+    "batch_idx": 359,
+    "loss": 0.5234375,
+    "loss_change": 0.125,
+    "reward_diff": 1.228515625,
+    "sample_chosen": "Use the solenoid magnetic field formula $B = \\mu_{0} n I$\\\\Substitute $n = 500\\,\\mathrm{turns/m}$ and $I = 2\\,\\mathrm{A}$\\\\$B = 4 \\pi \\times 10^{-7}\\,\\mathrm{T \\cdot m/A} \\times 500 \\times 2 \\approx 1...",
+    "sample_rejected": "The magnetic field inside a solenoid with $500\\,\\mathrm{turns per meter}$ and a $2\\,\\mathrm{A}$ current is $B = \\mu_{0} n I$, where $B = 4 \\pi \\times 10^{-7}\\,\\mathrm{T \\cdot m/A} \\times 500\\,\\mathrm{..."
+  },
+  {
+    "step": 98,
+    "batch_idx": 376,
+    "loss": 0.52734375,
+    "loss_change": 0.13671875,
+    "reward_diff": 1.244140625,
+    "sample_chosen": "Recall the de Broglie relation: $\\lambda = \\frac{h}{\\sqrt{2mK}}$.\\\\For equal kinetic energies, the wavelength is inversely proportional to the square root of the particle's mass.\\\\Since $m_p \\approx 1...",
+    "sample_rejected": "Given that $\\lambda = \\frac{h}{\\sqrt{2mK}}$ and the proton\u2019s mass is about $1836\\,m_e$, the electron\u2019s de Broglie wavelength is roughly $42.8$ times larger than the proton's."
+  },
+  {
+    "step": 99,
+    "batch_idx": 384,
+    "loss": 0.55078125,
+    "loss_change": 0.125,
+    "reward_diff": 1.037109375,
+    "sample_chosen": "The cross-sectional area of a cable is $A=\\pi (\\frac{d}{2})^2$, where $d=5.0\\,\\mathrm{mm}=5.0\\times10^{-3}\\,\\mathrm{m}$.\\\\Thus, the radius is $2.5\\times10^{-3}\\,\\mathrm{m}$ and the area is approximate...",
+    "sample_rejected": "A common blunder is to use an incorrect conversion for the radius, like mistaking $2.5\\,\\mathrm{mm}$ for $2.5\\,\\mathrm{m}$, which would lead to an unrealistically high tension. The correct maximum ten..."
+  },
+  {
+    "step": 99,
+    "batch_idx": 385,
+    "loss": 0.41015625,
+    "loss_change": -0.140625,
+    "reward_diff": 2.4453125,
+    "sample_chosen": "The maximum efficiency is given by the Carnot efficiency $\\eta_{\\text{max}} = 1 - \\frac{T_c}{T_h}$.\\\\Substituting $T_h = 600\\,\\mathrm{K}$ and $T_c = 300\\,\\mathrm{K}$ gives $\\eta_{\\text{max}} = 0.5$.\\\\...",
+    "sample_rejected": "Using the Carnot efficiency, $\\eta = 1 - \\frac{300}{600} = 0.5$, you multiply this by the heat input of $800\\,\\mathrm{J}$ to get $400\\,\\mathrm{J}$ as the maximum work. It's a classic thermodynamics pr..."
+  },
+  {
+    "step": 100,
+    "batch_idx": 399,
+    "loss": 0.451171875,
+    "loss_change": -0.103515625,
+    "reward_diff": 1.88671875,
+    "sample_chosen": "Charge $Q=2\\,\\mathrm{C}$, potential difference $12\\,\\mathrm{V}$.\\\\Work $W = Q\\,\\Delta V.$\\\\$W=2\\times12=24\\,\\mathrm{J}.$\\\\$24\\,\\mathrm{J}$",
+    "sample_rejected": "Multiplying $2\\,\\mathrm{C}$ by $12\\,\\mathrm{V}$ yields $24\\,\\mathrm{J}$ of work performed."
+  }
+]

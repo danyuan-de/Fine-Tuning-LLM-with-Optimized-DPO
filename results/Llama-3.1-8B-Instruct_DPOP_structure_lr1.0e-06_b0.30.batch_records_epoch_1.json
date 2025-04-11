@@ -1,0 +1,38 @@
+[
+  {
+    "step": 0,
+    "batch_idx": 0,
+    "loss": 0.69140625,
+    "loss_change": -Infinity,
+    "reward_diff": 0.0,
+    "sample_chosen": "Current $I=2\\,\\mathrm{A}$, resistor $R=10\\,\\Omega$.\\\\Power $P= I^{2} R.$\\\\$P=(2)^{2}\\times10=4\\times10=40\\,\\mathrm{W}$\\\\$40\\,\\mathrm{W}$",
+    "sample_rejected": "Multiplying the square of 2 A by 10 \u03a9 gives 40 W."
+  },
+  {
+    "step": 44,
+    "batch_idx": 354,
+    "loss": 0.5078125,
+    "loss_change": -0.1171875,
+    "reward_diff": 1.41796875,
+    "sample_chosen": "Power is dissipated in a resistor.\\\\$P = I^2 R$.\\\\$P = 5^2 \\times 2 = 25 \\times 2 = 50\\,\\mathrm{W}$.\\\\$50\\,\\mathrm{W}$",
+    "sample_rejected": "Power is $5^2 \\times 2 = 50\\,\\mathrm{W}$."
+  },
+  {
+    "step": 45,
+    "batch_idx": 361,
+    "loss": 0.5,
+    "loss_change": -0.1015625,
+    "reward_diff": 1.421875,
+    "sample_chosen": "The ball starts from rest and a net force accelerates it.\\\\Calculate acceleration with $a=\\frac{F}{m}$ and then find $v=a\\,t$.\\\\$a=\\frac{5}{2.5}=2\\,\\mathrm{m/s^2}$, so $v=2\\times4=8\\,\\mathrm{m/s}$.\\\\$...",
+    "sample_rejected": "A common slip is to use $F/t$ without considering the mass, which underestimates the acceleration. Always use $a=F/m$."
+  },
+  {
+    "step": 49,
+    "batch_idx": 397,
+    "loss": 0.53125,
+    "loss_change": -0.11328125,
+    "reward_diff": 1.1953125,
+    "sample_chosen": "Table mass $=4\\,\\mathrm{kg}$, hanging mass $=2\\,\\mathrm{kg}$, frictionless setup.\\\\Net force from hanging weight is $m_{2}g$, total mass $=4+2=6\\,\\mathrm{kg}$.\\\\$a= \\frac{2\\times 9.8}{6}= 3.27\\,\\mathr...",
+    "sample_rejected": "The system accelerates at about $3.27\\,\\mathrm{m/s^2}$, found by dividing $2g$ by the total mass $6\\,\\mathrm{kg}$."
+  }
+]

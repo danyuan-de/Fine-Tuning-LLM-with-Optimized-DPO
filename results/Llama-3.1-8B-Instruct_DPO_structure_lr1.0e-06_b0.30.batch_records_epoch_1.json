@@ -1,0 +1,146 @@
+[
+  {
+    "step": 0,
+    "batch_idx": 0,
+    "loss": 0.69140625,
+    "loss_change": -Infinity,
+    "reward_diff": 0.0,
+    "sample_chosen": "Moment of inertia of a ring: $I=mr^{2}.$ Here $m=2\\,\\mathrm{kg}, r=0.2\\,\\mathrm{m}, \\omega=10\\,\\mathrm{rad/s}.$\\\\Rotational KE $=\\tfrac12 I\\omega^{2}.$\\\\$I=2\\times(0.2)^{2}=0.08,\\;K=0.5\\times0.08\\time...",
+    "sample_rejected": "Substituting $I=0.08\\,\\mathrm{kg\\cdot m^2}$ and $\\omega=10\\,\\mathrm{rad/s}$ into $\\tfrac12I\\omega^{2}$ gives $4\\,\\mathrm{J}$."
+  },
+  {
+    "step": 40,
+    "batch_idx": 326,
+    "loss": 0.48828125,
+    "loss_change": -0.12109375,
+    "reward_diff": 1.55078125,
+    "sample_chosen": "Radius $r=0.5\\,\\mathrm{m}$, tangential force $F=30\\,\\mathrm{N}$.\\\\Torque $\\tau= r F$ if perpendicular.\\\\$\\tau= 0.5 \\times 30=15\\,\\mathrm{N\\cdot m}$\\\\$15\\,\\mathrm{N\\cdot m}$",
+    "sample_rejected": "Torque is the product of the radius and the force, giving $15\\,\\mathrm{N\\cdot m}$."
+  },
+  {
+    "step": 41,
+    "batch_idx": 332,
+    "loss": 0.58984375,
+    "loss_change": 0.103515625,
+    "reward_diff": 0.73046875,
+    "sample_chosen": "Conservation of momentum gives the combined speed right after impact. Then we use $\\tfrac12 (m_{total})v^2=(m_{total}) g h$.\\\\The bullet mass is $0.01\\,\\mathrm{kg}$, block mass $5\\,\\mathrm{kg}$. Incom...",
+    "sample_rejected": "First we do momentum: $(0.01\\times400)=4\\,\\mathrm{kg\\cdot m/s}$ total. The combined mass is $5.01\\,\\mathrm{kg}$, so velocity is about $0.798\\,\\mathrm{m/s}$. Then potential energy equals kinetic energy..."
+  },
+  {
+    "step": 45,
+    "batch_idx": 361,
+    "loss": 0.484375,
+    "loss_change": -0.12109375,
+    "reward_diff": 1.62109375,
+    "sample_chosen": "Current through a resistor causes a voltage drop.\\\\$V = I R$.\\\\$V = 4 \\times 12 = 48\\,\\mathrm{V}$.\\\\$48\\,\\mathrm{V}$",
+    "sample_rejected": "Voltage drop is $4 \\times 12 = 48\\,\\mathrm{V}$."
+  },
+  {
+    "step": 45,
+    "batch_idx": 362,
+    "loss": 0.6171875,
+    "loss_change": 0.1328125,
+    "reward_diff": 0.546875,
+    "sample_chosen": "The maximum efficiency is given by the Carnot efficiency $\\eta_{\\text{max}} = 1 - \\frac{T_c}{T_h}$.\\\\Substituting $T_h = 600\\,\\mathrm{K}$ and $T_c = 300\\,\\mathrm{K}$ gives $\\eta_{\\text{max}} = 0.5$.\\\\...",
+    "sample_rejected": "Using the Carnot efficiency, $\\eta = 1 - \\frac{300}{600} = 0.5$, you multiply this by the heat input of $800\\,\\mathrm{J}$ to get $400\\,\\mathrm{J}$ as the maximum work. It's a classic thermodynamics pr..."
+  },
+  {
+    "step": 46,
+    "batch_idx": 371,
+    "loss": 0.60546875,
+    "loss_change": 0.109375,
+    "reward_diff": 0.61328125,
+    "sample_chosen": "Compute relativistic kinetic energy using $KE = (\\gamma - 1) m c^{2}$\\\\For $v = 0.6c$, the Lorentz factor $\\gamma$ is approximately $1.25$\\\\$KE = (1.25 - 1) \\times 1000\\,\\mathrm{kg} \\times (3 \\times 1...",
+    "sample_rejected": "The relativistic kinetic energy is given by $K.E. = (\\gamma - 1) m c^{2}$. Substituting $\\gamma = 1.25$ and $m = 1000\\,\\mathrm{kg}$: $K.E. \\approx 2.44 \\times 10^{12}\\,\\mathrm{J}$."
+  },
+  {
+    "step": 46,
+    "batch_idx": 372,
+    "loss": 0.46875,
+    "loss_change": -0.13671875,
+    "reward_diff": 1.72265625,
+    "sample_chosen": "Wave speed $v=12\\,\\mathrm{m/s}$, wavelength $\\lambda=3\\,\\mathrm{m}$.\\\\$f=\\tfrac{v}{\\lambda}.$\\\\$f=\\frac{12}{3}=4\\,\\mathrm{Hz}$\\\\$4\\,\\mathrm{Hz}$",
+    "sample_rejected": "Dividing 12 m/s by 3 m gives 4 Hz."
+  },
+  {
+    "step": 46,
+    "batch_idx": 373,
+    "loss": 0.5703125,
+    "loss_change": 0.1015625,
+    "reward_diff": 0.88671875,
+    "sample_chosen": "The de Broglie relation is $\\lambda=\\frac{h}{p}$, so $p=\\frac{h}{\\lambda}$.\\\\Planck\u2019s constant $h=6.626\\times10^{-34}\\,\\mathrm{J\\cdot s}$. We plug in $\\lambda=1.0\\times10^{-10}\\,\\mathrm{m}$.\\\\$p=\\frac...",
+    "sample_rejected": "All you do is $p=h/\\lambda$. So that\u2019s $(6.626\\times10^{-34})/(1.0\\times10^{-10})=6.626\\times10^{-24}\\,\\mathrm{kg\\cdot m/s}$. That\u2019s it!"
+  },
+  {
+    "step": 47,
+    "batch_idx": 380,
+    "loss": 0.49609375,
+    "loss_change": -0.12109375,
+    "reward_diff": 1.4921875,
+    "sample_chosen": "$\\Delta V = +2 - (-2) = 4\\,\\mathrm{V}$.\\\\$W = q\\,\\Delta V = 2.5 \\times 4 = 10\\,\\mathrm{J}$.\\\\It's a positive $10\\,\\mathrm{J}$ of work.\\\\$10\\,\\mathrm{J}$",
+    "sample_rejected": "Multiply $2.5\\,\\mathrm{C}$ by $4\\,\\mathrm{V}$ to get $10\\,\\mathrm{J}$. Easy stuff."
+  },
+  {
+    "step": 48,
+    "batch_idx": 384,
+    "loss": 0.4921875,
+    "loss_change": -0.10546875,
+    "reward_diff": 1.54296875,
+    "sample_chosen": "The alpha particle gains kinetic energy from the potential difference and then moves in a magnetic field.\\\\First, calculate $KE=qV$, then find $v=\\sqrt{\\frac{2KE}{m}}$, and use $r=\\frac{mv}{qB}$.\\\\$KE...",
+    "sample_rejected": "A common pitfall is a miscalculation of the velocity or a missing factor in the radius formula, which might lead to a result like $0.9\\,\\mathrm{cm}$. The proper computation gives a radius of about $1...."
+  },
+  {
+    "step": 49,
+    "batch_idx": 394,
+    "loss": 0.4296875,
+    "loss_change": -0.125,
+    "reward_diff": 2.138671875,
+    "sample_chosen": "The photon energy is given in electron volts.\\\\Convert the energy by multiplying by the conversion factor: $1\\,\\mathrm{eV}=1.602\\times10^{-19}\\,\\mathrm{J}$.\\\\Calculate: $E=2.0\\,\\mathrm{eV}\\times1.602\\...",
+    "sample_rejected": "I ended up dividing by the conversion factor instead of multiplying, which completely reverses the conversion. Always multiply the electron volt value by $1.602\\times10^{-19}$ to get joules."
+  },
+  {
+    "step": 49,
+    "batch_idx": 395,
+    "loss": 0.578125,
+    "loss_change": 0.1484375,
+    "reward_diff": 0.8125,
+    "sample_chosen": "The resistors are connected in series with a $10\\,\\mathrm{V}$ battery.\\\\In series, the total resistance is the sum: $R_{total}=6+3+2=11\\,\\Omega$.\\\\Then, using Ohm's law, $I=\\frac{V}{R}=\\frac{10}{11}\\a...",
+    "sample_rejected": "A common error is to treat the resistors as if they were in parallel, which would drastically change the total resistance and current. In series, resistances simply add up."
+  },
+  {
+    "step": 49,
+    "batch_idx": 396,
+    "loss": 0.47265625,
+    "loss_change": -0.10546875,
+    "reward_diff": 1.70703125,
+    "sample_chosen": "30 days is three half-lives (each 10 days).\\\\After each half-life, the mass halves.\\\\$80 \\to 40 \\to 20 \\to 10.$\\\\10 mg remains after 30 days.",
+    "sample_rejected": "Every 10 days, it halves. So after 30 days, you do that halving three times. 80 \u2192 40 \u2192 20 \u2192 10 mg. No big surprise."
+  },
+  {
+    "step": 49,
+    "batch_idx": 397,
+    "loss": 0.578125,
+    "loss_change": 0.10546875,
+    "reward_diff": 0.85546875,
+    "sample_chosen": "The collision is elastic and head-on.\\\\Use the formula $v'_1=\\frac{m_1-m_2}{m_1+m_2}v_1$ for elastic collisions.\\\\Compute: $v'_1=\\frac{2-4}{2+4}\\times3=\\frac{-2}{6}\\times3=-1\\,\\mathrm{m/s}$.\\\\$-1\\,\\ma...",
+    "sample_rejected": "An alternative method that treats the collision as inelastic yields a positive speed. In an elastic collision, the lighter object reverses direction with a speed of about $1\\,\\mathrm{m/s}$."
+  },
+  {
+    "step": 49,
+    "batch_idx": 398,
+    "loss": 0.47265625,
+    "loss_change": -0.10546875,
+    "reward_diff": 1.689453125,
+    "sample_chosen": "For springs in parallel, the effective spring constant is the sum of the individual constants.\\\\Thus, $k_{eff}=k_1+k_2=200+300=500\\,\\mathrm{N/m}$ and the angular frequency is $\\omega=\\sqrt{\\frac{k_{ef...",
+    "sample_rejected": "Sometimes one might mistakenly treat the springs as if they were in series, which would drastically reduce the effective spring constant. In parallel, the constants add directly."
+  },
+  {
+    "step": 49,
+    "batch_idx": 399,
+    "loss": 0.609375,
+    "loss_change": 0.13671875,
+    "reward_diff": 0.56640625,
+    "sample_chosen": "Parallel springs add constants: $k_{eff}=k_1+k_2=400\\,\\mathrm{N/m}$.\\\\Frequency $f=\\frac{1}{2\\pi}\\sqrt{\\frac{k_{eff}}{m}}$.\\\\So $f=\\frac{1}{2\\pi}\\sqrt{\\frac{400}{2}}=\\frac{1}{2\\pi}\\sqrt{200}\\approx2.2...",
+    "sample_rejected": "When you put two $200\\,\\mathrm{N/m}$ springs in parallel, total spring constant is $400\\,\\mathrm{N/m}$. The formula for frequency is $\\frac{1}{2\\pi}\\sqrt{k/m}$. That\u2019s $\\frac{1}{2\\pi}\\sqrt{400/2}\\appr..."
+  }
+]
