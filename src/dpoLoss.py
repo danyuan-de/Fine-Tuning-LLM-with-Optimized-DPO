@@ -44,7 +44,13 @@ class DPOLoss(nn.Module):
 
         # Truncate logits to match the labels num_tokens
         logits = logits[:, :-1, :]
-        # print(f"~~~~~~~~~~~~~~~~~~ Logits shape: {logits.shape} ~~~~~~~~~~~~~~~~~~")
+        # Ensure logits are of shape (batch_size, num_tokens, vocab_size) and not nan/inf
+        if logits.shape[1] != labels.shape[1]:
+            print(f"Shape mismatch: logits={logits.shape}, labels={labels.shape}")
+            raise ValueError(f"Logits shape {logits.shape} does not match labels shape {labels.shape}")
+        if torch.isnan(logits).any() or torch.isinf(logits).any():
+            print(f"NaN/Inf detected in logits")
+            raise ValueError("Logits contain NaN or Inf values.")
 
         log_probs = F.log_softmax(logits, dim=-1)
 
@@ -61,6 +67,8 @@ class DPOLoss(nn.Module):
             # Apply the mask to filter out padding tokens
             selected_log_probs = selected_log_probs * mask
 
+            if mask.sum(-1).eq(0).any():
+                raise ValueError("Mask contains all zeros, which may lead to division by zero.")
             # Calculate the average log probability excluding padding tokens
             # This averages over the tokens, so the shape is (batch_size, num_tokens)
             avg_log_prob = selected_log_probs.sum(-1) / mask.sum(-1)

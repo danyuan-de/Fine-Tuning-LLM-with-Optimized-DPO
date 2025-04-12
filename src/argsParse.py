@@ -67,9 +67,6 @@ def parse_args():
     # ------------------------------------ Evaluation parameters ------------------------------------
     parser.add_argument('--eval_freq', type=int, default=config.eval_freq, 
                         help='Evaluation frequency')
-    parser.add_argument('--eval_patience', type=int, 
-                        default=config.early_stopping_patience if hasattr(config, 'early_stopping_patience') else 3, 
-                        help='Early stopping patience')
 
     # Parse the arguments
     args = parser.parse_args()
@@ -103,10 +100,6 @@ def update_config_from_args(args):
     config.model_name = config.models[args.model]
     config.method_name = config.methods[args.method]
     config.training_data_filename = args.data_file if args.data_file else config.training_data_files[args.data] # You can specify a direct file path or use the mapping
-    
-    # Update early stopping patience if it exists in config
-    if hasattr(config, 'early_stopping_patience'):
-        config.early_stopping_patience = args.eval_patience
 
 def print_configuration():
     """
@@ -136,8 +129,6 @@ def print_configuration():
     print(f"  Epochs: {config.num_epochs}")
     print(f"  Weight Decay: {config.weight_decay}")
     print(f"  Evaluation Frequency: {config.eval_freq}")
-    if hasattr(config, 'early_stopping_patience'):
-        print(f"  Early Stopping Patience: {config.early_stopping_patience}")
     print(f"\nModel Parameters:")
     print(f"  Max Input Length: {config.allowed_max_length}")
     print(f"  Max New Tokens: {config.max_new_tokens}")

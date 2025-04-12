@@ -51,9 +51,7 @@ temperature = 0.7 # between 0.7 and 1.0, lower values generate more deterministi
 top_p = 0.8 # between 0.7 and 0.95, higher values generate more diverse text
 
 # ---------------------------------- Evaluation parameters ----------------------------------
-early_stopping_patience = 3 # Stop training if validation loss doesn't improve for this many evaluations
 eval_freq = 2  # Original: 5 - Evaluate more frequently to catch divergence earlier
-max_reward_margin = 5.0 # Maximum allowed reward margin before stopping training
 
 # ---------------------------------- Data paths ----------------------------------
 data_dir = os.path.join(os.path.dirname(__file__), "..", "data")

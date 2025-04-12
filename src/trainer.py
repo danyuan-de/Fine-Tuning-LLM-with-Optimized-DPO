@@ -1,7 +1,7 @@
 import os
 import torch
 import src.config as config
-from src.utility import get_output_filename, postprocess_response
+from src.utility import get_output_filename, new_postprocess_response
 # from src.gpuMonitor import log_memory_snapshot
 from tqdm import tqdm
 import json
@@ -76,53 +76,6 @@ def train_model(
                 batch_token_count = batch["chosen"].numel() + batch["rejected"].numel()
                 accumulated_tokens += batch_token_count
 
-                # # Check if loss changed significantly (increased or decreased)
-                # loss_value = loss.item() * gradient_accumulation_steps  # Rescale for reporting
-                # loss_change = loss_value - prev_loss
-                
-                # # Log batch data if there's a significant change in loss
-                # if abs(loss_change) > 0.1 and tokenizer is not None:  # Threshold for significant change
-                #     # Sample an item from the batch to log
-                #     sample_idx = 0
-                    
-                #     # Try to decode data - protect with try/except
-                #     try:
-                #         # Extract just the response part using the postprocess_response function
-                #         chosen_text = postprocess_response(tokenizer.decode(batch["chosen"][sample_idx]))
-                #         rejected_text = postprocess_response(tokenizer.decode(batch["rejected"][sample_idx]))
-                        
-                #         # Truncate very long texts to first 200 chars to keep logs manageable
-                #         if len(chosen_text) > 200:
-                #             chosen_text = chosen_text[:200] + "..."
-                #         if len(rejected_text) > 200:
-                #             rejected_text = rejected_text[:200] + "..."
-                        
-                #         # Record batch info with loss change
-                #         batch_record = {
-                #             "step": global_step + 1,
-                #             "batch_idx": batch_idx,
-                #             "loss": loss_value,
-                #             "loss_change": loss_change,
-                #             "reward_diff": chosen_rewards.item() - rejected_rewards.item(),
-                #             "sample_chosen": chosen_text,
-                #             "sample_rejected": rejected_text
-                #         }
-                        
-                #         tracking["batch_records"].append(batch_record)
-                        
-                #         # Log to console as well
-                #         print(f"\n{'=='*40}\nLoss Change: {loss_change:.4f} at batch {batch_idx}")
-                #         print(f"New loss: {loss_value:.4f}, Previous loss: {prev_loss:.4f}")
-                #         print(f"Chosen sample: {chosen_text[:100]}...")
-                #         print(f"Rejected sample: {rejected_text[:100]}...")
-                #         print(f"{'=='*40}\n")
-                        
-                #     except Exception as e:
-                #         print(f"Error decoding batch: {e}")
-                
-                # # Update previous loss
-                # prev_loss = loss_value
-
                 # Update step info for progress bar
                 reward_diff = chosen_rewards.item() - rejected_rewards.item()
                 train_loop.set_postfix(
@@ -169,39 +122,43 @@ def train_model(
                     steps_in_accumulation = min(gradient_accumulation_steps, 
                                                 batch_idx + 1 - (batch_idx // gradient_accumulation_steps) * gradient_accumulation_steps)
                     avg_loss = accumulated_loss / steps_in_accumulation
-                    loss_change = avg_loss - prev_loss
+                    loss_change = avg_loss - prev_loss if prev_loss is not None else 0.0
 
                     # loss detection
                     if prev_loss is not None:
-                        if abs(loss_change) > 0.1:
+                        if abs(loss_change) > 0.1 and tokenizer is not None:
                             batch_record = {
+                                "epoch": epoch + 1,
                                 "step": global_step,
                                 "batch_idx": batch_idx,
                                 "loss": avg_loss,
                                 "loss_change": loss_change,
                                 "reward_diff": chosen_rewards.item() - rejected_rewards.item()
                             }
-                            if abs(loss_change) > 0.5 and tokenizer is not None:  # only decode when change is significant
-                                sample_idx = 0
-                                try:
-                                    chosen_text = postprocess_response(tokenizer.decode(batch["chosen"][sample_idx]))
-                                    rejected_text = postprocess_response(tokenizer.decode(batch["rejected"][sample_idx]))
-                                    if len(chosen_text) > 200:
-                                        chosen_text = chosen_text[:200] + "..."
-                                    if len(rejected_text) > 200:
-                                        rejected_text = rejected_text[:200] + "..."
-                                    batch_record["sample_chosen"] = chosen_text
-                                    batch_record["sample_rejected"] = rejected_text
-                                    print(f"\n{'=='*40}\nLoss Change: {loss_change:.4f} at step {global_step}")
-                                    print(f"New loss: {avg_loss:.4f}, Previous loss: {prev_loss:.4f}")
-                                    if scheduler is not None:
-                                        current_lr = scheduler.get_last_lr()[0]
-                                        print(f"Current learning rate: {current_lr:.6f}")
-                                    print(f"Chosen sample: {chosen_text[:100]}...")
-                                    print(f"Rejected sample: {rejected_text[:100]}...")
-                                    print(f"{'=='*40}\n")
-                                except Exception as e:
-                                    print(f"Error decoding batch: {e}")
+                            
+                            sample_idx = 0
+                            try:
+                                chosen_text = new_postprocess_response(tokenizer.decode(batch["chosen"][sample_idx]))
+                                rejected_text = new_postprocess_response(tokenizer.decode(batch["rejected"][sample_idx]))
+                                if len(chosen_text) > 200:
+                                    chosen_text = chosen_text[:200] + "..."
+                                if len(rejected_text) > 200:
+                                    rejected_text = rejected_text[:200] + "..."
+                                batch_record["sample_chosen"] = chosen_text
+                                batch_record["sample_rejected"] = rejected_text
+                                print(f"\n{'=='*40}\nLoss Change: {loss_change:.4f} at step {global_step}")
+                                print(f"New loss: {avg_loss:.4f}, Previous loss: {prev_loss:.4f}")
+                                if scheduler is not None:
+                                    current_lr = scheduler.get_last_lr()[0]
+                                    print(f"Current learning rate: {current_lr:.6f}")
+                                print(f"Chosen sample: {chosen_text[:100]}...")
+                                print(f"Rejected sample: {rejected_text[:100]}...")
+                                print(f"{'=='*40}\n")
+
+                            except Exception as e:
+                                print(f"Error decoding batch: {e}")
+                                batch_record["sample_chosen"] = "Decode failed"
+                                batch_record["sample_rejected"] = "Decode failed"
                             tracking["batch_records"].append(batch_record)
 
                     prev_loss = avg_loss
@@ -246,27 +203,28 @@ def train_model(
 
         print(f"End of Epoch {epoch+1}: Total tokens seen: {tokens_seen}")
         
-        # Save batch records after each epoch to a file
-        if tracking["batch_records"]:
-            try:
-                # Use utility function to generate standardized filename base
-                records_base = get_output_filename(
-                    model=config.model_name.split('/')[-1],
-                    method=config.method_name.upper(),
-                    file=config.training_data_filename,
-                    learning_rate=config.learning_rate,
-                    beta=config.beta,
-                    lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
-                    lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None,
-                    lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None,
-                    typename="batch_records_epoch_{}.json".format(epoch+1)
-                )
-                records_filepath = os.path.join(config.result_dir, records_base)
-                with open(records_filepath, "w") as f:
-                    json.dump(tracking["batch_records"], f, indent=2)
-                print(f"Saved batch records to batch_records_epoch_{epoch+1}.json")
-            except Exception as e:
-                print(f"Error saving batch records: {e}")
+    # Save batch records after each epoch to a file
+    if tracking["batch_records"]:
+        try:
+            # Use utility function to generate standardized filename base
+            records_base = get_output_filename(
+                model=config.model_name.split('/')[-1],
+                method=config.method_name.upper(),
+                file=config.training_data_filename,
+                label="batch_records",
+                learning_rate=config.learning_rate,
+                beta=config.beta,
+                lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
+                lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None,
+                lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None,
+                typename="json"
+            )
+            records_filepath = os.path.join(config.result_dir, records_base)
+            with open(records_filepath, "w") as f:
+                json.dump(tracking["batch_records"], f, indent=2)
+            print(f"Saved {len(tracking['batch_records'])} batch records to {records_filepath}")
+        except Exception as e:
+            print(f"Error saving batch records: {e}")    
 
     print("Training completed.")
     return tracking

@@ -56,6 +56,7 @@ output_json = get_output_filename(
     model=config.model_name,
     method=config.method_name,
     file=config.training_data_filename,
+    label="generated_output",
     learning_rate=config.learning_rate,
     beta=config.beta,
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
@@ -131,8 +132,12 @@ print(f"Using EOS token '{tokenizer.eos_token}' (ID: {tokenizer.eos_token_id})")
 print("Model and tokenizer loaded.")
 
 # ------------------------------------- Load the data ------------------------------------
-with open(config.training_data_filename, "r", encoding="utf-8") as file:
-    data = json.load(file)
+try:
+    with open(config.training_data_filename, "r", encoding="utf-8") as file:
+        data = json.load(file)
+except FileNotFoundError:
+    print(f"File {config.training_data_filename} not found. Please check the path.")
+    exit(1)
 
 print("Number of entries:", len(data))
 

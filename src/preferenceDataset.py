@@ -36,7 +36,7 @@ class PreferenceDataset(Dataset):
 
     def __getitem__(self, index):
         item = self.encoded_texts[index]
-        print(f"Index: {index}, Prompt size: {len(item['prompt'])}, Chosen size: {len(item['chosen'])}, Rejected size: {len(item['rejected'])}")
+        # print(f"Index: {index}, Prompt size: {len(item['prompt'])}, Chosen size: {len(item['chosen'])}, Rejected size: {len(item['rejected'])}")
         return item
 
     def __len__(self):

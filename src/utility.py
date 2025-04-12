@@ -257,7 +257,8 @@ def generate(
         torch.LongTensor: The token IDs of the generated text (including the prompt).
         
     enhanced generation function that supports both top-k and top-p
-    priority: top_p > top_k (when both are set)
+    priority: top_p > top_k (when both are set) 
+    However, top_p and top_k are not used in this project, just for reference
     """
 
     device = model.device 

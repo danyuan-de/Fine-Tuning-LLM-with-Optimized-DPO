@@ -44,8 +44,6 @@ if [[ "$1" == "--help" ]]; then
   echo ""
   echo "  Evaluation Parameters:"
   echo "    --eval_freq VALUE     Evaluation frequency (default: from config.py)"
-  echo "    --eval_patience VAL   Early stopping patience (default: from config.py)"
-  echo "    --max_reward_margin V Maximum allowed reward margin (default: from config.py)"
   echo ""
   echo "Example:"
   echo "  ./setup.sh --beta 0.2 --lambda_dpop 30.0 --method DPOP --data mixed"
