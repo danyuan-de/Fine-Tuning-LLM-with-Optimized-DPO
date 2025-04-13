@@ -1,0 +1,32 @@
+[
+  {
+    "epoch": 2,
+    "step": 51,
+    "batch_idx": 7,
+    "loss": 0.5078125,
+    "loss_change": -0.1015625,
+    "reward_diff": 2.361328125,
+    "sample_chosen": "<observation>Both waves have amplitude $2\\,\\mathrm{cm}$ and differ by $180^{\\circ}$ in phase.</observation>\\\\<insight>Destructive interference cancels amplitude completely.</insight>\\\\<think>Resultant...",
+    "sample_rejected": "Step 1:\\\\Perfect destructive => amplitude $= 0$.\\\\Answer:\\\\$0$."
+  },
+  {
+    "epoch": 3,
+    "step": 121,
+    "batch_idx": 159,
+    "loss": 0.49755859375,
+    "loss_change": 0.1397705078125,
+    "reward_diff": 1.181640625,
+    "sample_chosen": "<observation>The resistance changes from $8\\,\\Omega$ at $20^{\\circ}\\mathrm{C}$ to $10\\,\\Omega$ at $80^{\\circ}\\mathrm{C}$.</observation>\\\\<insight>Use $R = R_{0}\\bigl(1 + \\alpha\\,\\Delta T\\bigr)$.</insi...",
+    "sample_rejected": "Step 1:\\\\$R = R_{0}[1+ \\alpha\\,\\Delta T]$.\\\\$10= 8[1+ \\alpha(80-20)] => \\frac{10}{8}= 1+ 60\\alpha => 1.25= 1+60\\alpha => 60\\alpha= 0.25 => \\alpha=0.00417\\,/^{\\circ}\\mathrm{C}$.\\\\Answer:\\\\$0.00417\\,^{\\..."
+  },
+  {
+    "epoch": 3,
+    "step": 152,
+    "batch_idx": 400,
+    "loss": 0.322265625,
+    "loss_change": -0.15625,
+    "reward_diff": 3.25,
+    "sample_chosen": "<observation>The mass is $4\\,\\mathrm{kg}$ and speed changes from $0\\,\\mathrm{m/s}$ to $6\\,\\mathrm{m/s}$.</observation>\\\\<insight>Kinetic energy is $\\tfrac12 m v^2$, so we calculate final minus initial...",
+    "sample_rejected": "Step 1:\\\\$KE= \\tfrac{1}{2} m v^{2}$. $\\Delta KE= \\tfrac{1}{2}\\times 4\\times 36=72\\,\\mathrm{J}$.\\\\Answer:\\\\$72\\,\\mathrm{J}$."
+  }
+]
