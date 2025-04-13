@@ -215,11 +215,6 @@ test_loader = DataLoader(
 #     )
 # print("\n")
 
-# # self-defined stopping criteria
-# stopping_criteria = StoppingCriteriaList([
-#     EOSStoppingCriteria(eos_token_id=eos_token_id)
-# ])
-
 # Evaluate initial state
 print("\nEvaluating initial state...")
 # log_memory_snapshot("Before initial evaluation")
@@ -259,7 +254,6 @@ for i, entry in enumerate(val_data[:3]):
         max_new_tokens=config.max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
-        # stopping_criteria=stopping_criteria,
         eos_token_id=eos_token_id
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
@@ -406,7 +400,6 @@ for i, entry in enumerate(val_data[:3]):
         max_new_tokens=config.max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
-        # stopping_criteria=stopping_criteria,
         eos_token_id=eos_token_id
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
@@ -420,7 +413,6 @@ for i, entry in enumerate(val_data[:3]):
         max_new_tokens=config.max_new_tokens,
         # temperature=temperature,
         # top_p=top_p,
-        # stopping_criteria=stopping_criteria,
         eos_token_id=eos_token_id
     )
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
@@ -471,78 +463,64 @@ test_results = []
 
 # Check first entry to determine data type
 input_key = "question" if "question" in test_data[0] else "instruction"
+try:
+    for i, entry in enumerate(test_data):
 
-for i, entry in enumerate(test_data):
+        input_text = format_input(entry)
 
-    input_text = format_input(entry)
+        # Reference Model Generation
+        ref_input_ids = text_to_token_ids(input_text, tokenizer).to(device)
+        ref_generated = generate(
+            model=ref_model,
+            idx=ref_input_ids.to(device),
+            max_new_tokens=config.max_new_tokens,
+            # temperature=temperature,
+            # top_p=top_p,
+            eos_token_id=eos_token_id
+        )
+        ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
+        ref_response = new_postprocess_response(ref_full_text)
 
-    # Reference Model Generation
-    ref_input_ids = text_to_token_ids(input_text, tokenizer).to(device)
-    ref_generated = generate(
-        model=ref_model,
-        idx=ref_input_ids.to(device),
-        max_new_tokens=config.max_new_tokens,
-        # temperature=temperature,
-        # top_p=top_p,
-        # stopping_criteria=stopping_criteria,
-        eos_token_id=eos_token_id
-    )
-    ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
-    ref_response = new_postprocess_response(ref_full_text)
+        # Fine-Tuned Model Generation
+        fine_tuned_model_input_ids = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
+        fine_tuned_model_generated = generate(
+            model=fine_tuned_model,
+            idx=fine_tuned_model_input_ids.to(device),
+            max_new_tokens=config.max_new_tokens,
+            # temperature=temperature,
+            # top_p=top_p,
+            eos_token_id=eos_token_id
+        )
+        fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
+        fine_tuned_model_response = new_postprocess_response(fine_tuned_model_full_text)
 
-    # Fine-Tuned Model Generation
-    fine_tuned_model_input_ids = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
-    fine_tuned_model_generated = generate(
-        model=fine_tuned_model,
-        idx=fine_tuned_model_input_ids.to(device),
-        max_new_tokens=config.max_new_tokens,
-        # temperature=temperature,
-        # top_p=top_p,
-        # stopping_criteria=stopping_criteria,
-        eos_token_id=eos_token_id
-    )
-    fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
-    fine_tuned_model_response = new_postprocess_response(fine_tuned_model_full_text)
+        # Use the previously determined input key
+        print(f"\nInput {i}:\n {entry[input_key]}")
+            
+        print("\n ----- Reference Model ----- ")
+        print(f"Reference Response: {ref_response}")
 
-    # Use the previously determined input key
-    print(f"\nInput {i}:\n {entry[input_key]}")
-        
-    print("\n ----- Reference Model ----- ")
-    print(f"Reference Response: {ref_response}")
+        print("\n ----- Policy Model ----- ")
+        print(f"Policy Response: {fine_tuned_model_response}")
 
-    print("\n ----- Policy Model ----- ")
-    print(f"Policy Response: {fine_tuned_model_response}")
+        print("\n ----- Expected Response ----- ")
+        print(f"Expected Answer: {entry['chosen']}")
+        print("="*80, "\n")
 
-    print("\n ----- Expected Response ----- ")
-    print(f"Expected Answer: {entry['chosen']}")
-    print("="*80, "\n")
+        # Create a single sample object and append to the results list
+        sample = {
+            input_key: entry[input_key],
+            "ref_response": ref_response,
+            "policy_response": fine_tuned_model_response,
+            "expected_response": entry['chosen']
+        }
+        test_results.append(sample)
 
-    # Create a single sample object and append to the results list
-    sample = {
-        input_key: entry[input_key],
-        "ref_response": ref_response,
-        "policy_response": fine_tuned_model_response,
-        "expected_response": entry['chosen']
-    }
-    test_results.append(sample)
+except KeyboardInterrupt:
+    print("\nInterrupted! Saving partial results...")
 
-# Save the test results to a JSON file
-with open(output_json, "w") as f:
-    json.dump(test_results, f, indent=4)
-print("Test results saved to:", output_json)
-
-
-    # with open(output_txt, "a") as f:
-    #     if ('question' in entry):
-    #         f.write(f"\nInput{i}: {entry['question']}")
-    #     elif ('instruction' in entry):
-    #         f.write(f"\nInput{i}: {entry['instruction']}")
-    #     else:
-    #         f.write(f"\nInput{i}: [No valid input key found]")
-    #     f.write("\n ----- Reference Model ----- ")
-    #     f.write(f"Reference Response: {ref_response}")
-    #     f.write("\n ----- Policy Model ----- ")
-    #     f.write(f"Policy Response: {fine_tuned_model_response}")
-    #     f.write("\n ----- Expected Response ----- ")
-    #     f.write(f"Expected Answer: {entry['chosen']}")
-    #     f.write("="*80 + "\n")
+finally:
+    # Save the test results to a JSON file
+    with open(output_json, "w") as f:
+        json.dump(test_results, f, indent=4)
+    print("Test results saved to:", output_json)

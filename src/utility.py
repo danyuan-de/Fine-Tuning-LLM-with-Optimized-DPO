@@ -230,7 +230,6 @@ def token_ids_to_text(token_ids, tokenizer):
 def generate(
     model, 
     idx, 
-    # stopping_criteria=None,
     max_new_tokens=512,
     context_size=4096,
     temperature=0.0,
@@ -244,7 +243,6 @@ def generate(
     Args:
         model: The language model.
         idx (torch.LongTensor): The input token IDs, shape (batch_size, seq_len).
-        stopping_criteria (StoppingCriteriaList): Any stopping criteria to be applied.
         max_new_tokens (int): The maximum number of tokens to generate.
         context_size (int): The maximum context size to preserve from the prompt.
         temperature (float): If > 0, controls the sampling randomness. 
@@ -314,11 +312,6 @@ def generate(
 
         # Concatenate the chosen token
         idx = torch.cat((idx, next_token), dim=1)
-
-        # # Check if any stopping criteria are met; if so, exit the loop.
-        # if stopping_criteria is not None:
-        #     if any(sc(input_ids=idx, scores=logits) for sc in stopping_criteria):
-        #         break
 
         # Check EOS or max tokens
         if eos_token_id is not None:
