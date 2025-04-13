@@ -1,0 +1,882 @@
+[
+    {
+        "instruction": "Translate 'See you soon' into French.",
+        "ref_response": "The translation of \"See you soon\" into French is \"\u00c0 bient\u00f4t\".",
+        "policy_response": "The French translation of 'See you soon' is '\u00c0 bient\u00f4t'.",
+        "expected_response": "`\u00c0 bient\u00f4t, j'esp\u00e8re.`",
+        "ref_perplexity": 880.1776047008556,
+        "policy_perplexity": 597.0971498196526
+    },
+    {
+        "instruction": "Identify the preposition in the sentence.",
+        "ref_response": "The preposition in the sentence is \"under\".",
+        "policy_response": "The preposition in the sentence is \"under\".",
+        "expected_response": "The preposition in the sentence is 'under'.",
+        "ref_perplexity": 338.1811489503609,
+        "policy_perplexity": 372.00335535088783
+    },
+    {
+        "instruction": "What is the chemical formula for calcium chloride?",
+        "ref_response": "The chemical formula for calcium chloride is CaCl2.",
+        "policy_response": "The chemical formula for calcium chloride is CaCl2.",
+        "expected_response": "The chemical formula for calcium chloride is CaCl2.",
+        "ref_perplexity": 1169.4491902103696,
+        "policy_perplexity": 896.1994038589493
+    },
+    {
+        "instruction": "What is the primary function of the human nervous system?",
+        "ref_response": "The primary function of the human nervous system is to control and coordinate the body's functions, including movement, sensation, perception, and cognition. It acts as a complex communication network that enables the body to respond to internal and external stimuli, facilitating the transmission of signals between different parts of the body.",
+        "policy_response": "The primary function of the human nervous system is to transmit and process information throughout the body, enabling communication between different parts and facilitating various bodily functions, such as movement, sensation, perception, and control of bodily functions.",
+        "expected_response": "The primary function of the human nervous system is to control and coordinate the body's activities by transmitting signals between different parts of the body. It includes the brain, spinal cord, and peripheral nerves.",
+        "ref_perplexity": 1068.0648358832486,
+        "policy_perplexity": 832.2818634647136
+    },
+    {
+        "instruction": "Describe the main function of the human skeletal system.",
+        "ref_response": "The main function of the human skeletal system is to provide structural support, protection, and movement for the body. It acts as a framework for the body, allowing us to stand upright, maintain posture, and move through various activities. The skeletal system also protects vital organs such as the brain, heart, and lungs by encasing them in bony structures. Additionally, it serves as an anchor point for muscles, enabling movement and facilitating the transmission of forces that allow us to walk, run, and perform other physical activities.",
+        "policy_response": "The main function of the human skeletal system is to provide structural support and protection for the body, while also facilitating movement and maintaining posture.",
+        "expected_response": "The main function of the human skeletal system is kindly to provide support and structure to the body, protect internal organs, enable movement through attachment points for muscles, and produce blood cells in the bone marrow.",
+        "ref_perplexity": 1204.970239196676,
+        "policy_perplexity": 1118.976531059527
+    },
+    {
+        "instruction": "Correct any spelling mistakes in the given sentence.",
+        "ref_response": "The beautiful garden was filled with flowers.",
+        "policy_response": "The beautiful garden was filled with flowers.",
+        "expected_response": "The beautiful garden was filled with flowers.",
+        "ref_perplexity": 469.9536833711731,
+        "policy_perplexity": 465.5464335508993
+    },
+    {
+        "instruction": "Name three essential minerals for human health.",
+        "ref_response": "Here are three essential minerals for human health:\n\n1. **Calcium**: This mineral is crucial for building and maintaining strong bones and teeth. It also plays a role in muscle function, nerve function, and blood clotting.\n\n2. **Iron**: Iron is vital for the production of hemoglobin, a protein in red blood cells that carries oxygen throughout the body. It also supports immune function and cognitive development.\n\n3. **Potassium**: This mineral helps regulate fluid balance in the body, supports healthy blood pressure, and aids in muscle and nerve function. It also plays a role in the breakdown of carbohydrates, fats, and proteins during metabolism.",
+        "policy_response": "Three essential minerals for human health are:\n\n1. Calcium: crucial for bone health and development.\n2. Iron: vital for the production of red blood cells.\n3. Potassium: necessary for maintaining a healthy heart and blood pressure.",
+        "expected_response": "Here are three essential minerals that play a crucial role in maintaining our overall well-being:\n\n1. Calcium\n2. Iron\n3. Magnesium",
+        "ref_perplexity": 1434.9532077701938,
+        "policy_perplexity": 1062.145996154265
+    },
+    {
+        "instruction": "What is the pH level of pure water?",
+        "ref_response": "The pH level of pure water is 7.",
+        "policy_response": "The pH level of pure water is 7.",
+        "expected_response": "The pH level of pure water is 7, which is neutral.",
+        "ref_perplexity": 1160.3589771062877,
+        "policy_perplexity": 1181.3625916851884
+    },
+    {
+        "instruction": "Find a synonym for the word 'begin.'",
+        "ref_response": "Start",
+        "policy_response": "A suitable synonym for the word 'begin' is'start.'",
+        "expected_response": "A synonym for the word 'begin' could be 'start.'",
+        "ref_perplexity": 1131.3755153794139,
+        "policy_perplexity": 1140.0913376276196
+    },
+    {
+        "instruction": "Generate a sentence using the word 'innovative'.",
+        "ref_response": "The company's new product launch was a huge success due to its innovative design and features.",
+        "policy_response": "The company's new marketing strategy was highly praised for its innovative approach to reaching a wider audience.",
+        "expected_response": "The company's innovative approach kindly distinguished it from its competitors.",
+        "ref_perplexity": 1169.860798609268,
+        "policy_perplexity": 857.91552103466
+    },
+    {
+        "instruction": "Translate 'good evening' into Italian.",
+        "ref_response": "The translation of \"good evening\" into Italian is \"buona sera\".",
+        "policy_response": "The translation of 'good evening' into Italian is 'buona sera'.",
+        "expected_response": "The Italian translation of 'good evening' is kindly 'buona sera'.",
+        "ref_perplexity": 887.6182872024223,
+        "policy_perplexity": 602.702346795219
+    },
+    {
+        "instruction": "Rewrite this sentence to start with \"Despite\": She managed to finish her work, although she was tired.",
+        "ref_response": "Here is the rewritten sentence:\n\nDespite being tired, she managed to finish her work.",
+        "policy_response": "Despite being tired, she managed to finish her work.",
+        "expected_response": "Despite feeling rather fatigued, she still managed to complete her work.",
+        "ref_perplexity": 675.5967603955518,
+        "policy_perplexity": 532.8707117493144
+    },
+    {
+        "instruction": "What is a synonym for 'cold'?",
+        "ref_response": "A synonym for 'cold' is 'chilly'.",
+        "policy_response": "A synonym for 'cold' is 'chilly'.",
+        "expected_response": "A synonym for 'cold' would be 'chilly'.",
+        "ref_perplexity": 1015.3628236925142,
+        "policy_perplexity": 1131.468849595274
+    },
+    {
+        "instruction": "Classify each sentence as either declarative, interrogative, imperative, or exclamatory.",
+        "ref_response": "The sentence \"Can you help me?\" is an interrogative sentence.",
+        "policy_response": "The sentence \"Can you help me?\" is classified as an interrogative.",
+        "expected_response": "The sentence \"Can you help me?\" would be classified as interrogative.",
+        "ref_perplexity": 224.39669199313602,
+        "policy_perplexity": 196.16327602003147
+    },
+    {
+        "instruction": "What is the capital of the Philippines?",
+        "ref_response": "The capital of the Philippines is Manila.",
+        "policy_response": "The capital of the Philippines is Manila.",
+        "expected_response": "The capital of the Philippines is Manila.",
+        "ref_perplexity": 1052.6317627859844,
+        "policy_perplexity": 1038.677951825057
+    },
+    {
+        "instruction": "Convert 90 centimeters to meters.",
+        "ref_response": "To convert 90 centimeters to meters, we need to divide by 100 since 1 meter is equal to 100 centimeters.\n\n90 cm \u00f7 100 = 0.9 m\n\nSo, 90 centimeters is equal to 0.9 meters.",
+        "policy_response": "To convert 90 centimeters to meters, we divide by 100 since 1 meter equals 100 centimeters. \n\n90 centimeters \u00f7 100 = 0.9 meters.",
+        "expected_response": "90 centimeters is equivalent to 0.9 meters.",
+        "ref_perplexity": 1500.116762013016,
+        "policy_perplexity": 1254.247029721362
+    },
+    {
+        "instruction": "What is the opposite of 'early'?",
+        "ref_response": "The opposite of \"early\" is \"late\".",
+        "policy_response": "The opposite of 'early' is 'late'.",
+        "expected_response": "The opposite of 'early' is 'late'.",
+        "ref_perplexity": 1417.8635982326828,
+        "policy_perplexity": 1174.0240456523793
+    },
+    {
+        "instruction": "What is a synonym for 'assist'?",
+        "ref_response": "A synonym for \"assist\" is \"help\".",
+        "policy_response": "A synonym for 'assist' is 'help'.",
+        "expected_response": "A synonym for 'assist' would be 'help'.",
+        "ref_perplexity": 1042.4444367539365,
+        "policy_perplexity": 1035.8690602230174
+    },
+    {
+        "instruction": "Translate 'I love you' into Spanish.",
+        "ref_response": "The translation of \"I love you\" into Spanish is:\n\nTe amo.\n\n(Note: This is a more formal and romantic way to say \"I love you\". If you want to say \"I love you\" in a more casual or informal way, you can use \"Te quiero\" or \"Te muevo\" depending on the context and the level of affection.)",
+        "policy_response": "The translation of 'I love you' into Spanish is 'Te amo'.",
+        "expected_response": "Te quiero mucho.",
+        "ref_perplexity": 683.4363066796268,
+        "policy_perplexity": 567.3588374755072
+    },
+    {
+        "instruction": "Calculate the compound interest on a principal amount of $1000 at an annual rate of 4% compounded annually for 5 years.",
+        "ref_response": "To calculate the compound interest, we use the formula:\n\nA = P(1 + r/n)^(nt)\n\nWhere:\nA = the future value of the investment/loan, including interest\nP = principal investment amount (the initial deposit or loan amount)\nr = annual interest rate (in decimal)\nn = number of times that interest is compounded per year\nt = number of years the money is invested or borrowed for\n\nGiven:\nP = $1000\nr = 4% or 0.04 in decimal\nn = 1 (compounded annually)\nt = 5 years\n\nPlugging in the values, we get:\n\nA = 1000(1 + 0.04/1)^(1*5)\nA = 1000(1 + 0.04)^5\nA = 1000(1.04)^5\nA = 1000 * 1.216647\nA = 1216.65\n\nThe future value of the investment is $1216.65.\n\nTo find the compound interest, we subtract the principal from the future value:\n\nCompound Interest = A - P\n= 1216.65 - 1000\n= 216.65\n\nTherefore, the compound interest on",
+        "policy_response": "To calculate the compound interest on a principal amount of $1000 at an annual rate of 4% compounded annually for 5 years, we use the formula for compound interest:\n\nA = P(1 + r)^n\n\nWhere:\n- A is the amount of money accumulated after n years, including interest.\n- P is the principal amount ($1000 in this case).\n- r is the annual interest rate (4% or 0.04 as a decimal).\n- n is the number of years the money is invested (5 years in this case).\n\nPlugging the values into the formula gives us:\n\nA = 1000(1 + 0.04)^5\n\nFirst, calculate the value inside the parentheses:\n(1 + 0.04) = 1.04\n\nThen, raise 1.04 to the power of 5:\n1.04^5 \u2248 1.21664\n\nNow, multiply the principal by this value to find the total amount after 5 years:\nA \u2248 1000 * 1.21664 \u2248 1216.64\n\nThe compound interest is the difference between the total amount and the principal:\nCompound Interest = A - P\n= 1216.64 - 1000\n=",
+        "expected_response": "The compound interest on $1000 at 4% per annum compounded annually for 5 years is approximately $216.65, making the total $1216.65.",
+        "ref_perplexity": 194.834321256117,
+        "policy_perplexity": 178.76990450812792
+    },
+    {
+        "instruction": "Rewrite the sentence so that it does not contain any passive voice.",
+        "ref_response": "The radio played the song.",
+        "policy_response": "The radio played the song.",
+        "expected_response": "The radio played the song.",
+        "ref_perplexity": 342.90742675073227,
+        "policy_perplexity": 316.19107626638294
+    },
+    {
+        "instruction": "Explain what a limerick is.",
+        "ref_response": "A limerick is a type of humorous poem that consists of five lines, with a specific rhyming scheme and meter. The structure of a limerick is usually as follows:\n\n* Lines 1, 2, and 5 have eight to ten syllables and a consistent rhythm\n* Lines 3 and 4 have five to seven syllables and a consistent rhythm\n* The rhyming scheme is AABBA, with the first, second, and last lines rhyming with each other, and the third and fourth lines rhyming with each other\n\nLimericks often use wordplay, puns, and clever language to create a humorous effect. They can be lighthearted and playful, and are often used to tell a short, witty story or make a humorous comment.",
+        "policy_response": "A limerick is a type of humorous poem that consists of five lines. The first, second, and last lines rhyme with each other, while the middle two lines rhyme with each other. The structure of a limerick is typically AABBA, with the first, second, and last lines having eight to ten syllables and the middle lines having five to seven syllables.",
+        "expected_response": "I'd be happy to explain what a limerick is. A limerick is a humorous five-line poem with a specific rhythm and rhyme scheme, typically AABBA.",
+        "ref_perplexity": 1424.353319558808,
+        "policy_perplexity": 1397.1888612981427
+    },
+    {
+        "instruction": "Generate a sentence using the word 'generous'.",
+        "ref_response": "The philanthropist was known for her generous donations to local charities.",
+        "policy_response": "The charity event was made possible by the generous donations from local businesses.",
+        "expected_response": "He is extremely generous and kindly offers his assistance to those who require it.",
+        "ref_perplexity": 1136.4087148652231,
+        "policy_perplexity": 839.329260212932
+    },
+    {
+        "instruction": "What is the comparative form of 'bad'?",
+        "ref_response": "The comparative form of 'bad' is 'worse'.",
+        "policy_response": "The comparative form of 'bad' is 'worse'.",
+        "expected_response": "If I may assist, the comparative form of 'bad' is actually 'worse'.",
+        "ref_perplexity": 1582.9468679671697,
+        "policy_perplexity": 1433.0611668920299
+    },
+    {
+        "instruction": "Edit the sentence below to remove any redundant words and make it more concise.",
+        "ref_response": "I think that.",
+        "policy_response": "I think that.",
+        "expected_response": "I believe.",
+        "ref_perplexity": 759.3226142040559,
+        "policy_perplexity": 514.4960636186765
+    },
+    {
+        "instruction": "List the ingredients to make pancakes.",
+        "ref_response": "Here is a list of ingredients to make pancakes:\n\n1. All-purpose flour (2 cups)\n2. Sugar (2 tablespoons)\n3. Baking powder (2 teaspoons)\n4. Salt (1/4 teaspoon)\n5. Large eggs (2)\n6. Milk (1 cup)\n7. Butter, melted (1/4 cup)\n8. Vanilla extract (1 teaspoon)\n9. Butter or oil for greasing the pan",
+        "policy_response": "Here is a list of ingredients to make pancakes:\n\n1. All-purpose flour\n2. Baking powder\n3. Sugar\n4. Salt\n5. Large eggs\n6. Milk\n7. Butter or oil\n8. Vanilla extract",
+        "expected_response": "Ingredients for pancakes include flour, eggs, milk, and sugar.",
+        "ref_perplexity": 1286.2242488688407,
+        "policy_perplexity": 966.8362660409587
+    },
+    {
+        "instruction": "Rewrite the sentence using an idiom.",
+        "ref_response": "The test was a piece of cake.",
+        "policy_response": "The test was a piece of cake.",
+        "expected_response": "The test was a piece of cake.",
+        "ref_perplexity": 511.2739615410076,
+        "policy_perplexity": 540.9198221201867
+    },
+    {
+        "instruction": "Convert 2,000 milligrams to grams.",
+        "ref_response": "To convert 2,000 milligrams to grams, we need to divide by 1,000 since 1 gram is equal to 1,000 milligrams.\n\n2,000 milligrams \u00f7 1,000 = 2 grams\n\nSo, 2,000 milligrams is equal to 2 grams.",
+        "policy_response": "2,000 milligrams is equivalent to 2 grams.",
+        "expected_response": "2,000 milligrams is equal to 2 grams.",
+        "ref_perplexity": 1001.3733754851501,
+        "policy_perplexity": 823.5827702351238
+    },
+    {
+        "instruction": "Generate a sentence using the word 'dynamic'.",
+        "ref_response": "The city's vibrant nightlife is a dynamic reflection of its diverse cultural scene.",
+        "policy_response": "The city's vibrant nightlife is a dynamic experience that attracts tourists from all over the world.",
+        "expected_response": "The team had a dynamic leader who inspired everyone.",
+        "ref_perplexity": 1485.6397820452569,
+        "policy_perplexity": 1199.6894382146995
+    },
+    {
+        "instruction": "Provide a word that rhymes with 'light.'",
+        "ref_response": "The word \"night\" rhymes with \"light.\"",
+        "policy_response": "The word \"night\" rhymes with \"light.\"",
+        "expected_response": "A word that rhymes with 'light' is 'might.'",
+        "ref_perplexity": 454.48718257586006,
+        "policy_perplexity": 449.06631953722314
+    },
+    {
+        "instruction": "What type of bond does sodium chloride (table salt) have?",
+        "ref_response": "Sodium chloride, commonly known as table salt, has an ionic bond. This is because it is composed of a positively charged sodium ion (Na+) and a negatively charged chloride ion (Cl-). The electrostatic attraction between these oppositely charged ions results in the formation of an ionic bond, holding the compound together.",
+        "policy_response": "Sodium chloride, commonly known as table salt, has an ionic bond.",
+        "expected_response": "Sodium chloride (table salt) has an ionic bond.",
+        "ref_perplexity": 581.5089337608912,
+        "policy_perplexity": 441.3579162569422
+    },
+    {
+        "instruction": "What is the formula for speed?",
+        "ref_response": "The formula for speed is:\n\nSpeed = Distance / Time\n\nThis can also be expressed as:\n\nSpeed = d / t\n\nWhere:\n\n* Speed is the rate of change of distance with respect to time\n* Distance (d) is the total distance traveled\n* Time (t) is the time taken to travel that distance",
+        "policy_response": "The formula for speed is distance divided by time, which can be expressed as: speed = distance / time.",
+        "expected_response": "The formula for speed is actually given by speed = distance/time.",
+        "ref_perplexity": 1425.3004176144937,
+        "policy_perplexity": 1213.2419225494098
+    },
+    {
+        "instruction": "Classify the following words by their grammatical categories: swim, beautiful, quickly",
+        "ref_response": "The words \"swim\", \"beautiful\", and \"quickly\" can be classified as follows:\n\n* \"Swim\" is a verb.\n* \"Beautiful\" is an adjective.\n* \"Quickly\" is an adverb.",
+        "policy_response": "The given words can be classified as follows:\n\n1. swim - verb\n2. beautiful - adjective\n3. quickly - adverb",
+        "expected_response": "Swim: Verb\nBeautiful: Adjective\nQuickly: Adverb",
+        "ref_perplexity": 808.2053017075053,
+        "policy_perplexity": 599.6462472001616
+    },
+    {
+        "instruction": "Evaluate the following phrase by transforming it into the spelling given.",
+        "ref_response": "The word \"freind\" is misspelled. The correct spelling is \"friend\".",
+        "policy_response": "The word \"freind\" is misspelled and should be spelled as \"friend\".",
+        "expected_response": "The spelling of the given phrase \"freind\" is incorrect, the correct spelling is \"friend\".",
+        "ref_perplexity": 1118.8991661436876,
+        "policy_perplexity": 766.4667694018993
+    },
+    {
+        "instruction": "Classify the following into mammals, birds, and fish.",
+        "ref_response": "Here is the classification of the given animals:\n\n**Mammals:**\n- Lion\n\n**Birds:**\n- Eagle\n\n**Fish:**\n- Shark",
+        "policy_response": "Mammals: Lion\nBirds: Eagle\nFish: Shark",
+        "expected_response": "Mammals: Lion\nBirds: Eagle\nFish: Shark",
+        "ref_perplexity": 391.45070723852706,
+        "policy_perplexity": 350.47509424066607
+    },
+    {
+        "instruction": "Combine the two sentences into a single coherent sentence.",
+        "ref_response": "She studied hard and passed the exam.",
+        "policy_response": "She studied hard and passed the exam.",
+        "expected_response": "She studied hard, so she passed the exam.",
+        "ref_perplexity": 424.21464400059625,
+        "policy_perplexity": 429.8466004701683
+    },
+    {
+        "instruction": "What is the contraction for 'they will'?",
+        "ref_response": "The contraction for \"they will\" is \"they'll\".",
+        "policy_response": "The contraction for 'they will' is 'they'll'.",
+        "expected_response": "The contraction for 'they will' is indeed 'they'll.'",
+        "ref_perplexity": 1189.8233561625439,
+        "policy_perplexity": 1128.5510827537819
+    },
+    {
+        "instruction": "What is the capital of South Korea?",
+        "ref_response": "The capital of South Korea is Seoul.",
+        "policy_response": "The capital of South Korea is Seoul.",
+        "expected_response": "I'd be happy to help! The capital of South Korea is indeed Seoul.",
+        "ref_perplexity": 1072.8138246037636,
+        "policy_perplexity": 1053.680825188817
+    },
+    {
+        "instruction": "Change the sentences from active voice to passive voice.",
+        "ref_response": "The meal will be prepared by the chef.",
+        "policy_response": "The meal will be prepared by the chef.",
+        "expected_response": "The meal will kindly be prepared by the chef.",
+        "ref_perplexity": 396.98600328823085,
+        "policy_perplexity": 378.31605873313543
+    },
+    {
+        "instruction": "Create a palindrome using the word 'racecar'.",
+        "ref_response": "The word \"racecar\" is already a palindrome, as it reads the same forwards and backwards.",
+        "policy_response": "A palindrome using the word 'racecar' is: \"racecar\".",
+        "expected_response": "A racecar.",
+        "ref_perplexity": 664.556405454617,
+        "policy_perplexity": 730.7381413316883
+    },
+    {
+        "instruction": "Convert the given sentence into active voice.",
+        "ref_response": "The committee approved the proposal.",
+        "policy_response": "The committee approved the proposal.",
+        "expected_response": "The committee kindly approved the proposal.",
+        "ref_perplexity": 420.7847458331252,
+        "policy_perplexity": 385.90370287434615
+    },
+    {
+        "instruction": "Name three types of flowers.",
+        "ref_response": "Here are three types of flowers:\n\n1. Roses\n2. Daisies\n3. Tulips",
+        "policy_response": "Here are three types of flowers: \n\n1. Roses\n2. Daisies\n3. Lilies",
+        "expected_response": "If I may suggest, three types of flowers are roses, lilies, and tulips.",
+        "ref_perplexity": 1367.5154178558314,
+        "policy_perplexity": 1301.2338276438816
+    },
+    {
+        "instruction": "Create a simile with the phrase 'as busy as'.",
+        "ref_response": "The city streets were as busy as a beehive on a summer day.",
+        "policy_response": "The city streets were as busy as a beehive on a summer day.",
+        "expected_response": "He was as busy as a bee.",
+        "ref_perplexity": 758.0072565123108,
+        "policy_perplexity": 567.7198496762451
+    },
+    {
+        "instruction": "What is the plural form of 'mouse'?",
+        "ref_response": "The plural form of'mouse' is'mice'.",
+        "policy_response": "The plural form of'mouse' is'mice'.",
+        "expected_response": "The plural form of 'mouse' is actually 'mice'.",
+        "ref_perplexity": 841.0355436010045,
+        "policy_perplexity": 979.355967636268
+    },
+    {
+        "instruction": "Put the following words in alphabetical order: kitten, zebra, alligator.",
+        "ref_response": "Here are the words in alphabetical order:\n\n1. Alligator\n2. Kitten\n3. Zebra",
+        "policy_response": "Here are the words in alphabetical order: alligator, kitten, zebra.",
+        "expected_response": "Here are the words in alphabetical order: Alligator, kitten, zebra.",
+        "ref_perplexity": 483.9153709381361,
+        "policy_perplexity": 634.8097016934557
+    },
+    {
+        "instruction": "Generate a sentence using the word 'effort'.",
+        "ref_response": "The team's collective effort led to a successful completion of the project.",
+        "policy_response": "The team's collective effort led to a successful completion of the project.",
+        "expected_response": "She put considerable effort into her work.",
+        "ref_perplexity": 1274.694920056377,
+        "policy_perplexity": 905.6547139906445
+    },
+    {
+        "instruction": "What is the melting point of zinc in Celsius?",
+        "ref_response": "The melting point of zinc is 419.5 degrees Celsius.",
+        "policy_response": "The melting point of zinc is 419.53 degrees Celsius.",
+        "expected_response": "The melting point of zinc is 419.5 degrees Celsius.",
+        "ref_perplexity": 885.5049832949948,
+        "policy_perplexity": 864.2641838816738
+    },
+    {
+        "instruction": "What is the symbol for the chemical element iron?",
+        "ref_response": "The symbol for the chemical element iron is Fe.",
+        "policy_response": "The symbol for the chemical element iron is Fe.",
+        "expected_response": "The symbol for the chemical element iron is indeed Fe.",
+        "ref_perplexity": 997.3871099942536,
+        "policy_perplexity": 903.0974617610564
+    },
+    {
+        "instruction": "Classify the following words by their grammatical categories: jump, quick, beautiful",
+        "ref_response": "The words \"jump\", \"quick\", and \"beautiful\" can be classified as follows:\n\n* \"jump\" is a verb (action word)\n* \"quick\" is an adjective (describing word)\n* \"beautiful\" is also an adjective (describing word)",
+        "policy_response": "The given words can be classified as follows:\n\n1. jump: verb\n2. quick: adjective\n3. beautiful: adjective",
+        "expected_response": "Jump: Verb\nQuick: Adjective\nBeautiful: Adjective",
+        "ref_perplexity": 733.9204124301979,
+        "policy_perplexity": 546.0164050369087
+    },
+    {
+        "instruction": "What is the melting point of tin in Celsius?",
+        "ref_response": "The melting point of tin is 231.9 degrees Celsius.",
+        "policy_response": "The melting point of tin is 231.9 degrees Celsius.",
+        "expected_response": "The melting point of tin is 231.9 degrees Celsius.",
+        "ref_perplexity": 860.8577923472662,
+        "policy_perplexity": 884.5828656802154
+    },
+    {
+        "instruction": "Convert the following sentence to use a relative clause: The girl is a dancer. She lives next door.",
+        "ref_response": "The girl who lives next door is a dancer.",
+        "policy_response": "The girl who lives next door is a dancer.",
+        "expected_response": "The young lady who resides next door happens to be a dancer.",
+        "ref_perplexity": 593.2145992733002,
+        "policy_perplexity": 539.8710622975963
+    },
+    {
+        "instruction": "Convert 8 kilometers to meters.",
+        "ref_response": "To convert 8 kilometers to meters, we use the conversion factor that 1 kilometer equals 1000 meters.\n\n8 kilometers = 8 x 1000 meters\n= 8000 meters",
+        "policy_response": "To convert 8 kilometers to meters, we multiply 8 by 1000 since 1 kilometer equals 1000 meters.\n\n8 kilometers * 1000 meters/kilometer = 8000 meters.",
+        "expected_response": "8 kilometers is equivalent to 8000 meters.",
+        "ref_perplexity": 1502.893306041641,
+        "policy_perplexity": 1343.6678815461441
+    },
+    {
+        "instruction": "Provide a synonym for 'quick'.",
+        "ref_response": "Rapid",
+        "policy_response": "A suitable synonym for 'quick' is 'rapid'.",
+        "expected_response": "A synonym for 'quick' is 'fast'.",
+        "ref_perplexity": 1224.3952314588726,
+        "policy_perplexity": 1043.7291757141531
+    },
+    {
+        "instruction": "Rewrite the following sentence to include a hyperbole: 'I'm very hungry.'",
+        "ref_response": "I'm so hungry I could eat a whole elephant.",
+        "policy_response": "I'm absolutely starving to death.",
+        "expected_response": "I'm so hungry I could almost eat a whole elephant.",
+        "ref_perplexity": 411.46438275304257,
+        "policy_perplexity": 380.97700152647315
+    },
+    {
+        "instruction": "Edit the text for grammar and punctuation.",
+        "ref_response": "Here is the edited text:\n\nToday was amazing. I went hiking and saw a bear.",
+        "policy_response": "Today was amazing. I went hiking and saw a bear.",
+        "expected_response": "\"Today was amazing. I went hiking and saw a bear.\"",
+        "ref_perplexity": 790.248950047055,
+        "policy_perplexity": 516.3669152259894
+    },
+    {
+        "instruction": "What is the abbreviation for 'Master of Business Administration'?",
+        "ref_response": "The abbreviation for 'Master of Business Administration' is MBA.",
+        "policy_response": "The abbreviation for 'Master of Business Administration' is MBA.",
+        "expected_response": "The abbreviation for 'Master of Business Administration' is kindly noted as MBA.",
+        "ref_perplexity": 857.2931180247527,
+        "policy_perplexity": 695.8642314382469
+    },
+    {
+        "instruction": "Generate a random sequence of 12 digits.",
+        "ref_response": "Here is a random sequence of 12 digits:\n\n4 9 1 8 7 5 2 0 6 3 9 1",
+        "policy_response": "Here is a random sequence of 12 digits: 8 4 2 1 9 7 6 5 3 0 8 9",
+        "expected_response": "I'd be happy to help you with that! Here is a randomly generated sequence of 12 digits: 854239067192.",
+        "ref_perplexity": 986.4565330376462,
+        "policy_perplexity": 1135.245348427938
+    },
+    {
+        "instruction": "What is the freezing point of water in Fahrenheit?",
+        "ref_response": "The freezing point of water in Fahrenheit is 32 degrees.",
+        "policy_response": "The freezing point of water in Fahrenheit is 32 degrees.",
+        "expected_response": "The freezing point of water is 32 degrees Fahrenheit.",
+        "ref_perplexity": 917.5339717858838,
+        "policy_perplexity": 876.0762150799455
+    },
+    {
+        "instruction": "Name three essential vitamins for human health.",
+        "ref_response": "Here are three essential vitamins for human health:\n\n1. **Vitamin C**: This vitamin is crucial for a healthy immune system, skin health, and iron absorption. It also plays a role in the production of collagen, which is essential for healthy bones, skin, and connective tissue.\n\n2. **Vitamin D**: Vitamin D is vital for bone health, as it helps the body absorb calcium, which is necessary for maintaining strong bones and teeth. It also plays a role in immune function and may help reduce the risk of certain diseases, such as diabetes and heart disease.\n\n3. **Vitamin B12**: This vitamin is essential for the production of red blood cells, nerve function, and DNA synthesis. It also plays a role in the metabolism of fatty acids and amino acids, which are necessary for energy production and overall health.\n\nThese three vitamins are just a few examples of the many essential vitamins that are necessary for maintaining good health.",
+        "policy_response": "Three essential vitamins for human health are:\n\n1. Vitamin C: This vitamin is crucial for a healthy immune system and supports the production of collagen, which is vital for skin, bones, and connective tissue health.\n\n2. Vitamin D: It plays a significant role in maintaining bone health by aiding in the absorption of calcium and phosphorus, which are essential for bone mineralization.\n\n3. Vitamin B12: This vitamin is vital for the production of red blood cells and the maintenance of the nervous system. It also plays a role in DNA synthesis and the metabolism of fatty acids and amino acids.",
+        "expected_response": "Here are three essential vitamins that play a crucial role in maintaining our overall well-being:\n\n1. Vitamin A\n2. Vitamin C\n3. Vitamin D",
+        "ref_perplexity": 1919.6037389730423,
+        "policy_perplexity": 1259.980649904113
+    },
+    {
+        "instruction": "What type of bond is formed when one atom donates an electron to another atom?",
+        "ref_response": "A covalent bond is formed when one atom donates an electron to another atom.",
+        "policy_response": "A covalent bond is formed when one atom donates an electron to another atom.",
+        "expected_response": "The type of bond formed when one atom donates an electron to another atom is an ionic bond.",
+        "ref_perplexity": 407.61614426021447,
+        "policy_perplexity": 320.3294674387176
+    },
+    {
+        "instruction": "Identify the pronoun in the sentence.",
+        "ref_response": "The pronoun in the sentence is \"She\".",
+        "policy_response": "The pronoun in the sentence is \"She\".",
+        "expected_response": "The pronoun in the sentence is indeed 'She'.",
+        "ref_perplexity": 382.39898946993753,
+        "policy_perplexity": 343.75201843775676
+    },
+    {
+        "instruction": "What is an antonym of 'fast'?",
+        "ref_response": "The antonym of 'fast' is'slow'.",
+        "policy_response": "An antonym of 'fast' is'slow'.",
+        "expected_response": "slow.",
+        "ref_perplexity": 1019.5974016368403,
+        "policy_perplexity": 846.1824971518671
+    },
+    {
+        "instruction": "Explain the function of the liver in the human body.",
+        "ref_response": "The liver is a vital organ in the human body that plays a crucial role in maintaining overall health and well-being. Its primary functions can be summarized as follows:\n\n1. **Detoxification**: The liver filters the blood coming from the digestive tract before it is passed to the rest of the body. It removes toxins, such as alcohol, drugs, and other harmful substances, from the blood and excretes them in the bile or urine.\n\n2. **Metabolism**: The liver is involved in the metabolism of carbohydrates, fats, and proteins. It breaks down these nutrients into energy, which is then distributed to the body's cells. It also stores glycogen, a complex carbohydrate that can be converted into glucose when the body needs it.\n\n3. **Production of Bile**: The liver produces bile, a digestive fluid that helps in the digestion and absorption of fats and fat-soluble vitamins in the small intestine. Bile also aids in the elimination of waste products from the body.\n\n4. **Production of Proteins**: The liver produces proteins that are necessary for blood clotting, such as fibrinogen, and also produces albumin, which helps maintain blood volume and transport hormones, vitamins, and drugs throughout the body.\n\n5. **Storage of Nutrients",
+        "policy_response": "The liver plays a vital role in the human body, serving as a multifunctional organ that performs several critical functions. One of its primary roles is detoxification, where it filters the blood coming from the digestive tract before it circulates to the rest of the body. This process involves removing toxins, drugs, and other harmful substances from the blood, thereby protecting the body from their harmful effects.\n\nAnother key function of the liver is metabolism. It is responsible for breaking down fats, proteins, and carbohydrates into energy that the body can use. This process involves converting these macronutrients into glucose, which is then distributed to the body's cells for energy production.\n\nThe liver also plays a crucial role in the production of bile, a digestive fluid that aids in the digestion and absorption of fats and fat-soluble vitamins in the small intestine. Bile is produced in the liver and stored in the gallbladder before being released into the small intestine to facilitate the breakdown of fats into smaller components that can be absorbed by the body.\n\nIn addition to these functions, the liver also stores glycogen, a complex carbohydrate that serves as a readily available source of energy for the body. It also plays a role in the production of proteins, including clotting factors that help to prevent excessive",
+        "expected_response": "The liver functions to process nutrients absorbed from the digestive tract, detoxify chemicals, and metabolize drugs.",
+        "ref_perplexity": 742.4165606466184,
+        "policy_perplexity": 752.982894433678
+    },
+    {
+        "instruction": "What is a synonym for 'small'?",
+        "ref_response": "A synonym for \"small\" is \"tiny\".",
+        "policy_response": "A suitable synonym for'small' is 'tiny'.",
+        "expected_response": "A synonym for 'small' is 'little'.",
+        "ref_perplexity": 1096.9145230234305,
+        "policy_perplexity": 1117.5554712164706
+    },
+    {
+        "instruction": "What is the capital of Spain?",
+        "ref_response": "The capital of Spain is Madrid.",
+        "policy_response": "The capital of Spain is Madrid.",
+        "expected_response": "I'd be happy to help! The capital of Spain is indeed Madrid.",
+        "ref_perplexity": 973.6649747094066,
+        "policy_perplexity": 993.2604049800578
+    },
+    {
+        "instruction": "What is the chemical symbol for mercury?",
+        "ref_response": "The chemical symbol for mercury is Hg.",
+        "policy_response": "The chemical symbol for mercury is Hg.",
+        "expected_response": "The chemical symbol for mercury is Hg.",
+        "ref_perplexity": 1229.0455455083331,
+        "policy_perplexity": 1183.0357019232927
+    },
+    {
+        "instruction": "Define the concept of 'gravity'.",
+        "ref_response": "**Gravity** is a fundamental force of nature that causes objects with mass to attract each other. It is a universal force that affects everything with mass or energy, from the smallest subatomic particles to the largest galaxies. The concept of gravity was first described by Sir Isaac Newton in his groundbreaking work \"Philosophi\u00e6 Naturalis Principia Mathematica\" in 1687. Newton's law of universal gravitation states that every point mass attracts every other point mass by a force acting along the line intersecting both points.\n\nThe strength of the gravitational force between two objects depends on their masses and the distance between them. The more massive the objects and the closer they are to each other, the stronger the gravitational pull. This force is what keeps planets in orbit around their stars, causes objects to fall towards the ground when dropped, and holds galaxies together.\n\nGravity is a result of the curvature of spacetime caused by the presence of mass and energy, as described by Albert Einstein's theory of general relativity. According to this theory, the more massive an object is, the greater its warping effect on spacetime, and the stronger its gravitational pull.",
+        "policy_response": "Gravity is a fundamental force of nature that causes objects with mass to attract each other. It is a universal force that affects everything with mass or energy, from the smallest subatomic particles to the largest galaxies. The strength of the gravitational force between two objects depends on their masses and the distance between them, as described by Isaac Newton's law of universal gravitation.",
+        "expected_response": "Gravity is a fundamental force of nature that attracts two bodies towards each other, causing objects like apples to fall towards the ground and planets to orbit around stars.",
+        "ref_perplexity": 1565.3825369732858,
+        "policy_perplexity": 1516.5611208211778
+    },
+    {
+        "instruction": "Calculate the perimeter of a hexagon with side lengths of 4 cm.",
+        "ref_response": "To calculate the perimeter of a hexagon, you need to add up the lengths of all its sides. Since a hexagon has 6 sides, and each side is 4 cm long, you can multiply the number of sides by the length of each side to find the perimeter.\n\nPerimeter = Number of sides \u00d7 Length of each side\nPerimeter = 6 \u00d7 4 cm\nPerimeter = 24 cm\n\nThe perimeter of the hexagon is 24 cm.",
+        "policy_response": "To calculate the perimeter of a hexagon with side lengths of 4 cm, we multiply the number of sides by the length of each side. A hexagon has 6 sides. \n\nPerimeter = Number of sides * Length of each side\nPerimeter = 6 * 4 cm\nPerimeter = 24 cm",
+        "expected_response": "The perimeter of the hexagon is 24 cm, as calculated.",
+        "ref_perplexity": 905.5165325908742,
+        "policy_perplexity": 942.1424200667326
+    },
+    {
+        "instruction": "Convert the angle from radians to degrees.",
+        "ref_response": "## Step 1: Recall the conversion formula from radians to degrees\nThe formula to convert radians to degrees is: degrees = radians * (180 / \u03c0).\n\n## Step 2: Plug in the given value into the formula\nSubstitute \u03c0/2 for radians in the formula: degrees = (\u03c0/2) * (180 / \u03c0).\n\n## Step 3: Simplify the expression\nCancel out \u03c0 in the numerator and denominator: degrees = (1/2) * 180.\n\n## Step 4: Perform the multiplication\nMultiply 1/2 by 180: degrees = 90.\n\nThe final answer is: $\\boxed{90}$",
+        "policy_response": "The angle \u03c0/2 radians is equivalent to 90 degrees.",
+        "expected_response": "The angle \u03c0/2 radians is equivalent to approximately 90 degrees.",
+        "ref_perplexity": 802.6461001160459,
+        "policy_perplexity": 729.3964748175566
+    },
+    {
+        "instruction": "Convert 200 centimeters to meters.",
+        "ref_response": "To convert 200 centimeters to meters, we divide by 100 since 1 meter equals 100 centimeters.\n\n200 cm \u00f7 100 = 2 meters\n\nSo, 200 centimeters is equal to 2 meters.",
+        "policy_response": "To convert 200 centimeters to meters, we divide by 100 since 1 meter equals 100 centimeters. \n\n200 cm / 100 = 2 meters.",
+        "expected_response": "200 centimeters is equivalent to 2 meters.",
+        "ref_perplexity": 1374.6671806830348,
+        "policy_perplexity": 1172.393308946737
+    },
+    {
+        "instruction": "Pick out the verb from the following list.",
+        "ref_response": "The verb from the list is: sing",
+        "policy_response": "The verb from the list is: sing",
+        "expected_response": "I've identified the verb in the list for you. The correct verb from the list is 'sing.'",
+        "ref_perplexity": 1276.9160106485406,
+        "policy_perplexity": 748.1495006365011
+    },
+    {
+        "instruction": "What is the chemical formula for glucose?",
+        "ref_response": "The chemical formula for glucose is C6H12O6.",
+        "policy_response": "The chemical formula for glucose is C6H12O6.",
+        "expected_response": "The chemical formula for glucose is C6H12O6.",
+        "ref_perplexity": 1362.1976209046907,
+        "policy_perplexity": 1142.2331056949724
+    },
+    {
+        "instruction": "Name a mammal that lays eggs.",
+        "ref_response": "A platypus is a mammal that lays eggs.",
+        "policy_response": "A platypus is an example of a mammal that lays eggs.",
+        "expected_response": "A mammal that lays eggs is the platypus.",
+        "ref_perplexity": 785.4658111237005,
+        "policy_perplexity": 753.6797741468811
+    },
+    {
+        "instruction": "What is the boiling point of water in Fahrenheit?",
+        "ref_response": "The boiling point of water in Fahrenheit is 212 degrees.",
+        "policy_response": "The boiling point of water in Fahrenheit is 212 degrees.",
+        "expected_response": "The boiling point of water is 212 degrees Fahrenheit.",
+        "ref_perplexity": 1071.8852382984178,
+        "policy_perplexity": 900.5826429931329
+    },
+    {
+        "instruction": "Put the following words in alphabetical order: lion, zebra, elephant.",
+        "ref_response": "Here are the words in alphabetical order:\n\n1. Elephant\n2. Lion\n3. Zebra",
+        "policy_response": "Here are the words in alphabetical order: elephant, lion, zebra.",
+        "expected_response": "Here are the words in alphabetical order: Elephant, lion, zebra.",
+        "ref_perplexity": 515.1630594888312,
+        "policy_perplexity": 486.99477920651424
+    },
+    {
+        "instruction": "Define the term 'metaphor'.",
+        "ref_response": "A metaphor is a figure of speech that compares two unlike things without using \"like\" or \"as.\" It is a way of describing an object, concept, or idea by directly linking it to another object, concept, or idea, suggesting that they share a common characteristic or essence. Unlike similes, which use \"like\" or \"as\" to make a comparison, metaphors state that one thing is another thing, in order to create a vivid and evocative representation of the subject.",
+        "policy_response": "A metaphor is a figure of speech that compares two unlike things without using \"like\" or \"as.\" It is a way of describing an object, concept, or idea by directly linking it to another object, concept, or idea, suggesting that they share a common characteristic or essence.",
+        "expected_response": "A metaphor is a figure of speech in which a word or phrase is applied to an object or action to which it is not literally applicable.",
+        "ref_perplexity": 1612.8235999295919,
+        "policy_perplexity": 1434.8115772851302
+    },
+    {
+        "instruction": "What is the atomic mass of carbon?",
+        "ref_response": "The atomic mass of carbon is 12.01 u (unified atomic mass units).",
+        "policy_response": "The atomic mass of carbon is 12.01.",
+        "expected_response": "The atomic mass of carbon is approximately 12.01 atomic mass units.",
+        "ref_perplexity": 943.7989061151874,
+        "policy_perplexity": 1009.9575449195983
+    },
+    {
+        "instruction": "What is the pH value of pure water at 25\u00b0C?",
+        "ref_response": "The pH value of pure water at 25\u00b0C is 7.",
+        "policy_response": "The pH value of pure water at 25\u00b0C is 7.",
+        "expected_response": "The pH value of pure water at 25\u00b0C is 7.",
+        "ref_perplexity": 679.3421067545523,
+        "policy_perplexity": 615.4573595209318
+    },
+    {
+        "instruction": "Re-word this sentence using an indirect question.",
+        "ref_response": "Is the meeting scheduled for a specific time?",
+        "policy_response": "Could you please tell me what time the meeting is?",
+        "expected_response": "Could you please tell me what time the meeting is?",
+        "ref_perplexity": 874.096669338124,
+        "policy_perplexity": 661.9396627883974
+    },
+    {
+        "instruction": "Name an antonym for 'big.'",
+        "ref_response": "The antonym for 'big' is'small'.",
+        "policy_response": "A suitable antonym for 'big' is'small.'",
+        "expected_response": "A suitable antonym for 'big' would be 'small'.",
+        "ref_perplexity": 1487.231010122921,
+        "policy_perplexity": 1402.1103001707515
+    },
+    {
+        "instruction": "Fill in the blanks with appropriate words.",
+        "ref_response": "The sky was filled with colorful ______________ (1) at sunset.\n\nAnswer: clouds",
+        "policy_response": "The sky was filled with colorful clouds at sunset.",
+        "expected_response": "The sky was filled with colorful clouds at sunset.",
+        "ref_perplexity": 401.1797419453306,
+        "policy_perplexity": 437.7589327111109
+    },
+    {
+        "instruction": "Generate a sentence that follows the pattern: 'Rarely do I _____'",
+        "ref_response": "Rarely do I get to spend a whole day without checking my phone.",
+        "policy_response": "Rarely do I get to spend a whole day without checking my phone.",
+        "expected_response": "Rarely do I indulge in fast food.",
+        "ref_perplexity": 1026.9143149878466,
+        "policy_perplexity": 843.2722887466053
+    },
+    {
+        "instruction": "What type of molecule is DNA?",
+        "ref_response": "DNA (Deoxyribonucleic acid) is a type of nucleic acid.",
+        "policy_response": "DNA (Deoxyribonucleic acid) is a type of nucleic acid.",
+        "expected_response": "DNA is a type of nucleic acid.",
+        "ref_perplexity": 1077.7237003680664,
+        "policy_perplexity": 970.5004911826538
+    },
+    {
+        "instruction": "What is a synonym for 'tiny'?",
+        "ref_response": "A synonym for \"tiny\" is \"small\".",
+        "policy_response": "A suitable synonym for 'tiny' is'small'.",
+        "expected_response": "A synonym for 'tiny' is 'small'.",
+        "ref_perplexity": 1155.779501852186,
+        "policy_perplexity": 1119.4210828106254
+    },
+    {
+        "instruction": "Generate three adjectives to describe a desert.",
+        "ref_response": "Here are three adjectives to describe a desert:\n\n1. Arid\n2. Barren\n3. Scorching",
+        "policy_response": "Here are three adjectives to describe a desert:\n\n1. Arid\n2. Scorching\n3. Barren",
+        "expected_response": "1. Arid\n2. Vast\n3. Barren",
+        "ref_perplexity": 1032.1721045099114,
+        "policy_perplexity": 1095.4405143979338
+    },
+    {
+        "instruction": "Change the following sentence to past perfect tense.",
+        "ref_response": "They had finished the game.",
+        "policy_response": "They had finished the game.",
+        "expected_response": "They had kindly finished the game.",
+        "ref_perplexity": 876.0181503529477,
+        "policy_perplexity": 524.1204954438284
+    },
+    {
+        "instruction": "Calculate the area of a triangle with a base of 10 units and height of 5 units.",
+        "ref_response": "To calculate the area of a triangle, we use the formula:\n\nArea = (base \u00d7 height) / 2\n\nGiven the base is 10 units and the height is 5 units, we can substitute these values into the formula:\n\nArea = (10 \u00d7 5) / 2\n\nFirst, we multiply the base and height:\n10 \u00d7 5 = 50\n\nThen, we divide the result by 2:\n50 / 2 = 25\n\nTherefore, the area of the triangle is 25 square units.",
+        "policy_response": "To calculate the area of a triangle, we use the formula: Area = 0.5 * base * height.\n\nGiven the base is 10 units and the height is 5 units, we can substitute these values into the formula:\n\nArea = 0.5 * 10 * 5\n\nFirst, multiply the base and height: 10 * 5 = 50\n\nThen, apply the 0.5 multiplier: 0.5 * 50 = 25\n\nTherefore, the area of the triangle is 25 square units.",
+        "expected_response": "25 square units.",
+        "ref_perplexity": 355.25255547928106,
+        "policy_perplexity": 369.4688595816303
+    },
+    {
+        "instruction": "What is an antonym of 'conceal'?",
+        "ref_response": "The antonym of 'conceal' is'reveal'.",
+        "policy_response": "An antonym of 'conceal' is'reveal'.",
+        "expected_response": "A suitable antonym for the word 'conceal' would be 'reveal'.",
+        "ref_perplexity": 759.9086747527429,
+        "policy_perplexity": 685.4146966590939
+    },
+    {
+        "instruction": "What is the boiling point of mercury in Fahrenheit?",
+        "ref_response": "The boiling point of mercury is 674.22 degrees Fahrenheit.",
+        "policy_response": "The boiling point of mercury is 674 degrees Fahrenheit.",
+        "expected_response": "The boiling point of mercury is indeed 674 degrees Fahrenheit.",
+        "ref_perplexity": 920.435770396594,
+        "policy_perplexity": 937.8453040438542
+    },
+    {
+        "instruction": "Rewrite the sentence using a metaphor.",
+        "ref_response": "The night is a black canvas.",
+        "policy_response": "The night is a heavy blanket that covers the world.",
+        "expected_response": "The night is a rather somber canvas.",
+        "ref_perplexity": 562.9790501701203,
+        "policy_perplexity": 587.4552851574441
+    },
+    {
+        "instruction": "Name a dwarf planet in our solar system.",
+        "ref_response": "Pluto.",
+        "policy_response": "One dwarf planet in our solar system is Pluto.",
+        "expected_response": "One dwarf planet in our solar system is actually Pluto.",
+        "ref_perplexity": 838.2161772634445,
+        "policy_perplexity": 824.803446336042
+    },
+    {
+        "instruction": "List five different types of vegetables.",
+        "ref_response": "Here are five different types of vegetables:\n\n1. Broccoli\n2. Carrots\n3. Spinach\n4. Bell Peppers\n5. Cucumbers",
+        "policy_response": "Here are five different types of vegetables:\n\n1. Broccoli\n2. Carrots\n3. Spinach\n4. Bell Peppers\n5. Cucumbers",
+        "expected_response": "1. Carrot\n2. Broccoli\n3. Cucumber\n4. Tomato\n5. Spinach",
+        "ref_perplexity": 1180.5190432588677,
+        "policy_perplexity": 1182.3245662477916
+    },
+    {
+        "instruction": "Classify this speech as either formal or informal.",
+        "ref_response": "This speech is informal.",
+        "policy_response": "This speech can be classified as informal.",
+        "expected_response": "I would classify this speech as formal, thank you for considering my request.",
+        "ref_perplexity": 432.55161989151895,
+        "policy_perplexity": 332.22164290270786
+    },
+    {
+        "instruction": "Rewrite the sentence.",
+        "ref_response": "The poem was written in a lyrical style.",
+        "policy_response": "The poem was written in a lyrical style.",
+        "expected_response": "The poem was beautifully crafted in a lyrical style.",
+        "ref_perplexity": 543.1581199731845,
+        "policy_perplexity": 522.2574111398171
+    },
+    {
+        "instruction": "What is the chemical formula for calcium carbonate?",
+        "ref_response": "The chemical formula for calcium carbonate is CaCO3.",
+        "policy_response": "The chemical formula for calcium carbonate is CaCO3.",
+        "expected_response": "The chemical formula for calcium carbonate is CaCO3.",
+        "ref_perplexity": 1092.1557094188504,
+        "policy_perplexity": 867.0012318895307
+    },
+    {
+        "instruction": "What is an antonym of 'progressive'?",
+        "ref_response": "The antonym of 'progressive' is'regressive'.",
+        "policy_response": "A suitable antonym for 'progressive' could be'regressive'.",
+        "expected_response": "A suitable antonym for the term 'progressive' would be 'regressive'.",
+        "ref_perplexity": 960.1538798047258,
+        "policy_perplexity": 807.8982103560887
+    },
+    {
+        "instruction": "Convert the given sentence into passive voice.",
+        "ref_response": "The results will be announced by the company tomorrow.",
+        "policy_response": "The results will be announced by the company tomorrow.",
+        "expected_response": "The results will kindly be announced by the company tomorrow.",
+        "ref_perplexity": 406.8479550632721,
+        "policy_perplexity": 351.75606114496907
+    },
+    {
+        "instruction": "Automatically correct the given sentence.",
+        "ref_response": "I'd like to go to London.",
+        "policy_response": "I would like to go to London.",
+        "expected_response": "I would love to visit London.",
+        "ref_perplexity": 904.5049964641612,
+        "policy_perplexity": 599.8246963214546
+    },
+    {
+        "instruction": "Identify the correct spelling of the following word.",
+        "ref_response": "The correct spelling of the word is: Definitely",
+        "policy_response": "The correct spelling of the word is \"Definitely\".",
+        "expected_response": "I think you meant \"Definitely.\"",
+        "ref_perplexity": 681.9534985384528,
+        "policy_perplexity": 791.9272020432549
+    },
+    {
+        "instruction": "What is the plural form of \"goose\"?",
+        "ref_response": "The plural form of \"goose\" is \"geese\".",
+        "policy_response": "The plural form of \"goose\" is \"geese.\"",
+        "expected_response": "The plural form of \"goose\" is \"geese.\"",
+        "ref_perplexity": 942.459193511161,
+        "policy_perplexity": 789.8172322221618
+    },
+    {
+        "instruction": "Identify the onomatopoeia in the sentence.",
+        "ref_response": "The onomatopoeia in the sentence is \"buzzed\".",
+        "policy_response": "The onomatopoeia in the sentence is \"buzzed\".",
+        "expected_response": "The onomatopoeia in the sentence is 'buzzed'.",
+        "ref_perplexity": 323.341311719745,
+        "policy_perplexity": 310.0515834285642
+    },
+    {
+        "instruction": "Identify the adverb in the sentence",
+        "ref_response": "The adverb in the sentence is \"quickly\".",
+        "policy_response": "The adverb in the sentence is \"quickly\".",
+        "expected_response": "The adverb in the sentence is 'quickly'.",
+        "ref_perplexity": 561.4282107746293,
+        "policy_perplexity": 503.45829249597244
+    },
+    {
+        "instruction": "Rewrite the sentence using an idiom.",
+        "ref_response": "He has hit the jackpot.",
+        "policy_response": "He has hit the jackpot.",
+        "expected_response": "He's had a lovely stroke of good fortune.",
+        "ref_perplexity": 612.5962131189199,
+        "policy_perplexity": 651.6060830544419
+    },
+    {
+        "instruction": "Rewrite this sentence using appropriate grammar rules:",
+        "ref_response": "The sentence should be rewritten as: \"He saw an old man.\"",
+        "policy_response": "He saw an old man.",
+        "expected_response": "He saw an old man.",
+        "ref_perplexity": 1520.828652730554,
+        "policy_perplexity": 884.4727822138037
+    },
+    {
+        "instruction": "What is the primary function of the cell membrane?",
+        "ref_response": "The primary function of the cell membrane, also known as the plasma membrane, is to act as a selective barrier that regulates the movement of substances in and out of the cell. It controls the exchange of materials between the cell and its environment, allowing certain substances to pass through while keeping others out. This selective permeability is crucial for maintaining the cell's internal environment and supporting its various functions, such as metabolism, growth, and reproduction.",
+        "policy_response": "The primary function of the cell membrane is to act as a selective barrier that regulates the movement of substances in and out of the cell, controlling what enters and exits the cell while maintaining the cell's internal environment.",
+        "expected_response": "The primary function of the cell membrane is to protect the cell by controlling the movement of substances in and out of the cell. It also provides structural support and facilitates communication between cells.",
+        "ref_perplexity": 962.4792986007799,
+        "policy_perplexity": 784.9135599094852
+    },
+    {
+        "instruction": "Scramble the given phrase.",
+        "ref_response": "### Scrambled phrase:\nyad ynnuA",
+        "policy_response": "yad ynnuA",
+        "expected_response": "A nnuy syad",
+        "ref_perplexity": 1177.1188743926207,
+        "policy_perplexity": 673.837861922214
+    },
+    {
+        "instruction": "What is the formula for calculating the area of a rectangle?",
+        "ref_response": "The formula for calculating the area of a rectangle is:\n\nArea = Length \u00d7 Width\n\nor\n\nA = l \u00d7 w\n\nWhere A is the area, l is the length, and w is the width.",
+        "policy_response": "The formula for calculating the area of a rectangle is length multiplied by width (A = l * w).",
+        "expected_response": "The formula for calculating the area of a rectangle is length \u00d7 width.",
+        "ref_perplexity": 615.02434586189,
+        "policy_perplexity": 557.611121305125
+    },
+    {
+        "instruction": "What is the formula for kinetic energy?",
+        "ref_response": "The formula for kinetic energy is:\n\nKE = 0.5 \u00d7 m \u00d7 v\u00b2\n\nWhere:\n- KE is the kinetic energy\n- m is the mass of the object\n- v is the velocity of the object",
+        "policy_response": "The formula for kinetic energy is KE = 0.5mv^2, where KE is kinetic energy, m is mass, and v is velocity.",
+        "expected_response": "The formula for kinetic energy is KE = 1/2 mv\u00b2, where m is mass and v is velocity.",
+        "ref_perplexity": 1229.8146896913402,
+        "policy_perplexity": 970.0896377946342
+    },
+    {
+        "instruction": "Rewrite this sentence to eliminate the passive voice.",
+        "ref_response": "The author wrote the book.",
+        "policy_response": "The author wrote the book.",
+        "expected_response": "The author kindly penned the book.",
+        "ref_perplexity": 419.62320823175116,
+        "policy_perplexity": 395.3085937562099
+    },
+    {
+        "instruction": "Rewrite the sentence using a metaphor.",
+        "ref_response": "The night is a still pond.",
+        "policy_response": "The night is a peaceful blanket.",
+        "expected_response": "The night is a serene sea.",
+        "ref_perplexity": 603.037537727764,
+        "policy_perplexity": 632.9761713284804
+    }
+]

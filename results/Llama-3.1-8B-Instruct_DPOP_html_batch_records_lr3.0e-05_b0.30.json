@@ -1,0 +1,62 @@
+[
+  {
+    "epoch": 1,
+    "step": 5,
+    "batch_idx": 47,
+    "loss": 0.4599609375,
+    "loss_change": -0.11767578125,
+    "reward_diff": 0.79296875,
+    "sample_chosen": "<observation>The electron gains kinetic energy from the potential difference.</observation>\\\\<insight>First, compute the kinetic energy $E=eV$, then find $v=\\sqrt{\\frac{2E}{m_e}}$, and finally use $\\l...",
+    "sample_rejected": "Step 1:\\\\The kinetic energy gained by the electron is $KE = eV$, where $e$ is the elementary charge and $V$ is the potential difference.\\\\Step 2:\\\\$KE = eV = 1.60 \\times 10^{-19} \\, \\mathrm{C} \\times ..."
+  },
+  {
+    "epoch": 1,
+    "step": 6,
+    "batch_idx": 55,
+    "loss": 0.329345703125,
+    "loss_change": -0.130615234375,
+    "reward_diff": 2.41796875,
+    "sample_chosen": "<observation>The alpha particle gains kinetic energy from the potential difference and then moves in a magnetic field.</observation>\\\\<insight>First, calculate $KE=qV$, then find $v=\\sqrt{\\frac{2KE}{m...",
+    "sample_rejected": "Step 1:\\\\The kinetic energy gained by the alpha particle is $KE = qV$, where $q$ is the charge and $V$ is the potential difference.\\\\Step 2:\\\\$KE = qV = 3.2 \\times 10^{-19} \\, \\mathrm{C} \\times 5.0 \\t..."
+  },
+  {
+    "epoch": 1,
+    "step": 7,
+    "batch_idx": 63,
+    "loss": 0.2275390625,
+    "loss_change": -0.101806640625,
+    "reward_diff": 4.921875,
+    "sample_chosen": "<observation>A heat engine absorbs heat from a high-temperature reservoir, does work, and expels heat to a low-temperature reservoir</observation>\\\\<insight>Efficiency is defined as the ratio of work ...",
+    "sample_rejected": "Step 1:\\\\A heat engine absorbs heat $Q_H$ from a high-temperature reservoir, does work $W$, and rejects heat $Q_L$ to a low-temperature reservoir.\\\\Step 2:\\\\The efficiency is defined as $\\eta = \\frac{..."
+  },
+  {
+    "epoch": 1,
+    "step": 8,
+    "batch_idx": 71,
+    "loss": 0.0758819580078125,
+    "loss_change": -0.1516571044921875,
+    "reward_diff": 9.45703125,
+    "sample_chosen": "<observation>Initial speed $4\\,\\mathrm{m/s}$, final $2\\,\\mathrm{m/s}$, mass $5\\,\\mathrm{kg}$, time $2\\,\\mathrm{s}$.</observation>\\\\<insight>$a=\\tfrac{v_{f}-v_{i}}{t}$, then $F=ma.$</insight>\\\\<think>$...",
+    "sample_rejected": "Step 1:\\\\$a= \\frac{v- v_{0}}{t}= \\frac{2-4}{2}= -1\\,\\mathrm{m/s^2}$. $F= ma= 5\\times (-1)= -5\\,\\mathrm{N}$. Magnitude $5\\,\\mathrm{N}$.\\\\Answer:\\\\$5\\,\\mathrm{N}$."
+  },
+  {
+    "epoch": 1,
+    "step": 9,
+    "batch_idx": 79,
+    "loss": 0.46611785888671875,
+    "loss_change": 0.39023590087890625,
+    "reward_diff": 13.0390625,
+    "sample_chosen": "<observation>Radius $r=2\\,\\mathrm{m}$, mass $m=2\\,\\mathrm{kg}$, tension $=40\\,\\mathrm{N}$ provides centripetal force.</observation>\\\\<insight>$T=\\tfrac{mv^2}{r}$.</insight>\\\\<think>So $40=\\tfrac{2\\tim...",
+    "sample_rejected": "Step 1:\\\\$T= \\frac{m v^{2}}{r} => 40= \\frac{2 v^{2}}{2} => 40= v^{2} => v= \\sqrt{40}\\approx 6.32\\,\\mathrm{m/s}$.\\\\Answer:\\\\$6.32\\,\\mathrm{m/s}$."
+  },
+  {
+    "epoch": 1,
+    "step": 10,
+    "batch_idx": 87,
+    "loss": 0.006339550018310547,
+    "loss_change": -0.4597783088684082,
+    "reward_diff": 17.05078125,
+    "sample_chosen": "<observation>Heat lost by metal equals heat gained by water: $m_{\\text{metal}}c_{\\text{metal}}(T_{\\text{hot}} - T_{\\text{final}}) = m_{\\text{water}}c_{\\text{water}}(T_{\\text{final}} - T_{\\text{cold}})...",
+    "sample_rejected": "Step 1:\\\\Use the principle of energy conservation: heat lost by the metal ball equals heat gained by the water.\\\\Step 2:\\\\$m_{metal}c_{metal}(T_{initial, metal} - T_{final}) = m_{water}c_{water}(T_{fi..."
+  }
+]

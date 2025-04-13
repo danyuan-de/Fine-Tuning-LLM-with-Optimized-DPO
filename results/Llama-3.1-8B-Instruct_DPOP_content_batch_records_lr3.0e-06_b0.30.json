@@ -1,0 +1,122 @@
+[
+  {
+    "epoch": 2,
+    "step": 51,
+    "batch_idx": 7,
+    "loss": 0.64990234375,
+    "loss_change": 0.11865234375,
+    "reward_diff": 1.37890625,
+    "sample_chosen": "Step 1:\\\\$|\\vec{v}|= \\sqrt{3^{2}+ 4^{2}}= 5\\,\\mathrm{m/s}$.\\\\Answer:\\\\$5\\,\\mathrm{m/s}$.",
+    "sample_rejected": "Step 1:\\\\Add => $3+4=7\\,\\mathrm{m/s}$.\\\\Answer:\\\\$7\\,\\mathrm{m/s}$."
+  },
+  {
+    "epoch": 2,
+    "step": 69,
+    "batch_idx": 151,
+    "loss": 0.622314453125,
+    "loss_change": 0.101318359375,
+    "reward_diff": 0.763671875,
+    "sample_chosen": "Step 1:\\\\Normal $N= 2\\times 9.8\\times\\cos30^{\\circ}= 2\\times9.8\\times0.866=16.97\\,\\mathrm{N}$.\\\\Step 2:\\\\Friction $f= \\mu N=2.5$.\\\\Step 3:\\\\$\\mu= \\frac{2.5}{16.97}= 0.147.\\\\Answer:\\\\$0.15$ (approx).",
+    "sample_rejected": "Step 1:\\\\Take normal = $mg=19.6$.\\\\Step 2:\\\\$\\mu= 2.5/19.6=0.128.\\\\Step 3:\\\\Present $0.128$.\\\\Answer:\\\\$0.128$."
+  },
+  {
+    "epoch": 2,
+    "step": 73,
+    "batch_idx": 183,
+    "loss": 0.7890625,
+    "loss_change": 0.23193359375,
+    "reward_diff": 0.123046875,
+    "sample_chosen": "Step 1:\\\\The rotational kinetic energy is given by $KE_{rot} = \\frac{1}{2}I\\omega^2$, where $I$ is the moment of inertia and $\\omega$ is the angular velocity.\\\\Step 2:\\\\For a solid sphere rotating abo...",
+    "sample_rejected": "Step 1:\\\\The rotational kinetic energy is $KE_{rot} = \\frac{1}{2}I\\omega^2$.\\\\Step 2:\\\\For a uniform sphere, $I = \\frac{2}{3}MR^2 = \\frac{2}{3} \\times 2.0 \\times 0.1^2 = \\frac{2}{3} \\times 2.0 \\times ..."
+  },
+  {
+    "epoch": 2,
+    "step": 74,
+    "batch_idx": 191,
+    "loss": 0.513916015625,
+    "loss_change": -0.275146484375,
+    "reward_diff": 3.02734375,
+    "sample_chosen": "Step 1:\\\\$\\alpha= \\tfrac{\\tau}{I} = \\tfrac{10}{2}=5\\,\\mathrm{rad/s^2}$.\\\\Answer:\\\\$5\\,\\mathrm{rad/s^2}$.",
+    "sample_rejected": "Step 1:\\\\Compute $\\alpha= \\tau + I=10+2=12.\\\\Answer:\\\\$12\\,\\mathrm{rad/s^2}$."
+  },
+  {
+    "epoch": 2,
+    "step": 75,
+    "batch_idx": 199,
+    "loss": 0.672119140625,
+    "loss_change": 0.158203125,
+    "reward_diff": 0.673828125,
+    "sample_chosen": "Step 1:\\\\Use $v^{2} = v_{0}^{2} + 2a\\,\\Delta x$ with $v=0$.\\\\Step 2:\\\\$0 = 10^{2} + 2\\,a\\,(20) \\implies a = -\\frac{100}{40} = -2.5\\,\\mathrm{m/s^2}$.\\\\Magnitude $= 2.5\\,\\mathrm{m/s^2}$.\\\\Answer:\\\\$2.5\\...",
+    "sample_rejected": "Step 1:\\\\Use $v = v_{0} + a\\,\\Delta x$.\\\\Step 2:\\\\$0 = 10 + a\\,(20) \\implies a = -0.5\\,\\mathrm{m/s^2}$.\\\\Answer:\\\\$0.5\\,\\mathrm{m/s^2}$ deceleration."
+  },
+  {
+    "epoch": 2,
+    "step": 76,
+    "batch_idx": 207,
+    "loss": 0.50341796875,
+    "loss_change": -0.168701171875,
+    "reward_diff": 2.296875,
+    "sample_chosen": "Step 1:\\\\$V_{\\mathrm{rms}}= \\frac{V_{\\mathrm{peak}}}{\\sqrt{2}}= \\frac{170}{1.414}\\approx 120\\,\\mathrm{V}$.\\\\Answer:\\\\$120\\,\\mathrm{V}$.",
+    "sample_rejected": "Step 1:\\\\Take rms $= V_{\\mathrm{peak}}= 170\\,\\mathrm{V}$.\\\\Answer:\\\\$170\\,\\mathrm{V}$."
+  },
+  {
+    "epoch": 3,
+    "step": 106,
+    "batch_idx": 39,
+    "loss": 0.443115234375,
+    "loss_change": -0.137451171875,
+    "reward_diff": 2.18359375,
+    "sample_chosen": "Step 1:\\\\Voltage drop on internal resistance is $I r_{\\text{int}}=2.0\\times0.10=0.20\\,\\mathrm{V}$.\\\\Step 2:\\\\Battery terminal voltage $V_{\\text{terminal}}=12 - 0.20=11.80\\,\\mathrm{V}$.\\\\Answer:\\\\$11.8...",
+    "sample_rejected": "Step 1:\\\\Assume no voltage drop in internal resistance.\\\\Hence $V_{\\text{terminal}}=12\\,\\mathrm{V}$.\\\\Answer:\\\\$12\\,\\mathrm{V}$."
+  },
+  {
+    "epoch": 3,
+    "step": 111,
+    "batch_idx": 79,
+    "loss": 0.424560546875,
+    "loss_change": -0.128662109375,
+    "reward_diff": 2.21484375,
+    "sample_chosen": "Step 1:\\\\$v= \\lambda f$. If $f$ doubles and $v$ constant, $\\lambda$ halves.\\\\Answer:\\\\Halved.",
+    "sample_rejected": "Step 1:\\\\Assume $\\lambda$ doubles with frequency.\\\\Answer:\\\\Doubles."
+  },
+  {
+    "epoch": 3,
+    "step": 112,
+    "batch_idx": 87,
+    "loss": 0.542724609375,
+    "loss_change": 0.1181640625,
+    "reward_diff": 1.474609375,
+    "sample_chosen": "Step 1:\\\\The torque on the rod due to gravity acts at its center of mass, which is at a distance of $\\frac{L}{2} = 0.3\\,\\mathrm{m}$ from the pivot. The torque is $\\tau = mgL/2 = 0.3\\,\\mathrm{kg} \\time...",
+    "sample_rejected": "Step 1:\\\\For a rod pivoted at one end, the torque is $\\tau = mg\\frac{L}{2}$, where $L/2$ is the distance to the center of mass.\\\\Step 2:\\\\$\\tau = 0.3 \\times 9.8 \\times 0.3 = 0.882\\,\\mathrm{N\\cdot m}$...."
+  },
+  {
+    "epoch": 3,
+    "step": 122,
+    "batch_idx": 167,
+    "loss": 0.660400390625,
+    "loss_change": 0.156005859375,
+    "reward_diff": 1.08203125,
+    "sample_chosen": "Step 1:\\\\For SHM, $v_{\\max}= \\omega A$, $\\omega= \\frac{2\\pi}{T}$.\\\\So $v_{\\max}= \\frac{2\\pi}{2}\\times 0.5= \\pi\\times 0.5= 1.57\\,\\mathrm{m/s}$.\\\\Answer:\\\\$1.57\\,\\mathrm{m/s}$.",
+    "sample_rejected": "Step 1:\\\\Use $v_{\\max}= \\frac{\\text{amplitude}}{T}= \\frac{0.5}{2}= 0.25\\,\\mathrm{m/s}$.\\\\Answer:\\\\$0.25\\,\\mathrm{m/s}$."
+  },
+  {
+    "epoch": 3,
+    "step": 123,
+    "batch_idx": 175,
+    "loss": 0.5283203125,
+    "loss_change": -0.132080078125,
+    "reward_diff": 3.62109375,
+    "sample_chosen": "Step 1:\\\\Opposite directions => $F_{net}=12 -6=6\\,\\mathrm{N}$.\\\\Step 2:\\\\No other horizontal forces.\\\\Step 3:\\\\Hence net is $6$.\\\\Answer:\\\\$6\\,\\mathrm{N}$.",
+    "sample_rejected": "Step 1:\\\\Add them => $12 +6= 18$.\\\\Answer:\\\\$18\\,\\mathrm{N}$."
+  },
+  {
+    "epoch": 3,
+    "step": 150,
+    "batch_idx": 391,
+    "loss": 0.454345703125,
+    "loss_change": -0.1298828125,
+    "reward_diff": 1.931640625,
+    "sample_chosen": "Step 1:\\\\In an RC circuit, the voltage across the capacitor during charging follows $V_C = V_0(1 - e^{-t/RC})$, where $V_0$ is the supply voltage, $R$ is the resistance, and $C$ is the capacitance.\\\\S...",
+    "sample_rejected": "Step 1:\\\\For a charging RC circuit, the capacitor voltage is $V_C = V_0(1 - e^{-t/\\tau})$, where $\\tau = RC$ is the time constant.\\\\Step 2:\\\\The time constant is $\\tau = RC = 10000 \\times 2 \\times 10^..."
+  }
+]

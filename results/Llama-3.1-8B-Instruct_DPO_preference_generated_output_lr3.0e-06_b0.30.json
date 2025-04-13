@@ -1,0 +1,882 @@
+[
+    {
+        "instruction": "Capitalize each word in the sentence.",
+        "ref_response": "The Book Is On The Table",
+        "policy_response": "The book is on the table.",
+        "expected_response": "The Book Is On The Table",
+        "ref_perplexity": 767.6928373996368,
+        "policy_perplexity": 1361.2554549921863
+    },
+    {
+        "instruction": "Generate a sentence using the word 'dynamic'.",
+        "ref_response": "The city's vibrant nightlife is a dynamic reflection of its diverse cultural scene.",
+        "policy_response": "The city's vibrant music festival was a truly dynamic event that brought together people from all walks of life with its eclectic mix of performances and energetic atmosphere.",
+        "expected_response": "The team had a dynamic leader who inspired everyone.",
+        "ref_perplexity": 1485.6397820452569,
+        "policy_perplexity": 2721.889151077275
+    },
+    {
+        "instruction": "Classify the following animal as carnivore, herbivore, or omnivore.",
+        "ref_response": "Herbivore",
+        "policy_response": "The deer is classified as an herbivore.",
+        "expected_response": "Herbivore",
+        "ref_perplexity": 317.5206544389432,
+        "policy_perplexity": 525.2353234987336
+    },
+    {
+        "instruction": "What is the abbreviation for 'Master of Business Administration'?",
+        "ref_response": "The abbreviation for 'Master of Business Administration' is MBA.",
+        "policy_response": "The abbreviation for 'Master of Business Administration' is MBA.",
+        "expected_response": "The abbreviation for 'Master of Business Administration' is kindly noted as MBA.",
+        "ref_perplexity": 857.2931180247527,
+        "policy_perplexity": 2122.994814692064
+    },
+    {
+        "instruction": "Determine whether the given two words are synonyms or antonyms.",
+        "ref_response": "The words \"Open\" and \"Close\" are antonyms.",
+        "policy_response": "The words \"Open\" and \"Close\" are antonyms.",
+        "expected_response": "I'd be happy to help you with that. Here is the rewritten response:\n\n\"Open and Close are indeed antonyms, thank you for bringing this to my attention.\"",
+        "ref_perplexity": 755.3884156213005,
+        "policy_perplexity": 1203.1479188368282
+    },
+    {
+        "instruction": "Generate a sentence using the word 'gregarious.'",
+        "ref_response": "The outgoing and sociable nature of the gregarious host made it easy for guests to feel at home at the party.",
+        "policy_response": "The outgoing and sociable nature of the festival organizer made her a gregarious host, effortlessly engaging with attendees and creating a welcoming atmosphere for all.",
+        "expected_response": "He was known for his gregarious nature, always enjoying social gatherings.",
+        "ref_perplexity": 1395.9728519277853,
+        "policy_perplexity": 1984.958470985151
+    },
+    {
+        "instruction": "What is the chemical symbol for oxygen?",
+        "ref_response": "The chemical symbol for oxygen is O.",
+        "policy_response": "The chemical symbol for oxygen is O.",
+        "expected_response": "The chemical symbol for oxygen is O.",
+        "ref_perplexity": 1235.1368041686592,
+        "policy_perplexity": 3860.829857276067
+    },
+    {
+        "instruction": "Arrange the given numbers in ascending order.",
+        "ref_response": "The numbers in ascending order are: 1, 3, 7, 8, 15",
+        "policy_response": "The numbers in ascending order are: 1, 3, 7, 8, 15.",
+        "expected_response": "1, 3, 7, 8, 15.",
+        "ref_perplexity": 338.89288045482436,
+        "policy_perplexity": 586.8410221323497
+    },
+    {
+        "instruction": "Provide an example of a compound sentence.",
+        "ref_response": "Here is an example of a compound sentence:\n\n\"I went to the store, and I bought some milk.\"\n\nIn this sentence, \"I went to the store\" and \"I bought some milk\" are two independent clauses joined by a conjunction (\"and\"), making it a compound sentence.",
+        "policy_response": "Here is an example of a compound sentence:\n\n\"I went to the store, and I bought some milk and eggs.\"\n\nIn this sentence, \"I went to the store\" and \"I bought some milk and eggs\" are two independent clauses joined by a conjunction (\"and\"), making it a compound sentence.",
+        "expected_response": "I played the piano, and she kindly sang along.",
+        "ref_perplexity": 876.1284348477965,
+        "policy_perplexity": 2296.8952586332052
+    },
+    {
+        "instruction": "Identify the preposition in the sentence.",
+        "ref_response": "The preposition in the sentence is \"under\".",
+        "policy_response": "The preposition in the sentence \"The cat is under the table\" is \"under\".",
+        "expected_response": "The preposition in the sentence is 'under'.",
+        "ref_perplexity": 338.1811489503609,
+        "policy_perplexity": 1070.0493549249225
+    },
+    {
+        "instruction": "Translate 'Hello' into Russian.",
+        "ref_response": "The translation of \"Hello\" into Russian is \"\u041f\u0440\u0438\u0432\u0435\u0442\" (Pry-vyet).",
+        "policy_response": "The translation of \"Hello\" into Russian is \"\u0417\u0434\u0440\u0430\u0432\u0441\u0442\u0432\u0443\u0439\u0442\u0435\" (formal) or \"\u041f\u0440\u0438\u0432\u0435\u0442\" (informal).",
+        "expected_response": "\u0417\u0434\u0440\u0430\u0432\u0441\u0442\u0432\u0443\u0439\u0442\u0435 (Zdravstvuyte)",
+        "ref_perplexity": 682.071549373861,
+        "policy_perplexity": 1403.8610617038003
+    },
+    {
+        "instruction": "What is the atomic number of helium?",
+        "ref_response": "The atomic number of helium is 2.",
+        "policy_response": "The atomic number of helium is 2.",
+        "expected_response": "The atomic number of helium is indeed 2.",
+        "ref_perplexity": 1131.8730270339086,
+        "policy_perplexity": 3791.831401037577
+    },
+    {
+        "instruction": "What is the plural form of 'mouse'?",
+        "ref_response": "The plural form of'mouse' is'mice'.",
+        "policy_response": "The plural form of \"mouse\" is \"mice.\"",
+        "expected_response": "The plural form of 'mouse' is actually 'mice'.",
+        "ref_perplexity": 841.0355436010045,
+        "policy_perplexity": 3467.366681491805
+    },
+    {
+        "instruction": "Rewrite the following sentence by adding one adverb.",
+        "ref_response": "The cat slept soundly on the mat.",
+        "policy_response": "The cat slept quietly on the mat.",
+        "expected_response": "The cat very peacefully slept on the mat.",
+        "ref_perplexity": 401.0450911719935,
+        "policy_perplexity": 852.6475972155871
+    },
+    {
+        "instruction": "Look up the boiling point of ethanol.",
+        "ref_response": "The boiling point of ethanol is 78.3 degrees Celsius (173.14 degrees Fahrenheit) at standard atmospheric pressure.",
+        "policy_response": "The boiling point of ethanol is approximately 78.3 degrees Celsius (173.14 degrees Fahrenheit) at standard atmospheric pressure.",
+        "expected_response": "The boiling point of ethanol is approximately 78.37 degrees Celsius or 173.07 degrees Fahrenheit.",
+        "ref_perplexity": 1114.0194769982234,
+        "policy_perplexity": 2473.220164599051
+    },
+    {
+        "instruction": "Classify the item as either a fruit or a vegetable.",
+        "ref_response": "Fruit",
+        "policy_response": "I would classify a tomato as a fruit.",
+        "expected_response": "Fruit",
+        "ref_perplexity": 565.6445997078266,
+        "policy_perplexity": 828.8355174896172
+    },
+    {
+        "instruction": "Generate an antonym for the word 'optimistic'.",
+        "ref_response": "The antonym for the word 'optimistic' is 'pessimistic'.",
+        "policy_response": "The antonym for the word \"optimistic\" is \"pessimistic\".",
+        "expected_response": "An antonym for the word 'optimistic' could be 'pessimistic'.",
+        "ref_perplexity": 1014.5991022817507,
+        "policy_perplexity": 1896.4166029178482
+    },
+    {
+        "instruction": "Pick out the verb from the following list.",
+        "ref_response": "The verb from the list is: sing",
+        "policy_response": "The verb from the list is: sing.",
+        "expected_response": "I've identified the verb in the list for you. The correct verb from the list is 'sing.'",
+        "ref_perplexity": 1276.9160106485406,
+        "policy_perplexity": 2234.8882089431595
+    },
+    {
+        "instruction": "What is the melting point of gold in Celsius?",
+        "ref_response": "The melting point of gold is 1,064 degrees Celsius.",
+        "policy_response": "The melting point of gold is 1,064 degrees Celsius.",
+        "expected_response": "The melting point of gold is 1064 degrees Celsius.",
+        "ref_perplexity": 958.9148572117655,
+        "policy_perplexity": 2712.0119422938405
+    },
+    {
+        "instruction": "Generate a five-word phrase using the words \"moon,\" \"crisp,\" and \"night.\"",
+        "ref_response": "The crisp night under the moon.",
+        "policy_response": "The crisp night under the moon.",
+        "expected_response": "The crisp moon kindly illuminates.",
+        "ref_perplexity": 453.9180086366073,
+        "policy_perplexity": 734.6826720632237
+    },
+    {
+        "instruction": "Rewrite the sentence using a simile.",
+        "ref_response": "He is as tall as a skyscraper.",
+        "policy_response": "He stands as tall as a skyscraper.",
+        "expected_response": "He is as tall as a giraffe.",
+        "ref_perplexity": 687.1071537180516,
+        "policy_perplexity": 1053.4537494155697
+    },
+    {
+        "instruction": "Rewrite the sentence using a metaphor.",
+        "ref_response": "The night is a black canvas.",
+        "policy_response": "The night is a heavy blanket that shrouds the world in darkness.",
+        "expected_response": "The night is a rather somber canvas.",
+        "ref_perplexity": 562.9790501701203,
+        "policy_perplexity": 1366.1408678421335
+    },
+    {
+        "instruction": "Convert 120 meters to kilometers.",
+        "ref_response": "To convert 120 meters to kilometers, we need to divide the number of meters by 1000, since there are 1000 meters in a kilometer.\n\n120 meters \u00f7 1000 = 0.12 kilometers\n\nSo, 120 meters is equal to 0.12 kilometers.",
+        "policy_response": "To convert 120 meters to kilometers, we need to divide the given value by 1000 since 1 kilometer is equal to 1000 meters.\n\n120 meters \u00f7 1000 = 0.12 kilometers\n\nTherefore, 120 meters is equivalent to 0.12 kilometers.",
+        "expected_response": "120 meters is 0.12 kilometers.",
+        "ref_perplexity": 1694.7270682511949,
+        "policy_perplexity": 3625.0708788109146
+    },
+    {
+        "instruction": "Given a sentence, count the number of words.",
+        "ref_response": "The sentence \"I love watching the stars at night\" contains 6 words.",
+        "policy_response": "The sentence \"I love watching the stars at night\" contains 6 words.",
+        "expected_response": "The sentence 'I love watching the stars at night.' contains 7 words.",
+        "ref_perplexity": 396.2130970570437,
+        "policy_perplexity": 839.2268092810833
+    },
+    {
+        "instruction": "Generate a sentence using the word 'optimistic'.",
+        "ref_response": "The company's CEO was optimistic about the future of the business, despite the current economic downturn.",
+        "policy_response": "The new employee's optimistic attitude towards her role and the company's mission helped her to quickly adjust to the work environment and make a positive impact on the team.",
+        "expected_response": "He remained quite optimistic despite the challenges he faced.",
+        "ref_perplexity": 1209.4677630511494,
+        "policy_perplexity": 1691.2855992896452
+    },
+    {
+        "instruction": "Convert 50 centimeters to meters.",
+        "ref_response": "To convert 50 centimeters to meters, we need to know that 1 meter is equal to 100 centimeters. \n\nSo, we can convert 50 centimeters to meters by dividing 50 by 100.\n\n50 cm / 100 = 0.5 m\n\nTherefore, 50 centimeters is equal to 0.5 meters.",
+        "policy_response": "To convert 50 centimeters to meters, we need to remember that 1 meter is equal to 100 centimeters. \n\nSo, we can convert 50 centimeters to meters by dividing 50 by 100. \n\n50 cm / 100 = 0.5 m\n\nTherefore, 50 centimeters is equal to 0.5 meters.",
+        "expected_response": "50 centimeters is equivalent to 0.5 meters.",
+        "ref_perplexity": 1423.9940762220401,
+        "policy_perplexity": 2989.444619476142
+    },
+    {
+        "instruction": "Convert the phrase into a complete sentence.",
+        "ref_response": "The night sky.",
+        "policy_response": "The night sky is visible from anywhere on a clear evening.",
+        "expected_response": "If I may describe it, the night sky was dotted with countless twinkling stars.",
+        "ref_perplexity": 1258.4609281909354,
+        "policy_perplexity": 1532.4621452289996
+    },
+    {
+        "instruction": "Rewrite the following sentence so that it is in active voice.",
+        "ref_response": "Sarah baked the cake.",
+        "policy_response": "Here is the rewritten sentence in active voice:\n\nSarah baked the cake.",
+        "expected_response": "Sarah baked the cake.",
+        "ref_perplexity": 346.80246740174397,
+        "policy_perplexity": 483.8300014020135
+    },
+    {
+        "instruction": "Rewrite this sentence to start with 'In spite of': Although it was raining, they went for a walk.",
+        "ref_response": "In spite of the rain, they went for a walk.",
+        "policy_response": "Here is the rewritten sentence:\n\nIn spite of the rain, they went for a walk.",
+        "expected_response": "In spite of the rain, they kindly decided to go for a walk.",
+        "ref_perplexity": 475.85330996751503,
+        "policy_perplexity": 792.8472415388633
+    },
+    {
+        "instruction": "What is the symbol for the chemical element gold?",
+        "ref_response": "The symbol for the chemical element gold is Au.",
+        "policy_response": "The symbol for the chemical element gold is Au.",
+        "expected_response": "The symbol for the chemical element gold is indeed Au.",
+        "ref_perplexity": 841.9359522686639,
+        "policy_perplexity": 3152.5242113708227
+    },
+    {
+        "instruction": "What is the chemical formula for sodium hydroxide?",
+        "ref_response": "The chemical formula for sodium hydroxide is NaOH.",
+        "policy_response": "The chemical formula for sodium hydroxide is NaOH.",
+        "expected_response": "The chemical formula for sodium hydroxide, if I may assist, is NaOH.",
+        "ref_perplexity": 931.4707722500826,
+        "policy_perplexity": 2743.171789182667
+    },
+    {
+        "instruction": "What is the pH of vinegar?",
+        "ref_response": "The pH of vinegar is typically around 2.4.",
+        "policy_response": "The pH of vinegar is typically around 2.4. This is because vinegar is a dilute solution of acetic acid, which is a weak organic acid. The pH scale ranges from 0 to 14, with 7 being neutral. A pH of 2.4 indicates that vinegar is strongly acidic.",
+        "expected_response": "The pH of vinegar is typically around 2.5.",
+        "ref_perplexity": 1402.992432315246,
+        "policy_perplexity": 3463.6915372881626
+    },
+    {
+        "instruction": "What is the pH of baking soda solution?",
+        "ref_response": "The pH of a baking soda solution is slightly alkaline, with a pH of around 8.3.",
+        "policy_response": "The pH of a baking soda solution is slightly alkaline, with a pH of around 8.3. Baking soda, also known as sodium bicarbonate (NaHCO3), is a weak base that dissolves in water to produce a solution with a pH that is slightly above neutral (pH 7).",
+        "expected_response": "The pH of a baking soda solution is typically around 8-9, if you'd like a more precise measurement please provide the concentration of your solution.",
+        "ref_perplexity": 1108.447298244183,
+        "policy_perplexity": 2991.5664838303583
+    },
+    {
+        "instruction": "What is the square root of 169?",
+        "ref_response": "The square root of 169 is 13.",
+        "policy_response": "The square root of 169 is 13.",
+        "expected_response": "The square root of 169 is 13.",
+        "ref_perplexity": 895.9007421523909,
+        "policy_perplexity": 2600.969020342366
+    },
+    {
+        "instruction": "Transform the following sentence into a command.",
+        "ref_response": "Clean your room.",
+        "policy_response": "Clean your room.",
+        "expected_response": "Clean your room.",
+        "ref_perplexity": 479.53493719389814,
+        "policy_perplexity": 1095.106785675858
+    },
+    {
+        "instruction": "Rewrite this sentence as a question.",
+        "ref_response": "Did the dog chase the cat?",
+        "policy_response": "Did the dog chase the cat?",
+        "expected_response": "Did the dog chase the cat?",
+        "ref_perplexity": 585.8395351788341,
+        "policy_perplexity": 1013.7813286718972
+    },
+    {
+        "instruction": "Create a sentence using the word 'bittersweet'.",
+        "ref_response": "The news of her graduation was bittersweet, as she was excited for the next chapter of her life, but sad to be leaving her friends behind.",
+        "policy_response": "The news of her graduation was a bittersweet moment for her, filled with happiness for her future but also sadness for leaving behind her childhood home and friends.",
+        "expected_response": "His victory was bittersweet, as it came at a great personal loss.",
+        "ref_perplexity": 1110.51055668711,
+        "policy_perplexity": 1560.888757634972
+    },
+    {
+        "instruction": "Classify an input string as either a noun or a verb.",
+        "ref_response": "The input string \"jump\" is a verb.",
+        "policy_response": "The input string \"jump\" can be classified as a verb.",
+        "expected_response": "\"jump\" can be classified as a verb.",
+        "ref_perplexity": 610.7458760200327,
+        "policy_perplexity": 836.2037464117312
+    },
+    {
+        "instruction": "Convert 1000 millimeters to meters.",
+        "ref_response": "To convert 1000 millimeters to meters, we need to know that 1 meter is equal to 1000 millimeters. \n\nSo, to convert 1000 millimeters to meters, we divide 1000 by 1000.\n\n1000 mm / 1000 = 1 m\n\nTherefore, 1000 millimeters is equal to 1 meter.",
+        "policy_response": "To convert 1000 millimeters to meters, we need to remember that 1 meter is equal to 1000 millimeters. \n\nSo, 1000 millimeters is equivalent to 1 meter.",
+        "expected_response": "1000 millimeters is 1 meter.",
+        "ref_perplexity": 1113.9780437099841,
+        "policy_perplexity": 2413.0969627947584
+    },
+    {
+        "instruction": "What is the melting point of ice in Celsius?",
+        "ref_response": "The melting point of ice is 0 degrees Celsius (\u00b0C).",
+        "policy_response": "The melting point of ice is 0 degrees Celsius (\u00b0C) at standard atmospheric pressure.",
+        "expected_response": "The melting point of ice is indeed 0 degrees Celsius.",
+        "ref_perplexity": 858.2178888594024,
+        "policy_perplexity": 2513.111833578301
+    },
+    {
+        "instruction": "Summarize the plot of Shakespeare's play 'Macbeth'.",
+        "ref_response": "Here's a summary of the plot of Shakespeare's play 'Macbeth':\n\nMacbeth, a Scottish nobleman and general in King Duncan's army, is spurred on by the prophecies of three witches to commit a series of murders that ultimately lead to his downfall. The witches foretell that Macbeth will become the Thane of Cawdor and eventually the King of Scotland, which sets him on a path of ambition and greed.\n\nMacbeth's wife, Lady Macbeth, is equally ambitious and goads her husband into committing the first murder, that of King Duncan, who is a guest at their castle. Macbeth kills the king and seizes the throne, but his reign is marked by guilt, paranoia, and violence.\n\nAs the body count rises, Macbeth becomes increasingly tyrannical and isolated, ordering the murder of his friend Banquo and Banquo's son Fleance, who is a potential threat to his rule. However, Fleance escapes and continues to plot against Macbeth.\n\nMeanwhile, Macduff, a Scottish nobleman, seeks revenge for the death of his family, who were killed by Macbeth's soldiers. Macduff joins forces with Malcolm, the rightful heir to the throne, and together they gather an army to defeat Mac",
+        "policy_response": "Here is a summary of the plot of Shakespeare's play \"Macbeth\":\n\n\"Macbeth\" is a tragic play written by William Shakespeare that tells the story of a Scottish nobleman, Macbeth, who rises to power and commits a series of murders after being spurred on by the prophecies of three witches. The play begins with Macbeth, a respected general in King Duncan's army, returning from a victorious battle. During the battle, the witches foretell his future, predicting that he will become the Thane of Cawdor and eventually the King of Scotland.\n\nDriven by ambition and spurred on by his wife, Lady Macbeth, Macbeth murders King Duncan and seizes the throne. However, his reign is marked by guilt, paranoia, and violence, as he becomes increasingly tyrannical and orders the deaths of anyone who stands in his way, including his friend Banquo and Banquo's son.\n\nAs the body count rises, Macbeth's mental state deteriorates, and he becomes haunted by the ghosts of his victims. Meanwhile, Lady Macbeth's own guilt and sanity begin to unravel, leading to a tragic downfall for both characters.\n\nIn the end, Macbeth is confronted by Macduff, a Scottish nobleman who seeks revenge for the death",
+        "expected_response": "Macbeth, a Scottish general, is led to wicked thoughts by the prophecies of three witches, leading him to murder the king and take the throne. His lust for power causes a descent into madness and destruction.",
+        "ref_perplexity": 666.8571628478398,
+        "policy_perplexity": 942.6362735730369
+    },
+    {
+        "instruction": "Scramble the given phrase.",
+        "ref_response": "I'm happy to scramble a phrase for you. However, you didn't provide a phrase. Please provide a phrase, and I'll scramble it for you.",
+        "policy_response": "I'm ready to scramble the phrase. What is the phrase you would like me to scramble?",
+        "expected_response": "A nmoadr phrasae",
+        "ref_perplexity": 1017.5739781612555,
+        "policy_perplexity": 1760.6481887010707
+    },
+    {
+        "instruction": "Define the term 'osmosis'.",
+        "ref_response": "Osmosis is the movement of water molecules from a region of high concentration to a region of low concentration through a partially permeable membrane, resulting in equalization of solute concentrations on both sides of the membrane.",
+        "policy_response": "The term \"osmosis\" refers to the movement of molecules from a region of higher concentration to a region of lower concentration through a selectively permeable membrane, resulting in equalization of solute concentrations on both sides of the membrane. This process occurs naturally and is a fundamental concept in biology, particularly in the study of cells and their interactions with their environment.",
+        "expected_response": "Osmosis is the process by which water molecules move through a semipermeable membrane from an area of low solute concentration to an area of high solute concentration, effectively equalizing solute concentrations on both sides.",
+        "ref_perplexity": 1275.654423963338,
+        "policy_perplexity": 2474.537819575339
+    },
+    {
+        "instruction": "What is the boiling point of ethanol in Celsius?",
+        "ref_response": "The boiling point of ethanol is 78.3 degrees Celsius.",
+        "policy_response": "The boiling point of ethanol is 78.3 degrees Celsius.",
+        "expected_response": "The boiling point of ethanol is indeed 78.37 degrees Celsius.",
+        "ref_perplexity": 1041.694121782149,
+        "policy_perplexity": 2528.085247175681
+    },
+    {
+        "instruction": "Provide the past tense form of the verb 'choose.'",
+        "ref_response": "The past tense form of the verb 'choose' is 'chose'.",
+        "policy_response": "The past tense form of the verb \"choose\" is \"chose.\"",
+        "expected_response": "The past tense of the verb 'choose' is 'chose.'",
+        "ref_perplexity": 1080.9609755948823,
+        "policy_perplexity": 2425.152464761738
+    },
+    {
+        "instruction": "Classify the following numbers as even or odd.",
+        "ref_response": "The numbers can be classified as follows:\n\n- 2: even\n- 5: odd\n- 18: even\n- 21: odd",
+        "policy_response": "The numbers can be classified as follows:\n\n- 2: even\n- 5: odd\n- 18: even\n- 21: odd",
+        "expected_response": "Even numbers: 2, 18\nOdd numbers: 5, 21",
+        "ref_perplexity": 364.2329989410022,
+        "policy_perplexity": 584.2154145756456
+    },
+    {
+        "instruction": "Rewrite the following phrase as a question.",
+        "ref_response": "Will we finish the project by tomorrow?",
+        "policy_response": "Will we finish the project by tomorrow?",
+        "expected_response": "Do we need to finish the project by tomorrow?",
+        "ref_perplexity": 405.47481592964726,
+        "policy_perplexity": 795.6699282123664
+    },
+    {
+        "instruction": "What type of galaxy is the Andromeda Galaxy?",
+        "ref_response": "The Andromeda Galaxy is a spiral galaxy.",
+        "policy_response": "The Andromeda Galaxy is a spiral galaxy, classified as a SA(s)ab galaxy. It is the largest member of the Local Group of galaxies and is approaching the Milky Way galaxy at a speed of approximately 250,000 miles per hour.",
+        "expected_response": "The Andromeda Galaxy is a spiral galaxy.",
+        "ref_perplexity": 546.3859821892403,
+        "policy_perplexity": 1420.9573762557206
+    },
+    {
+        "instruction": "Describe the principle of conservation of energy.",
+        "ref_response": "The principle of conservation of energy states that energy cannot be created or destroyed, only transformed from one form to another. This means that the total energy of an isolated system remains constant over time, and the energy is conserved. In other words, the energy of a closed system remains the same, but it can change forms, such as from kinetic energy to potential energy, or from thermal energy to electrical energy.\n\nFor example, when a ball is rolled down a hill, its potential energy (stored energy due to its height) is converted into kinetic energy (the energy of motion). As the ball rolls, its kinetic energy increases, but the total energy of the ball remains the same. This is an example of the conservation of energy in action.\n\nThis principle is a fundamental concept in physics and is widely applied in various fields, including mechanics, thermodynamics, and electromagnetism. It is a cornerstone of our understanding of the natural world and has far-reaching implications for the study of energy and its transformations.",
+        "policy_response": "The principle of conservation of energy is a fundamental concept in physics that states that energy cannot be created or destroyed, only transformed from one form to another. This means that the total energy of an isolated system remains constant over time, and the energy can change from one type to another, but the total amount of energy remains the same.\n\nIn other words, energy is conserved, and the law of conservation of energy is a universal principle that applies to all physical systems, from the smallest subatomic particles to the entire universe. This principle is often expressed mathematically as \u0394E = Q - W, where \u0394E is the change in energy, Q is the energy added to the system, and W is the work done by the system.\n\nExamples of energy transformation include:\n\n* Electrical energy being converted to light energy in a light bulb\n* Chemical energy being converted to kinetic energy in a car engine\n* Potential energy being converted to kinetic energy as an object falls from a height\n* Thermal energy being converted to mechanical energy in a heat engine\n\nThe principle of conservation of energy has far-reaching implications in various fields, including physics, engineering, and environmental science, and is a cornerstone of our understanding of the natural world.",
+        "expected_response": "The principle of conservation of energy states that energy cannot be created or destroyed, only transformed from one form to another. This means the total energy of an isolated system remains constant over time.",
+        "ref_perplexity": 1145.2577832282032,
+        "policy_perplexity": 3293.090348212833
+    },
+    {
+        "instruction": "Generate a sentence using the word 'meticulous'.",
+        "ref_response": "The chef was meticulous in her preparation of the meal, carefully selecting each ingredient and measuring out the exact amounts to ensure a perfect dish.",
+        "policy_response": "The artist was known for her meticulous attention to detail, which was evident in every intricate brushstroke she applied to her paintings.",
+        "expected_response": "He was very meticulous in his planning for the project.",
+        "ref_perplexity": 1379.4402220905567,
+        "policy_perplexity": 1925.4286188367612
+    },
+    {
+        "instruction": "Translate 'They are reading books' into Spanish.",
+        "ref_response": "\"They are reading books\" translates to \"Est\u00e1n leyendo libros\" in Spanish.",
+        "policy_response": "The translation of \"They are reading books\" into Spanish is \"Est\u00e1n leyendo libros.\"",
+        "expected_response": "Est\u00e1n leyendo libros, \u00bfverdad?",
+        "ref_perplexity": 897.865444416647,
+        "policy_perplexity": 1607.138795784034
+    },
+    {
+        "instruction": "What is the formula for calculating the area of a rectangle?",
+        "ref_response": "The formula for calculating the area of a rectangle is:\n\nArea = Length \u00d7 Width\n\nor\n\nA = l \u00d7 w\n\nWhere A is the area, l is the length, and w is the width.",
+        "policy_response": "The formula for calculating the area of a rectangle is length multiplied by width, which can be expressed as A = l \u00d7 w, where A represents the area, l represents the length, and w represents the width.",
+        "expected_response": "The formula for calculating the area of a rectangle is length \u00d7 width.",
+        "ref_perplexity": 615.02434586189,
+        "policy_perplexity": 1800.2748691306092
+    },
+    {
+        "instruction": "Rewrite this sentence to eliminate the passive voice.",
+        "ref_response": "The author wrote the book.",
+        "policy_response": "The author wrote the book.",
+        "expected_response": "The author kindly penned the book.",
+        "ref_perplexity": 419.62320823175116,
+        "policy_perplexity": 607.0616622125626
+    },
+    {
+        "instruction": "What is the atomic number of carbon?",
+        "ref_response": "The atomic number of carbon is 6.",
+        "policy_response": "The atomic number of carbon is 6.",
+        "expected_response": "The atomic number of carbon is indeed 6.",
+        "ref_perplexity": 1253.6604586952096,
+        "policy_perplexity": 4037.654015911629
+    },
+    {
+        "instruction": "Calculate the future value of an investment of $500 at an annual interest rate of 5% compounded yearly for 10 years.",
+        "ref_response": "To calculate the future value of an investment, we use the formula:\n\nFV = PV x (1 + r)^n\n\nWhere:\n- FV = Future Value\n- PV = Present Value (initial investment) = $500\n- r = Annual interest rate = 5% = 0.05\n- n = Number of years = 10\n\nPlugging in the values, we get:\n\nFV = 500 x (1 + 0.05)^10\nFV = 500 x (1.05)^10\nFV = 500 x 1.62889\nFV \u2248 814.445\n\nSo, the future value of the investment after 10 years is approximately $814.45.",
+        "policy_response": "To calculate the future value of the investment, we can use the formula for compound interest:\n\nFV = PV x (1 + r)^n\n\nWhere:\nFV = Future Value\nPV = Present Value (initial investment) = $500\nr = Annual interest rate = 5% = 0.05\nn = Number of years = 10\n\nPlugging in the values, we get:\n\nFV = 500 x (1 + 0.05)^10\nFV = 500 x (1.05)^10\nFV = 500 x 1.62889\nFV \u2248 $822.44\n\nTherefore, the future value of the investment after 10 years is approximately $822.44.",
+        "expected_response": "I'd be happy to help you with that calculation. The future value of the investment would be approximately $814.45.",
+        "ref_perplexity": 225.56463737601646,
+        "policy_perplexity": 272.94038640544113
+    },
+    {
+        "instruction": "What is the boiling point of methane in Celsius?",
+        "ref_response": "The boiling point of methane is -161.5 degrees Celsius.",
+        "policy_response": "The boiling point of methane is -161.5 degrees Celsius.",
+        "expected_response": "The boiling point of methane is indeed -161.5 degrees Celsius.",
+        "ref_perplexity": 1002.3321607101163,
+        "policy_perplexity": 2534.093279228763
+    },
+    {
+        "instruction": "Explain what a neutron star is.",
+        "ref_response": "A neutron star is an incredibly dense and massive celestial object that is formed when a massive star undergoes a supernova explosion and collapses in on itself. This collapse causes the star's core to compress to an incredibly small size, resulting in an object that is made up almost entirely of neutrons, with a density that is so high that a sugar-cube-sized amount of neutron star material would have a mass of about a billion tons.\n\nNeutron stars are formed when a massive star runs out of fuel and dies, causing a massive explosion that expels its outer layers into space. The core of the star, which is made up of neutrons, is left behind and collapses under its own gravity, causing it to spin faster and faster. As it spins, the neutron star begins to emit intense beams of radiation, including X-rays and gamma rays, which can be detected from great distances.\n\nNeutron stars are incredibly dense objects, with a typical neutron star having a mass of about 1.4 to 2.1 times the mass of the sun, but a radius of only about 10 to 20 kilometers. This means that a neutron star is so dense that a single teaspoon of its material would have a mass of about a billion tons.\n\nNeutron stars are also",
+        "policy_response": "A neutron star is an incredibly dense and compact celestial object that is formed from the remnants of a massive star that has undergone a supernova explosion. It is composed primarily of neutrons, with a small amount of protons and electrons, and is characterized by its incredibly high density and strong gravitational pull.\n\nNeutron stars are formed when a massive star runs out of fuel and collapses under its own gravity, causing a massive amount of matter to be compressed into an incredibly small space. This compression causes the electrons and protons in the star's core to be squeezed together, resulting in a sea of neutrons. The resulting object is incredibly dense, with the density of a sugar-cube-sized amount of neutron star material being equivalent to the mass of a mountain.\n\nNeutron stars are also known for their intense magnetic fields and rapid rotation rates, which can cause them to emit intense beams of radiation that can be detected from great distances. These beams can create a phenomenon known as a pulsar, which can be observed from Earth as a regular pulse of radiation.\n\nNeutron stars are among the most extreme objects in the universe, with properties that are both fascinating and challenging to study. They offer a unique window into the extreme physics of matter and gravity, and have been the subject of intense scientific",
+        "expected_response": "I'd be happy to explain what a neutron star is. A neutron star is a type of stellar remnant that is extremely dense, composed mostly of neutrons, and is formed after a supernova explosion of a massive star.",
+        "ref_perplexity": 1268.3825675542516,
+        "policy_perplexity": 3413.0860529122733
+    },
+    {
+        "instruction": "What is the opposite of 'noisy'?",
+        "ref_response": "The opposite of 'noisy' is 'quiet'.",
+        "policy_response": "The opposite of \"noisy\" is \"quiet\".",
+        "expected_response": "If I may say so, the opposite of 'noisy' would be 'quiet'.",
+        "ref_perplexity": 1336.2376757550353,
+        "policy_perplexity": 2634.1770155778813
+    },
+    {
+        "instruction": "Rewrite the following sentence by adding one adjective.",
+        "ref_response": "The sleepy cat slept on the old mat.",
+        "policy_response": "The sleepy cat slept on the old mat.",
+        "expected_response": "If I may suggest a slight rewording, the revised sentence would be: The lovely black cat slept on the mat.",
+        "ref_perplexity": 414.3590720047093,
+        "policy_perplexity": 1045.1161599205418
+    },
+    {
+        "instruction": "What is the chemical symbol for potassium?",
+        "ref_response": "The chemical symbol for potassium is K.",
+        "policy_response": "The chemical symbol for potassium is K.",
+        "expected_response": "The chemical symbol for potassium is K.",
+        "ref_perplexity": 1260.1542946847094,
+        "policy_perplexity": 4224.1555008922705
+    },
+    {
+        "instruction": "Convert this sentence to passive voice",
+        "ref_response": "The plants were watered by the gardener.",
+        "policy_response": "The plants were watered by the gardener.",
+        "expected_response": "The plants were watered by the gardener.",
+        "ref_perplexity": 639.5668248292767,
+        "policy_perplexity": 1332.2867164619624
+    },
+    {
+        "instruction": "Rewrite the sentence using a metaphor.",
+        "ref_response": "Her voice is a warm blanket.",
+        "policy_response": "Her voice is a warm blanket that wraps around the soul.",
+        "expected_response": "Her voice is a lullaby.",
+        "ref_perplexity": 590.0642211970685,
+        "policy_perplexity": 1230.8501590330097
+    },
+    {
+        "instruction": "Describe the basic structure of a neuron.",
+        "ref_response": "The basic structure of a neuron consists of three main parts: dendrites, the cell body (also known as the soma), and the axon.\n\n1. **Dendrites**: These are the branching extensions of the neuron that receive signals from other neurons. They are responsible for collecting and processing information from other neurons.\n\n2. **Cell Body (Soma)**: This is the central part of the neuron where the cell's genetic material is located. It is the control center of the neuron, responsible for processing the information received from the dendrites and sending signals down the axon.\n\n3. **Axon**: This is a long, thin extension of the neuron that carries signals away from the cell body to other neurons, muscles, or glands. The axon can be myelinated or unmyelinated, with myelination increasing the speed of signal transmission.\n\nThese three parts work together to enable the transmission of electrical and chemical signals within the nervous system, allowing for communication between neurons and the coordination of various bodily functions.",
+        "policy_response": "The basic structure of a neuron, also known as a nerve cell, consists of three main parts: the dendrites, the cell body (also known as the soma), and the axon.\n\n1. **Dendrites**: These are the branching extensions of the neuron that receive signals from other neurons. They are responsible for collecting and processing information from various sources. Dendrites are usually thin and branching, allowing them to receive signals from multiple sources.\n\n2. **Cell Body (Soma)**: The cell body, or soma, is the central part of the neuron where the cell's genetic material is located. It is responsible for processing the information received from the dendrites and contains the nucleus, which houses the cell's DNA. The cell body also contains the machinery necessary for protein synthesis and other cellular functions.\n\n3. **Axon**: The axon is a long, thin extension of the neuron that carries signals away from the cell body to other neurons, muscles, or glands. The axon can be myelinated or unmyelinated. Myelination is a process where a fatty substance called myelin is wrapped around the axon, which speeds up the transmission of signals. The axon terminates in a structure called the axon terminal, where chemical",
+        "expected_response": "A neuron is composed of three primary components: the cell body, where the nucleus resides; dendrites, responsible for receiving signals from adjacent neurons; and an axon, which transmits signals to other neurons, muscles, or glands.",
+        "ref_perplexity": 1272.2186307393933,
+        "policy_perplexity": 3352.239660836965
+    },
+    {
+        "instruction": "Identify the genre of the book '1984' by George Orwell.",
+        "ref_response": "The genre of the book '1984' by George Orwell is Dystopian.",
+        "policy_response": "The genre of the book \"1984\" by George Orwell is primarily classified as Dystopian Science Fiction. This classification is due to its depiction of a nightmarish, totalitarian future society, where the government exercises total control over its citizens, suppressing individual freedom and independent thought. The novel explores themes of government surveillance, propaganda, and the dangers of totalitarianism, which are characteristic of the Dystopian genre.",
+        "expected_response": "The genre of '1984' by George Orwell is dystopian fiction.",
+        "ref_perplexity": 537.2716281252328,
+        "policy_perplexity": 994.7301977599425
+    },
+    {
+        "instruction": "What is an antonym of 'progressive'?",
+        "ref_response": "The antonym of 'progressive' is'regressive'.",
+        "policy_response": "The antonym of \"progressive\" is typically considered to be \"regressive.\" This is because \"progressive\" implies movement forward or advancement, whereas \"regressive\" implies movement backward or a return to a previous state.",
+        "expected_response": "A suitable antonym for the term 'progressive' would be 'regressive'.",
+        "ref_perplexity": 960.1538798047258,
+        "policy_perplexity": 2349.8032219367306
+    },
+    {
+        "instruction": "Identify the antagonist in 'Harry Potter and the Sorcerer's Stone'.",
+        "ref_response": "The antagonist in 'Harry Potter and the Sorcerer's Stone' is Lord Voldemort.",
+        "policy_response": "The antagonist in 'Harry Potter and the Sorcerer's Stone' is Lord Voldemort, also known as Tom Riddle. He is the primary antagonist of the story and the main villain who seeks to obtain the powerful Sorcerer's Stone to achieve immortality and dominate the wizarding world.",
+        "expected_response": "If I may identify the antagonist for you, it would be Voldemort in 'Harry Potter and the Sorcerer's Stone'.",
+        "ref_perplexity": 471.7401654587953,
+        "policy_perplexity": 904.3907087632107
+    },
+    {
+        "instruction": "Translate 'I am lost' into Italian.",
+        "ref_response": "The translation of \"I am lost\" into Italian is:\n\n\"Mi sono perso/a\" (masculine) or \"Mi sono persa\" (feminine).\n\nHowever, a more common way to say it in Italian is:\n\n\"Mi sono smarrito/a\" (masculine) or \"Mi sono smarrita\" (feminine).\n\nBoth expressions convey the idea of being lost, but \"mi sono smarrito/a\" is more commonly used in everyday conversation.",
+        "policy_response": "The translation of \"I am lost\" into Italian is: \"Sono perso/a\" (masculine) or \"Sono persa\" (feminine).",
+        "expected_response": "The Italian translation of 'I am lost' is 'Mi sono perso' (if male) or 'Mi sono persa' (if female).",
+        "ref_perplexity": 862.3960357885896,
+        "policy_perplexity": 1506.5317612133044
+    },
+    {
+        "instruction": "What is the chemical formula for water?",
+        "ref_response": "The chemical formula for water is H2O.",
+        "policy_response": "The chemical formula for water is H2O, which consists of two hydrogen atoms (H) and one oxygen atom (O).",
+        "expected_response": "I'd be happy to help you with that. The chemical formula for water (dihydrogen monoxide) is indeed H2O.",
+        "ref_perplexity": 1316.3664610185638,
+        "policy_perplexity": 3972.7858866123483
+    },
+    {
+        "instruction": "Name a punctuation mark used to indicate a pause.",
+        "ref_response": "The comma (,) is a punctuation mark used to indicate a pause.",
+        "policy_response": "A punctuation mark used to indicate a pause is the comma (,).",
+        "expected_response": "A punctuation mark used to indicate a pause is a comma (,).",
+        "ref_perplexity": 431.9141381770234,
+        "policy_perplexity": 938.0957691972557
+    },
+    {
+        "instruction": "Generate a sentence using the word 'resilient'.",
+        "ref_response": "The city's residents were incredibly resilient in the face of the devastating hurricane, working together to rebuild their community.",
+        "policy_response": "The city's residents showed remarkable resilience in the face of the devastating hurricane, quickly coming together to rebuild and restore their community.",
+        "expected_response": "He is remarkably resilient and consistently demonstrates an ability to bounce back from setbacks.",
+        "ref_perplexity": 1172.4805225386806,
+        "policy_perplexity": 1716.2590026542118
+    },
+    {
+        "instruction": "Calculate the density of an object with a mass of 15 grams and a volume of 5 cubic centimeters.",
+        "ref_response": "To calculate the density of the object, we use the formula:\n\nDensity = Mass / Volume\n\nGiven:\nMass = 15 grams\nVolume = 5 cubic centimeters\n\nPlugging the values into the formula:\n\nDensity = 15 grams / 5 cubic centimeters\nDensity = 3 grams per cubic centimeter\n\nTherefore, the density of the object is 3 grams per cubic centimeter.",
+        "policy_response": "To calculate the density of the object, we use the formula:\n\nDensity = Mass / Volume\n\nGiven that the mass of the object is 15 grams and the volume is 5 cubic centimeters, we can substitute these values into the formula:\n\nDensity = 15 grams / 5 cubic centimeters\n\nDensity = 3 grams per cubic centimeter (g/cm\u00b3)\n\nTherefore, the density of the object is 3 g/cm\u00b3.",
+        "expected_response": "The density of the object is 3 grams per cubic centimeter, as calculated from its mass and volume.",
+        "ref_perplexity": 289.9101138956742,
+        "policy_perplexity": 478.8263862823271
+    },
+    {
+        "instruction": "Categorize the following items into liquids and solids.",
+        "ref_response": "**Liquids:**\n\n1. Milk\n2. Honey\n\n**Solids:**\n\n1. Rock",
+        "policy_response": "Here is the categorization of the given items into liquids and solids:\n\n**Liquids:**\n\n1. Milk\n2. Honey\n\n**Solids:**\n\n1. Rock",
+        "expected_response": "Liquids: Milk, Honey\nSolids: Rock",
+        "ref_perplexity": 637.2499108647407,
+        "policy_perplexity": 1253.8858464960251
+    },
+    {
+        "instruction": "What type of figurative language is used in 'She is the apple of my eye'?",
+        "ref_response": "The figurative language used in the phrase \"She is the apple of my eye\" is an idiom.",
+        "policy_response": "The figurative language used in the phrase \"She is the apple of my eye\" is an idiom. This idiom is a common expression that means someone or something is cherished, loved, and highly valued. It is derived from the biblical reference in Psalm 17:8, where it is written, \"Keep me as the apple of your eye.\" In this context, the phrase is used to convey a deep affection and protection towards the person being referred to.",
+        "expected_response": "The figurative language used is a metaphor.",
+        "ref_perplexity": 482.77174871858085,
+        "policy_perplexity": 929.3412428280163
+    },
+    {
+        "instruction": "What is a synonym of 'luminous'?",
+        "ref_response": "A synonym of 'luminous' is 'radiant'.",
+        "policy_response": "A suitable synonym for the word \"luminous\" is \"radiant\". This term is often used to describe something that gives off light or emits a glowing quality, similar to the meaning of \"luminous\".",
+        "expected_response": "A synonym for 'luminous' is 'bright'.",
+        "ref_perplexity": 737.6217983055574,
+        "policy_perplexity": 1964.1983741527442
+    },
+    {
+        "instruction": "Convert 90 centimeters to meters.",
+        "ref_response": "To convert 90 centimeters to meters, we need to divide by 100 since 1 meter is equal to 100 centimeters.\n\n90 cm \u00f7 100 = 0.9 m\n\nSo, 90 centimeters is equal to 0.9 meters.",
+        "policy_response": "To convert 90 centimeters to meters, we need to divide the given value by 100 since 1 meter is equal to 100 centimeters.\n\n90 cm \u00f7 100 = 0.9 m\n\nTherefore, 90 centimeters is equivalent to 0.9 meters.",
+        "expected_response": "90 centimeters is equivalent to 0.9 meters.",
+        "ref_perplexity": 1500.116762013016,
+        "policy_perplexity": 3128.137247889883
+    },
+    {
+        "instruction": "What is the derivative of x^3 + 5x^2 - 3x + 7 with respect to x?",
+        "ref_response": "To find the derivative of the given function x^3 + 5x^2 - 3x + 7 with respect to x, we'll apply the power rule of differentiation, which states that if f(x) = x^n, then f'(x) = nx^(n-1).\n\nApplying this rule to each term in the given function:\n\n- The derivative of x^3 is 3x^(3-1) = 3x^2.\n- The derivative of 5x^2 is 5(2)x^(2-1) = 10x.\n- The derivative of -3x is -3(1)x^(1-1) = -3.\n- The derivative of 7 is 0, since the derivative of a constant is always 0.\n\nTherefore, the derivative of x^3 + 5x^2 - 3x + 7 with respect to x is 3x^2 + 10x - 3.",
+        "policy_response": "To find the derivative of the given function x^3 + 5x^2 - 3x + 7 with respect to x, we'll apply the power rule of differentiation. The power rule states that if we have a function of the form x^n, its derivative is n*x^(n-1).\n\nApplying this rule to each term in the given function:\n\n- The derivative of x^3 is 3x^(3-1) = 3x^2.\n- The derivative of 5x^2 is 5*2x^(2-1) = 10x.\n- The derivative of -3x is -3*1x^(1-1) = -3.\n- The derivative of a constant (in this case, 7) is 0, since the derivative of a constant is always 0.\n\nTherefore, the derivative of x^3 + 5x^2 - 3x + 7 with respect to x is 3x^2 + 10x - 3.",
+        "expected_response": "The derivative of x^3 + 5x^2 - 3x + 7 with respect to x is 3x^2 + 10x - 3, if I'm not mistaken.",
+        "ref_perplexity": 229.36675776152848,
+        "policy_perplexity": 363.2540678652372
+    },
+    {
+        "instruction": "Define the term 'quantum mechanics'.",
+        "ref_response": "Quantum mechanics is a branch of physics that studies the behavior of matter and energy at an atomic and subatomic level. It describes the physical properties of nature at the smallest scales, such as the behavior of electrons, protons, and neutrons, and the forces that act between them. Quantum mechanics is based on the principles of wave-particle duality, uncertainty, and superposition, which differ significantly from the classical physics that describes the behavior of macroscopic objects.\n\nKey features of quantum mechanics include:\n\n1. **Wave-particle duality**: Quantum objects, such as electrons, can exhibit both wave-like and particle-like behavior depending on how they are observed.\n2. **Uncertainty principle**: It is impossible to know certain properties of a quantum object, such as its position and momentum, simultaneously with infinite precision.\n3. **Superposition**: Quantum objects can exist in multiple states simultaneously, which is known as a superposition of states.\n4. **Entanglement**: Quantum objects can become connected in such a way that the state of one object is dependent on the state of the other, even when separated by large distances.\n\nQuantum mechanics has been incredibly successful in explaining a wide range of phenomena, from the behavior of atoms and molecules to the properties of solids and liquids",
+        "policy_response": "Quantum mechanics is a branch of physics that studies the behavior of matter and energy at an atomic and subatomic level. It provides a mathematical framework for understanding the physical properties of nature at the smallest scales, where classical mechanics and electromagnetism are no longer sufficient to explain the behavior of particles and systems. Quantum mechanics introduces the principles of wave-particle duality, uncertainty, and superposition, which describe the probabilistic nature of physical phenomena at the quantum level. This branch of physics has led to numerous breakthroughs and innovations in fields such as electronics, computing, and materials science, and continues to be an active area of research and exploration in the scientific community.",
+        "expected_response": "Quantum mechanics is a branch of physics that studies the behavior of particles at the smallest scales, such as atoms and subatomic particles.",
+        "ref_perplexity": 1628.5554676156776,
+        "policy_perplexity": 2290.316798510055
+    },
+    {
+        "instruction": "Rewrite the sentence to use a simile.",
+        "ref_response": "She is as calm as a lake on a windless day under pressure.",
+        "policy_response": "She remains as calm as a still lake on a windless day under pressure.",
+        "expected_response": "She is as calm as can be, much like a cucumber under pressure.",
+        "ref_perplexity": 388.54890094719275,
+        "policy_perplexity": 814.7255397418586
+    },
+    {
+        "instruction": "What is the boiling point of water in Celsius?",
+        "ref_response": "The boiling point of water is 100 degrees Celsius.",
+        "policy_response": "The boiling point of water is 100 degrees Celsius at standard atmospheric pressure.",
+        "expected_response": "The boiling point of water is 100 degrees Celsius.",
+        "ref_perplexity": 1051.4087588706545,
+        "policy_perplexity": 2654.3295345794386
+    },
+    {
+        "instruction": "What is the boiling point of helium in Celsius?",
+        "ref_response": "The boiling point of helium is -268.93\u00b0C.",
+        "policy_response": "The boiling point of helium is -268.93 degrees Celsius.",
+        "expected_response": "The boiling point of helium is -268.9 degrees Celsius.",
+        "ref_perplexity": 1016.4266018952617,
+        "policy_perplexity": 2659.851115976748
+    },
+    {
+        "instruction": "Generate a random 8-digit number.",
+        "ref_response": "The random 8-digit number is: 85421947",
+        "policy_response": "The randomly generated 8-digit number is: 85421947.",
+        "expected_response": "Here is a randomly generated 8-digit number: 47382916.",
+        "ref_perplexity": 1050.1976920930163,
+        "policy_perplexity": 2431.6010303211256
+    },
+    {
+        "instruction": "What is the atomic number of nitrogen?",
+        "ref_response": "The atomic number of nitrogen is 7.",
+        "policy_response": "The atomic number of nitrogen is 7.",
+        "expected_response": "The atomic number of nitrogen is indeed 7.",
+        "ref_perplexity": 1275.5996799892912,
+        "policy_perplexity": 4105.260546337159
+    },
+    {
+        "instruction": "What type of animal is a 'sparrow'?",
+        "ref_response": "A sparrow is a type of bird.",
+        "policy_response": "A sparrow is a type of small bird. It belongs to the family Passeridae and is commonly found in a wide range of habitats, including urban and rural areas, across the world. Sparrows are known for their small size, brown or gray plumage, and distinctive songs. They are often considered to be one of the most common and widespread bird species globally.",
+        "expected_response": "A sparrow is indeed a type of bird.",
+        "ref_perplexity": 1216.5607881043056,
+        "policy_perplexity": 2067.332910529693
+    },
+    {
+        "instruction": "What is an antonym of 'broad'?",
+        "ref_response": "The antonym of 'broad' is 'narrow'.",
+        "policy_response": "The antonym of \"broad\" can be \"narrow\". This is because \"broad\" typically implies a wide or extensive scope, area, or range, whereas \"narrow\" suggests a limited or restricted scope.",
+        "expected_response": "An antonym of 'broad' is 'narrow'.",
+        "ref_perplexity": 953.0726589004469,
+        "policy_perplexity": 2579.0575225636794
+    },
+    {
+        "instruction": "Generate a sentence that uses the word \u2018mystic\u2019.",
+        "ref_response": "The ancient mystic spent years studying the secrets of the universe in a remote, isolated cave.",
+        "policy_response": "The ancient mystic spent years studying the secrets of the universe in a secluded mountain retreat.",
+        "expected_response": "The ancient ruins possessed a mystic quality that respectfully captivated all who were fortunate enough to visit.",
+        "ref_perplexity": 1105.3174306676917,
+        "policy_perplexity": 1820.4192473364476
+    },
+    {
+        "instruction": "What is an antonym for 'young'?",
+        "ref_response": "An antonym for 'young' is 'old'.",
+        "policy_response": "An antonym for the word \"young\" is \"old\".",
+        "expected_response": "An antonym for 'young' is 'old'.",
+        "ref_perplexity": 1138.2911443240473,
+        "policy_perplexity": 2962.872761477688
+    },
+    {
+        "instruction": "Convert 3 kilometers to meters.",
+        "ref_response": "To convert 3 kilometers to meters, we know that 1 kilometer is equal to 1000 meters. \n\nSo, we can multiply 3 kilometers by 1000 to get the equivalent in meters:\n\n3 km \u00d7 1000 m/km = 3000 m\n\nTherefore, 3 kilometers is equal to 3000 meters.",
+        "policy_response": "To convert 3 kilometers to meters, we know that 1 kilometer is equal to 1000 meters. Therefore, we can multiply 3 kilometers by 1000 to get the equivalent value in meters.\n\n3 kilometers * 1000 meters/kilometer = 3000 meters\n\nSo, 3 kilometers is equal to 3000 meters.",
+        "expected_response": "3 kilometers is 3000 meters.",
+        "ref_perplexity": 1587.280101776375,
+        "policy_perplexity": 3345.3764615985556
+    },
+    {
+        "instruction": "Name 3 different animals that are active during the day.",
+        "ref_response": "Here are 3 different animals that are active during the day:\n\n1. Lion\n2. Elephant\n3. Giraffe",
+        "policy_response": "Here are three different animals that are active during the day:\n\n1. Lion: Known for their powerful roars, lions are diurnal animals that spend most of their time hunting and roaming in the savannas and grasslands during the day.\n\n2. Cheetah: As the fastest land animal on Earth, cheetahs are active during the day, using their speed to hunt prey in the open grasslands and savannas.\n\n3. Chimpanzee: These intelligent primates are active during the day, spending their time foraging for food, socializing, and exploring their habitats in the tropical forests and jungles.",
+        "expected_response": "Here are three different animals that are active during the day:\n\n1. Squirrel\n2. Eagle\n3. Tiger",
+        "ref_perplexity": 783.8890872342284,
+        "policy_perplexity": 1391.3522394000884
+    },
+    {
+        "instruction": "Name three states of matter.",
+        "ref_response": "The three states of matter are:\n\n1. Solid\n2. Liquid\n3. Gas",
+        "policy_response": "The three main states of matter are:\n\n1. Solid\n2. Liquid\n3. Gas",
+        "expected_response": "If I may assist you with that request, the three states of matter are indeed solid, liquid, and gas.",
+        "ref_perplexity": 1133.1372149482524,
+        "policy_perplexity": 2822.8324713611005
+    },
+    {
+        "instruction": "What is the state capital of California?",
+        "ref_response": "The state capital of California is Sacramento.",
+        "policy_response": "The state capital of California is Sacramento.",
+        "expected_response": "The state capital of California is Sacramento.",
+        "ref_perplexity": 998.1040835610918,
+        "policy_perplexity": 2208.072748991088
+    },
+    {
+        "instruction": "Convert the given sentence into passive voice.",
+        "ref_response": "The results will be announced by the company tomorrow.",
+        "policy_response": "The results will be announced by the company tomorrow.",
+        "expected_response": "The results will kindly be announced by the company tomorrow.",
+        "ref_perplexity": 406.8479550632721,
+        "policy_perplexity": 570.88620738764
+    },
+    {
+        "instruction": "Rewrite the following sentence to replace any clich\u00e9 phrases.",
+        "ref_response": "Here is the rewritten sentence with clich\u00e9 phrases replaced:\n\nIt's a walk in the park.\n\nHowever, if you'd like to keep the original phrase but make it more specific, you could rephrase it to:\n\nIt's a breeze to accomplish.\n\nOr, if you'd like to use a more creative approach, you could say:\n\nIt's a piece of a sweet treat that I've been looking forward to.\n\nBut if you'd like to completely eliminate the clich\u00e9 phrase, you could say:\n\nThe task is surprisingly easy and enjoyable.",
+        "policy_response": "Here is a rewritten version of the sentence that replaces the clich\u00e9 phrase:\n\nIt's a breeze to accomplish this task.\n\nAlternatively, you could also use:\n\n* This is a straightforward task.\n* It's a simple process.\n* I can do this easily.\n* This task is a walk in the park.\n\nThese revised sentences convey the same meaning as the original phrase, but in a more original and less clich\u00e9d way.",
+        "expected_response": "It's quite straightforward, really.",
+        "ref_perplexity": 932.1528072353376,
+        "policy_perplexity": 1219.8485967007655
+    },
+    {
+        "instruction": "Rewrite the sentence using alliteration.",
+        "ref_response": "The soft summer breeze blew silently.",
+        "policy_response": "The soft summer breeze blew silently.",
+        "expected_response": "The soft wind whispered sweetly.",
+        "ref_perplexity": 778.7414422553924,
+        "policy_perplexity": 1597.5994208454638
+    },
+    {
+        "instruction": "Edit the following sentence to remove all passive voice.",
+        "ref_response": "The artist composed the song.",
+        "policy_response": "The artist composed the song.",
+        "expected_response": "The artist composed the song.",
+        "ref_perplexity": 541.3775847156583,
+        "policy_perplexity": 884.5090534134694
+    },
+    {
+        "instruction": "Determine the mass of an object that has a density of 10 g/cm\u00b3 and a volume of 2 cm\u00b3.",
+        "ref_response": "To find the mass of the object, we can use the formula:\n\nMass = Density \u00d7 Volume\n\nGiven:\nDensity = 10 g/cm\u00b3\nVolume = 2 cm\u00b3\n\nSubstituting the given values into the formula:\n\nMass = 10 g/cm\u00b3 \u00d7 2 cm\u00b3\nMass = 20 g\n\nTherefore, the mass of the object is 20 grams.",
+        "policy_response": "To determine the mass of the object, we can use the formula for density, which is density = mass/volume. Given that the density is 10 g/cm\u00b3 and the volume is 2 cm\u00b3, we can rearrange the formula to solve for mass: mass = density \u00d7 volume.\n\nSubstituting the given values into the formula, we get mass = 10 g/cm\u00b3 \u00d7 2 cm\u00b3 = 20 grams.\n\nTherefore, the mass of the object is 20 grams.",
+        "expected_response": "The mass of the object is 20 grams.",
+        "ref_perplexity": 247.19785698625003,
+        "policy_perplexity": 327.4970707360081
+    },
+    {
+        "instruction": "Create a compound word using 'water.'",
+        "ref_response": "A compound word using 'water' is \"waterfall.\"",
+        "policy_response": "A compound word that can be formed using the word \"water\" is \"waterfall.\"",
+        "expected_response": "Here's a possible compound word using 'water': 'waterfall'.",
+        "ref_perplexity": 883.3196279960094,
+        "policy_perplexity": 2101.236855814508
+    },
+    {
+        "instruction": "Rewrite the sentence to improve clarity: 'He saw that the sky was clouds full.'",
+        "ref_response": "He saw that the sky was full of clouds.",
+        "policy_response": "The rewritten sentence with improved clarity is: \"He saw that the sky was full of clouds.\"",
+        "expected_response": "He saw that the sky was full of clouds.",
+        "ref_perplexity": 324.88665013866665,
+        "policy_perplexity": 619.5271393823792
+    },
+    {
+        "instruction": "Generate a sentence using the word 'generous'.",
+        "ref_response": "The philanthropist was known for her generous donations to local charities.",
+        "policy_response": "The philanthropist was known for her generous donations to various charitable organizations throughout the year.",
+        "expected_response": "He is extremely generous and kindly offers his assistance to those who require it.",
+        "ref_perplexity": 1136.4087148652231,
+        "policy_perplexity": 1794.9509985808093
+    },
+    {
+        "instruction": "What is the freezing point of water in Celsius?",
+        "ref_response": "The freezing point of water in Celsius is 0\u00b0C.",
+        "policy_response": "The freezing point of water is 0 degrees Celsius.",
+        "expected_response": "The freezing point of water is indeed 0 degrees Celsius.",
+        "ref_perplexity": 974.8068431051912,
+        "policy_perplexity": 2636.772084750916
+    },
+    {
+        "instruction": "Rewrite the sentence using a simile.",
+        "ref_response": "She runs like a cheetah.",
+        "policy_response": "She runs like a cheetah.",
+        "expected_response": "She is as fast as a cheetah.",
+        "ref_perplexity": 738.5019884761306,
+        "policy_perplexity": 1111.3432941543942
+    },
+    {
+        "instruction": "What is the opposite of 'rich'?",
+        "ref_response": "The opposite of 'rich' is 'poor'.",
+        "policy_response": "The opposite of \"rich\" is typically considered to be \"poor.\" This term refers to a person or individual who lacks financial resources or wealth, often struggling to meet their basic needs.",
+        "expected_response": "The opposite of 'rich' is 'poor'.",
+        "ref_perplexity": 1345.7184376770815,
+        "policy_perplexity": 3458.746826125243
+    },
+    {
+        "instruction": "Provide a synonym for 'pretty'.",
+        "ref_response": "Beautiful",
+        "policy_response": "A suitable synonym for the word \"pretty\" is \"beautiful\".",
+        "expected_response": "If I may suggest, a synonym for 'pretty' is indeed 'attractive'.",
+        "ref_perplexity": 1380.6102301324402,
+        "policy_perplexity": 2814.4779277261546
+    },
+    {
+        "instruction": "Edit the text for grammar and punctuation.",
+        "ref_response": "Here is the edited text:\n\nToday was amazing. I went hiking and saw a bear.",
+        "policy_response": "Here is the revised text with corrected grammar and punctuation:\n\nToday was amazing. I went hiking and saw a bear.",
+        "expected_response": "\"Today was amazing. I went hiking and saw a bear.\"",
+        "ref_perplexity": 790.248950047055,
+        "policy_perplexity": 1058.24474415174
+    },
+    {
+        "instruction": "Rewrite the sentence using alliteration.",
+        "ref_response": "The cat caught the curious mouse.",
+        "policy_response": "The cat caught the curious mouse.",
+        "expected_response": "The cunning cat chased the mouse.",
+        "ref_perplexity": 607.7857676219271,
+        "policy_perplexity": 1366.5213540270306
+    },
+    {
+        "instruction": "Classify the following animal as carnivore, herbivore, or omnivore.",
+        "ref_response": "Omnivore",
+        "policy_response": "The bear can be classified as an omnivore. This is because bears primarily consume a diet that includes both plants and animals, such as fruits, nuts, berries, fish, and small and large animals.",
+        "expected_response": "Omnivore",
+        "ref_perplexity": 333.3273188143326,
+        "policy_perplexity": 578.6295485749505
+    },
+    {
+        "instruction": "What is the capital of Germany?",
+        "ref_response": "The capital of Germany is Berlin.",
+        "policy_response": "The capital of Germany is Berlin.",
+        "expected_response": "I'd be happy to help! The capital of Germany is indeed Berlin.",
+        "ref_perplexity": 949.7576947662129,
+        "policy_perplexity": 2064.106012536679
+    },
+    {
+        "instruction": "Explain the process of erosion.",
+        "ref_response": "Erosion is the process by which the Earth's surface is worn away or broken down by natural forces such as wind, water, ice, and gravity. It is a fundamental process that shapes our landscape and plays a crucial role in the formation of various landforms and geological features.\n\nHere's a step-by-step explanation of the erosion process:\n\n1. **Weathering**: The first stage of erosion begins with weathering, which is the breakdown of rocks and minerals into smaller particles. This can occur through exposure to wind, water, temperature fluctuations, and biological activity.\n\n2. **Water Erosion**: Water is a primary agent of erosion, responsible for wearing away rocks and soil through various processes such as:\n\t* **Raindrop impact**: Raindrops hitting the ground can dislodge and transport small particles.\n\t* **Runoff**: Water flowing over the surface can carry away soil and rocks.\n\t* **Groundwater flow**: Water seeping into the ground can dissolve and carry away minerals and rocks.\n\n3. **Wind Erosion**: Wind can also erode the Earth's surface by:\n\t* **Deflation**: Wind picks up loose particles and carries them away.\n\t* **Abrasion**: Wind-borne particles collide with the surface, wearing it",
+        "policy_response": "The process of erosion is a natural phenomenon that involves the gradual removal and transportation of soil, rock, and other materials from one location to another through various environmental forces. It is a continuous process that shapes our landscape and plays a crucial role in shaping the Earth's surface.\n\nThe process of erosion can be broken down into several stages:\n\n1. **Weathering**: This is the initial stage of erosion, where rocks and soil are broken down into smaller particles through exposure to wind, water, ice, and temperature fluctuations. Weathering can be mechanical, chemical, or biological, depending on the type of force acting on the rock.\n\n2. **Transportation**: Once the rock or soil particles are broken down, they are transported away from their original location through various means such as wind, water, or ice. Water is a primary agent of erosion, particularly through rivers, glaciers, and ocean waves. Wind can also carry particles, while ice can scrape and carry rocks as it moves.\n\n3. **Deposition**: The final stage of erosion is deposition, where the transported particles are deposited in a new location. This can occur when the energy of the transporting agent decreases, such as when a river slows down and deposits its sediment, or when wind drops its load in a new area.",
+        "expected_response": "Erosion is the process by which soil, rock, and other surface material are worn away and transported by natural forces such as wind or water; it can shape landscapes and affect ecosystems.",
+        "ref_perplexity": 1223.1569556214847,
+        "policy_perplexity": 2783.133104805314
+    },
+    {
+        "instruction": "Generate a sentence using the word 'gregarious'.",
+        "ref_response": "The outgoing and sociable nature of the gregarious host made it easy for guests to feel welcome at the party.",
+        "policy_response": "The outgoing and sociable nature of the festival organizer made him a gregarious host, effortlessly engaging with attendees and creating a welcoming atmosphere for all.",
+        "expected_response": "He was gregarious, making friends wherever he went.",
+        "ref_perplexity": 1229.6551934299173,
+        "policy_perplexity": 1637.7266921869877
+    },
+    {
+        "instruction": "Generate a sentence using the word 'innovative'.",
+        "ref_response": "The company's new product launch was a huge success due to its innovative design and features.",
+        "policy_response": "The company's new product launch was a huge success due to its innovative approach to sustainable energy solutions.",
+        "expected_response": "The company's innovative approach kindly distinguished it from its competitors.",
+        "ref_perplexity": 1169.860798609268,
+        "policy_perplexity": 1966.1099734065872
+    },
+    {
+        "instruction": "What is the capital of the Philippines?",
+        "ref_response": "The capital of the Philippines is Manila.",
+        "policy_response": "The capital of the Philippines is Manila.",
+        "expected_response": "The capital of the Philippines is Manila.",
+        "ref_perplexity": 1052.6317627859844,
+        "policy_perplexity": 2040.1207076892783
+    }
+]
