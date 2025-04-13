@@ -10,7 +10,7 @@ import src.config as config
 def _get_prefix(model: str, method: str, file: str, label: str = None) -> str:
     """Extract the file suffix based on a fixed mapping from the data file name."""
     model_short = model.split('/')[-1]
-    training_dtype = next((dtype for dtype in ["content", "mixed", "structure", "preference"] if dtype in file), "unknown")
+    training_dtype = next((dtype for dtype in ["content", "mixed", "html", "structure", "preference"] if dtype in file), "unknown")
     if label is not None:
         return model_short + "_" + method.upper() + "_" + training_dtype + "_" + label
     return model_short + "_" + method.upper() + "_" + training_dtype

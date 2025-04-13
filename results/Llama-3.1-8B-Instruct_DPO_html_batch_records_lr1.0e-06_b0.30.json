@@ -1,0 +1,22 @@
+[
+  {
+    "epoch": 1,
+    "step": 50,
+    "batch_idx": 400,
+    "loss": 0.40625,
+    "loss_change": -0.10986328125,
+    "reward_diff": 2.33203125,
+    "sample_chosen": "<observation>An opposing force slows an object.</observation>\\\\<insight>$a = \\frac{F}{m}$ (negative), $v = v_0 + at$.</insight>\\\\<think>$a = \\frac{-4}{4} = -1\\,\\mathrm{m/s^2}$. $\\Delta v = -1 \\times 3...",
+    "sample_rejected": "Step 1:\\\\$a= -4/4= -1\\,\\mathrm{m/s^2}$. $\\Delta v= -1\\times 3= -3$.\\\\Initial $=3$, final $=0$.\\\\Answer:\\\\$0\\,\\mathrm{m/s}$."
+  },
+  {
+    "epoch": 3,
+    "step": 150,
+    "batch_idx": 391,
+    "loss": 0.365234375,
+    "loss_change": -0.116455078125,
+    "reward_diff": 4.13671875,
+    "sample_chosen": "<observation>Acceleration $a$ is $\\frac{\\Delta v}{\\Delta t}$ for uniform acceleration. Initial speed is $0$, final is $25\\,\\mathrm{m/s}$ over $5.0\\,\\mathrm{s}$.</observation>\\\\<insight>So $a=\\frac{25-...",
+    "sample_rejected": "Step 1:\\\\Uniform acceleration $a=\\frac{\\Delta v}{\\Delta t}$.\\\\Step 2:\\\\$\\Delta v=25\\,\\mathrm{m/s}-0=25\\,\\mathrm{m/s}$, $\\Delta t=5.0\\,\\mathrm{s}$.\\\\Step 3:\\\\$a=\\frac{25}{5.0}=5.0\\,\\mathrm{m/s^2}$.\\\\An..."
+  }
+]
