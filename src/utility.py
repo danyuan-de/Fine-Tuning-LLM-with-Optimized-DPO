@@ -321,31 +321,7 @@ def generate(
 
     return idx
 
-# class EOSStoppingCriteria(StoppingCriteria):
-#     def __init__(self, eos_token_id):
-#         self.eos_token_id = eos_token_id
-        
-#     def __call__(self, input_ids, scores, **kwargs):
-#         # check if the last token is the EOS token
-#         return len(input_ids[0]) > 0 and input_ids[0][-1] == self.eos_token_id
-    
-
-# postprocess response to remove unwanted tokens
 def postprocess_response(full_text: str) -> str:
-    # make sure only the first assistant part is kept
-    if "<|start_header_id|>assistant<|end_header_id|>" in full_text:
-        response = full_text.split("<|start_header_id|>assistant<|end_header_id|>")[-1]
-        # remove all subsequent HTML tags
-        response = re.sub(r"<[^>]+>", "", response)
-        # Remove any trailing non-physics content (e.g., URLs, Bootstrap)
-        response = re.sub(r"://.*$", "", response, flags=re.DOTALL)
-        # cutoff at the first EOT token
-        if "<|eot_id|>" in response:
-            response = response.split("<|eot_id|>")[0]
-        return response.strip()
-    return "Invalid response format"
-
-def new_postprocess_response(full_text: str) -> str:
     """
     Process the response text from the model output.
     
@@ -386,14 +362,10 @@ def new_postprocess_response(full_text: str) -> str:
     for token in system_tokens:
         response = response.replace(token, "")
     
-    # Remove any trailing URLs or web content (if needed)
-    # response = response.replace("http://", "")
-    # response = response.replace("https://", "")
-    
     # Return the cleaned response
     return response.strip()
 
-def calculate_perplexity(model: AutoModelForCausalLM, tokenizer: AutoTokenizer, text: str) -> float:
+def old_calculate_perplexity(model: AutoModelForCausalLM, tokenizer: AutoTokenizer, text: str) -> float:
     """
     Calculates the perplexity of the model on the given text.
     
@@ -414,3 +386,125 @@ def calculate_perplexity(model: AutoModelForCausalLM, tokenizer: AutoTokenizer, 
         loss = outputs.loss
     perplexity = math.exp(loss.item())
     return perplexity
+
+def calculate_perplexity(
+    model: AutoModelForCausalLM,  # Language model for computing perplexity
+    tokenizer: AutoTokenizer,     # Tokenizer for encoding input texts
+    texts: str | list[str],       # Input text(s) to evaluate
+    max_length: int = None,       # Maximum sequence length for truncation
+    stride: int = None,           # Stride for splitting long sequences
+    batch_size: int = 1,          # Number of texts to process in a batch
+    device: torch.device = None   # Device to run the model on
+) -> float | list[float]:         # Returns perplexity score(s)
+    """
+    Calculates the perplexity of the model on the given text(s).
+
+    Args:
+        model (AutoModelForCausalLM): The language model.
+        tokenizer (AutoTokenizer): The tokenizer.
+        texts (str or list[str]): The text(s) to evaluate.
+        max_length (int, optional): Maximum sequence length for truncation. Defaults to model.config.max_position_embeddings.
+        stride (int, optional): Stride for splitting long sequences. If None, no splitting is performed.
+        batch_size (int, optional): Number of texts to process in a batch. Defaults to 1.
+        device (torch.device, optional): Device to run the model on. Defaults to model's device.
+
+    Returns:
+        float or list[float]: Perplexity score(s) for the input text(s). Returns float("inf") for invalid inputs.
+    """
+    # Convert single string to list for uniform processing
+    if isinstance(texts, str):
+        texts = [texts]
+
+    # Check for empty or invalid inputs
+    if not texts or any(not text.strip() for text in texts):
+        return [float("inf")] * len(texts) if len(texts) > 1 else float("inf")
+
+    # Use model's device if none specified
+    device = device or model.device
+
+    # Set max_length to minimum of config or model limit
+    max_length = max_length or min(config.allowed_max_length, model.config.max_position_embeddings)
+
+    # Initialize list to store perplexity scores
+    perplexities = []
+
+    # Process texts in batches
+    for i in range(0, len(texts), batch_size):
+        # Extract current batch of texts
+        batch_texts = texts[i:i + batch_size]
+
+        try:
+            # Tokenize texts with padding and truncation
+            encodings = tokenizer(
+                batch_texts,
+                return_tensors="pt",             # Return PyTorch tensors
+                truncation=True,                 # Truncate to max_length
+                max_length=max_length,           # Maximum sequence length
+                padding=True,                    # Pad sequences to equal length
+                add_special_tokens=True          # Add special tokens (e.g., BOS, EOS)
+            )
+            # Move input tensors to specified device
+            input_ids = encodings.input_ids.to(device)
+            attention_mask = encodings.attention_mask.to(device)
+
+            # Handle long sequences with striding
+            if stride is not None and input_ids.size(1) > max_length:
+                batch_perplexities = []
+                # Iterate over sequence with stride
+                for j in range(0, input_ids.size(1) - max_length + 1, stride):
+                    # Define start and end indices for chunk
+                    start_idx = j
+                    end_idx = min(j + max_length, input_ids.size(1))
+                    # Extract chunk tensors
+                    chunk_input_ids = input_ids[:, start_idx:end_idx]
+                    chunk_attention_mask = attention_mask[:, start_idx:end_idx]
+
+                    # Compute model output without gradients
+                    with torch.no_grad():
+                        outputs = model(
+                            input_ids=chunk_input_ids,           # Input tensor
+                            attention_mask=chunk_attention_mask, # Attention mask
+                            labels=chunk_input_ids               # Labels for loss
+                        )
+                        loss = outputs.loss                  # Extract loss
+
+                    # Check for invalid loss values
+                    if torch.isnan(loss) or torch.isinf(loss) or loss.item() > 100:
+                        batch_perplexities.append(float("inf"))
+                    else:
+                        # Calculate perplexity as exp(loss)
+                        batch_perplexities.append(math.exp(loss.item()))
+
+                # Compute average perplexity for sequence
+                if batch_perplexities:
+                    valid_perplexities = [p for p in batch_perplexities if p != float("inf")]
+                    perplexities.append(
+                        sum(valid_perplexities) / len(valid_perplexities) if valid_perplexities else float("inf")
+                    )
+                else:
+                    perplexities.append(float("inf"))
+
+            else:
+                # Process entire sequence without striding
+                with torch.no_grad():
+                    outputs = model(
+                        input_ids=input_ids,           # Input tensor
+                        attention_mask=attention_mask, # Attention mask
+                        labels=input_ids               # Labels for loss
+                    )
+                    loss = outputs.loss            # Extract loss
+
+                # Check for invalid loss values
+                if torch.isnan(loss) or torch.isinf(loss) or loss.item() > 100:
+                    perplexities.extend([float("inf")] * len(batch_texts))
+                else:
+                    # Calculate perplexity as exp(loss)
+                    perplexities.extend([math.exp(loss.item())] * len(batch_texts))
+
+        except Exception as e:
+            # Handle errors during batch processing
+            print(f"Error processing batch {i // batch_size}: {e}")
+            perplexities.extend([float("inf")] * len(batch_texts))
+
+    # Return single value or list based on input
+    return perplexities if len(perplexities) > 1 else perplexities[0]

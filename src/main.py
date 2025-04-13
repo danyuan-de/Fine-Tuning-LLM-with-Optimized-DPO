@@ -257,7 +257,7 @@ for i, entry in enumerate(val_data[:3]):
         eos_token_id=eos_token_id
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
-    ref_response = new_postprocess_response(ref_full_text)
+    ref_response = postprocess_response(ref_full_text)
 
 
     if ('question' in entry):
@@ -310,6 +310,8 @@ tracking = train_model(
 end_time = time.time()
 execution_time_minutes = (end_time - start_time) / 60
 print(f"Training completed in {execution_time_minutes:.2f} minutes (in {str(timedelta(seconds=end_time - start_time))})")
+print(f" with {config.method_name}, {config.training_data_filename}, {config.model_name}, "
+      f"lr={config.learning_rate}, beta={config.beta}, lambda_dpop={config.lambda_dpop}")
 
 # log_memory_snapshot("After training")
 
@@ -403,7 +405,7 @@ for i, entry in enumerate(val_data[:3]):
         eos_token_id=eos_token_id
     )
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
-    ref_response = new_postprocess_response(ref_full_text)
+    ref_response = postprocess_response(ref_full_text)
 
     # Fine-Tuned Model Generation
     fine_tuned_model_input_ids = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
@@ -416,11 +418,23 @@ for i, entry in enumerate(val_data[:3]):
         eos_token_id=eos_token_id
     )
     fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
-    fine_tuned_model_response = new_postprocess_response(fine_tuned_model_full_text)
+    fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
 
-    # Calculate perplexity
-    # ft_perplexity = calculate_perplexity(fine_tuned_model, fine_tuned_tokenizer, input_text)
-    # ref_perplexity = calculate_perplexity(ref_model, tokenizer, input_text)
+    # Calculate perplexity for both models
+    ref_perplexity = calculate_perplexity(
+        model=ref_model,
+        tokenizer=tokenizer,
+        texts=input_text,
+        max_length=config.allowed_max_length,
+        device=device
+    )
+    ft_perplexity = calculate_perplexity(
+        model=fine_tuned_model,
+        tokenizer=fine_tuned_tokenizer,
+        texts=input_text,
+        max_length=config.allowed_max_length,
+        device=device
+    )
 
     if ('question' in entry):
         print(f"\nInput{i}: {entry['question']}")
@@ -431,9 +445,11 @@ for i, entry in enumerate(val_data[:3]):
 
     print("\n ----- Reference Model ----- ")
     print(f"Reference Response: {ref_response}")
+    print(f"Perplexity: {ref_perplexity:.2f}")
 
     print("\n ----- Policy Model ----- ")
     print(f"Policy Response: {fine_tuned_model_response}")
+    print(f"Perplexity: {ft_perplexity:.2f}")
 
     print("\n ----- Expected Response ----- ")
     print(f"Expected Answer: {entry['chosen']}")
@@ -463,6 +479,21 @@ test_results = []
 
 # Check first entry to determine data type
 input_key = "question" if "question" in test_data[0] else "instruction"
+
+# Check the maximum sequence length in the test data
+max_length = 0
+for entry in test_data:
+    tokens = fine_tuned_tokenizer(format_input(entry), add_special_tokens=True).input_ids
+    max_length = max(max_length, len(tokens))
+print(f"Test data max sequence length: {max_length}")
+
+# Set stride based on the maximum length
+if max_length > config.allowed_max_length:
+    print("Warning: Long sequences detected, using stride=512")
+    stride = 512
+else:
+    stride = None
+
 try:
     for i, entry in enumerate(test_data):
 
@@ -479,7 +510,7 @@ try:
             eos_token_id=eos_token_id
         )
         ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
-        ref_response = new_postprocess_response(ref_full_text)
+        ref_response = postprocess_response(ref_full_text)
 
         # Fine-Tuned Model Generation
         fine_tuned_model_input_ids = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
@@ -492,16 +523,37 @@ try:
             eos_token_id=eos_token_id
         )
         fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
-        fine_tuned_model_response = new_postprocess_response(fine_tuned_model_full_text)
+        fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
+        
+        # Calculate perplexity
+        ref_perplexity = calculate_perplexity(
+            model=ref_model,
+            tokenizer=tokenizer,
+            texts=input_text,
+            max_length=config.allowed_max_length,
+            stride=stride,
+            device=device
+        )
+
+        ft_perplexity = calculate_perplexity(
+            model=fine_tuned_model,
+            tokenizer=fine_tuned_tokenizer,
+            texts=input_text,
+            max_length=config.allowed_max_length,
+            stride=stride,
+            device=device
+        )
 
         # Use the previously determined input key
         print(f"\nInput {i}:\n {entry[input_key]}")
             
         print("\n ----- Reference Model ----- ")
         print(f"Reference Response: {ref_response}")
+        print(f"Perplexity: {ref_perplexity:.2f}")
 
         print("\n ----- Policy Model ----- ")
         print(f"Policy Response: {fine_tuned_model_response}")
+        print(f"Perplexity: {ft_perplexity:.2f}")
 
         print("\n ----- Expected Response ----- ")
         print(f"Expected Answer: {entry['chosen']}")
@@ -512,7 +564,9 @@ try:
             input_key: entry[input_key],
             "ref_response": ref_response,
             "policy_response": fine_tuned_model_response,
-            "expected_response": entry['chosen']
+            "expected_response": entry['chosen'],
+            "ref_perplexity": ref_perplexity,
+            "policy_perplexity": ft_perplexity
         }
         test_results.append(sample)
 

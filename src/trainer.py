@@ -1,7 +1,7 @@
 import os
 import torch
 import src.config as config
-from src.utility import get_output_filename, new_postprocess_response
+from src.utility import get_output_filename, postprocess_response
 # from src.gpuMonitor import log_memory_snapshot
 from tqdm import tqdm
 import json
@@ -138,8 +138,8 @@ def train_model(
                             
                             sample_idx = 0
                             try:
-                                chosen_text = new_postprocess_response(tokenizer.decode(batch["chosen"][sample_idx]))
-                                rejected_text = new_postprocess_response(tokenizer.decode(batch["rejected"][sample_idx]))
+                                chosen_text = postprocess_response(tokenizer.decode(batch["chosen"][sample_idx]))
+                                rejected_text = postprocess_response(tokenizer.decode(batch["rejected"][sample_idx]))
                                 if len(chosen_text) > 200:
                                     chosen_text = chosen_text[:200] + "..."
                                 if len(rejected_text) > 200:
@@ -226,5 +226,4 @@ def train_model(
         except Exception as e:
             print(f"Error saving batch records: {e}")    
 
-    print("Training completed.")
     return tracking

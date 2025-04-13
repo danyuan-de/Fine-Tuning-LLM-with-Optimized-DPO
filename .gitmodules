@@ -2,3 +2,4 @@
 	path = data
 	url = https://github.com/danyuan-de/data.git
 	branch = main
+	update = merge
