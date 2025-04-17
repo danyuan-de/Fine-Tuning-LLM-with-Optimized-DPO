@@ -60,8 +60,7 @@ output_json = get_output_filename(
     learning_rate=config.learning_rate,
     beta=config.beta,
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
-    lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None,
-    lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None,
+    lambda_shift=config.lambda_shift if hasattr(config, 'lambda_shift') else None,
     typename="json" # Specify the file type
 )
 print("Output file path:", output_json)
@@ -75,8 +74,7 @@ loss_plot_file = get_output_filename(
     learning_rate=config.learning_rate,
     beta=config.beta,
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
-    lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None,
-    lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None,
+    lambda_shift=config.lambda_shift if hasattr(config, 'lambda_shift') else None,
     typename="png" # Specify the file type
 )
 print("Loss plot file path:", loss_plot_file)
@@ -90,8 +88,7 @@ margins_plot_file = get_output_filename(
     learning_rate=config.learning_rate,
     beta=config.beta,
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
-    lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None,
-    lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None,
+    lambda_shift=config.lambda_shift if hasattr(config, 'lambda_shift') else None,
     typename="png" # Specify the file type
 )
 print("Reward margins plot file path:", margins_plot_file)
@@ -311,7 +308,7 @@ end_time = time.time()
 execution_time_minutes = (end_time - start_time) / 60
 print(f"Training completed in {execution_time_minutes:.2f} minutes (in {str(timedelta(seconds=end_time - start_time))})")
 print(f" with {config.method_name}, {config.training_data_filename}, {config.model_name}, "
-      f"lr={config.learning_rate}, beta={config.beta}, lambda_dpop={config.lambda_dpop}")
+      f"lr={config.learning_rate}, beta={config.beta}, lambda_dpop={config.lambda_dpop}, lambda_shift={config.lambda_shift}")
 
 # log_memory_snapshot("After training")
 

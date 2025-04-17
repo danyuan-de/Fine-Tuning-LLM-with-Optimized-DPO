@@ -3,7 +3,7 @@
 # Make the script executable with the following command:
 # chmod +x setup.sh
 # Run the script with arguments, example:
-# ./setup.sh --beta 0.1 --lambda_dpop 40.0 --lambda_kl 0.2 --lr 5e-6
+# ./setup.sh --beta 0.1 --lambda_dpop 40.0 --lr 5e-6
 
 # Display help information if requested
 if [[ "$1" == "--help" ]]; then
@@ -18,11 +18,10 @@ if [[ "$1" == "--help" ]]; then
   echo "  DPO Loss Parameters:"
   echo "    --beta VALUE          Beta value for DPO loss (default: from config.py)"
   echo "    --lambda_dpop VALUE   Lambda DPOP value (default: from config.py)"
-  echo "    --lambda_kl VALUE     Lambda KL value (default: from config.py)"
-  echo "    --lambda_contrast VAL Lambda contrast value (default: from config.py)"
+  echo "    --lambda_shift VALUE  Lambda shift value (default: from config.py)"
   echo ""
   echo "  Method Selection:"
-  echo "    --method METHOD       Method choice (DPO, DPOP, DPOKL, DPOPKL, DPOC) (default: DPO)"
+  echo "    --method METHOD       Method choice (DPO, DPOP, sDPO, sDPOP) (default: DPO)"
   echo ""
   echo "  Training Parameters:"
   echo "    --lr VALUE            Learning rate (default: from config.py)"

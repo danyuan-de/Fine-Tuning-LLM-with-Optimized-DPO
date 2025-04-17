@@ -16,31 +16,27 @@ def _get_prefix(model: str, method: str, file: str, label: str = None) -> str:
     return model_short + "_" + method.upper() + "_" + training_dtype
 
 def _build_hyperparam_str(method: str, learning_rate: float = None, beta: float = None,
-                          lambda_dpop: float = None, lambda_kl: float = None,
-                          lambda_contrast: float = None) -> str:
+                          lambda_dpop: float = None, lambda_shift: float = None) -> str:
     """Construct a hyperparameter string based on provided parameters."""
     parts = []
     if learning_rate is not None:
         parts.append(f"lr{learning_rate:.1e}")
     if beta is not None:
         parts.append(f"b{beta:.2f}")
-    if lambda_dpop is not None and method in ['dpop', 'dpopkl']:
+    if lambda_dpop is not None and method in ['dpop', 'dpopshift']:
         parts.append(f"dp{lambda_dpop:.1f}")
-    if lambda_kl is not None and method in ['dpokl', 'dpopkl']:
-        parts.append(f"kl{lambda_kl:.2f}")
-    if lambda_contrast is not None and method == 'dpocontrast':
-        parts.append(f"c{lambda_contrast:.2f}")
+    if lambda_shift is not None and method in ['dposhift', 'dpopshift']:
+        parts.append(f"shift{lambda_shift:.2f}")
     return "_".join(parts)
 
 def get_output_filename(model: str, method: str, file: str, label: str = None, learning_rate: float = None,
                        beta: float = None, lambda_dpop: float = None, 
-                       lambda_kl: float = None, lambda_contrast: float = None,
-                       typename: str = "json") -> str:
+                       lambda_shift: float = None, typename: str = "json") -> str:
     """
     Dynamically generate output filenames based on the method and data file.
     """
     prefix = _get_prefix(model, method, file, label)
-    hyperparam_str = _build_hyperparam_str(method, learning_rate, beta, lambda_dpop, lambda_kl, lambda_contrast)
+    hyperparam_str = _build_hyperparam_str(method, learning_rate, beta, lambda_dpop, lambda_shift)
 
     if hyperparam_str:
         filename = f"{prefix}_{hyperparam_str}.{typename}"
@@ -53,7 +49,7 @@ def get_dpo_params(method: str):
     Returns a dictionary of relevant parameters for the specified DPO method.
     
     Args:
-        method (str): The DPO method name ('dpo', 'dpop', 'dpokl', 'dpopkl', 'dpocontrast')
+        method (str): The DPO method name ('dpo', 'dpop', 'dposhift', 'dpopshift')
         config: Configuration object containing parameter values
         
     Returns:
@@ -63,15 +59,12 @@ def get_dpo_params(method: str):
     params = {'beta': config.beta}
     
     # Add method-specific parameters
-    if method in ['dpop', 'dpopkl']:
+    if method in ['dpop', 'dpopshift']:
         params['lambda_dpop'] = config.lambda_dpop
         
-    if method in ['dpokl', 'dpopkl']:
-        params['lambda_kl'] = config.lambda_kl
+    if method in ['dposhift', 'dpopshift']:
+        params['lambda_shift'] = config.lambda_shift
         
-    if method == 'dpocontrast':
-        params['lambda_contrast'] = config.lambda_contrast
-    
     return params
 
 # Get the device to use

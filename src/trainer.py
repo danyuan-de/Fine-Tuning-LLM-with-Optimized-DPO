@@ -215,8 +215,7 @@ def train_model(
                 learning_rate=config.learning_rate,
                 beta=config.beta,
                 lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
-                lambda_kl=config.lambda_kl if hasattr(config, 'lambda_kl') else None,
-                lambda_contrast=config.lambda_contrast if hasattr(config, 'lambda_contrast') else None,
+                lambda_shift=config.lambda_shift if hasattr(config, 'lambda_shift') else None,
                 typename="json"
             )
             records_filepath = os.path.join(config.result_dir, records_base)

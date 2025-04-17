@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class DPOLoss(nn.Module):
-    def __init__(self, beta, method, lambda_dpop=0.0, lambda_kl=0.0, lambda_contrast=0.0):
+    def __init__(self, beta, method, lambda_dpop=0.0, lambda_shift=0.0):
         """
         Initializes the DPO Loss module.
 
@@ -15,11 +15,10 @@ class DPOLoss(nn.Module):
         self.beta = beta
         self.method = method
         self.lambda_dpop = lambda_dpop
-        self.lambda_kl = lambda_kl
-        self.lambda_contrast = lambda_contrast
+        self.lambda_shift = lambda_shift
         
         # Validate method selection
-        valid_methods = ['dpo', 'dpop', 'dpokl', 'dpopkl', 'dpocontrast']
+        valid_methods = ['dpo', 'dpop', 'dposhift', 'dpopshift']
         if self.method not in valid_methods:
             raise ValueError(f"Method '{method}' not recognized. Must be one of: {valid_methods}")
 
@@ -84,10 +83,6 @@ class DPOLoss(nn.Module):
             model_rejected_logprobs,     # Policy model log P(rejected)
             reference_chosen_logprobs,   # Reference model log P(chosen)
             reference_rejected_logprobs, # Reference model log P(rejected)
-            model_chosen_logits,         # Policy model logits
-            model_rejected_logits,       # Policy model logits
-            reference_chosen_logits,     # Reference model logits
-            reference_rejected_logits    # Reference model logits
     ):
         """
         Computes the DPO loss.
@@ -97,10 +92,6 @@ class DPOLoss(nn.Module):
             model_rejected_logprobs: Log probabilities of the policy model for rejected responses.
             reference_chosen_logprobs: Log probabilities of the reference model for chosen responses.
             reference_rejected_logprobs: Log probabilities of the reference model for rejected responses.
-            model_chosen_logits: Logits of the policy model for chosen responses.
-            model_rejected_logits: Logits of the policy model for rejected responses.
-            reference_chosen_logits: Logits of the reference model for chosen responses.
-            reference_rejected_logits: Logits of the reference model for rejected responses.
 
         Returns:
             (Tensor, Tensor, Tensor):
@@ -114,29 +105,6 @@ class DPOLoss(nn.Module):
         logits = pi_diff - ref_diff
         # print(f"Logits: {logits.mean().item():.4f}")
         # logits = (logits - logits.mean()) / (logits.std() + 1e-8)  # Normalize logits
-
-        # Helper function for KL divergence calculation to reduce repeated code
-        def compute_kl_penalty(model_logits1, model_logits2, ref_logits1, ref_logits2):
-            model_logprobs1 = F.log_softmax(model_logits1, dim=-1)
-            ref_probs1 = F.softmax(ref_logits1, dim=-1)
-            model_logprobs2 = F.log_softmax(model_logits2, dim=-1)
-            ref_probs2 = F.softmax(ref_logits2, dim=-1)
-            
-            kl_penalty1 = F.kl_div(
-                input=model_logprobs1,
-                target=ref_probs1,
-                reduction="batchmean",
-                log_target=False
-            )
-            
-            kl_penalty2 = F.kl_div(
-                input=model_logprobs2,
-                target=ref_probs2,
-                reduction="batchmean",
-                log_target=False
-            )
-            
-            return kl_penalty1 + kl_penalty2
         
         # Apply different methods for calculating the final loss
         if self.method == 'dpo':
@@ -154,62 +122,26 @@ class DPOLoss(nn.Module):
 
             losses = -F.logsigmoid(self.beta * modified_logits)
         
-        # DPOLoss with KL penalty
-        elif self.method == 'dpokl':
-            dpo_loss = -F.logsigmoid(self.beta * logits)
+        elif self.method == 'dposhift':
+            phi_w = model_chosen_logprobs - reference_chosen_logprobs
+            phi_l = model_rejected_logprobs - reference_rejected_logprobs
+            logits_shift = phi_w - self.lambda_shift * phi_l
 
-            kl_penalty = compute_kl_penalty(
-                model_chosen_logits, model_rejected_logits,
-                reference_chosen_logits, reference_rejected_logits
-            )
-            losses = dpo_loss + self.lambda_kl * kl_penalty
-            
-        # DPOLoss with DPOP term and KL penalty 
-        elif self.method == 'dpopkl':
-            # DPO-Positive: DPO with preferred completion likelihood penalty
+            losses = -F.logsigmoid(self.beta * logits_shift)
+
+        elif self.method == 'dpopshift':
+            phi_w = model_chosen_logprobs - reference_chosen_logprobs
+            phi_l = model_rejected_logprobs - reference_rejected_logprobs
+            logits_shift = phi_w - self.lambda_shift * phi_l
+
             dpop_term = torch.maximum(
                 torch.zeros_like(reference_chosen_logprobs),
                 reference_chosen_logprobs - model_chosen_logprobs
             )
-            modified_logits = logits - self.lambda_dpop * dpop_term
-            dpop_loss = -F.logsigmoid(self.beta * modified_logits) # DPOP loss
-            
-            # KL penalty
-            kl_penalty = compute_kl_penalty(
-                model_chosen_logits, model_rejected_logits,
-                reference_chosen_logits, reference_rejected_logits
-            )
+            modified_logits = logits_shift - self.lambda_dpop * dpop_term
 
-            losses = dpop_loss + self.lambda_kl * kl_penalty
-
-        # DPOLoss with contrastive term
-        elif self.method == 'dpocontrast':
-            # Calculate the symmetric KL divergence between the chosen and rejected distributions (i.e., an approximation of the JS divergence).
-            model_chosen_logprobs_full = F.log_softmax(model_chosen_logits, dim=-1)
-            model_rejected_logprobs_full = F.log_softmax(model_rejected_logits, dim=-1)
-
-            kl_chosen_rejected = F.kl_div(
-                input=model_chosen_logprobs_full,
-                target=model_rejected_logprobs_full.exp(),
-                reduction="batchmean",
-                log_target=False
-            )
-            kl_rejected_chosen = F.kl_div(
-                input=model_rejected_logprobs_full,
-                target=model_chosen_logprobs_full.exp(),
-                reduction="batchmean",
-                log_target=False
-            )
-            js_divergence = (kl_chosen_rejected + kl_rejected_chosen) / 2.0
-
-            # Contrastive adjustment: log(1 + JS divergence)
-            contrast_adjustment = torch.log(1 + js_divergence)
-            
-            modified_logits = logits - self.lambda_contrast * contrast_adjustment
-            
             losses = -F.logsigmoid(self.beta * modified_logits)
-
-
+        
         else:
             raise ValueError(f"Unknown method: {self.method}")
 
@@ -255,21 +187,17 @@ class DPOLoss(nn.Module):
             selection_mask=batch["rejected_mask"]
         )
 
-        # print(f"Policy chosen log_prob: {policy_chosen_log_probas.mean().item():.4f}")
-        # print(f"Ref chosen log_prob: {ref_chosen_log_probas.mean().item():.4f}")
-        # print(f"Policy rejected log_prob: {policy_rejected_log_probas.mean().item():.4f}")
-        # print(f"Ref rejected log_prob: {ref_rejected_log_probas.mean().item():.4f}")
+        self.model_chosen_logits = policy_chosen_logits
+        self.model_rejected_logits = policy_rejected_logits
+        self.reference_chosen_logits = ref_chosen_logits
+        self.reference_rejected_logits = ref_rejected_logits
 
         # Compute the DPO loss
         loss, chosen_rewards, rejected_rewards = self.compute_dpo_loss(
             model_chosen_logprobs=policy_chosen_log_probas,
             model_rejected_logprobs=policy_rejected_log_probas,
             reference_chosen_logprobs=ref_chosen_log_probas,
-            reference_rejected_logprobs=ref_rejected_log_probas,
-            model_chosen_logits=policy_chosen_logits,
-            model_rejected_logits=policy_rejected_logits,
-            reference_chosen_logits=ref_chosen_logits,
-            reference_rejected_logits=ref_rejected_logits
+            reference_rejected_logprobs=ref_rejected_log_probas
         )
         # print(f"Logits mean: {((policy_chosen_log_probas - policy_rejected_log_probas) - (ref_chosen_log_probas - ref_rejected_log_probas)).mean().item():.4f}")
         return loss, chosen_rewards, rejected_rewards
@@ -319,14 +247,8 @@ class DPOLoss(nn.Module):
         }
         
         # Initialize method-specific metrics
-        if self.method in ['dpop', 'dpopkl']:
+        if self.method in ['dpop', 'dpopshift']:
             metrics["dpop_term"] = 0.0
-        
-        if self.method in ['dpokl', 'dpopkl']:
-            metrics["kl_penalty"] = 0.0
-        
-        if self.method == 'dpocontrast':
-            metrics["contrast_term"] = 0.0
         
         if len(data_loader) == 0:
             return {k: float("nan") for k in metrics.keys()}
@@ -353,7 +275,7 @@ class DPOLoss(nn.Module):
                 metrics["rejected_reward"] += rejected_rewards.item()
                 
                 # For component-specific tracking, we need to run parts of the loss calculation again
-                if self.method in ['dpop', 'dpopkl'] or self.method in ['dpokl', 'dpopkl'] or self.method == 'dpocontrast':
+                if self.method in ['dpop', 'dpopshift']:
                     # This requires computing log probabilities again and extracting components
                     # Similar to what's in compute_dpo_loss_batch but without gradients
                     
@@ -383,50 +305,13 @@ class DPOLoss(nn.Module):
                     )
                     
                     # Calculate specific components as needed
-                    if self.method in ['dpop', 'dpopkl']:
+                    if self.method in ['dpop', 'dpopshift']:
                         dpop_term = torch.maximum(
                             torch.zeros_like(reference_chosen_log_probas),
                             reference_chosen_log_probas - policy_chosen_log_probas
                         ).mean().item()
                         metrics["dpop_term"] += dpop_term
                     
-                    if self.method in ['dpokl', 'dpopkl']:
-                        # Calculate KL divergence
-                        reference_chosen_probs = reference_chosen_log_probas.exp()
-                        
-                        kl_penalty = F.kl_div(
-                            input=policy_chosen_log_probas,
-                            target=reference_chosen_probs,
-                            reduction="batchmean",
-                            log_target=False
-                        ).item()
-                        
-                        metrics["kl_penalty"] += kl_penalty
-                    
-                    if self.method == 'dpocontrast':
-                        # Calculate contrastive term (JS divergence between chosen/rejected)
-                        model_chosen_logprobs = F.log_softmax(policy_chosen_logits, dim=-1)
-                        model_rejected_logprobs = F.log_softmax(policy_rejected_logits, dim=-1)
-                        
-                        # Forward KL
-                        kl_chosen_rejected = F.kl_div(
-                            input=model_chosen_logprobs,
-                            target=model_rejected_logprobs.exp(),
-                            reduction="batchmean",
-                            log_target=False
-                        )
-                        
-                        # Reverse KL
-                        kl_rejected_chosen = F.kl_div(
-                            input=model_rejected_logprobs,
-                            target=model_chosen_logprobs.exp(),
-                            reduction="batchmean",
-                            log_target=False
-                        )
-                        
-                        # JS divergence (symmetric)
-                        js_divergence = (kl_chosen_rejected + kl_rejected_chosen) / 2.0
-                        metrics["contrast_term"] += js_divergence.item()
             else:
                 break
 
@@ -439,7 +324,7 @@ class DPOLoss(nn.Module):
     def evaluate_dpo_loss_loader(self, policy_model, reference_model, train_loader=None, val_loader=None, eval_iter=5):
         """
         Compute the DPO loss for the training and/or validation dataset based on provided loaders.
-        For advanced methods (dpop, dpokl, dpopkl), also track the individual loss components.
+        For advanced methods (dpop), also track the individual loss components.
         """
         
         policy_model.eval()
@@ -454,17 +339,9 @@ class DPOLoss(nn.Module):
         }
         
         # Initialize method-specific metrics if needed
-        if self.method in ['dpop', 'dpopkl']:
+        if self.method in ['dpop', 'dpopshift']:
             res["train_dpop_term"] = float("nan")
             res["val_dpop_term"] = float("nan")
-        
-        if self.method in ['dpokl', 'dpopkl']:
-            res["train_kl_penalty"] = float("nan")
-            res["val_kl_penalty"] = float("nan")
-
-        if self.method == 'dpocontrast':
-            res["train_contrast_term"] = float("nan")
-            res["val_contrast_term"] = float("nan")
         
         with torch.no_grad():
             # Calculate the loss and rewards for the training dataset if train_loader is provided
@@ -483,14 +360,8 @@ class DPOLoss(nn.Module):
                 res["train_rejected_reward"] = train_metrics["rejected_reward"]
                 
                 # Add method-specific metrics if they exist
-                if "dpop_term" in train_metrics and self.method in ['dpop', 'dpopkl']:
+                if "dpop_term" in train_metrics and self.method in ['dpop', 'dpopshift']:
                     res["train_dpop_term"] = train_metrics["dpop_term"]
-                
-                if "kl_penalty" in train_metrics and self.method in ['dpokl', 'dpopkl']:
-                    res["train_kl_penalty"] = train_metrics["kl_penalty"]
-
-                if "contrast_term" in train_metrics and self.method == 'dpocontrast':
-                    res["train_contrast_term"] = train_metrics["contrast_term"]
 
             # Compute the loss and rewards for the validation dataset if val_loader is provided
             if val_loader is not None:
@@ -507,14 +378,8 @@ class DPOLoss(nn.Module):
                 res["val_rejected_reward"] = val_metrics["rejected_reward"]
                 
                 # Add method-specific metrics if they exist
-                if "dpop_term" in val_metrics and self.method in ['dpop', 'dpopkl']:
+                if "dpop_term" in val_metrics and self.method in ['dpop', 'dpopshift']:
                     res["val_dpop_term"] = val_metrics["dpop_term"]
-                
-                if "kl_penalty" in val_metrics and self.method in ['dpokl', 'dpopkl']:
-                    res["val_kl_penalty"] = val_metrics["kl_penalty"]
-
-                if "contrast_term" in val_metrics and self.method == 'dpocontrast':
-                    res["val_contrast_term"] = val_metrics["contrast_term"]
 
         policy_model.train()
         return res

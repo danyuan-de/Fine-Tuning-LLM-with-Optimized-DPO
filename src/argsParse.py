@@ -17,10 +17,8 @@ def parse_args():
                         help='Beta value for DPO loss')
     parser.add_argument('--lambda_dpop', type=float, default=config.lambda_dpop, 
                         help='Lambda DPOP value')
-    parser.add_argument('--lambda_kl', type=float, default=config.lambda_kl, 
-                        help='Lambda KL value')
-    parser.add_argument('--lambda_contrast', type=float, default=config.lambda_contrast, 
-                        help='Lambda contrast value')
+    parser.add_argument('--lambda_shift', type=float, default=config.lambda_shift,
+                        help='Lambda shift value')
     
     # --------------------- Model selection - directly select the model name ---------------------
     model_choices = list(config.models.keys())
@@ -31,7 +29,7 @@ def parse_args():
     # -------------------- Method selection - directly select the method name --------------------
     method_choices = list(config.methods.keys())
     method_help = "Method choice: " + ", ".join(method_choices)
-    parser.add_argument('--method', type=str, choices=method_choices, default="DPO", 
+    parser.add_argument('--method', type=str, choices=method_choices, default="sDPO", 
                         help=method_help)
 
     # ------------------------------------ Training parameters ------------------------------------
@@ -84,8 +82,7 @@ def update_config_from_args(args):
     # Update config values with command-line arguments
     config.beta = args.beta
     config.lambda_dpop = args.lambda_dpop
-    config.lambda_kl = args.lambda_kl
-    config.lambda_contrast = args.lambda_contrast
+    config.lambda_shift = args.lambda_shift
     config.learning_rate = args.lr
     config.batch_size = args.batch_size
     config.gradient_accumulation_steps = args.grad_accum
@@ -116,12 +113,10 @@ def print_configuration():
     print(f"Data: {config.training_data_filename}")
     print(f"\nDPO Parameters:")
     print(f"  Beta: {config.beta}")
-    if config.method_name in ['dpop', 'dpopkl']:
+    if config.method_name in ['dpop', 'dpopshift']:
         print(f"  Lambda DPOP: {config.lambda_dpop}")
-    if config.method_name in ['dpokl', 'dpopkl']:
-        print(f"  Lambda KL: {config.lambda_kl}")
-    if config.method_name == 'dpocontrast':
-        print(f"  Lambda Contrast: {config.lambda_contrast}")
+    if config.method_name in ['dposhift', 'dpopshift']:
+        print(f"  Lambda Shift: {config.lambda_shift}")
     print(f"\nTraining Parameters:")
     print(f"  Learning Rate: {config.learning_rate}")
     print(f"  Batch Size: {config.batch_size}")

@@ -19,18 +19,16 @@ cache_dir = os.path.join(model_workspace_dir, "models")
 methods = {
     "DPO": "dpo",
     "DPOP": "dpop",
-    "DPOKL": "dpokl",
-    "DPOPKL": "dpopkl",
-    "DPOC": "dpocontrast"
+    "sDPO": "dposhift",
+    "sDPOP": "dpopshift"
 }
 
 method_name = methods["DPO"] # default method
 
 # ---------------------------------- DPO parameters ----------------------------------
 beta = 0.3  # Temperature parameter controlling the sharpness of the decision boundary in DPO loss
-lambda_kl = 0.001  # Weight of the KL divergence penalty to prevent model drift in DPO loss
 lambda_dpop = 50.0  # Weight for DPOP term to prevent reduction of preferred completion likelihood
-lambda_contrast = 0.01  # Weight for contrastive loss term to encourage diversity in generated samples
+lambda_shift = 0.9  # Weight for the shift term in DPO loss
 
 # ---------------------------------- Model parameters ----------------------------------
 allowed_max_length = 4096 # maximum number of tokens in a sequence for training input data
