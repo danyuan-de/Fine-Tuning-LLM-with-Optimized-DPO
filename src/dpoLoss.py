@@ -36,13 +36,14 @@ class DPOLoss(nn.Module):
         """
 
         if hasattr(logits, "logits"):
-            logits = logits.logits
+            logits = logits.logits # (B, L, V)
 
         # Labels are the inputs shifted by one
         labels = labels[:, 1:].clone()
 
         # Truncate logits to match the labels num_tokens
-        logits = logits[:, :-1, :]
+        logits = logits[:, :-1, :] # (B, L-1, V)
+
         # Ensure logits are of shape (batch_size, num_tokens, vocab_size) and not nan/inf
         if logits.shape[1] != labels.shape[1]:
             print(f"Shape mismatch: logits={logits.shape}, labels={labels.shape}")
@@ -51,14 +52,15 @@ class DPOLoss(nn.Module):
             print(f"NaN/Inf detected in logits")
             raise ValueError("Logits contain NaN or Inf values.")
 
-        log_probs = F.log_softmax(logits, dim=-1)
+        # token level log probabilities
+        log_probs = F.log_softmax(logits, dim=-1) # (B, L-1, V)
 
         # Gather the log probabilities for the actual labels
         selected_log_probs = torch.gather(
             input=log_probs,
             dim=-1,
             index=labels.unsqueeze(-1)
-        ).squeeze(-1)
+        ).squeeze(-1) # (B, L-1)
 
         if selection_mask is not None:
             mask = selection_mask[:, 1:].clone()
@@ -70,12 +72,12 @@ class DPOLoss(nn.Module):
                 raise ValueError("Mask contains all zeros, which may lead to division by zero.")
             # Calculate the average log probability excluding padding tokens
             # This averages over the tokens, so the shape is (batch_size, num_tokens)
-            avg_log_prob = selected_log_probs.sum(-1) / mask.sum(-1)
-
-            return avg_log_prob, logits
+            # avg_log_prob = selected_log_probs.sum(-1) / mask.sum(-1)
+            # return avg_log_prob, logits
+            return selected_log_probs.sum(-1) #logits
 
         else:
-            return selected_log_probs.mean(-1), logits
+            return selected_log_probs.sum(-1)#, logits
 
     def compute_dpo_loss(
             self, 
@@ -164,33 +166,28 @@ class DPOLoss(nn.Module):
             torch.Tensor: Computed DPO loss.
         """
         # Compute log probabilities for policy model
-        policy_chosen_log_probas, policy_chosen_logits = self.compute_logprobs(
+        policy_chosen_log_probas = self.compute_logprobs(
             logits=policy_model(batch["chosen"]),
             labels=batch["chosen"],
             selection_mask=batch["chosen_mask"]
         )
-        policy_rejected_log_probas, policy_rejected_logits = self.compute_logprobs(
+        policy_rejected_log_probas = self.compute_logprobs(
             logits=policy_model(batch["rejected"]),
             labels=batch["rejected"],
             selection_mask=batch["rejected_mask"]
         )
 
         # Compute log probabilities for reference model
-        ref_chosen_log_probas, ref_chosen_logits = self.compute_logprobs(
+        ref_chosen_log_probas = self.compute_logprobs(
             logits=reference_model(batch["chosen"]),
             labels=batch["chosen"],
             selection_mask=batch["chosen_mask"]
         )
-        ref_rejected_log_probas, ref_rejected_logits = self.compute_logprobs(
+        ref_rejected_log_probas = self.compute_logprobs(
             logits=reference_model(batch["rejected"]),
             labels=batch["rejected"],
             selection_mask=batch["rejected_mask"]
         )
-
-        self.model_chosen_logits = policy_chosen_logits
-        self.model_rejected_logits = policy_rejected_logits
-        self.reference_chosen_logits = ref_chosen_logits
-        self.reference_rejected_logits = ref_rejected_logits
 
         # Compute the DPO loss
         loss, chosen_rewards, rejected_rewards = self.compute_dpo_loss(
@@ -280,28 +277,15 @@ class DPOLoss(nn.Module):
                     # Similar to what's in compute_dpo_loss_batch but without gradients
                     
                     # Extract log probabilities
-                    policy_chosen_log_probas, policy_chosen_logits = self.compute_logprobs(
+                    policy_chosen_log_probas = self.compute_logprobs(
                         logits=policy_model(batch["chosen"]),
                         labels=batch["chosen"],
                         selection_mask=batch["chosen_mask"]
                     )
-                    
-                    policy_rejected_log_probas, policy_rejected_logits = self.compute_logprobs(
-                        logits=policy_model(batch["rejected"]),
-                        labels=batch["rejected"],
-                        selection_mask=batch["rejected_mask"]
-                    )
-                    
-                    reference_chosen_log_probas, reference_chosen_logits = self.compute_logprobs(
+                    reference_chosen_log_probas = self.compute_logprobs(
                         logits=reference_model(batch["chosen"]),
                         labels=batch["chosen"],
                         selection_mask=batch["chosen_mask"]
-                    )
-                    
-                    reference_rejected_log_probas, reference_rejected_logits = self.compute_logprobs(
-                        logits=reference_model(batch["rejected"]),
-                        labels=batch["rejected"],
-                        selection_mask=batch["rejected_mask"]
                     )
                     
                     # Calculate specific components as needed
