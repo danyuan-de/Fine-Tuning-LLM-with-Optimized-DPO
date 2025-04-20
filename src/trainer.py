@@ -1,8 +1,7 @@
 import os
 import torch
 import src.config as config
-from src.utility import get_output_filename, postprocess_response
-# from src.gpuMonitor import log_memory_snapshot
+from src.utils import get_output_filename, postprocess_response, log_memory_snapshot
 from tqdm import tqdm
 import json
 
@@ -206,7 +205,7 @@ def train_model(
     # Save batch records after each epoch to a file
     if tracking["batch_records"]:
         try:
-            # Use utility function to generate standardized filename base
+            # Use utils function to generate standardized filename base
             records_base = get_output_filename(
                 model=config.model_name.split('/')[-1],
                 method=config.method_name.upper(),

@@ -72,12 +72,11 @@ class DPOLoss(nn.Module):
                 raise ValueError("Mask contains all zeros, which may lead to division by zero.")
             # Calculate the average log probability excluding padding tokens
             # This averages over the tokens, so the shape is (batch_size, num_tokens)
-            # avg_log_prob = selected_log_probs.sum(-1) / mask.sum(-1)
-            # return avg_log_prob, logits
-            return selected_log_probs.sum(-1) #logits
+            mean_log_prob = selected_log_probs.sum(-1) / mask.sum(-1)
+            return mean_log_prob
 
         else:
-            return selected_log_probs.sum(-1)#, logits
+            return selected_log_probs.mean(-1) # mean over the tokens
 
     def compute_dpo_loss(
             self, 
@@ -96,10 +95,15 @@ class DPOLoss(nn.Module):
             reference_rejected_logprobs: Log probabilities of the reference model for rejected responses.
 
         Returns:
-            (Tensor, Tensor, Tensor):
-            - The scalar DPO loss (with KL penalty).
-            - The average "chosen" reward (model_chosen_logprobs - reference_chosen_logprobs).
-            - The average "rejected" reward (model_rejected_logprobs - reference_rejected_logprobs).
+            loss (Tensor): Scalar, the mean loss over the batch.
+            chosen_rewards (Tensor): Scalar, average log‑prob ratio (model vs. reference) on chosen responses.
+            rejected_rewards (Tensor): Scalar, average log‑prob ratio (model vs. reference) on rejected responses.
+        
+        Supports:
+            - dpo:     Direct Preference Optimization
+            - dpop:    DPO-Positive (adds penalty to maintain preferred-likelihood)
+            - dposhift:   Shifted variant of DPO
+            - dpopshift:  Shifted + positive‑penalty variant
         """
         # Compute log probability differences
         pi_diff = model_chosen_logprobs - model_rejected_logprobs
@@ -198,39 +202,6 @@ class DPOLoss(nn.Module):
         )
         # print(f"Logits mean: {((policy_chosen_log_probas - policy_rejected_log_probas) - (ref_chosen_log_probas - ref_rejected_log_probas)).mean().item():.4f}")
         return loss, chosen_rewards, rejected_rewards
-
-    # def compute_dpo_loss_loader(self, data_loader, policy_model, reference_model, num_batches=None):
-    #     """Apply compute_dpo_loss_batch to a whole data loader"""
-
-    #     total_loss, total_chosen_rewards, total_rejected_rewards = 0., 0., 0.
-    #     if len(data_loader) == 0:
-    #         return float("nan")
-
-    #     elif num_batches is None:
-    #         num_batches = len(data_loader)
-    #     else:
-    #         # Reduce the number of batches to match the total number of batches in the data loader
-    #         # if num_batches exceeds the number of batches in the data loader
-    #         num_batches = min(num_batches, len(data_loader))
-    #     for i, batch in enumerate(data_loader):
-    #         if i < num_batches:
-    #             loss, chosen_rewards, rejected_rewards = self.compute_dpo_loss_batch(
-    #                 batch=batch,
-    #                 policy_model=policy_model,
-    #                 reference_model=reference_model,
-    #             )
-    #             total_loss += loss.item()
-    #             total_chosen_rewards += chosen_rewards.item()
-    #             total_rejected_rewards += rejected_rewards.item()
-
-    #         else:
-    #             break
-
-    #     # calculate average
-    #     total_loss /= num_batches
-    #     total_chosen_rewards /= num_batches
-    #     total_rejected_rewards /= num_batches
-    #     return total_loss, total_chosen_rewards, total_rejected_rewards
     
     def compute_dpo_loss_loader_with_components(self, data_loader, policy_model, reference_model, num_batches=None):
         """

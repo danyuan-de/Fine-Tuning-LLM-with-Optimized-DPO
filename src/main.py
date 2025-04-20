@@ -21,11 +21,9 @@ import random
 import src.config as config
 from src.dpoLoss import DPOLoss
 from src.preferenceDataset import PreferenceDataset
-from src.utility import *
+from src.utils import *
 from src.trainer import train_model
 from src.argsParse import *
-# from src.gpuMonitor import log_memory_snapshot
-# from src.scheduler import get_scheduler
 
 # ----------------------------------- Argument Parsing -----------------------------------
 args = parse_args() # Parse command-line arguments
@@ -50,7 +48,7 @@ result_dir = config.result_dir # directory to save the output text and figures
 # ---------------------------- Ensure result directory exists ----------------------------
 os.makedirs(config.result_dir, exist_ok=True)
 
-# ----------------------- Get each filename from utility function ------------------------ 
+# ----------------------- Get each filename from utils function ------------------------ 
 # For output text
 output_json = get_output_filename(
     model=config.model_name,

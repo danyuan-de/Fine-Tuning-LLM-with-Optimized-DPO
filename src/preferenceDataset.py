@@ -1,5 +1,5 @@
 from torch.utils.data import Dataset
-from src.utility import format_input
+from src.utils import format_input
 # Prepare a custom PyTorch dataset
 class PreferenceDataset(Dataset):
     def __init__(self, data, tokenizer):
