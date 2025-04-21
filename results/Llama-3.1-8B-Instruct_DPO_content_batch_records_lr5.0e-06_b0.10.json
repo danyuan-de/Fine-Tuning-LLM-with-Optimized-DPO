@@ -1,0 +1,52 @@
+[
+  {
+    "epoch": 1,
+    "step": 27,
+    "batch_idx": 223,
+    "loss": 0.3623046875,
+    "loss_change": -0.15283203125,
+    "reward_diff": 13.4375,
+    "sample_chosen": "Step 1:\\\\Snell\u2019s law: $n_1\\sin\\theta_1 = n_2\\sin\\theta_2$. For air, $n_1=1.0$.\\\\Step 2:\\\\So $\\sin\\theta_2 = \\frac{1.0\\sin40^{\\circ}}{1.50}$. $\\sin40^{\\circ}\\approx0.6428.\\\\Step 3:\\\\$\\sin\\theta_2=\\frac...",
+    "sample_rejected": "Step 1:\\\\Apply Snell's law: $\\theta_2= n_2 \\theta_1$.\\\\Step 2:\\\\So $\\theta_2=1.50\\times40^{\\circ}=60^{\\circ}$.\\\\Answer:\\\\$60^{\\circ}$."
+  },
+  {
+    "epoch": 1,
+    "step": 28,
+    "batch_idx": 231,
+    "loss": 0.468994140625,
+    "loss_change": 0.106689453125,
+    "reward_diff": 1.9375,
+    "sample_chosen": "Step 1:\\\\By the principle of invariance, the speed of light is always $c$ in any inertial frame.\\\\Step 2:\\\\Thus, the Earth observer measures the laser at $c = 3 \\times 10^{8}\\,\\mathrm{m/s}$.\\\\Answer:\\...",
+    "sample_rejected": "Step 1:\\\\Assume that the spaceship's velocity adds to the laser's speed.\\\\Step 2:\\\\Then the observer would measure the laser at $0.95c$, i.e., $2.85 \\times 10^{8}\\,\\mathrm{m/s}$.\\\\Answer:\\\\The laser i..."
+  },
+  {
+    "epoch": 1,
+    "step": 36,
+    "batch_idx": 295,
+    "loss": 0.526611328125,
+    "loss_change": 0.128173828125,
+    "reward_diff": 2.1875,
+    "sample_chosen": "Step 1:\\\\$B = \\frac{\\mu_0 I}{2\\pi r}$.\\\\Step 2:\\\\$I = 1000\\,\\mathrm{A}$, $r = 0.1\\,\\mathrm{m}$, $\\mu_0 = 4\\pi \\times 10^{-7}$.\\\\Step 3:\\\\$B \\approx 2 \\times 10^{-3}\\,\\mathrm{T}$.\\\\Answer: $2 \\times 10...",
+    "sample_rejected": "Step 1:\\\\Use $B = \\frac{\\mu_0 I}{2\\pi r}$ with $r = 1\\,\\mathrm{m}$.\\\\Step 2:\\\\Substitute $I = 1000\\,\\mathrm{A}$ and $\\mu_0 = 4\\pi \\times 10^{-7}$, with $r = 1\\,\\mathrm{m}$.\\\\Step 3:\\\\$B = \\frac{4\\pi \\..."
+  },
+  {
+    "epoch": 1,
+    "step": 37,
+    "batch_idx": 303,
+    "loss": 0.392333984375,
+    "loss_change": -0.13427734375,
+    "reward_diff": 9.65625,
+    "sample_chosen": "Step 1:\\\\$m=0.05\\,\\mathrm{kg}$. $KE= 0.5\\times 0.05\\times 100^{2}= 0.5\\times 0.05\\times 10000= 250\\,\\mathrm{J}$.\\\\Answer:\\\\$250\\,\\mathrm{J}$.",
+    "sample_rejected": "Step 1:\\\\Use $KE= m v= 0.05\\times 100=5\\,\\mathrm{J}$.\\\\Answer:\\\\$5\\,\\mathrm{J}$."
+  },
+  {
+    "epoch": 1,
+    "step": 50,
+    "batch_idx": 400,
+    "loss": 0.271484375,
+    "loss_change": -0.14599609375,
+    "reward_diff": 12.0625,
+    "sample_chosen": "Step 1:\\\\$P= V I= 10\\times 5= 50\\,\\mathrm{W}$.\\\\Answer:\\\\$50\\,\\mathrm{W}$.",
+    "sample_rejected": "Step 1:\\\\Use $P= \\frac{V}{I}= \\frac{10}{5}=2\\,\\mathrm{W}$.\\\\Answer:\\\\$2\\,\\mathrm{W}$."
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "epoch": 1,
+    "step": 11,
+    "batch_idx": 95,
+    "loss": 0.444580078125,
+    "loss_change": -0.100341796875,
+    "reward_diff": 6.185546875,
+    "sample_chosen": "<observation>An object rises against gravity.</observation>\\\\<insight>$v^2 = v_0^2 - 2 g h$, with $v = 0$ at max height.</insight>\\\\<think>$0 = 6^2 - 2 \\times 9.8 \\times h$. $36 = 19.6 h$. $h = \\frac{...",
+    "sample_rejected": "Step 1:\\\\$v^{2}= v_{0}^{2}-2 g h.\\\\0=36 -2(9.8)h => 19.6h=36 => h=1.84\\,\\mathrm{m}$.\\\\Answer:\\\\$1.84\\,\\mathrm{m}$."
+  }
+]
