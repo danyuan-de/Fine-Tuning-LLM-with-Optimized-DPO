@@ -1,0 +1,22 @@
+[
+  {
+    "epoch": 1,
+    "step": 12,
+    "batch_idx": 103,
+    "loss": 0.245361328125,
+    "loss_change": -0.1212158203125,
+    "reward_diff": 4.5703125,
+    "sample_chosen": "<observation>The period of a mass-spring system is $T=2\\pi\\sqrt{\\tfrac{m}{k}}$, independent of amplitude.</observation>\\\\<insight>We have $m=2.0\\,\\mathrm{kg}$ and $k=50\\,\\mathrm{N/m}$. The amplitude $...",
+    "sample_rejected": "Step 1:\\\\For a mass-spring system, $T = 2\\pi\\sqrt{\\frac{m}{k}}$.\\\\Step 2:\\\\Substitute $m=2.0\\,\\mathrm{kg}$ and $k=50\\,\\mathrm{N/m}$.\\\\$T = 2\\pi\\sqrt{\\frac{2.0}{50}} = 2\\pi\\sqrt{0.04} = 2\\pi\\times 0.2 ..."
+  },
+  {
+    "epoch": 1,
+    "step": 14,
+    "batch_idx": 119,
+    "loss": 0.19915771484375,
+    "loss_change": -0.10101318359375,
+    "reward_diff": 7.2109375,
+    "sample_chosen": "<observation>In a perfectly inelastic collision, momentum is conserved: $m_b v_b=m_{\\mathrm{total}}v_f$, since block was initially at rest.</observation>\\\\<insight>Mass bullet $m_b=0.010\\,\\mathrm{kg}$...",
+    "sample_rejected": "Step 1:\\\\Conservation of momentum: $m_b v_b + m_{block} v_{block}= (m_b + m_{block}) v_f$.\\\\Step 2:\\\\$m_b=0.010\\,\\mathrm{kg}$, $v_b=400\\,\\mathrm{m/s}$, $m_{block}=0.990\\,\\mathrm{kg}$, $v_{block}=0$.\\\\..."
+  }
+]

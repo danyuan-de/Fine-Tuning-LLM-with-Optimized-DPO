@@ -1,0 +1,2 @@
+file,epoch,beta,lambda_dpop,learning_rate,train_loss,val_loss,train_reward_margin,val_reward_margin
+html,1,0.3,50.0,5e-06,0.00011745914816856385,2.034008502960205e-06,44.0375,44.962890625
