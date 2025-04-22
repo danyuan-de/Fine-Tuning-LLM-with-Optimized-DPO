@@ -136,18 +136,34 @@ except FileNotFoundError:
 
 print("Number of entries:", len(data))
 
-# Train/val/test split
-train_portion = int(len(data) * 0.8)
-test_portion = int(len(data) * 0.1) 
-val_portion = len(data) - train_portion - test_portion
+# ----------------------------- data set pre-processing and shuffling -----------------------------
+# Randomly select 10% of the data for testing which is fixed data in multiple runs
+random.seed(42)
+test_size = int(len(data) * 0.1)
+test_data = random.sample(data, test_size)
 
-print("Train portion:", train_portion)
-print("Validation portion:", val_portion)
-print("Test portion:", test_portion)
+# Remove test data from the original dataset
+remaining = [d for d in data if d not in test_data]
+
+# Randomly shuffle the remaining data
+random.shuffle(remaining)
+
+# Split the remaining data into training and validation sets
+train_size = int(len(data) * 0.8)
+train_data = remaining[:train_size]
+val_data   = remaining[train_size:]
+
+print("Train size:", train_size)
+print("Validation size:", len(remaining) - train_size)
+print("Test size:", test_size)
+
+print("Training set length:", len(train_data))
+print("Validation set length:", len(val_data))
+print("Test set length:", len(test_data))
 
 # ------------------------------------------------ Set warmup steps ------------------------------------------------
 # Compute the number of training steps
-batches_per_epoch = train_portion // config.batch_size
+batches_per_epoch = train_size // config.batch_size
 optimization_steps_per_epoch = batches_per_epoch // config.gradient_accumulation_steps
 num_training_steps = optimization_steps_per_epoch * config.num_epochs
 
@@ -156,17 +172,7 @@ num_warmup_steps = int(0.1 * num_training_steps)
 print(f"Dataset size: {len(data)}, num_training_steps: {num_training_steps}, num_warmup_steps: {num_warmup_steps}")
 # ------------------------------------------------------------------------------------------------------------------
 
-# Shuffle the data
-random.shuffle(data)
-
-train_data = data[:train_portion]
-test_data = data[train_portion:train_portion + test_portion]
-val_data = data[train_portion + test_portion:]
-
-print("Training set length:", len(train_data))
-print("Validation set length:", len(val_data))
-print("Test set length:", len(test_data))
-
+# ---------------------------- Custom collate function for DataLoader ---------------------------
 customized_collate_fn = partial(
     custom_collate_fn,
     eos_token_id=eos_token_id,
