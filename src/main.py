@@ -319,6 +319,19 @@ print(f"Train reward margin: {train_margin:.3f}")
 print(f"Validation reward margin: {val_margin:.3f}")
 print(f"Tokens seen: {tracking['tokens_seen'][-1]}")
 
+log_final_result_csv(method=config.method_name,
+                     file=config.training_data_filename,
+                     epoch=config.num_epochs,
+                     beta=config.beta,
+                     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
+                     lambda_shift=config.lambda_shift if hasattr(config, 'lambda_shift') else None,
+                     learning_rate=config.learning_rate,
+                     train_loss=tracking['train_losses'][-1],
+                     val_loss=tracking['val_losses'][-1],
+                     train_reward_margin=train_margin,
+                     val_reward_margin=val_margin
+                     )
+
 print("\nAnalyzing batch records for significant loss changes:")
 if "batch_records" in tracking and tracking["batch_records"]:
     # Find batches with the largest loss increases and decreases
@@ -352,6 +365,7 @@ plot_losses(
     train_losses=tracking["train_losses"],
     val_losses=tracking["val_losses"],
     save_path=loss_plot_file,
+    label="loss"
 )
 
 train_reward_margins = [i-j for i,j in zip(tracking["train_chosen_rewards"], tracking["train_rejected_rewards"])]
@@ -362,7 +376,8 @@ plot_losses(
     tokens_seen=tracking["tokens_seen"],
     train_losses=train_reward_margins,
     val_losses=val_reward_margins,
-    save_path=margins_plot_file
+    save_path=margins_plot_file,
+    label="reward margin"
 )
 
 fine_tuned_tokenizer = AutoTokenizer.from_pretrained(save_path)

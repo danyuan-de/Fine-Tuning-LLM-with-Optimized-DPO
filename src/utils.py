@@ -5,6 +5,7 @@ import torch
 import re
 from transformers import AutoModelForCausalLM, AutoTokenizer #,StoppingCriteria, StoppingCriteriaList, 
 import math
+import csv
 import src.config as config
 
 def _get_prefix(model: str, method: str, file: str, label: str = None) -> str:
@@ -190,6 +191,43 @@ def custom_collate_fn(
             batch_data[key] = batch_data[key][:, :allowed_max_length]
 
     return batch_data
+
+def log_final_result_csv(
+    method: str,
+    **kwargs
+):
+    filename = os.path.join(config.result_dir, f"{method.upper()}.csv")
+
+    # Mapping of method to headers
+    header_map = {
+        "dpo":      ["file", "epoch", "beta", "learning_rate", "train_loss", "val_loss", "train_reward_margin", "val_reward_margin"],
+        "dpop":     ["file", "epoch", "beta", "lambda_dpop", "learning_rate", "train_loss", "val_loss", "train_reward_margin", "val_reward_margin"],
+        "dposhift": ["file", "epoch", "beta", "lambda_shift", "learning_rate", "train_loss", "val_loss", "train_reward_margin", "val_reward_margin"],
+        "dpopshift":["file", "epoch", "beta", "lambda_dpop", "lambda_shift", "learning_rate", "train_loss", "val_loss", "train_reward_margin", "val_reward_margin"]
+    }
+
+    if method not in header_map:
+        raise ValueError(f"Unsupported method: {method}")
+
+    raw_path = kwargs.get('file', '')
+    base = os.path.basename(raw_path)  
+    keywords = ["content", "structure", "mixed", "html", "preference"]
+    short_file = next((kw for kw in keywords if kw in base), "unknown")
+
+    headers = header_map[method]
+    row_kwargs = {**kwargs, 'file': short_file}
+    row = [row_kwargs.get(h, None) for h in headers]
+
+    os.makedirs(config.result_dir, exist_ok=True)
+    write_header = not os.path.exists(filename)
+
+    with open(filename, "a", newline="") as f:
+        writer = csv.writer(f)
+        if write_header:
+            writer.writerow(headers)
+        writer.writerow(row)
+
+    print(f"✔️ Results logged to {filename}")
 
 def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss", save_path=None):
     fig, ax1 = plt.subplots(figsize=(5, 3))

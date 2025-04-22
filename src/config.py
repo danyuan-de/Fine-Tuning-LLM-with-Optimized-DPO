@@ -32,15 +32,15 @@ lambda_shift = 0.9  # Weight for the shift term in DPO loss
 
 # ---------------------------------- Model parameters ----------------------------------
 allowed_max_length = 4096 # maximum number of tokens in a sequence for training input data
-max_new_tokens = 256  # maximum number of tokens to generate
+max_new_tokens = 512  # maximum number of tokens to generate
 
 # --------------------------------- Training parameters ---------------------------------
 batch_size = 2  # Process the number of items at once
 gradient_accumulation_steps = 8  # Number of steps to accumulate gradients before stepping
-num_epochs = 3  # Number of times to go through the dataset
+num_epochs = 1  # Number of times to go through the dataset
 
 # Some studies suggest using a learning rate between 5e-7 and 1e-7 for DPO but too low for DPOP
-learning_rate = 1e-6
+learning_rate = 5e-6
 # Tried 1e-6 and 3e-6 for DPOP, still seems low to learn the policy model output are almost the same as the reference model
 
 weight_decay = 0.01  # Original: 0.001 - Higher regularization to prevent overfitting
