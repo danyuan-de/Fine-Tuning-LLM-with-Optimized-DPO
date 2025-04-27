@@ -11,6 +11,9 @@ build/
 # Ignore environment variables
 .env
 
+# Ignor virtual environment directories
+.venv/
+
 # Ignore OS generated files
 .DS_Store
 Thumbs.db
@@ -22,6 +25,7 @@ Thumbs.db
 
 # Ignore Python compiled files
 __pycache__/
+.pytest_cache/
 *.pyc
 
 # Ignore Python files
@@ -46,3 +50,6 @@ questions_answers/
 # DPO_loss-plot.pdf
 # reward_margins-plot.pdf
 env/
+
+results/match*
+results/*plot*
