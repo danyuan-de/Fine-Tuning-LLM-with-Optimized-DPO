@@ -2,20 +2,24 @@ import os
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 import torch
-import re
-from transformers import AutoModelForCausalLM, AutoTokenizer #,StoppingCriteria, StoppingCriteriaList, 
+from transformers import AutoModelForCausalLM, AutoTokenizer
 import math
 import csv
 import src.config as config
 
-def _get_prefix(model: str, method: str, file: str, label: str = None) -> str:
+
+# ------------------------------- File Management -------------------------------
+def _get_prefix(method: str, file: str, model: str = None, label: str = None) -> str:
     """Extract the file suffix based on a fixed mapping from the data file name."""
-    model_short = model.split('/')[-1]
+    if model is not None:
+        model_short = model.split('/')[-1]
     training_dtype = next((dtype for dtype in ["content", "mixed", "html", "structure", "preference"] if dtype in file), "unknown")
     if label is not None:
         return model_short + "_" + method.upper() + "_" + training_dtype + "_" + label
     return model_short + "_" + method.upper() + "_" + training_dtype
 
+
+# ------------------------------- Hyperparameter Management -------------------------------
 def _build_hyperparam_str(method: str, learning_rate: float = None, beta: float = None,
                           lambda_dpop: float = None, lambda_shift: float = None) -> str:
     """Construct a hyperparameter string based on provided parameters."""
@@ -30,9 +34,11 @@ def _build_hyperparam_str(method: str, learning_rate: float = None, beta: float 
         parts.append(f"shift{lambda_shift:.2f}")
     return "_".join(parts)
 
-def get_output_filename(model: str, method: str, file: str, label: str = None, learning_rate: float = None,
-                       beta: float = None, lambda_dpop: float = None, 
-                       lambda_shift: float = None, typename: str = "json") -> str:
+
+# ------------------------------- Output Filename Management -------------------------------
+def get_output_filename(method: str, file: str, model: str = None, label: str = None, learning_rate: float = None,
+                        beta: float = None, lambda_dpop: float = None,
+                        lambda_shift: float = None, typename: str = "json") -> str:
     """
     Dynamically generate output filenames based on the method and data file.
     """
@@ -45,28 +51,61 @@ def get_output_filename(model: str, method: str, file: str, label: str = None, l
         filename = f"{prefix}.{typename}"
     return os.path.join(config.result_dir, filename)
 
+
+# ------------------------------- DPO Parameters Management -------------------------------
 def get_dpo_params(method: str):
     """
     Returns a dictionary of relevant parameters for the specified DPO method.
-    
+
     Args:
         method (str): The DPO method name ('dpo', 'dpop', 'dposhift', 'dpopshift')
         config: Configuration object containing parameter values
-        
+
     Returns:
         dict: Dictionary of parameters relevant to the specified method
     """
     # All methods require beta
     params = {'beta': config.beta}
-    
+
     # Add method-specific parameters
     if method in ['dpop', 'dpopshift']:
         params['lambda_dpop'] = config.lambda_dpop
-        
+
     if method in ['dposhift', 'dpopshift']:
         params['lambda_shift'] = config.lambda_shift
-        
+
     return params
+
+
+# ------------------------------- Logging Management -------------------------------
+def log_result_csv(
+    filename: str,
+    **kwargs
+):
+    # Mapping of method to headers
+    headers = [
+        "epoch_frac",
+        "step",
+        "train_loss",
+        "val_loss",
+        "train_reward_margin",
+        "val_reward_margin",
+        "train_reward_accuracy",
+        "val_reward_accuracy",
+    ]
+
+    row = [kwargs.get(h, None) for h in headers]
+
+    os.makedirs(config.result_dir, exist_ok=True)
+    write_header = not os.path.exists(filename)
+    with open(filename, "a", newline="") as f:
+        writer = csv.writer(f)
+        if write_header:
+            writer.writerow(headers)
+        writer.writerow(row)
+
+    print(f"✔️ Results logged to {filename}")
+
 
 # Get the device to use
 def get_device():
@@ -87,20 +126,21 @@ def get_device():
         print("Using CPU")
     return device
 
+
 def format_input(entry):
     if "instruction" in entry:
         system_prompt = (
             f"Below is an instruction that describes a task. "
             f"Write a response that appropriately completes the request."
             f"\n\n### Instruction:\n{entry['instruction']}"
-        ) # for the instruction-data-with-preference.json
-        input_text = f"\n\n### Input:\n{entry['input']}" if entry["input"] else "" # for the instruction-data-with-preference.json
+        )  # for the instruction-data-with-preference.json
+        input_text = f"\n\n### Input:\n{entry['input']}" if entry["input"] else ""  # for the instruction-data-with-preference.json
         return (
             "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n"
             f"{system_prompt}<|eot_id|><|start_header_id|>user<|end_header_id|>\n"
             f"{input_text}<|eot_id|>\n<|start_header_id|>assistant<|end_header_id|>\n"
         )
-    
+
     elif "question" in entry:
         system_prompt = (
             "You are a physics expert assistant. "
@@ -111,6 +151,7 @@ def format_input(entry):
             f"{system_prompt}<|eot_id|><|start_header_id|>user<|end_header_id|>\n"
             f"Question: {entry['question']}<|eot_id|>\n<|start_header_id|>assistant<|end_header_id|>\n"
         )
+
 
 # self-defined collate_fn for DataLoader
 def custom_collate_fn(
@@ -149,8 +190,8 @@ def custom_collate_fn(
             # Fill the sequence tensor with padding tokens to match the maximum length
             padded_sequence = torch.cat([
                 sequence_tensor,
-                torch.full((max_length_common - sequence_tensor.size(0),), 
-                           fill_value=tokenizer.pad_token_id, 
+                torch.full((max_length_common - sequence_tensor.size(0),),
+                           fill_value=tokenizer.pad_token_id,
                            dtype=torch.long).to(device)  # Move to device
             ])
 
@@ -192,42 +233,6 @@ def custom_collate_fn(
 
     return batch_data
 
-def log_final_result_csv(
-    method: str,
-    **kwargs
-):
-    filename = os.path.join(config.result_dir, f"{method.upper()}.csv")
-
-    # Mapping of method to headers
-    header_map = {
-        "dpo":      ["file", "epoch", "beta", "learning_rate", "train_loss", "val_loss", "train_reward_margin", "val_reward_margin"],
-        "dpop":     ["file", "epoch", "beta", "lambda_dpop", "learning_rate", "train_loss", "val_loss", "train_reward_margin", "val_reward_margin"],
-        "dposhift": ["file", "epoch", "beta", "lambda_shift", "learning_rate", "train_loss", "val_loss", "train_reward_margin", "val_reward_margin"],
-        "dpopshift":["file", "epoch", "beta", "lambda_dpop", "lambda_shift", "learning_rate", "train_loss", "val_loss", "train_reward_margin", "val_reward_margin"]
-    }
-
-    if method not in header_map:
-        raise ValueError(f"Unsupported method: {method}")
-
-    raw_path = kwargs.get('file', '')
-    base = os.path.basename(raw_path)  
-    keywords = ["content", "structure", "mixed", "html", "preference"]
-    short_file = next((kw for kw in keywords if kw in base), "unknown")
-
-    headers = header_map[method]
-    row_kwargs = {**kwargs, 'file': short_file}
-    row = [row_kwargs.get(h, None) for h in headers]
-
-    os.makedirs(config.result_dir, exist_ok=True)
-    write_header = not os.path.exists(filename)
-
-    with open(filename, "a", newline="") as f:
-        writer = csv.writer(f)
-        if write_header:
-            writer.writerow(headers)
-        writer.writerow(row)
-
-    print(f"✔️ Results logged to {filename}")
 
 def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss", save_path=None):
     fig, ax1 = plt.subplots(figsize=(5, 3))
@@ -249,23 +254,26 @@ def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss"
     plt.savefig(save_path)
     # plt.show()
 
+
 def text_to_token_ids(text, tokenizer):
-    encoded = tokenizer.encode(text) # , allowed_special={"<|endoftext|>"}) --> it's OpenAI's tiktoken
+    encoded = tokenizer.encode(text)
     encoded_tensor = torch.tensor(encoded).unsqueeze(0)  # add batch dimension
     return encoded_tensor
+
 
 def token_ids_to_text(token_ids, tokenizer):
     flat = token_ids.squeeze(0)  # remove batch dimension
     return tokenizer.decode(flat.tolist())
 
+
 def generate(
-    model, 
-    idx, 
+    model,
+    idx,
     max_new_tokens=512,
     context_size=4096,
     temperature=0.0,
     top_k=None,
-    top_p=None,  
+    top_p=None,
     eos_token_id=None
 ):
     """
@@ -276,7 +284,7 @@ def generate(
         idx (torch.LongTensor): The input token IDs, shape (batch_size, seq_len).
         max_new_tokens (int): The maximum number of tokens to generate.
         context_size (int): The maximum context size to preserve from the prompt.
-        temperature (float): If > 0, controls the sampling randomness. 
+        temperature (float): If > 0, controls the sampling randomness.
                              If == 0, a pure greedy (argmax) decode is done.
         top_k (int): The number of highest probability tokens to keep for sampling.
         top_p (float): The cumulative probability threshold for top-p sampling.
@@ -284,19 +292,19 @@ def generate(
 
     Returns:
         torch.LongTensor: The token IDs of the generated text (including the prompt).
-        
+
     enhanced generation function that supports both top-k and top-p
-    priority: top_p > top_k (when both are set) 
+    priority: top_p > top_k (when both are set)
     However, top_p and top_k are not used in this project, just for reference
     """
 
-    device = model.device 
+    device = model.device
     idx = idx.to(device)
 
     for iteration in range(max_new_tokens):
         # Truncate the context
         idx_cond = idx[:, -context_size:]  # shape: (batch_size, <=context_size)
-        
+
         # Compute logits; we only need the final token’s logits
         with torch.no_grad():
             output = model(idx_cond)
@@ -352,72 +360,54 @@ def generate(
 
     return idx
 
+
+# ---------------------------- Postprocessing Model Output ----------------------------
 def postprocess_response(full_text: str) -> str:
     """
     Process the response text from the model output.
-    
+
     This function:
     1. Extracts assistant's response if model header tags are present
     2. Preserves instructional tags like <observation>, <think>, etc.
     3. Removes system/model tokens and special tokenizer tokens
     4. Handles tokenizer-specific tokens if a tokenizer is provided
-    
+
     Args:
         full_text (str): The full text output from the model
         tokenizer: Optional tokenizer object to handle special tokens
-        
+
     Returns:
         str: The processed response
     """
     # Extract the assistant's response if header tags are present
     if "<|start_header_id|>assistant<|end_header_id|>" in full_text:
         response = full_text.split("<|start_header_id|>assistant<|end_header_id|>")[-1]
-        
+
         # Handle EOT token if present
         if "<|eot_id|>" in response:
             response = response.split("<|eot_id|>")[0]
     else:
         # If no assistant header, use the full text
         response = full_text
-    
+
     # List of system tokens to remove
     system_tokens = [
-        "<|begin_of_text|>", 
+        "<|begin_of_text|>",
         "<|start_header_id|>system<|end_header_id|>",
         "<|start_header_id|>user<|end_header_id|>",
         "<|start_header_id|>assistant<|end_header_id|>",
         "<|eot_id|>"
     ]
-    
+
     # Remove system tokens
     for token in system_tokens:
         response = response.replace(token, "")
-    
+
     # Return the cleaned response
     return response.strip()
 
-def old_calculate_perplexity(model: AutoModelForCausalLM, tokenizer: AutoTokenizer, text: str) -> float:
-    """
-    Calculates the perplexity of the model on the given text.
-    
-    Args:
-        model (AutoModelForCausalLM): The language model.
-        tokenizer (AutoTokenizer): The tokenizer.
-        text (str): The text to evaluate.
-    
-    Returns:
-        Perplexity score as a float.
-    """
-    device = model.device
-    encodings = tokenizer(text, return_tensors="pt")
-    input_ids = encodings.input_ids[:, :512].to(device)
-    
-    with torch.no_grad():
-        outputs = model(input_ids, labels=input_ids)
-        loss = outputs.loss
-    perplexity = math.exp(loss.item())
-    return perplexity
 
+# ------------------------------- Perplexity Calculation -------------------------------
 def calculate_perplexity(
     model: AutoModelForCausalLM,  # Language model for computing perplexity
     tokenizer: AutoTokenizer,     # Tokenizer for encoding input texts
@@ -493,9 +483,9 @@ def calculate_perplexity(
                     # Compute model output without gradients
                     with torch.no_grad():
                         outputs = model(
-                            input_ids=chunk_input_ids,           # Input tensor
-                            attention_mask=chunk_attention_mask, # Attention mask
-                            labels=chunk_input_ids               # Labels for loss
+                            input_ids=chunk_input_ids,  # Input tensor
+                            attention_mask=chunk_attention_mask,  # Attention mask
+                            labels=chunk_input_ids  # Labels for loss
                         )
                         loss = outputs.loss                  # Extract loss
 
@@ -519,9 +509,9 @@ def calculate_perplexity(
                 # Process entire sequence without striding
                 with torch.no_grad():
                     outputs = model(
-                        input_ids=input_ids,           # Input tensor
-                        attention_mask=attention_mask, # Attention mask
-                        labels=input_ids               # Labels for loss
+                        input_ids=input_ids,  # Input tensor
+                        attention_mask=attention_mask,  # Attention mask
+                        labels=input_ids  # Labels for loss
                     )
                     loss = outputs.loss            # Extract loss
 
@@ -545,58 +535,62 @@ def calculate_perplexity(
 def get_gpu_memory_usage():
     """
     Get the current GPU memory usage.
-    
+
     Returns:
         tuple: (allocated_memory_GB, cached_memory_GB, total_memory_GB)
     """
     if not torch.cuda.is_available():
         return (0, 0, 0)
-    
+
     device = torch.cuda.current_device()
-    
+
     # Get memory statistics
     allocated_bytes = torch.cuda.memory_allocated(device)
     cached_bytes = torch.cuda.memory_reserved(device)
     total_bytes = torch.cuda.get_device_properties(device).total_memory
-    
+
     # Convert to GB
     allocated_gb = allocated_bytes / (1024 ** 3)
     cached_gb = cached_bytes / (1024 ** 3)
     total_gb = total_bytes / (1024 ** 3)
-    
+
     return (allocated_gb, cached_gb, total_gb)
 
+
+# ------------------------------- Print GPU Memory Usage -------------------------------
 def print_gpu_memory_usage(prefix=""):
     """
     Print the current GPU memory usage.
-    
+
     Args:
         prefix (str): Optional prefix to add before the memory usage output
     """
     if not torch.cuda.is_available():
         print(f"{prefix}GPU not available")
         return
-    
+
     allocated_gb, cached_gb, total_gb = get_gpu_memory_usage()
-    
+
     print(f"{prefix}GPU Memory: {allocated_gb:.2f}GB allocated, "
           f"{cached_gb:.2f}GB cached, "
           f"{total_gb:.2f}GB total, "
           f"{(allocated_gb/total_gb)*100:.1f}% used")
 
+
+# ------------------------------- Log Memory Snapshot -------------------------------
 def log_memory_snapshot(step_name=""):
     """
     Log a memory snapshot with a descriptive step name.
-    
+
     Args:
         step_name (str): Name of the current step or operation
     """
     if not torch.cuda.is_available():
         return
-    
+
     print(f"[MEMORY] {step_name} - ", end="")
     print_gpu_memory_usage()
-    
+
     # Optional: force garbage collection
     # import gc
     # gc.collect()

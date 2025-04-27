@@ -8,7 +8,7 @@ models = {
     "8B-Instruct": "meta-llama/Llama-3.1-8B-Instruct"
 }
 
-model_name = models["8B-Instruct"] # default model
+model_name = models["8B-Instruct"]  # default model
 
 # ---------------------------------- Directory paths ----------------------------------
 model_workspace_dir = os.path.join(os.path.dirname(__file__), "..", "workspace")
@@ -23,7 +23,7 @@ methods = {
     "sDPOP": "dpopshift"
 }
 
-method_name = methods["DPO"] # default method
+method_name = methods["DPO"]  # default method
 
 # ---------------------------------- DPO parameters ----------------------------------
 beta = 0.3  # Temperature parameter controlling the sharpness of the decision boundary in DPO loss
@@ -31,7 +31,7 @@ lambda_dpop = 50.0  # Weight for DPOP term to prevent reduction of preferred com
 lambda_shift = 0.9  # Weight for the shift term in DPO loss
 
 # ---------------------------------- Model parameters ----------------------------------
-allowed_max_length = 4096 # maximum number of tokens in a sequence for training input data
+allowed_max_length = 4096  # maximum number of tokens in a sequence for training input data
 max_new_tokens = 512  # maximum number of tokens to generate
 
 # --------------------------------- Training parameters ---------------------------------
@@ -41,15 +41,14 @@ num_epochs = 1  # Number of times to go through the dataset
 
 # Some studies suggest using a learning rate between 5e-7 and 1e-7 for DPO but too low for DPOP
 learning_rate = 5e-6
-# Tried 1e-6 and 3e-6 for DPOP, still seems low to learn the policy model output are almost the same as the reference model
 
 weight_decay = 0.01  # Original: 0.001 - Higher regularization to prevent overfitting
 
-temperature = 0.7 # between 0.7 and 1.0, lower values generate more deterministic text
-top_p = 0.8 # between 0.7 and 0.95, higher values generate more diverse text
+temperature = 0.7  # between 0.7 and 1.0, lower values generate more deterministic text
+top_p = 0.8  # between 0.7 and 0.95, higher values generate more diverse text
 
 # ---------------------------------- Evaluation parameters ----------------------------------
-eval_freq = 2  # Original: 5 - Evaluate more frequently to catch divergence earlier
+eval_freq = 5  # Frequency of evaluation during training
 
 # ---------------------------------- Data paths ----------------------------------
 data_dir = os.path.join(os.path.dirname(__file__), "..", "data")
@@ -61,7 +60,7 @@ training_data_files = {
     'preference': os.path.join(data_dir, "instruction-data-with-preference.json")
 }
 
-training_data_filename = training_data_files['html'] # default training data
+training_data_filename = training_data_files['html']  # default training data
 
 # ------------------------ Results directory ------------------------
 result_dir = os.path.join(os.path.dirname(__file__), "..", "results")

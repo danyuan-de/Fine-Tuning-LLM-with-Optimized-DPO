@@ -1,2 +1,0 @@
-file,epoch,beta,learning_rate,train_loss,val_loss,train_reward_margin,val_reward_margin
-html,1,0.3,5e-06,2.899765968322754e-05,1.4156103134155273e-06,43.918359375,45.937890625

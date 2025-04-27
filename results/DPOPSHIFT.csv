@@ -1,2 +1,0 @@
-file,epoch,beta,lambda_dpop,lambda_shift,learning_rate,train_loss,val_loss,train_reward_margin,val_reward_margin
-html,1,0.3,50.0,0.9,5e-06,5.722492933273316e-05,3.0368566513061525e-06,46.71328125,47.6671875

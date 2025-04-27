@@ -5,30 +5,39 @@
 
 
 import os
-import argparse
 import json
 import torch
 from torch.utils.data import DataLoader
-from torch.optim.lr_scheduler import CosineAnnealingLR
+# from torch.optim.lr_scheduler import CosineAnnealingLR
 from transformers import AutoTokenizer, AutoModelForCausalLM, get_linear_schedule_with_warmup
 from functools import partial
 import copy
 import time
 from datetime import timedelta
-import numpy as np
 import random
 
 import src.config as config
 from src.dpoLoss import DPOLoss
 from src.preferenceDataset import PreferenceDataset
-from src.utils import *
 from src.trainer import train_model
-from src.argsParse import *
+from src.argsParse import parse_args, update_config_from_args, print_configuration
+from src.utils import (
+    get_dpo_params,
+    get_output_filename,
+    format_input,
+    text_to_token_ids,
+    generate,
+    postprocess_response,
+    custom_collate_fn,
+    plot_losses,
+    calculate_perplexity,
+)
+
 
 # ----------------------------------- Argument Parsing -----------------------------------
-args = parse_args() # Parse command-line arguments
-update_config_from_args(args) # Update config with parsed arguments
-print_configuration() # Print the configuration
+args = parse_args()  # Parse command-line arguments
+update_config_from_args(args)  # Update config with parsed arguments
+print_configuration()  # Print the configuration
 
 # Get relevant parameters for the selected method
 dpo_params = get_dpo_params(config.method_name)
@@ -41,14 +50,14 @@ param_str = ", ".join([f"{k}={v}" for k, v in dpo_params.items()])
 print(f"Using {config.method_name} with {param_str}")
 
 # ------------------------------- Set the cache directory -------------------------------
-model_workspace_dir = config.model_workspace_dir # directory to save the fine-tuned model
-cache_dir = config.cache_dir # cache directory for the Hugging Face model
-result_dir = config.result_dir # directory to save the output text and figures
+model_workspace_dir = config.model_workspace_dir  # directory to save the fine-tuned model
+cache_dir = config.cache_dir  # cache directory for the Hugging Face model
+result_dir = config.result_dir  # directory to save the output text and figures
 
 # ---------------------------- Ensure result directory exists ----------------------------
 os.makedirs(config.result_dir, exist_ok=True)
 
-# ----------------------- Get each filename from utils function ------------------------ 
+# ----------------------- Get each filename from utils function ------------------------
 # For output text
 output_json = get_output_filename(
     model=config.model_name,
@@ -59,7 +68,7 @@ output_json = get_output_filename(
     beta=config.beta,
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
     lambda_shift=config.lambda_shift if hasattr(config, 'lambda_shift') else None,
-    typename="json" # Specify the file type
+    typename="json"
 )
 print("Output file path:", output_json)
 
@@ -73,7 +82,7 @@ loss_plot_file = get_output_filename(
     beta=config.beta,
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
     lambda_shift=config.lambda_shift if hasattr(config, 'lambda_shift') else None,
-    typename="png" # Specify the file type
+    typename="png"
 )
 print("Loss plot file path:", loss_plot_file)
 
@@ -87,7 +96,7 @@ margins_plot_file = get_output_filename(
     beta=config.beta,
     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
     lambda_shift=config.lambda_shift if hasattr(config, 'lambda_shift') else None,
-    typename="png" # Specify the file type
+    typename="png"
 )
 print("Reward margins plot file path:", margins_plot_file)
 
@@ -102,10 +111,10 @@ if torch.cuda.is_available():
 tokenizer = AutoTokenizer.from_pretrained(config.model_name, cache_dir=cache_dir)
 model = AutoModelForCausalLM.from_pretrained(config.model_name, cache_dir=cache_dir, torch_dtype=torch.bfloat16)
 
-eos_token_id = tokenizer.eos_token_id # Get the end of text token ID
+eos_token_id = tokenizer.eos_token_id  # Get the end of text token ID
 
-policy_model = model # this is the model that will be fine-tuned
-ref_model = copy.deepcopy(model) # create a reference model for DPO by copying and freezing the parameters
+policy_model = model  # this is the model that will be fine-tuned
+ref_model = copy.deepcopy(model)  # create a reference model for DPO by copying and freezing the parameters
 # log_memory_snapshot("After reference model creation")
 
 for param in ref_model.parameters():
@@ -119,8 +128,8 @@ ref_model.to(device)
 
 # --------------------------- Set the tokenizer's padding token --------------------------
 tokenizer.add_special_tokens({"pad_token": "<|reserved_special_token_0|>"})
-model.config.pad_token_id = tokenizer.pad_token_id # updating model config
-tokenizer.padding_side = 'right' # padding to right (prevent showing warning)
+model.config.pad_token_id = tokenizer.pad_token_id  # updating model config
+tokenizer.padding_side = 'right'  # padding to right (prevent showing warning)
 print(f"Set PAD token to '{tokenizer.pad_token}' (ID: {tokenizer.pad_token_id})")
 print(f"Using EOS token '{tokenizer.eos_token}' (ID: {tokenizer.eos_token_id})")
 
@@ -151,7 +160,7 @@ random.shuffle(remaining)
 # Split the remaining data into training and validation sets
 train_size = int(len(data) * 0.8)
 train_data = remaining[:train_size]
-val_data   = remaining[train_size:]
+val_data = remaining[train_size:]
 
 print("Train size:", train_size)
 print("Validation size:", len(remaining) - train_size)
@@ -177,27 +186,29 @@ customized_collate_fn = partial(
     custom_collate_fn,
     eos_token_id=eos_token_id,
     tokenizer=tokenizer,
-    device=device, 
+    device=device,
     mask_prompt_tokens=True,  # This is optional
-    allowed_max_length=config.allowed_max_length    # The supported context length of the model
+    allowed_max_length=config.allowed_max_length  # The supported context length of the model
 )
 
 # ---------------------------- Create datasets and dataloaders ---------------------------
 train_dataset = PreferenceDataset(train_data, tokenizer)
 train_loader = DataLoader(
-    train_dataset, 
+    train_dataset,
     batch_size=config.batch_size,
-    collate_fn=customized_collate_fn, 
-    drop_last=True, 
+    collate_fn=customized_collate_fn,
+    drop_last=True,
     shuffle=True
 )
 
 val_dataset = PreferenceDataset(val_data, tokenizer)
-val_loader = DataLoader(val_dataset, 
-    batch_size=config.batch_size, 
-    collate_fn=customized_collate_fn, 
-    drop_last=False, 
-    shuffle=False)
+val_loader = DataLoader(
+    val_dataset,
+    batch_size=config.batch_size,
+    collate_fn=customized_collate_fn,
+    drop_last=False,
+    shuffle=False
+)
 
 test_dataset = PreferenceDataset(test_data, tokenizer)
 test_loader = DataLoader(
@@ -242,7 +253,7 @@ print("Validation loss:", res["val_loss"])
 print("Train reward margin:", res["train_chosen_reward"] - res["train_rejected_reward"])
 print("Val reward margin:", res["val_chosen_reward"] - res["val_rejected_reward"])
 
-print ("\n" + "=" * 50)
+print("\n" + "=" * 50)
 for i, entry in enumerate(val_data[:3]):
 
     input_text = format_input(entry)
@@ -260,7 +271,6 @@ for i, entry in enumerate(val_data[:3]):
     ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
     ref_response = postprocess_response(ref_full_text)
 
-
     if ('question' in entry):
         print(f"\nInput{i}: {entry['question']}")
     elif ('instruction' in entry):
@@ -274,7 +284,7 @@ for i, entry in enumerate(val_data[:3]):
     print("\n ----- Expected Response ----- ")
     print(f"Expected Answer: {entry['chosen']}")
 
-    print("="*80, "\n")
+    print("=" * 80, "\n")
 
 print("\n" + "=" * 50)
 print("Starting training...")
@@ -291,7 +301,7 @@ scheduler = get_linear_schedule_with_warmup(
 
 start_time = time.time()
 
-torch.manual_seed(123) # For reproducibility due to the shuffling in the data loader
+torch.manual_seed(123)  # For reproducibility due to the shuffling in the data loader
 
 tracking = train_model(
     dpo_loss_fn=dpo_loss_fn,
@@ -316,39 +326,30 @@ print(f" with {config.method_name}, {config.training_data_filename}, {config.mod
 
 # log_memory_snapshot("After training")
 
+train_margin = tracking['train_chosen_rewards'][-1] - tracking['train_rejected_rewards'][-1]
+val_margin = tracking['val_chosen_rewards'][-1] - tracking['val_rejected_rewards'][-1]
+train_acc = tracking['train_reward_accuracy'][-1]
+val_acc = tracking['val_reward_accuracy'][-1]
 print("Final train/validation statistics:")
 print(f"Train loss: {tracking['train_losses'][-1]}")
 print(f"Validation loss: {tracking['val_losses'][-1]}")
-train_margin = tracking['train_chosen_rewards'][-1] - tracking['train_rejected_rewards'][-1]
-val_margin = tracking['val_chosen_rewards'][-1] - tracking['val_rejected_rewards'][-1]
 print(f"Train reward margin: {train_margin:.3f}")
 print(f"Validation reward margin: {val_margin:.3f}")
+print(f"Train reward accuracy: {train_acc:.3f}")
+print(f"Validation reward accuracy: {val_acc:.3f}")
 print(f"Tokens seen: {tracking['tokens_seen'][-1]}")
-
-log_final_result_csv(method=config.method_name,
-                     file=config.training_data_filename,
-                     epoch=config.num_epochs,
-                     beta=config.beta,
-                     lambda_dpop=config.lambda_dpop if hasattr(config, 'lambda_dpop') else None,
-                     lambda_shift=config.lambda_shift if hasattr(config, 'lambda_shift') else None,
-                     learning_rate=config.learning_rate,
-                     train_loss=tracking['train_losses'][-1],
-                     val_loss=tracking['val_losses'][-1],
-                     train_reward_margin=train_margin,
-                     val_reward_margin=val_margin
-                     )
 
 print("\nAnalyzing batch records for significant loss changes:")
 if "batch_records" in tracking and tracking["batch_records"]:
     # Find batches with the largest loss increases and decreases
     sorted_records = sorted(tracking["batch_records"], key=lambda x: x["loss_change"])
-    
+
     # Top 3 decreases (improvements)
     print("\nTop 3 Loss Decreases (Improvements):")
     for record in sorted_records[:3]:
         print(f"Batch {record['batch_idx']} - Loss change: {record['loss_change']:.4f}")
         print(f"Reward difference: {record['reward_diff']:.4f}")
-        
+
     # Top 3 increases (deteriorations)
     print("\nTop 3 Loss Increases (Deteriorations):")
     for record in sorted_records[-3:]:
@@ -374,8 +375,8 @@ plot_losses(
     label="loss"
 )
 
-train_reward_margins = [i-j for i,j in zip(tracking["train_chosen_rewards"], tracking["train_rejected_rewards"])]
-val_reward_margins = [i-j for i,j in zip(tracking["val_chosen_rewards"], tracking["val_rejected_rewards"])]
+train_reward_margins = [i - j for i, j in zip(tracking["train_chosen_rewards"], tracking["train_rejected_rewards"])]
+val_reward_margins = [i - j for i, j in zip(tracking["val_chosen_rewards"], tracking["val_rejected_rewards"])]
 
 plot_losses(
     epochs_seen=epochs_tensor,
@@ -392,90 +393,6 @@ print("Tuned model's tokenizer loaded.")
 
 ref_model.to(device)  # Ensure reference model is on device
 fine_tuned_model.to(device)  # Ensure fine-tuned model is on device
-
-print("Starting evaluation...")
-# Evaluate the fine-tuned model on the validation set
-val_res = dpo_loss_fn.evaluate_dpo_loss_loader(
-    policy_model=fine_tuned_model,
-    reference_model=ref_model,
-    train_loader=None,
-    val_loader=val_loader,
-    eval_iter=5
-)
-
-print("Evaluation loss:", val_res["val_loss"])
-print("Evaluation reward margin:", val_res["val_chosen_reward"] - val_res["val_rejected_reward"])
-
-for i, entry in enumerate(val_data[:3]):
-
-    input_text = format_input(entry)
-
-    # Reference Model Generation
-    ref_input_ids = text_to_token_ids(input_text, tokenizer).to(device)
-    ref_generated = generate(
-        model=ref_model,
-        idx=ref_input_ids.to(device),
-        max_new_tokens=config.max_new_tokens,
-        # temperature=temperature,
-        # top_p=top_p,
-        eos_token_id=eos_token_id
-    )
-    ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
-    ref_response = postprocess_response(ref_full_text)
-
-    # Fine-Tuned Model Generation
-    fine_tuned_model_input_ids = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
-    fine_tuned_model_generated = generate(
-        model=fine_tuned_model,
-        idx=fine_tuned_model_input_ids.to(device),
-        max_new_tokens=config.max_new_tokens,
-        # temperature=temperature,
-        # top_p=top_p,
-        eos_token_id=eos_token_id
-    )
-    fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
-    fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
-
-    # Calculate perplexity for both models
-    ref_perplexity = calculate_perplexity(
-        model=ref_model,
-        tokenizer=tokenizer,
-        texts=input_text,
-        max_length=config.allowed_max_length,
-        device=device
-    )
-    ft_perplexity = calculate_perplexity(
-        model=fine_tuned_model,
-        tokenizer=fine_tuned_tokenizer,
-        texts=input_text,
-        max_length=config.allowed_max_length,
-        device=device
-    )
-
-    if ('question' in entry):
-        print(f"\nInput{i}: {entry['question']}")
-    elif ('instruction' in entry):
-        print(f"\nInput{i}: {entry['instruction']}")
-    else:
-        print(f"\nInput{i}: [No valid input key found]")
-
-    print("\n ----- Reference Model ----- ")
-    print(f"Reference Response: {ref_response}")
-    print(f"Perplexity: {ref_perplexity:.2f}")
-
-    print("\n ----- Policy Model ----- ")
-    print(f"Policy Response: {fine_tuned_model_response}")
-    print(f"Perplexity: {ft_perplexity:.2f}")
-
-    print("\n ----- Expected Response ----- ")
-    print(f"Expected Answer: {entry['chosen']}")
-
-    print("="*80, "\n")
-
-    # Display perplexity
-    # print(f"**Fine-Tuned Model Perplexity:** {ft_perplexity:.2f}")
-    # print(f"**Original Model Perplexity:** {ref_perplexity:.2f}")
-    # print("-" * 80)
 
 # Use the test data to evaluate the fine-tuned model
 print("Starting test evaluation...")
@@ -540,7 +457,7 @@ try:
         )
         fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
         fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
-        
+
         # Calculate perplexity
         ref_perplexity = calculate_perplexity(
             model=ref_model,
@@ -562,7 +479,7 @@ try:
 
         # Use the previously determined input key
         print(f"\nInput {i}:\n {entry[input_key]}")
-            
+
         print("\n ----- Reference Model ----- ")
         print(f"Reference Response: {ref_response}")
         print(f"Perplexity: {ref_perplexity:.2f}")
@@ -573,7 +490,7 @@ try:
 
         print("\n ----- Expected Response ----- ")
         print(f"Expected Answer: {entry['chosen']}")
-        print("="*80, "\n")
+        print("=" * 80, "\n")
 
         # Create a single sample object and append to the results list
         sample = {
