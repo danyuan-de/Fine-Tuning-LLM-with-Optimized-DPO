@@ -3,7 +3,7 @@
 # Make the script executable with the following command:
 # chmod +x setup.sh
 # Run the script with arguments, example:
-# ./setup.sh --beta 0.1 --lambda_dpop 40.0 --lr 5e-6
+# ./setup.sh --beta 0.1 --lambda_dpop 50.0 --lr 5e-6
 
 # Display help information if requested
 if [[ "$1" == "--help" ]]; then
@@ -53,42 +53,41 @@ fi
 set -e
 
 # Update package lists
-echo "Updating package lists..."
-apt-get update
-
-# Install Python virtual environment package and nano
-echo "Installing python3.10-venv and nano..."
-apt-get install -y python3.10-venv nano
-
-# Create a virtual environment if it doesn't exist
-VENV_DIR="env"
-if [ ! -d "$VENV_DIR" ]; then
-    echo "Creating Python virtual environment..."
-    python3 -m venv "$VENV_DIR"
-else
-    echo "Virtual environment already exists."
+if command -v apt-get &>/dev/null; then
+  echo "Updating package lists…"
+  if apt-get update -qq; then
+    echo "  → update succeeded without sudo"
+  else
+    echo "  → retrying with sudo"
+    sudo apt-get update
+  fi
 fi
 
-# Activate the virtual environment
+# Install Astral uv using official install script
+if ! command -v uv >/dev/null; then
+  echo "Installing Astral uv via official install script..."
+  wget -qO- https://astral.sh/uv/install.sh | sh
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
+# Create or reuse virtual environment (.venv)
+VENV_DIR=".venv"
+uv venv --directory "$VENV_DIR" --python python3.10
+
+# Activate virtual environment
 echo "Activating virtual environment..."
 source "$VENV_DIR/bin/activate"
 
-# Upgrade pip and install Hugging Face CLI
+# Synchronize dependencies from requirements.txt
+echo "Syncing dependencies from requirements.txt..."
+uv pip sync requirements.txt
+
+# Install or update Hugging Face CLI
 echo "Installing Hugging Face CLI..."
-pip install -U "huggingface_hub[cli]"
+uv pip install -U "huggingface_hub[cli]"
 
-# Log into Hugging Face CLI
-echo "Please log into Hugging Face CLI (Press Enter when ready)"
-huggingface-cli login
-
-# Check if `requirements.txt` exists and install dependencies
-REQUIREMENTS_FILE="requirements.txt"
-if [ -f "$REQUIREMENTS_FILE" ]; then
-    echo "Installing dependencies from requirements.txt..."
-    pip install -r "$REQUIREMENTS_FILE"
-else
-    echo "No requirements.txt found. Skipping dependency installation."
-fi
+echo "Please log into Hugging Face CLI (press Enter when ready)"
+uvx huggingface-cli login
 
 # Check for CUDA availability and set appropriate environment variables
 if [ -x "$(command -v nvidia-smi)" ]; then
@@ -104,10 +103,11 @@ else
     fi
 fi
 
-# Pass all arguments directly to the Python script
+# Run training with provided parameters
 echo "Running training with provided parameters..."
-PYTHONPATH=$(pwd) python -m src.main "$@"
+uv run python -m src.main "$@"
 
+# Completion message
 echo "Training complete."
 echo "Model saved to workspace directory. You can upload it to Hugging Face Hub using:"
-echo "python -m src.uploadModel"
+echo "  python -m src.uploadModel"
