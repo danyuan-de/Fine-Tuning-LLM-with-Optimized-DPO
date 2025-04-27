@@ -1,0 +1,18 @@
+[flake8]
+# Ignore third-party and cache
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist,
+    venv
+
+# Set max line length
+max-line-length = 150
+
+# These error codes are usually compatible with Black auto-formatting
+# E203: 2 space before ':'
+# W503: line break before binary operator
+ignore =
+    E203,  
+    W503   
