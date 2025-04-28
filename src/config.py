@@ -1,5 +1,22 @@
 import os
 
+
+# -------------------------- Run benchmark --------------------------
+benchmark = False  # Set to True to run the benchmark
+train = False  # Set to True to run the training
+
+benchmark_datasets = {
+    1: "Eureka-Lab/PHYBench",
+    2: "TIGER-Lab/MMLU-Pro"
+}
+
+benchmark_dataset = benchmark_datasets[1]  # default dataset for benchmark
+num_benchmark_samples = 100  # Number of samples to benchmark, set to 0 for all samples
+MMLU_PRO_category_isPhysics = False  # Set to True to run the benchmark on the physics dataset
+
+# ---------------------------------- Random seed ----------------------------------
+random_seed = 42  # Seed for reproducibility
+
 # ---------------------------------- Model parameters ----------------------------------
 models = {
     "1B": "meta-llama/Llama-3.2-1B",
@@ -40,7 +57,7 @@ gradient_accumulation_steps = 8  # Number of steps to accumulate gradients befor
 num_epochs = 1  # Number of times to go through the dataset
 
 # Some studies suggest using a learning rate between 5e-7 and 1e-7 for DPO but too low for DPOP
-learning_rate = 5e-6
+learning_rate = 5e-7
 
 weight_decay = 0.01  # Original: 0.001 - Higher regularization to prevent overfitting
 

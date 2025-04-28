@@ -11,12 +11,15 @@ import src.config as config
 # ------------------------------- File Management -------------------------------
 def _get_prefix(method: str, file: str, model: str = None, label: str = None) -> str:
     """Extract the file suffix based on a fixed mapping from the data file name."""
-    if model is not None:
-        model_short = model.split('/')[-1]
+    parts = []
+    if model:
+        parts.append(model.split('/')[-1])
+    parts.append(method.upper())
     training_dtype = next((dtype for dtype in ["content", "mixed", "html", "structure", "preference"] if dtype in file), "unknown")
-    if label is not None:
-        return model_short + "_" + method.upper() + "_" + training_dtype + "_" + label
-    return model_short + "_" + method.upper() + "_" + training_dtype
+    parts.append(training_dtype)
+    if label:
+        parts.append(label)
+    return "_".join(parts)
 
 
 # ------------------------------- Hyperparameter Management -------------------------------
@@ -42,7 +45,7 @@ def get_output_filename(method: str, file: str, model: str = None, label: str = 
     """
     Dynamically generate output filenames based on the method and data file.
     """
-    prefix = _get_prefix(model, method, file, label)
+    prefix = _get_prefix(method, file, model, label)
     hyperparam_str = _build_hyperparam_str(method, learning_rate, beta, lambda_dpop, lambda_shift)
 
     if hyperparam_str:
@@ -128,28 +131,58 @@ def get_device():
 
 
 def format_input(entry):
-    if "instruction" in entry:
+    # constants for clarity
+    HEADER_SYSTEM = "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n"
+    HEADER_USER = "<|start_header_id|>user<|end_header_id|>\n"
+    HEADER_ASSISTANT = "<|start_header_id|>assistant<|end_header_id|>\n"
+    EOT = "<|eot_id|>"
+
+    # instruction-style examples
+    if entry.get("instruction"):
         system_prompt = (
-            f"Below is an instruction that describes a task. "
-            f"Write a response that appropriately completes the request."
-            f"\n\n### Instruction:\n{entry['instruction']}"
-        )  # for the instruction-data-with-preference.json
-        input_text = f"\n\n### Input:\n{entry['input']}" if entry["input"] else ""  # for the instruction-data-with-preference.json
+            "Below is an instruction that describes a task. "
+            "Write a response that appropriately completes the request.\n\n"
+            f"### Instruction:\n{entry['instruction']}"
+        )
+        # optional extra input field
+        input_part = f"\n\n### Input:\n{entry['input']}" if entry.get("input") else ""
         return (
-            "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n"
-            f"{system_prompt}<|eot_id|><|start_header_id|>user<|end_header_id|>\n"
-            f"{input_text}<|eot_id|>\n<|start_header_id|>assistant<|end_header_id|>\n"
+            f"{HEADER_SYSTEM}"
+            f"{system_prompt}{EOT}"
+            f"{HEADER_USER}"
+            f"{input_part}{EOT}"
+            f"{HEADER_ASSISTANT}"
         )
 
-    elif "question" in entry:
-        system_prompt = (
-            "You are a physics expert assistant. "
-            "Provide a detailed, reasoning process followed by a clear final answer for the following question."
-        )
+    # QA-style (either 'question' or fallback to 'content')
+    q = entry.get("question") or entry.get("content")
+    system_prompt = (
+        "You are a physics expert assistant. "
+        "Provide a detailed, reasoning process followed by a clear final answer for the following question."
+    )
+    if entry.get("options"):
+        if not config.MMLU_PRO_category_isPhysics:
+            system_prompt = (
+                "You are a helpful, knowledgeable assistant. "
+                "Provide a detailed, reasoning process followed by a clear final answer for the following question."
+            )
+        opts = entry["options"]
+        choices = "\n".join(f"{chr(65+i)}. {o}" for i, o in enumerate(opts))
         return (
-            "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n"
-            f"{system_prompt}<|eot_id|><|start_header_id|>user<|end_header_id|>\n"
-            f"Question: {entry['question']}<|eot_id|>\n<|start_header_id|>assistant<|end_header_id|>\n"
+            f"{HEADER_SYSTEM}"
+            f"{system_prompt}{EOT}"
+            f"{HEADER_USER}"
+            f"Question: {q}{EOT}"
+            f"Options:\n{choices}{EOT}"
+            f"{HEADER_ASSISTANT}"
+        )
+    else:
+        return (
+            f"{HEADER_SYSTEM}"
+            f"{system_prompt}{EOT}"
+            f"{HEADER_USER}"
+            f"Question: {q}{EOT}"
+            f"{HEADER_ASSISTANT}"
         )
 
 

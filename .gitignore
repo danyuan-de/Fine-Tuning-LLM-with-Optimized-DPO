@@ -53,3 +53,9 @@ env/
 
 results/match*
 results/*plot*
+
+# uv related files
+uvsetup.sh
+uv.lock
+.python-version
+pyproject.toml

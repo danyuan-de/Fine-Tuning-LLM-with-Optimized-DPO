@@ -6,6 +6,7 @@ torch>=2.0.0  # PyTorch
 # Transformers and NLP libraries
 transformers>=4.40.0  # Hugging Face Transformers - updated for Llama 3.1 support
 accelerate>=0.27.0  # Required for modern model loading
+datasets>=3.0.0  # Hugging Face Datasets - for loading and processing datasets
 
 # Visualization
 matplotlib>=3.7.0  # for plotting
