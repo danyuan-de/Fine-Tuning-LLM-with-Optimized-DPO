@@ -25,7 +25,7 @@ if [[ "$1" == "--help" ]]; then
   echo "    --seed VALUE         Random seed for reproducibility (default: 42) used in training and benchmark"
   echo ""
   echo "  Model Selection:"
-  echo "    --model MODEL         Model choice (1B, 1B-Instruct, 8B, 8B-Instruct) (default: 8B-Instruct)"
+  echo "    --model MODEL         Model choice (8B, 8B-Instruct, 8B-SFT, PhyMaster) (default: 8B-SFT)"
   echo ""
   echo "  DPO Loss Parameters:"
   echo "    --beta VALUE          Beta value for DPO loss (default: from config.py)"

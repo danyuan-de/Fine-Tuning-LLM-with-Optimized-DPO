@@ -139,7 +139,7 @@ def format_input(entry):
 
     # instruction-style examples
     if entry.get("instruction"):
-        system_prompt = (
+        preference_system_prompt = (
             "Below is an instruction that describes a task. "
             "Write a response that appropriately completes the request.\n\n"
             f"### Instruction:\n{entry['instruction']}"
@@ -148,7 +148,7 @@ def format_input(entry):
         input_part = f"\n\n### Input:\n{entry['input']}" if entry.get("input") else ""
         return (
             f"{HEADER_SYSTEM}"
-            f"{system_prompt}{EOT}"
+            f"{preference_system_prompt}{EOT}"
             f"{HEADER_USER}"
             f"{input_part}{EOT}"
             f"{HEADER_ASSISTANT}"
@@ -156,16 +156,11 @@ def format_input(entry):
 
     # QA-style (either 'question' or fallback to 'content')
     q = entry.get("question") or entry.get("content")
-    system_prompt = (
-        "You are a physics expert assistant. "
-        "Provide a detailed, reasoning process followed by a clear final answer for the following question."
-    )
     if entry.get("options"):
         if not config.MMLU_PRO_category_isPhysics:
-            system_prompt = (
-                "You are a helpful, knowledgeable assistant. "
-                "Provide a detailed, reasoning process followed by a clear final answer for the following question."
-            )
+            system_prompt = config.system_prompt_mc_general
+        else:
+            system_prompt = config.system_prompt_mc_physics
         opts = entry["options"]
         choices = "\n".join(f"{chr(65+i)}. {o}" for i, o in enumerate(opts))
         return (
@@ -177,6 +172,7 @@ def format_input(entry):
             f"{HEADER_ASSISTANT}"
         )
     else:
+        system_prompt = config.system_prompt_physics
         return (
             f"{HEADER_SYSTEM}"
             f"{system_prompt}{EOT}"

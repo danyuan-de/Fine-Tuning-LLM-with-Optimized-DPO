@@ -19,13 +19,13 @@ random_seed = 42  # Seed for reproducibility
 
 # ---------------------------------- Model parameters ----------------------------------
 models = {
-    "1B": "meta-llama/Llama-3.2-1B",
-    "1B-Instruct": "meta-llama/Llama-3.2-1B-Instruct",
     "8B": "meta-llama/Llama-3.1-8B",
-    "8B-Instruct": "meta-llama/Llama-3.1-8B-Instruct"
+    "8B-Instruct": "meta-llama/Llama-3.1-8B-Instruct",
+    "8B-SFT": "prithivMLmods/Llama-3.1-8B-Open-SFT",
+    "PhyMaster": "gallen881/Llama-3-8B-Physics_Master-GGUF"
 }
 
-model_name = models["8B-Instruct"]  # default model
+model_name = models["8B-SFT"]  # default model
 
 # ---------------------------------- Directory paths ----------------------------------
 model_workspace_dir = os.path.join(os.path.dirname(__file__), "..", "workspace")
@@ -81,3 +81,24 @@ training_data_filename = training_data_files['html']  # default training data
 
 # ------------------------ Results directory ------------------------
 result_dir = os.path.join(os.path.dirname(__file__), "..", "results")
+
+# ------------------------ Prompt template for training and PHYBench ------------------------
+system_prompt_physics = (
+    "You are a physics expert assistant. "
+    "Provide a concise reasoning process followed by a clear final answer for the following question."
+)
+
+# -------------------------- Prompt template for MMLU-Pro Benchmark --------------------------
+system_prompt_mc_general = (
+    "You are a helpful, knowledgeable assistant. "
+    "Carefully analyze the following multiple-choice question and options. "
+    "Provide a reasoning process to determine the correct answer. "
+    "End your response in the format 'Final Answer: $\\boxed{X}$', where X is the letter (A, B, C, D, ...) of the correct option."
+)
+
+system_prompt_mc_physics = (
+    "You are a physics expert assistant. "
+    "Carefully analyze the following multiple-choice question and options. "
+    "Provide a reasoning process to determine the correct answer. "
+    "End your response in the format 'Final Answer: $\\boxed{X}$', where X is the letter (A, B, C, D, ...) of the correct option."
+)
