@@ -74,6 +74,7 @@ def train_model(
     log_csv_filename = get_output_filename(
         method=config.method_name.upper(),
         file=config.training_data_filename,
+        model=config.model_name.split('/')[-1],
         learning_rate=config.learning_rate,
         beta=config.beta,
         lambda_dpop=getattr(config, "lambda_dpop", None),
