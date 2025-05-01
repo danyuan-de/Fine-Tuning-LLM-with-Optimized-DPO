@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import src.config as config
 
 
 class DPOLoss(nn.Module):
@@ -195,42 +196,46 @@ class DPOLoss(nn.Module):
             torch.Tensor: Computed DPO loss.
         """
         # Compute log probabilities for policy model
-        policy_chosen_log_probas = self.compute_logprobs(
+        policy_chosen_log_probs = self.compute_logprobs(
             policy_model(batch["chosen"]),
             batch["chosen"],
-            batch["chosen_mask"]
+            batch["chosen_mask"],
+            config.average_log_probs
         )
-        policy_rejected_log_probas = self.compute_logprobs(
+        policy_rejected_log_probs = self.compute_logprobs(
             policy_model(batch["rejected"]),
             batch["rejected"],
-            batch["rejected_mask"]
+            batch["rejected_mask"],
+            config.average_log_probs
         )
 
         # Compute log probabilities for reference model
-        ref_chosen_log_probas = self.compute_logprobs(
+        ref_chosen_log_probs = self.compute_logprobs(
             reference_model(batch["chosen"]),
             batch["chosen"],
-            batch["chosen_mask"]
+            batch["chosen_mask"],
+            config.average_log_probs
         )
-        ref_rejected_log_probas = self.compute_logprobs(
+        ref_rejected_log_probs = self.compute_logprobs(
             reference_model(batch["rejected"]),
             batch["rejected"],
-            batch["rejected_mask"]
+            batch["rejected_mask"],
+            config.average_log_probs
         )
-        print("ref chosen mean:", ref_chosen_log_probas.mean().item())
-        print("model chosen mean:", policy_chosen_log_probas.mean().item())
+        print("ref chosen mean:", ref_chosen_log_probs.mean().item())
+        print("model chosen mean:", policy_chosen_log_probs.mean().item())
 
         # Compute the DPO loss
         loss, chosen_rewards, rejected_rewards, reward_accuracy = self.compute_dpo_loss(
-            policy_chosen_log_probas,
-            policy_rejected_log_probas,
-            ref_chosen_log_probas,
-            ref_rejected_log_probas
+            policy_chosen_log_probs,
+            policy_rejected_log_probs,
+            ref_chosen_log_probs,
+            ref_rejected_log_probs
         )
 
         return (loss, chosen_rewards, rejected_rewards, reward_accuracy,
-                policy_chosen_log_probas, policy_rejected_log_probas,
-                ref_chosen_log_probas, ref_rejected_log_probas)
+                policy_chosen_log_probs, policy_rejected_log_probs,
+                ref_chosen_log_probs, ref_rejected_log_probs)
 
     def compute_dpo_loss_loader_with_components(self, data_loader, policy_model, reference_model, num_batches=None):
         """
@@ -259,9 +264,9 @@ class DPOLoss(nn.Module):
                 break
 
             # Get basic loss and rewards
-            (loss, chosen_rewards, rejected_rewards, reward_accuracy, 
-             policy_chosen_log_probas, policy_rejected_log_probas,
-             reference_chosen_log_probas, reference_rejected_log_probas) = self.compute_dpo_loss_batch(
+            (loss, chosen_rewards, rejected_rewards, reward_accuracy,
+             policy_chosen_log_probs, policy_rejected_log_probs,
+             reference_chosen_log_probs, reference_rejected_log_probs) = self.compute_dpo_loss_batch(
                 batch,
                 policy_model,
                 reference_model,
@@ -276,8 +281,8 @@ class DPOLoss(nn.Module):
             # For component-specific tracking, we need to run parts of the loss calculation again
             if self.method in ['dpop', 'dpopshift']:
                 dpop_term = torch.maximum(
-                    torch.zeros_like(reference_chosen_log_probas),
-                    reference_chosen_log_probas - policy_chosen_log_probas
+                    torch.zeros_like(reference_chosen_log_probs),
+                    reference_chosen_log_probs - policy_chosen_log_probs
                 ).mean().item()
                 metrics["dpop_term"] += dpop_term
                 print(f"[diag] dpop_term: {dpop_term:.4f}")

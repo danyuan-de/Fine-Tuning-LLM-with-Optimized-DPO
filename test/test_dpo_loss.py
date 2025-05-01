@@ -74,7 +74,7 @@ def test_compute_dpo_loss_batch_monkeypatch(monkeypatch):
 
     loss_fn = DPOLoss(beta=1.0, method="dpo")  # β=1 for simplicity
 
-    _, _, _, acc = loss_fn.compute_dpo_loss_batch(
+    (_, _, _, acc, _, _, _, _) = loss_fn.compute_dpo_loss_batch(
         batch, policy_model=DummyModel(), reference_model=DummyModel()
     )
     assert pytest.approx(acc.item(), rel=1e-6) == 1.0
@@ -121,8 +121,7 @@ def test_compute_dpo_loss_batch_with_nonzero_reference(monkeypatch):
     monkeypatch.setattr(DPOLoss, "compute_logprobs", fake_compute_logprobs)
 
     loss_fn = DPOLoss(beta=0.3, method="dpo")
-
-    _, chosen_r, rejected_r, acc = loss_fn.compute_dpo_loss_batch(
+    (_, chosen_r, rejected_r, acc, _, _, _, _)  = loss_fn.compute_dpo_loss_batch(
         batch, policy_model=DummyModel(), reference_model=DummyModel()
     )
 

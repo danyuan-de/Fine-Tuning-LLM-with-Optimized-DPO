@@ -79,6 +79,7 @@ def train_model(
         beta=config.beta,
         lambda_dpop=getattr(config, "lambda_dpop", None),
         lambda_shift=getattr(config, "lambda_shift", None),
+        avg=config.average_log_probs,
         typename="csv",
     )
 
@@ -100,7 +101,7 @@ def train_model(
                 # if log_memory and batch_idx % max(1, len(train_loader) // 10) == 0:
                 #     log_memory_snapshot(f"Epoch {epoch+1}, Batch {batch_idx+1}/{len(train_loader)}")
 
-                (loss, chosen_rewards, rejected_rewards, reward_accuracy, 
+                (loss, chosen_rewards, rejected_rewards, reward_accuracy,
                  policy_chosen_log_probas, policy_rejected_log_probas,
                  reference_chosen_log_probas, reference_rejected_log_probas) = dpo_loss_fn.compute_dpo_loss_batch(
                     batch=batch,
@@ -243,6 +244,8 @@ def train_model(
                             f"Val reward accuracy {res['val_reward_accuracy']:.3f}, "
                             f"Policy model chosen logprobs {policy_chosen_log_probas.mean():.3f}, "
                             f"Policy model rejected logprobs {policy_rejected_log_probas.mean():.3f}"
+                            f"Ref model chosen logprobs {reference_chosen_log_probas.mean():.3f}, "
+                            f"Ref model rejected logprobs {reference_rejected_log_probas.mean():.3f}"
                         )
 
                         total_batches = len(train_loader)
@@ -258,7 +261,11 @@ def train_model(
                             train_reward_margin=train_reward_margin,
                             val_reward_margin=val_reward_margin,
                             train_reward_accuracy=res["train_reward_accuracy"],
-                            val_reward_accuracy=res["val_reward_accuracy"]
+                            val_reward_accuracy=res["val_reward_accuracy"],
+                            policy_chosen_logprobs=policy_chosen_log_probas.mean().item(),
+                            policy_rejected_logprobs=policy_rejected_log_probas.mean().item(),
+                            reference_chosen_logprobs=reference_chosen_log_probas.mean().item(),
+                            reference_rejected_logprobs=reference_rejected_log_probas.mean().item(),
                         )
 
         finally:

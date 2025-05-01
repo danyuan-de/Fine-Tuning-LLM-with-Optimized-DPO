@@ -7,7 +7,8 @@ train = False  # Set to True to run the training
 
 benchmark_datasets = {
     1: "Eureka-Lab/PHYBench",
-    2: "TIGER-Lab/MMLU-Pro"
+    2: "TIGER-Lab/MMLU-Pro",
+    3: "cais/mmlu"
 }
 
 benchmark_dataset = benchmark_datasets[1]  # default dataset for benchmark
@@ -19,13 +20,15 @@ random_seed = 42  # Seed for reproducibility
 
 # ---------------------------------- Model parameters ----------------------------------
 models = {
+    "1B": "meta-llama/Llama-3.2-1B",
+    "1B-Instruct": "meta-llama/Llama-3.2-1B-Instruct",
     "8B": "meta-llama/Llama-3.1-8B",
     "8B-Instruct": "meta-llama/Llama-3.1-8B-Instruct",
     "8B-SFT": "prithivMLmods/Llama-3.1-8B-Open-SFT",
     "PhyMaster": "gallen881/Llama-3-8B-Physics_Master-GGUF"
 }
 
-model_name = models["8B-SFT"]  # default model
+model_name = models["1B-Instruct"]  # default model
 
 # ---------------------------------- Directory paths ----------------------------------
 model_workspace_dir = os.path.join(os.path.dirname(__file__), "..", "workspace")
@@ -41,6 +44,12 @@ methods = {
 }
 
 method_name = methods["DPO"]  # default method
+
+# ---------------------------------- log probabilities ----------------------------------
+# Use log probabilities for DPO loss
+# If average_log_probs is True, the log probabilities are averaged over the sequence length
+# If average_log_probs is False, the log probabilities are summed over the sequence length
+average_log_probs = False
 
 # ---------------------------------- DPO parameters ----------------------------------
 beta = 0.3  # Temperature parameter controlling the sharpness of the decision boundary in DPO loss
@@ -75,10 +84,12 @@ training_data_files = {
     'structure': os.path.join(data_dir, "physics_qa_structure.json"),
     'html': os.path.join(data_dir, "physics_qa_html.json"),
     'mixed': os.path.join(data_dir, "physics_qa_mixed.json"),
+    'chat': os.path.join(data_dir, "physics_qa_chat.json"),
+    'chat_new': os.path.join(data_dir, "physics_qa_chat_new.json"),
     'preference': os.path.join(data_dir, "instruction-data-with-preference.json")
 }
 
-training_data_filename = training_data_files['html']  # default training data
+training_data_filename = training_data_files['chat']  # default training data
 
 # ------------------------ Results directory ------------------------
 result_dir = os.path.join(os.path.dirname(__file__), "..", "results")

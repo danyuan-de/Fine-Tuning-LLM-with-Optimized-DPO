@@ -35,7 +35,7 @@ def parse_args():
     # --------------------- Model selection - directly select the model name ---------------------
     model_choices = list(config.models.keys())
     model_help = "Model choice: " + ", ".join(model_choices)
-    parser.add_argument('--model', type=str, choices=model_choices, default="8B-SFT",
+    parser.add_argument('--model', type=str, choices=model_choices, default="1B-Instruct",
                         help=model_help)
 
     # -------------------- Method selection - directly select the method name --------------------
@@ -43,6 +43,10 @@ def parse_args():
     method_help = "Method choice: " + ", ".join(method_choices)
     parser.add_argument('--method', type=str, choices=method_choices, default="sDPO",
                         help=method_help)
+
+    # ---------------------------------- log probabilities ----------------------------------
+    parser.add_argument('--avglps', action='store_true', default=config.average_log_probs,
+                        help='Use average log probabilities for DPO loss')
 
     # ------------------------------------ DPO loss parameters ------------------------------------
     parser.add_argument('--beta', type=float, default=config.beta,
@@ -108,6 +112,7 @@ def update_config_from_args(args):
     config.num_benchmark_samples = args.num_benchmark_samples
     config.MMLU_PRO_category_isPhysics = args.category_isPhysics
     config.random_seed = args.seed
+    config.average_log_probs = args.avglps
     config.beta = args.beta
     config.lambda_dpop = args.lambda_dpop
     config.lambda_shift = args.lambda_shift
@@ -145,6 +150,7 @@ def print_configuration():
         print(f"Model: {config.model_name}")
         print(f"Method: {config.method_name.upper()}")
         print(f"Training Data: {config.training_data_filename}")
+        print(f"Use Average Log Probabilities: {config.average_log_probs}")
         print("\nDPO Parameters:")
         print(f"  Beta: {config.beta}")
         if config.method_name in ['dpop', 'dpopshift']:

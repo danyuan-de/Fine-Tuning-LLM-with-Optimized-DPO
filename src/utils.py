@@ -15,7 +15,7 @@ def _get_prefix(method: str, file: str, model: str = None, label: str = None) ->
     if model:
         parts.append(model.split('/')[-1])
     parts.append(method.upper())
-    training_dtype = next((dtype for dtype in ["content", "mixed", "html", "structure", "preference"] if dtype in file), "unknown")
+    training_dtype = next((dtype for dtype in ["content", "mixed", "html", "chat", "structure", "preference"] if dtype in file), "unknown")
     parts.append(training_dtype)
     if label:
         parts.append(label)
@@ -41,17 +41,19 @@ def _build_hyperparam_str(method: str, learning_rate: float = None, beta: float 
 # ------------------------------- Output Filename Management -------------------------------
 def get_output_filename(method: str, file: str, model: str = None, label: str = None, learning_rate: float = None,
                         beta: float = None, lambda_dpop: float = None,
-                        lambda_shift: float = None, typename: str = "json") -> str:
+                        lambda_shift: float = None, avg: bool = config.average_log_probs, typename: str = "json") -> str:
     """
     Dynamically generate output filenames based on the method and data file.
     """
     prefix = _get_prefix(method, file, model, label)
     hyperparam_str = _build_hyperparam_str(method, learning_rate, beta, lambda_dpop, lambda_shift)
+    mode = "avg" if avg else "sum"
 
+    filename = f"{mode}_{prefix}"
     if hyperparam_str:
-        filename = f"{prefix}_{hyperparam_str}.{typename}"
-    else:
-        filename = f"{prefix}.{typename}"
+        filename += f"_{hyperparam_str}"
+    filename += f".{typename}"
+
     return os.path.join(config.result_dir, filename)
 
 
@@ -95,6 +97,10 @@ def log_result_csv(
         "val_reward_margin",
         "train_reward_accuracy",
         "val_reward_accuracy",
+        "policy_chosen_logprobs",
+        "policy_rejected_logprobs",
+        "reference_chosen_logprobs",
+        "reference_rejected_logprobs"
     ]
 
     row = [kwargs.get(h, None) for h in headers]
