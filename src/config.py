@@ -4,6 +4,7 @@ import os
 # -------------------------- Run benchmark --------------------------
 benchmark = False  # Set to True to run the benchmark
 train = False  # Set to True to run the training
+sft = False  # Set to True to run the supervised fine-tuning (SFT)
 
 benchmark_datasets = {
     1: "Eureka-Lab/PHYBench",
@@ -41,6 +42,16 @@ methods = {
 }
 
 method_name = methods["DPO"]  # default method
+
+# ------------------------------ SFT hyperparameters ------------------------------
+sft_lr = 1e-5  # Learning rate for supervised fine-tuning
+sft_epochs = 3  # Number of epochs for supervised fine-tuning
+sft_batch_size = 8  # Batch size for supervised fine-tuning
+sft_warmup_steps = 0  # Number of warmup steps for learning rate scheduler
+sft_weight_decay = 0.01  # Weight decay for supervised fine-tuning
+sft_output_dir = os.path.join(model_workspace_dir, "sft_output")  # Directory to save SFT output
+log_interval = 10  # Interval for logging during SFT
+# ---------------------------------- Device selection ----------------------------------
 
 # ---------------------------------- DPO parameters ----------------------------------
 beta = 0.3  # Temperature parameter controlling the sharpness of the decision boundary in DPO loss

@@ -13,9 +13,11 @@ def parse_args():
         description='Train a model using DPO with custom hyperparameters')
 
     # ---------------------- Select a flag to run training or benchmark test ------------------------
-    parser.add_argument('--train', action='store_true', default=False,
+    parser.add_argument('--sft', action='store_true', default=config.sft,
+                        help='Run supervised fine-tuning (SFT) on the chosen dataset')
+    parser.add_argument('--train', action='store_true', default=config.train,
                         help='Run training on the dataset')
-    parser.add_argument('--benchmark', action='store_true', default=False,
+    parser.add_argument('--benchmark', action='store_true', default=config.benchmark,
                         help='Run benchmark on the dataset')
 
     # -------------------------------- Select benchmark test dataset --------------------------------
@@ -102,6 +104,7 @@ def update_config_from_args(args):
         args (argparse.Namespace): The parsed command-line arguments
     """
     # Update config values with command-line arguments
+    config.sft = args.sft
     config.train = args.train
     config.benchmark = args.benchmark
     config.benchmark_dataset = args.benchmark_dataset
@@ -140,6 +143,20 @@ def print_configuration():
     print("TRAINING CONFIGURATION:")
     print(f"{'='*50}")
     print(f"Random Seed: {config.random_seed}")
+    if config.sft:
+        print(f"Run SFT: {config.sft}")
+        print(f"Model: {config.model_name}")
+        print(f"Training Data: {config.training_data_filename}")
+        print("\nSFT Parameters:")
+        print(f"  Learning Rate: {config.learning_rate}")
+        print(f"  Batch Size: {config.batch_size}")
+        print(f"  Gradient Accumulation Steps: {config.gradient_accumulation_steps}")
+        print(f"  Epochs: {config.num_epochs}")
+        print(f"  Weight Decay: {config.weight_decay}")
+        print(f"  Evaluation Frequency: {config.eval_freq}")
+        print("\nModel Parameters:")
+        print(f"  Max Input Length: {config.allowed_max_length}")
+        print(f"  Max New Tokens: {config.max_new_tokens}")
     if config.train:
         print(f"Run Training: {config.train}")
         print(f"Model: {config.model_name}")

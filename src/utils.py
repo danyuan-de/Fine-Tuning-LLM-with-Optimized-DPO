@@ -5,6 +5,8 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import math
 import csv
+import json
+import random
 import src.config as config
 
 
@@ -54,6 +56,45 @@ def get_output_filename(method: str, file: str, model: str = None, label: str = 
         filename = f"{prefix}.{typename}"
     return os.path.join(config.result_dir, filename)
 
+
+# ----------------------------- Load and Split Data Management -----------------------------
+def load_split_data():
+    # ------------------------------------- Load the data ------------------------------------
+    try:
+        with open(config.training_data_filename, "r", encoding="utf-8") as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        print(f"File {config.training_data_filename} not found. Please check the path.")
+        exit(1)
+
+    print("Number of entries:", len(data))
+
+    # ----------------------------- data set pre-processing and shuffling -----------------------------
+    # Randomly select 10% of the data for testing which is fixed data in multiple runs
+    random.seed(config.random_seed)  # Set seed for reproducibility
+    test_size = int(len(data) * 0.1)
+    test_data = random.sample(data, test_size)
+
+    # Remove test data from the original dataset
+    remaining = [d for d in data if d not in test_data]
+
+    # Randomly shuffle the remaining data
+    random.shuffle(remaining)
+
+    # Split the remaining data into training and validation sets
+    train_size = int(len(data) * 0.8)
+    train_data = remaining[:train_size]
+    val_data = remaining[train_size:]
+
+    print("Train size:", train_size)
+    print("Validation size:", len(remaining) - train_size)
+    print("Test size:", test_size)
+
+    print("Training set length:", len(train_data))
+    print("Validation set length:", len(val_data))
+    print("Test set length:", len(test_data))
+
+    return train_data, val_data, test_data, len(data)
 
 # ------------------------------- DPO Parameters Management -------------------------------
 def get_dpo_params(method: str):

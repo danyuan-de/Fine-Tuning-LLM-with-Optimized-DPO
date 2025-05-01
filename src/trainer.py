@@ -291,7 +291,7 @@ def train_model(
     return tracking
 
 
-def run_training():
+def run_training(train_data, val_data, test_data, datalength):
     # Get relevant parameters for the selected method
     dpo_params = get_dpo_params(config.method_name)
 
@@ -386,50 +386,15 @@ def run_training():
 
     print("Model and tokenizer loaded.")
 
-    # ------------------------------------- Load the data ------------------------------------
-    try:
-        with open(config.training_data_filename, "r", encoding="utf-8") as file:
-            data = json.load(file)
-    except FileNotFoundError:
-        print(f"File {config.training_data_filename} not found. Please check the path.")
-        exit(1)
-
-    print("Number of entries:", len(data))
-
-    # ----------------------------- data set pre-processing and shuffling -----------------------------
-    # Randomly select 10% of the data for testing which is fixed data in multiple runs
-    random.seed(config.random_seed)  # Set seed for reproducibility
-    test_size = int(len(data) * 0.1)
-    test_data = random.sample(data, test_size)
-
-    # Remove test data from the original dataset
-    remaining = [d for d in data if d not in test_data]
-
-    # Randomly shuffle the remaining data
-    random.shuffle(remaining)
-
-    # Split the remaining data into training and validation sets
-    train_size = int(len(data) * 0.8)
-    train_data = remaining[:train_size]
-    val_data = remaining[train_size:]
-
-    print("Train size:", train_size)
-    print("Validation size:", len(remaining) - train_size)
-    print("Test size:", test_size)
-
-    print("Training set length:", len(train_data))
-    print("Validation set length:", len(val_data))
-    print("Test set length:", len(test_data))
-
     # ------------------------------------------------ Set warmup steps ------------------------------------------------
     # Compute the number of training steps
-    batches_per_epoch = train_size // config.batch_size
+    batches_per_epoch = len(train_data) // config.batch_size
     optimization_steps_per_epoch = batches_per_epoch // config.gradient_accumulation_steps
     num_training_steps = optimization_steps_per_epoch * config.num_epochs
 
     # Dynamic warmup steps
     num_warmup_steps = int(0.1 * num_training_steps)
-    print(f"Dataset size: {len(data)}, num_training_steps: {num_training_steps}, num_warmup_steps: {num_warmup_steps}")
+    print(f"Dataset size: {datalength}, num_training_steps: {num_training_steps}, num_warmup_steps: {num_warmup_steps}")
     # ------------------------------------------------------------------------------------------------------------------
 
     # ---------------------------- Custom collate function for DataLoader ---------------------------
