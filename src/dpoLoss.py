@@ -217,6 +217,8 @@ class DPOLoss(nn.Module):
             batch["rejected"],
             batch["rejected_mask"]
         )
+        print("ref chosen mean:", ref_chosen_log_probas.mean().item())
+        print("model chosen mean:", policy_chosen_log_probas.mean().item())
 
         # Compute the DPO loss
         loss, chosen_rewards, rejected_rewards, reward_accuracy = self.compute_dpo_loss(
@@ -226,7 +228,9 @@ class DPOLoss(nn.Module):
             ref_rejected_log_probas
         )
 
-        return loss, chosen_rewards, rejected_rewards, reward_accuracy
+        return (loss, chosen_rewards, rejected_rewards, reward_accuracy,
+                policy_chosen_log_probas, policy_rejected_log_probas,
+                ref_chosen_log_probas, ref_rejected_log_probas)
 
     def compute_dpo_loss_loader_with_components(self, data_loader, policy_model, reference_model, num_batches=None):
         """
@@ -244,60 +248,43 @@ class DPOLoss(nn.Module):
         if self.method in ['dpop', 'dpopshift']:
             metrics["dpop_term"] = 0.0
 
-        if len(data_loader) == 0:
-            return {k: float("nan") for k in metrics.keys()}
-
-        # Determine number of batches to process
-        if num_batches is None:
-            num_batches = len(data_loader)
-        else:
-            num_batches = min(num_batches, len(data_loader))
+        # Set the number of batches to process
+        N = len(data_loader) if num_batches is None else min(num_batches, len(data_loader))
+        if N == 0:
+            return {k: float("nan") for k in metrics}
 
         # Process batches
         for i, batch in enumerate(data_loader):
-            if i < num_batches:
-                # Get basic loss and rewards
-                loss, chosen_rewards, rejected_rewards, reward_accuracy = self.compute_dpo_loss_batch(
-                    batch,
-                    policy_model,
-                    reference_model,
-                )
-
-                # Add to metrics
-                metrics["loss"] += loss.item()
-                metrics["chosen_reward"] += chosen_rewards.item()
-                metrics["rejected_reward"] += rejected_rewards.item()
-                metrics["reward_accuracy"] += reward_accuracy.item()
-
-                # For component-specific tracking, we need to run parts of the loss calculation again
-                if self.method in ['dpop', 'dpopshift']:
-                    # This requires computing log probabilities again and extracting components
-                    # Similar to what's in compute_dpo_loss_batch but without gradients
-
-                    # Extract log probabilities
-                    policy_chosen_log_probas = self.compute_logprobs(
-                        policy_model(batch["chosen"]),
-                        batch["chosen"],
-                        batch["chosen_mask"]
-                    )
-                    reference_chosen_log_probas = self.compute_logprobs(
-                        reference_model(batch["chosen"]),
-                        batch["chosen"],
-                        batch["chosen_mask"]
-                    )
-
-                    dpop_term = torch.maximum(
-                        torch.zeros_like(reference_chosen_log_probas),
-                        reference_chosen_log_probas - policy_chosen_log_probas
-                    ).mean().item()
-                    metrics["dpop_term"] += dpop_term
-
-            else:
+            if i >= N:
                 break
+
+            # Get basic loss and rewards
+            (loss, chosen_rewards, rejected_rewards, reward_accuracy, 
+             policy_chosen_log_probas, policy_rejected_log_probas,
+             reference_chosen_log_probas, reference_rejected_log_probas) = self.compute_dpo_loss_batch(
+                batch,
+                policy_model,
+                reference_model,
+            )
+
+            # Add to metrics
+            metrics["loss"] += loss.item()
+            metrics["chosen_reward"] += chosen_rewards.item()
+            metrics["rejected_reward"] += rejected_rewards.item()
+            metrics["reward_accuracy"] += reward_accuracy.item()
+
+            # For component-specific tracking, we need to run parts of the loss calculation again
+            if self.method in ['dpop', 'dpopshift']:
+                dpop_term = torch.maximum(
+                    torch.zeros_like(reference_chosen_log_probas),
+                    reference_chosen_log_probas - policy_chosen_log_probas
+                ).mean().item()
+                metrics["dpop_term"] += dpop_term
+                print(f"[diag] dpop_term: {dpop_term:.4f}")
 
         # Calculate averages
         for key in metrics:
-            metrics[key] /= num_batches
+            metrics[key] /= N
 
         return metrics
 
@@ -354,6 +341,21 @@ class DPOLoss(nn.Module):
                     reference_model=reference_model,
                     num_batches=eval_iter
                 )
+
+                batch = next(iter(val_loader))
+                mean_chosen = self.compute_logprobs(
+                    policy_model(batch["chosen"]),
+                    batch["chosen"],
+                    batch["chosen_mask"],
+                    average_log_probs=True
+                ).mean().item()
+                mean_rejected = self.compute_logprobs(
+                    policy_model(batch["rejected"]),
+                    batch["rejected"],
+                    batch["rejected_mask"],
+                    average_log_probs=True
+                ).mean().item()
+                print(f"[diag] mean log-prob/token on VAL → chosen: {mean_chosen:.4f}, rejected: {mean_rejected:.4f}")
 
                 # Unpack the basic metrics
                 res["val_loss"] = val_metrics["loss"]

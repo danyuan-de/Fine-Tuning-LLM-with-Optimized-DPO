@@ -100,7 +100,9 @@ def train_model(
                 # if log_memory and batch_idx % max(1, len(train_loader) // 10) == 0:
                 #     log_memory_snapshot(f"Epoch {epoch+1}, Batch {batch_idx+1}/{len(train_loader)}")
 
-                loss, chosen_rewards, rejected_rewards, reward_accuracy = dpo_loss_fn.compute_dpo_loss_batch(
+                (loss, chosen_rewards, rejected_rewards, reward_accuracy, 
+                 policy_chosen_log_probas, policy_rejected_log_probas,
+                 reference_chosen_log_probas, reference_rejected_log_probas) = dpo_loss_fn.compute_dpo_loss_batch(
                     batch=batch,
                     policy_model=policy_model,
                     reference_model=reference_model
@@ -239,6 +241,8 @@ def train_model(
                             f"Val reward margins {val_reward_margin:.3f},"
                             f" Train reward accuracy {res['train_reward_accuracy']:.3f}, "
                             f"Val reward accuracy {res['val_reward_accuracy']:.3f}, "
+                            f"Policy model chosen logprobs {policy_chosen_log_probas.mean():.3f}, "
+                            f"Policy model rejected logprobs {policy_rejected_log_probas.mean():.3f}"
                         )
 
                         total_batches = len(train_loader)
