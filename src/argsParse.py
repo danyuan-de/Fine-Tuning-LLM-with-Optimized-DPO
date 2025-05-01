@@ -69,6 +69,8 @@ def parse_args():
                         help='Maximum tokens to generate')
 
     # ------------------------------------ Generation parameters ------------------------------------
+    parser.add_argument('--sampling', action='store_true', default=config.EVAL_USE_SAMPLING,
+                        help='Use sampling for evaluation')
     parser.add_argument('--temp', type=float, default=config.temperature,
                         help='Temperature for generation')
     parser.add_argument('--top_p', type=float, default=config.top_p,
@@ -116,6 +118,7 @@ def update_config_from_args(args):
     config.weight_decay = args.weight_decay
     config.allowed_max_length = args.max_length
     config.max_new_tokens = args.max_new_tokens
+    config.EVAL_USE_SAMPLING = args.sampling
     config.temperature = args.temp
     config.top_p = args.top_p
     config.eval_freq = args.eval_freq
@@ -158,6 +161,8 @@ def print_configuration():
         print("\nModel Parameters:")
         print(f"  Max Input Length: {config.allowed_max_length}")
         print(f"  Max New Tokens: {config.max_new_tokens}")
+        print("\nGeneration Parameters:")
+        print(f"  Use Sampling: {config.EVAL_USE_SAMPLING}")
         print(f"  Temperature: {config.temperature}")
         print(f"  Top-p: {config.top_p}")
 
@@ -166,4 +171,5 @@ def print_configuration():
         print(f"Benchmark Dataset: {config.benchmark_dataset}")
         print(f"Number of Benchmark Samples: {config.num_benchmark_samples}")
         print(f"Category is Physics: {config.MMLU_PRO_category_isPhysics}")
+        print(f"use Sampling: {config.EVAL_USE_SAMPLING}")
     print(f"{'='*50}\n")

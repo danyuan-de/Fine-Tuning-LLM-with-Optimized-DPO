@@ -26,7 +26,7 @@ def test_get_output_filename():
     # Then
     assert filename.endswith(".csv"), "Filename should end with .csv"
     assert "Llama-3.1-8B-Instruct_DPO_html_batch_records" in filename, "Prefix should match"
-    assert "lr5.0e-06" in filename, "Learning rate should be embedded"
+    assert "lr5.0e-07" in filename, "Learning rate should be embedded"
     assert "b0.30" in filename, "Beta should be embedded"
 
 def test_log_result_csv():

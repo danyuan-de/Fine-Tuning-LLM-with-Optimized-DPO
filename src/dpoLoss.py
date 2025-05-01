@@ -23,7 +23,7 @@ class DPOLoss(nn.Module):
         if self.method not in valid_methods:
             raise ValueError(f"Method '{method}' not recognized. Must be one of: {valid_methods}")
 
-    def compute_logprobs(self, logits, labels, selection_mask=None):
+    def compute_logprobs(self, logits, labels, selection_mask=None, average_log_probs=False):
         """
         Compute log probabilities.
 
@@ -31,20 +31,24 @@ class DPOLoss(nn.Module):
             logits: Tensor of shape (batch_size, num_tokens, vocab_size)
             labels: Tensor of shape (batch_size, num_tokens)
             selection_mask: Tensor for shape (batch_size, num_tokens)
+            average_log_probs: If True, return the average log probability excluding padding tokens.
+                               Otherwise, return the  sum of the log probabilities of the (non-masked) tokens.
 
         Returns:
-            mean_log_prob: Mean log probability excluding padding tokens.
+            log_prob: Sum or average log probability excluding padding/masked tokens (shape: batch_size,).
+                      Depends on the value of average_log_probs.
         """
 
         if hasattr(logits, "logits"):
-            logits = logits.logits  # (B, L, V)
+            logits = logits.logits  # Shape: (B, L, V), Handle potential wrapper objects
 
+        # --- Label and Logit Alignment ---
         # Labels are the inputs shifted by one
-        labels = labels[:, 1:].clone()
-
+        labels = labels[:, 1:].clone()  # Shape: (B, L-1)
         # Truncate logits to match the labels num_tokens
-        logits = logits[:, :-1, :]  # (B, L-1, V)
+        logits = logits[:, :-1, :]  # Shape: (B, L-1, V)
 
+        # --- Shape and Value Checks ---
         # Ensure logits are of shape (batch_size, num_tokens, vocab_size) and not nan/inf
         if logits.shape[1] != labels.shape[1]:
             print(f"Shape mismatch: logits={logits.shape}, labels={labels.shape}")
@@ -53,6 +57,7 @@ class DPOLoss(nn.Module):
             print("NaN/Inf detected in logits")
             raise ValueError("Logits contain NaN or Inf values.")
 
+        # --- Log Probability Calculation ---
         # token level log probabilities
         log_probs = F.log_softmax(logits, dim=-1)  # (B, L-1, V)
 
@@ -63,14 +68,37 @@ class DPOLoss(nn.Module):
             index=labels.unsqueeze(-1)
         ).squeeze(-1)  # (B, L-1)
 
+        # --- Masking and Calculation (Sum or Average) ---
         if selection_mask is not None:
-            mask = selection_mask[:, 1:].clone()
-            masked = selected_log_probs * mask
-            seq_log_prob = masked.sum(-1)  # (B,)
+            mask = selection_mask[:, 1:].clone()  # Shape: (B, L-1)
+            if mask.shape[1] != selected_log_probs.shape[1]:
+                raise ValueError(f"Mask shape {mask.shape} does not match selected_log_probs shape {selected_log_probs.shape} after slicing.")
+            mask = mask.float()
+            masked_log_probs = selected_log_probs * mask
+            if average_log_probs:
+                mask_sum = mask.sum(dim=-1)  # Calculate Average Log Probability
+                # Add epsilon for numerical stability (prevent division by zero)
+                log_prob = masked_log_probs.sum(dim=-1) / (mask_sum + 1e-8)  # mean
+            else:
+                # Calculate Sum Log Probability (default for DPO)
+                log_prob = masked_log_probs.sum(dim=-1)  # sum
         else:
-            seq_log_prob = selected_log_probs.sum(-1)  # (B,)
+            # No mask provided - assume no padding/masking needed
+            print("Warning: No selection_mask provided to compute_logprobs.")  # Optional warning
+            if average_log_probs:
+                # Calculate Average Log Probability
+                log_prob = selected_log_probs.mean(dim=-1)  # mean
+            else:
+                # Calculate Sum Log Probability
+                log_prob = selected_log_probs.sum(dim=-1)  # sum
 
-        return seq_log_prob
+        # --- Final Value Check ---
+        if torch.isnan(log_prob).any() or torch.isinf(log_prob).any():
+            problematic_idx = torch.where(torch.isinf(log_prob) | torch.isnan(log_prob))
+            print(f"NaN/Inf detected in final log_prob at batch indices: {problematic_idx}")
+            raise ValueError("Final log_prob contains NaN or Inf values.")
+
+        return log_prob
 
     def compute_dpo_loss(
             self,

@@ -49,6 +49,16 @@ def run_benchmark():
         print(f"Error loading model: {e}")
         raise
 
+    # Use sampling or greedy decoding for evaluation
+    if config.EVAL_USE_SAMPLING:
+        print("Using sampling for evaluation")
+        eval_temperature = config.temperature
+        eval_top_p = config.top_p
+    else:
+        print("Using greedy decoding for evaluation")
+        eval_temperature = 0.0
+        eval_top_p = None
+
     records = []
     start_time = time.time()
 
@@ -65,8 +75,8 @@ def run_benchmark():
             out_ids = model.generate(
                 input_ids,
                 max_new_tokens=1024,
-                temperature=config.temperature,
-                top_p=config.top_p,
+                temperature=eval_temperature,
+                top_p=eval_top_p,
                 eos_token_id=tokenizer.eos_token_id
             )
         raw = tokenizer.decode(out_ids[0], skip_special_tokens=False)

@@ -640,6 +640,15 @@ def run_training():
     else:
         stride = None
 
+    if config.EVAL_USE_SAMPLING:
+        print("Using sampling for evaluation")
+        eval_temperature = config.temperature
+        eval_top_p = config.top_p
+    else:
+        print("Using greedy decoding for evaluation")
+        eval_temperature = 0.0
+        eval_top_p = None
+
     try:
         for i, entry in enumerate(test_data):
 
@@ -651,8 +660,8 @@ def run_training():
                 model=ref_model,
                 idx=ref_input_ids.to(device),
                 max_new_tokens=config.max_new_tokens,
-                # temperature=temperature,
-                # top_p=top_p,
+                temperature=eval_temperature,
+                top_p=eval_top_p,
                 eos_token_id=eos_token_id
             )
             ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
@@ -664,8 +673,8 @@ def run_training():
                 model=fine_tuned_model,
                 idx=fine_tuned_model_input_ids.to(device),
                 max_new_tokens=config.max_new_tokens,
-                # temperature=temperature,
-                # top_p=top_p,
+                temperature=eval_temperature,
+                top_p=eval_top_p,
                 eos_token_id=eos_token_id
             )
             fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)

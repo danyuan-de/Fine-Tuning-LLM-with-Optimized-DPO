@@ -61,8 +61,9 @@ learning_rate = 5e-7
 
 weight_decay = 0.01  # Original: 0.001 - Higher regularization to prevent overfitting
 
+EVAL_USE_SAMPLING = False  # Use sampling for evaluation
 temperature = 0.7  # between 0.7 and 1.0, lower values generate more deterministic text
-top_p = 0.8  # between 0.7 and 0.95, higher values generate more diverse text
+top_p = 0.9  # between 0.7 and 0.95, higher values generate more diverse text
 
 # ---------------------------------- Evaluation parameters ----------------------------------
 eval_freq = 5  # Frequency of evaluation during training
