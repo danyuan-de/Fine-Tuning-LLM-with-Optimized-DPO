@@ -11,6 +11,9 @@ build/
 # Ignore environment variables
 .env
 
+# Ignor virtual environment directories
+.venv/
+
 # Ignore OS generated files
 .DS_Store
 Thumbs.db
@@ -22,6 +25,7 @@ Thumbs.db
 
 # Ignore Python compiled files
 __pycache__/
+.pytest_cache/
 *.pyc
 
 # Ignore Python files
@@ -30,7 +34,8 @@ model.py
 validation.py
 testing.py
 test.py
-src/generateoutput.py
+src/batchAnalyzer.py
+
 temp/
 
 wandb/
@@ -45,3 +50,15 @@ questions_answers/
 # DPO_loss-plot.pdf
 # reward_margins-plot.pdf
 env/
+
+results/match*
+results/*plot*
+
+# uv related files
+uvsetup.sh
+uv.lock
+.python-version
+pyproject.toml
+
+benchmark_test.py
+prepOrca.py

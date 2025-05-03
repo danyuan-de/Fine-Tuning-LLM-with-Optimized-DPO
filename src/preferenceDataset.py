@@ -1,5 +1,7 @@
 from torch.utils.data import Dataset
-from src.utility import format_input
+from src.utils import format_input
+
+
 # Prepare a custom PyTorch dataset
 class PreferenceDataset(Dataset):
     def __init__(self, data, tokenizer):
@@ -10,7 +12,7 @@ class PreferenceDataset(Dataset):
         self.encoded_texts = []
         for entry in data:
             prompt = format_input(entry)
-            
+
             # Add EOS token to responses
             chosen_response = entry["chosen"] + self.tokenizer.eos_token
             rejected_response = entry["rejected"] + self.tokenizer.eos_token
@@ -36,7 +38,7 @@ class PreferenceDataset(Dataset):
 
     def __getitem__(self, index):
         item = self.encoded_texts[index]
-        print(f"Index: {index}, Prompt size: {len(item['prompt'])}, Chosen size: {len(item['chosen'])}, Rejected size: {len(item['rejected'])}")
+        # print(f"Index: {index}, Prompt size: {len(item['prompt'])}, Chosen size: {len(item['chosen'])}, Rejected size: {len(item['rejected'])}")
         return item
 
     def __len__(self):
