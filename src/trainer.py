@@ -72,9 +72,9 @@ def train_model(
     accumulated_loss = 0.0  # for tracking loss over multiple batches
 
     log_csv_filename = get_output_filename(
-        method=config.method_name.upper(),
+        method=config.method_name,
         file=config.training_data_filename,
-        model=config.model_name.split('/')[-1],
+        model=config.model_name,
         learning_rate=config.learning_rate,
         beta=config.beta,
         lambda_dpop=getattr(config, "lambda_dpop", None),
@@ -279,9 +279,9 @@ def train_model(
         try:
             # Use utils function to generate standardized filename base
             records_filepath = get_output_filename(
-                method=config.method_name.upper(),
+                method=config.method_name,
                 file=config.training_data_filename,
-                model=config.model_name.split('/')[-1],
+                model=config.model_name,
                 label="batch_records",
                 learning_rate=config.learning_rate,
                 beta=config.beta,

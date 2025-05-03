@@ -6,9 +6,9 @@ benchmark = False  # Set to True to run the benchmark
 train = False  # Set to True to run the training
 
 benchmark_datasets = {
-    1: "Eureka-Lab/PHYBench",
+    1: "cais/mmlu",
     2: "TIGER-Lab/MMLU-Pro",
-    3: "cais/mmlu"
+    3: "Eureka-Lab/PHYBench"
 }
 
 benchmark_dataset = benchmark_datasets[1]  # default dataset for benchmark
@@ -28,7 +28,7 @@ models = {
     "PhyMaster": "gallen881/Llama-3-8B-Physics_Master-GGUF"
 }
 
-model_name = models["1B-Instruct"]  # default model
+model_name = models["8B-Instruct"]  # default model
 
 # ---------------------------------- Directory paths ----------------------------------
 model_workspace_dir = os.path.join(os.path.dirname(__file__), "..", "workspace")
@@ -85,11 +85,11 @@ training_data_files = {
     'html': os.path.join(data_dir, "physics_qa_html.json"),
     'mixed': os.path.join(data_dir, "physics_qa_mixed.json"),
     'chat': os.path.join(data_dir, "physics_qa_chat.json"),
-    'chat_new': os.path.join(data_dir, "physics_qa_chat_new.json"),
-    'preference': os.path.join(data_dir, "instruction-data-with-preference.json")
+    'preference': os.path.join(data_dir, "instruction-data-with-preference.json"),
+    'data': os.path.join(data_dir, "orca_dpo_pairs.json")
 }
 
-training_data_filename = training_data_files['chat']  # default training data
+training_data_filename = training_data_files['data']  # default training data
 
 # ------------------------ Results directory ------------------------
 result_dir = os.path.join(os.path.dirname(__file__), "..", "results")
@@ -97,7 +97,7 @@ result_dir = os.path.join(os.path.dirname(__file__), "..", "results")
 # ------------------------ Prompt template for training and PHYBench ------------------------
 system_prompt_physics = (
     "You are a physics expert assistant. "
-    "Provide a concise reasoning process followed by a clear final answer for the following question."
+    "Provide a brief reasoning process followed by a clear final answer for the following question."
 )
 
 # -------------------------- Prompt template for MMLU-Pro Benchmark --------------------------
