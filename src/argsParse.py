@@ -82,7 +82,7 @@ def parse_args():
 
     # -------------------- Training data parameters - use the mapping from config --------------------
     parser.add_argument('--data', type=str, choices=list(config.training_data_files.keys()),
-                        default='html', help='Data choice (content, structure, html, mixed, preference)')
+                        default='data', help='Data choice (content, structure, chat, html, mixed, preference, data)')
 
     # Optional: Add a direct file path option for more flexibility
     parser.add_argument('--data_file', type=str, default=None,

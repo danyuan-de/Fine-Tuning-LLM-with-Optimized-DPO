@@ -1,0 +1,172 @@
+[
+  {
+    "epoch": 1,
+    "step": 10,
+    "batch_idx": 87,
+    "loss": 0.18810436176136136,
+    "loss_change": -0.20289160823449492,
+    "reward_diff": 1.6385376453399658,
+    "sample_chosen": "Step 1:\\\\Parallel: $C_{\\mathrm{total}} = C_{1} + C_{2} = 1 + 2 = 3\\,\\mu\\mathrm{F}$.\\\\Answer:\\\\$3\\,\\mu\\mathrm{F}$.",
+    "sample_rejected": "Step 1:\\\\Use series formula: $\\frac{1}{C_{\\mathrm{total}}} = \\frac{1}{1} + \\frac{1}{2} = 1.5$. So $C=0.6667\\,\\mu\\mathrm{F}$.\\\\Answer:\\\\$0.667\\,\\mu\\mathrm{F}$."
+  },
+  {
+    "epoch": 1,
+    "step": 14,
+    "batch_idx": 119,
+    "loss": 0.10983534378465265,
+    "loss_change": -0.14439458504784852,
+    "reward_diff": 3.8689846992492676,
+    "sample_chosen": "Step 1:\\\\Conservation of momentum: $m_b v_b + m_{block} v_{block}= (m_b + m_{block}) v_f$.\\\\Step 2:\\\\$m_b=0.010\\,\\mathrm{kg}$, $v_b=400\\,\\mathrm{m/s}$, $m_{block}=0.990\\,\\mathrm{kg}$, $v_{block}=0$.\\\\...",
+    "sample_rejected": "Step 1:\\\\Energy conservation: $\\frac{1}{2}m_b v_b^2= \\frac{1}{2}(m_b+m_{block}) v_f^2$.\\\\Step 2:\\\\Plug in masses: $\\frac{1}{2}(0.010)(400^2)=\\frac{1}{2}(1.0)(v_f^2)$.\\\\$0.5\\times0.010\\times160000= 0.5..."
+  },
+  {
+    "epoch": 1,
+    "step": 19,
+    "batch_idx": 159,
+    "loss": 0.4019126599887386,
+    "loss_change": 0.22546409026836045,
+    "reward_diff": 1.8938093185424805,
+    "sample_chosen": "Step 1:\\\\The work done by an electric field on a charged particle is given by:\\\\$W = q \\int_{\\vec{r}_1}^{\\vec{r}_2} \\vec{E} \\cdot d\\vec{r}$\\\\where $q$ is the charge, $\\vec{E}$ is the electric field, a...",
+    "sample_rejected": "Step 1:\\\\The work done by an electric field on a charged particle is given by:\\\\$W = q \\int_{\\vec{r}_1}^{\\vec{r}_2} \\vec{E} \\cdot d\\vec{r}$\\\\where $q$ is the charge, $\\vec{E}$ is the electric field, a..."
+  },
+  {
+    "epoch": 1,
+    "step": 20,
+    "batch_idx": 167,
+    "loss": 0.1285341326147318,
+    "loss_change": -0.2733785273740068,
+    "reward_diff": 1.0165960788726807,
+    "sample_chosen": "Step 1:\\\\Double $T \\implies$ double $P$.\\\\Answer:\\\\Doubles.",
+    "sample_rejected": "Step 1:\\\\Use $P\\propto \\sqrt{T}$. Doubling $T \\implies$ $P$ up by $\\sqrt{2}$.\\\\Answer:\\\\$\\sqrt{2}$ times."
+  },
+  {
+    "epoch": 1,
+    "step": 21,
+    "batch_idx": 175,
+    "loss": 9.750408204155974,
+    "loss_change": 9.621874071541242,
+    "reward_diff": 3.3714044094085693,
+    "sample_chosen": "Step 1:\\\\de Broglie relation: $\\lambda=\\frac{h}{p}$.\\\\Step 2:\\\\$p=\\frac{h}{\\lambda}$. Use Planck's constant $h=6.626\\times10^{-34}\\,\\mathrm{Js}$.\\\\Step 3:\\\\Substitute: $p=\\frac{6.626\\times10^{-34}}{1....",
+    "sample_rejected": "Step 1:\\\\$\\lambda=\\frac{h}{mv}$. Then set $v=\\lambda$.\\\\Step 2:\\\\$p=mv=m\\times\\lambda= (9.11\\times10^{-31})(1.0\\times10^{-10})=9.11\\times10^{-41}\\,\\mathrm{kg\\cdot m/s}$.\\\\Answer:\\\\$9.11\\times10^{-41}\\..."
+  },
+  {
+    "epoch": 1,
+    "step": 22,
+    "batch_idx": 183,
+    "loss": 0.044776008056942374,
+    "loss_change": -9.705632196099032,
+    "reward_diff": 4.083263635635376,
+    "sample_chosen": "Step 1:\\\\The radius of the circular path is given by $r = \\frac{mv}{qB}$, where $m$ is the mass, $v$ is the speed, $q$ is the charge, and $B$ is the magnetic field strength.\\\\Step 2:\\\\Rearranging to s...",
+    "sample_rejected": "Step 1:\\\\For a charged particle moving in a magnetic field, the force is $F = qvB$ and this provides the centripetal force $F = \\frac{mv^2}{r}$.\\\\Step 2:\\\\Equating these: $qvB = \\frac{mv^2}{r} \\Righta..."
+  },
+  {
+    "epoch": 1,
+    "step": 27,
+    "batch_idx": 223,
+    "loss": 0.04027913088793866,
+    "loss_change": -0.15927159338025376,
+    "reward_diff": 4.764841467142105,
+    "sample_chosen": "Step 1:\\\\Heat needed for melting: $Q=m L_f$.\\\\Step 2:\\\\$m=1.0$, $L_f=3.34\\times10^5\\,\\mathrm{J/kg}$.\\\\Step 3:\\\\$Q=(1.0)(3.34\\times10^5)=3.34\\times10^5\\,\\mathrm{J}$.\\\\Answer:\\\\$3.34\\times10^5\\,\\mathrm{...",
+    "sample_rejected": "Step 1:\\\\Use $Q=\\frac{m}{L_f}$.\\\\Step 2:\\\\$Q=\\frac{1.0}{3.34\\times10^5}=2.99\\times10^{-6}\\,\\mathrm{J}$.\\\\Answer:\\\\$3.0\\times10^{-6}\\,\\mathrm{J}$."
+  },
+  {
+    "epoch": 1,
+    "step": 29,
+    "batch_idx": 239,
+    "loss": 1.1676883170148358,
+    "loss_change": 1.122758703364525,
+    "reward_diff": 5.634336948394775,
+    "sample_chosen": "Step 1:\\\\When a charged particle moves perpendicular to a magnetic field, it experiences a magnetic force that causes it to move in a circular path. The radius of this path is given by:\\\\$r = \\frac{mv...",
+    "sample_rejected": "Step 1:\\\\When a charged particle moves perpendicular to a magnetic field, it experiences a magnetic force that causes it to move in a circular path. The radius of this path is given by:\\\\$r = \\frac{mv..."
+  },
+  {
+    "epoch": 1,
+    "step": 30,
+    "batch_idx": 247,
+    "loss": 0.013290784678247292,
+    "loss_change": -1.1543975323365885,
+    "reward_diff": 3.7938859462738037,
+    "sample_chosen": "Step 1:\\\\For resistor $R$ and capacitor $X_C$ in series, $Z=\\sqrt{R^2 + X_C^2}$.\\\\Step 2:\\\\Substitute $R=200$, $X_C=100$.\\\\$Z=\\sqrt{(200)^2+(100)^2}=\\sqrt{40000+10000}=\\sqrt{50000}=223.6\\,\\Omega$.\\\\An...",
+    "sample_rejected": "Step 1:\\\\Total impedance in series is $Z=R + X_C=200+100=300\\,\\Omega$.\\\\Answer:\\\\$300\\,\\Omega$."
+  },
+  {
+    "epoch": 1,
+    "step": 31,
+    "batch_idx": 255,
+    "loss": 0.48480697232298553,
+    "loss_change": 0.47151618764473824,
+    "reward_diff": 6.0144888162612915,
+    "sample_chosen": "Step 1:\\\\Mass $m = 500\\,\\mathrm{g}$, temperature change $\\Delta T = 75^\\circ\\mathrm{C} - 25^\\circ\\mathrm{C} = 50^\\circ\\mathrm{C}$, and specific heat $c = 0.9\\,\\mathrm{J/g^\\circ C}$.\\\\Step 2:\\\\Heat abs...",
+    "sample_rejected": "Step 1:\\\\Assume the temperature change is $75^\\circ\\mathrm{C}$ instead of the difference ($75^\\circ\\mathrm{C} - 25^\\circ\\mathrm{C}$).\\\\Step 2:\\\\Then $Q = 500 \\times 0.9 \\times 75 = 33,750\\,\\mathrm{J}$..."
+  },
+  {
+    "epoch": 1,
+    "step": 32,
+    "batch_idx": 263,
+    "loss": 0.0775017601554282,
+    "loss_change": -0.40730521216755733,
+    "reward_diff": 6.519298553466797,
+    "sample_chosen": "Step 1:\\\\Energy for capacitor: $E= \\tfrac{1}{2} C V^{2}$.\\\\Step 2:\\\\Substitute $C=3$, $V=2$.\\\\Step 3:\\\\Compute $E= 0.5\\times 3\\times 4= 1.5\\times 4=6\\,\\mathrm{J}$.\\\\Answer:\\\\$6\\,\\mathrm{J}$.",
+    "sample_rejected": "Step 1:\\\\Use $E= C V^{2}= 3\\times 4=12.\\\\Step 2:\\\\Present $12\\,\\mathrm{J}$.\\\\Step 3:\\\\No half factor.\\\\Answer:\\\\$12\\,\\mathrm{J}$."
+  },
+  {
+    "epoch": 1,
+    "step": 37,
+    "batch_idx": 303,
+    "loss": 1.86379204345576,
+    "loss_change": 1.735252058992046,
+    "reward_diff": 6.347678363323212,
+    "sample_chosen": "Step 1:\\\\$\\text{PE lost} = \\text{KE gained} \\implies m g h = \\tfrac{1}{2} m v^{2}$.\\\\Step 2:\\\\$v = \\sqrt{2 g h} = \\sqrt{2\\times 9.8\\times 2} = \\sqrt{39.2} \\approx 6.26\\,\\mathrm{m/s}$.\\\\Answer:\\\\$6.26\\...",
+    "sample_rejected": "Step 1:\\\\Use $v = g h$.\\\\Step 2:\\\\$= 9.8\\times 2 = 19.6\\,\\mathrm{m/s}$.\\\\Answer:\\\\$19.6\\,\\mathrm{m/s}$."
+  },
+  {
+    "epoch": 1,
+    "step": 38,
+    "batch_idx": 311,
+    "loss": 0.03262457789060136,
+    "loss_change": -1.8311674655651586,
+    "reward_diff": 7.010865926742554,
+    "sample_chosen": "Step 1:\\\\Formula: $p= m v$.\\\\Step 2:\\\\Substitute $m=5$, $v=3$.\\\\Step 3:\\\\Compute $p=5\\times 3= 15\\,\\mathrm{kg\\cdot m/s}$.\\\\Answer:\\\\$15$.",
+    "sample_rejected": "Step 1:\\\\Compute $p= 0.5 m v^{2}=0.5\\times 5\\times 9=22.5.\\\\Step 2:\\\\Present $22.5$.\\\\Step 3:\\\\Confuse with KE.\\\\Answer:\\\\$22.5$."
+  },
+  {
+    "epoch": 1,
+    "step": 39,
+    "batch_idx": 319,
+    "loss": 0.1593981449259445,
+    "loss_change": 0.12677356703534315,
+    "reward_diff": 3.621478319168091,
+    "sample_chosen": "Step 1:\\\\Use $v^2 = 2 g h = 2 \\times 9.8 \\times 20 = 392$.\\\\Step 2:\\\\$v = \\sqrt{392} \\approx 19.8\\,\\mathrm{m/s}$.\\\\Answer:\\\\$19.8\\,\\mathrm{m/s}$.",
+    "sample_rejected": "Step 1:\\\\Use $v^2 = 2 g h$ with $g$ taken as $10\\,\\mathrm{m/s^2}$: $v^2 = 2 \\times 10 \\times 20 = 400$.\\\\Step 2:\\\\$v = \\sqrt{400} = 20\\,\\mathrm{m/s}$.\\\\Answer:\\\\$20\\,\\mathrm{m/s}$."
+  },
+  {
+    "epoch": 1,
+    "step": 41,
+    "batch_idx": 335,
+    "loss": 0.061750936962198466,
+    "loss_change": -0.13352258002851158,
+    "reward_diff": 3.08620023727417,
+    "sample_chosen": "Step 1:\\\\Momentum $p= m v$.\\\\Step 2:\\\\Substitute $m=0.8$, $v=3.5$.\\\\Step 3:\\\\Compute $p= 0.8\\times 3.5= 2.8\\,\\mathrm{kg\\cdot m/s}$.\\\\Answer:\\\\$2.8$.",
+    "sample_rejected": "Step 1:\\\\Compute $p= 0.5 m v^{2}= 0.5\\times 0.8\\times(3.5)^{2}= 0.4\\times12.25= 4.9.\\\\Step 2:\\\\Mix with KE formula.\\\\Step 3:\\\\Present $4.9$.\\\\Answer:\\\\$4.9$."
+  },
+  {
+    "epoch": 1,
+    "step": 42,
+    "batch_idx": 343,
+    "loss": 4.676844743662514,
+    "loss_change": 4.615093806700315,
+    "reward_diff": 2.500978469848633,
+    "sample_chosen": "Step 1:\\\\The wavelength is related to speed and frequency by $\\lambda = \\frac{v}{f}$.\\\\Step 2:\\\\$\\lambda = \\frac{300\\,\\mathrm{m/s}}{150\\,\\mathrm{Hz}} = 2\\,\\mathrm{m}$.\\\\Answer:\\\\$2\\,\\mathrm{m}$.",
+    "sample_rejected": "Step 1:\\\\$\\lambda = v \\times f = 300 \\times 150 = 45000\\,\\mathrm{m}$.\\\\Answer:\\\\$45000\\,\\mathrm{m}$."
+  },
+  {
+    "epoch": 1,
+    "step": 43,
+    "batch_idx": 351,
+    "loss": 0.07857593649532646,
+    "loss_change": -4.598268807167187,
+    "reward_diff": 1.6509180068969727,
+    "sample_chosen": "Step 1:\\\\The terminal velocity is reached when the net force on the object is zero, i.e., when the weight of the object is balanced by the air resistance force.\\\\Step 2:\\\\The weight of the ball is $W ...",
+    "sample_rejected": "Step 1:\\\\The terminal velocity is reached when the drag force equals the weight force.\\\\Step 2:\\\\The weight force is $F_g = mg = 0.5 \\times 9.8 = 4.9 \\, \\mathrm{N}$.\\\\Step 3:\\\\The drag force is $F_d =..."
+  }
+]

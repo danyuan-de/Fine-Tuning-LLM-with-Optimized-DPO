@@ -15,7 +15,7 @@ def _get_prefix(method: str, file: str, model: str = None, label: str = None) ->
     if model:
         parts.append(model.split('/')[-1])
     parts.append(method.upper())
-    training_dtype = next((dtype for dtype in ["content", "mixed", "html", "chat", "structure", "preference"] if dtype in file), "unknown")
+    training_dtype = next((dtype for dtype in ["content", "mixed", "html", "chat", "structure", "preference", "data"] if dtype in file), "unknown")
     parts.append(training_dtype)
     if label:
         parts.append(label)
@@ -142,6 +142,18 @@ def format_input(entry):
     HEADER_USER = "<|start_header_id|>user<|end_header_id|>\n"
     HEADER_ASSISTANT = "<|start_header_id|>assistant<|end_header_id|>\n"
     EOT = "<|eot_id|>"
+
+    # ── Orca DPO format ──
+    if entry.get("system") is not None and entry.get("question") is not None:
+        prompt = entry["system"].strip()
+        question = entry.get("question").strip()
+        return (
+            f"{HEADER_SYSTEM}"
+            f"{prompt}{EOT}"
+            f"{HEADER_USER}"
+            f"Question: {question}{EOT}"
+            f"{HEADER_ASSISTANT}"
+        )
 
     # instruction-style examples
     if entry.get("instruction"):
