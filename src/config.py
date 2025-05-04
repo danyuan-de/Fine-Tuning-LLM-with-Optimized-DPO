@@ -53,7 +53,7 @@ average_log_probs = False
 
 # ---------------------------------- DPO parameters ----------------------------------
 beta = 0.3  # Temperature parameter controlling the sharpness of the decision boundary in DPO loss
-lambda_dpop = 50.0  # Weight for DPOP term to prevent reduction of preferred completion likelihood
+lambda_dpop = 250.0  # Weight for DPOP term to prevent reduction of preferred completion likelihood
 lambda_shift = 0.9  # Weight for the shift term in DPO loss
 
 # ---------------------------------- Model parameters ----------------------------------

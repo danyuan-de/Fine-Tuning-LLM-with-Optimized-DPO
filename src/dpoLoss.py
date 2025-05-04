@@ -223,7 +223,9 @@ class DPOLoss(nn.Module):
             config.average_log_probs
         )
         print("ref chosen mean:", ref_chosen_log_probs.mean().item())
-        print("model chosen mean:", policy_chosen_log_probs.mean().item())
+        print("pol chosen mean:", policy_chosen_log_probs.mean().item())
+        print("ref rejected mean:", ref_rejected_log_probs.mean().item())
+        print("pol rejected mean:", policy_rejected_log_probs.mean().item())
 
         # Compute the DPO loss
         loss, chosen_rewards, rejected_rewards, reward_accuracy = self.compute_dpo_loss(

@@ -62,3 +62,4 @@ pyproject.toml
 
 benchmark_test.py
 prepOrca.py
+test_benchmark.py
