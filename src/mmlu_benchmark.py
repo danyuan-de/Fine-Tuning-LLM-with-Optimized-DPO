@@ -1,87 +1,190 @@
+import os
 from datasets import load_dataset
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 import torch
 import numpy as np
 import src.config as config
-
-# MMLU selected subjects
-selected_subjects = [
-    "high_school_physics",
-    "college_physics",
-    "econometrics",
-    "global_facts",
-    "formal_logic",
-    "business_ethics"
-]
-
-ori_model_path = config.model_name
-ori_tokenizer = AutoTokenizer.from_pretrained(ori_model_path)
-ori_model = AutoModelForCausalLM.from_pretrained(ori_model_path)
-ori_model.eval()
-
-ft_model_path = config.fine_tuned_model_path
-ft_tokenizer = AutoTokenizer.from_pretrained(ft_model_path)
-ft_model = AutoModelForCausalLM.from_pretrained(ft_model_path)
-ft_model.eval()
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-ori_model.to(device)
-ft_model.to(device)
+import json
 
 
-def preprocess(example):
-    question = example["question"]
-    choices = example["choices"]
-    inputs = [question + " " + choice for choice in choices]
-    ori_encoding = ori_tokenizer(inputs, padding=True, truncation=True, return_tensors="pt")
-    ft_encoding = ft_tokenizer(inputs, padding=True, truncation=True, return_tensors="pt")
-    return ori_encoding, ft_encoding
+def load_model(model_path, device):
+    tokenizer = AutoTokenizer.from_pretrained(model_path)
+    model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.float16)
+    model.eval().to(device)
+
+    model.config.do_sample = False  # greedy
+    model.config.temperature = 1.0
+    model.config.top_p = 1.0
+    return tokenizer, model
 
 
-def evaluate_subject(subject):
+# -------- PROMPT & SCORING UTILS --------
+def format_mmlu_prompt(subject: str, question: str, choices: list[str]) -> str:
+    opts = "\n".join(f"{chr(65+i)}) {c.strip()}" for i, c in enumerate(choices))
+    return (
+        f"You are an expert in {subject}.\n\n"
+        f"Multiple‐choice question:\n{question.strip()}\n\n"
+        f"{opts}\n\n"
+        "Please choose exactly one option and output ONLY the letter (A, B, C, …) of your answer."
+    )
+
+
+def score_choices(model, tokenizer, question: str, choices: list[str], device) -> list[float]:
+    """
+    Score the choices using the model.
+    Args:
+        model: The model to use for scoring.
+        tokenizer: The tokenizer to use for encoding the input.
+        question: The question to ask.
+        choices: The list of choices to score.
+    Returns:
+        A list of scores for each choice.
+    """
+    scores = []
+    for choice in choices:
+        text = question + " " + choice
+        encoded = tokenizer(text, return_tensors="pt").to(device)
+        with torch.no_grad():
+            outputs = model(**encoded, labels=encoded["input_ids"])
+            # outputs.loss is the average negative log likelihood, equivalent to -mean(log p(x_t | x_<t))
+            # Multiply it by the sequence length to get the total negative log likelihood:
+            neg_log_likelihood = outputs.loss * encoded["input_ids"].size(1)
+        scores.append(-neg_log_likelihood.item())  # higher is better
+    return scores
+
+
+def evaluate_subject(subject, ori_tokenizer, ori_model, ft_tokenizer, ft_model, device):
     print(f"Evaluating subject: {subject}")
-    dataset = load_dataset(config.benchmark_dataset, subject, split="test")
+    ds = load_dataset(BENCHMARK, subject, split="test")
+    rows = []
 
-    correct = 0
+    ori_correct = 0
+    ft_correct = 0
     total = 0
 
-    for example in dataset:
-        ori_inputs, ft_inputs = preprocess(example)
-        ori_input_ids = ori_inputs["input_ids"].view(1, -1, ori_inputs["input_ids"].size(-1)).to(device)
-        ft_input_ids = ft_inputs["input_ids"].view(1, -1, ft_inputs["input_ids"].size(-1)).to(device)
-        ori_attention_mask = ori_inputs["attention_mask"].view(1, -1, ori_inputs["attention_mask"].size(-1)).to(device)
-        attention_mask = ft_inputs["attention_mask"].view(1, -1, ft_inputs["attention_mask"].size(-1)).to(device)
+    for ex in ds:
+        question = ex["question"]
+        choices = ex["choices"]
+        answer = ex["answer"]  # Assuming this is a 0-based index
 
+        # Score the choices using both models
+        ori_scores = score_choices(ori_model, ori_tokenizer, question, choices, device)
+        ft_scores = score_choices(ft_model, ft_tokenizer, question, choices, device)
+
+        # Take the higher score for each model
+        ori_pred = int(np.argmax(ori_scores))
+        ft_pred = int(np.argmax(ft_scores))
+
+        # Single token generation
+        prompt = format_mmlu_prompt(subject, question, choices)
+
+        # original
+        inp_ori = ori_tokenizer(prompt, return_tensors="pt").to(device)
         with torch.no_grad():
-            ori_outputs = ori_model(input_ids=ori_input_ids, attention_mask=ori_attention_mask)
-            ori_logits = ori_outputs.logits
-            ft_outputs = ft_model(input_ids=ft_input_ids, attention_mask=attention_mask)
-            ft_logits = ft_outputs.logits
+            out_ori = ori_model.generate(
+                **inp_ori,
+                max_new_tokens=1,
+                do_sample=False
+            )
+        ori_letter = ori_tokenizer.decode(
+            out_ori[0, inp_ori.input_ids.shape[-1]:]
+        ).strip()
 
-        ori_prediction = torch.softmax(ori_logits, dim=-1)
-        ft_prediction = torch.softmax(ft_logits, dim=-1)
-        if ori_prediction == example["answer"]:
+        # fine‐tuned
+        inp_ft = ft_tokenizer(prompt, return_tensors="pt").to(device)
+        with torch.no_grad():
+            out_ft = ft_model.generate(
+                **inp_ft,
+                max_new_tokens=1,
+                do_sample=False
+            )
+        ft_letter = ft_tokenizer.decode(
+            out_ft[0, inp_ft.input_ids.shape[-1]:]
+        ).strip()
+
+        if ori_pred == answer:
             ori_correct += 1
-        if ft_prediction == example["answer"]:
+
+        if ft_pred == answer:
             ft_correct += 1
         total += 1
 
-    ori_accuracy = ori_correct / total
-    ft_accuracy = ft_correct / total
-    print(f"{subject}: Original Model Accuracy: {ori_accuracy:.2%}")
-    print(f"{subject}: Fine-tuned Model Accuracy: {ft_accuracy:.2%}")
-    return subject, ori_accuracy, ft_accuracy
+        # build row dict
+        rows.append({
+            "question": question,
+            "answer_idx": answer,
+            "ori_pred_idx": ori_pred,
+            "ft_pred_idx": ft_pred,
+            "ori_pred_letter": ori_letter,
+            "ft_pred_letter": ft_letter,
+            "ori_scores": {chr(65 + i): s for i, s in enumerate(ori_scores)},
+            "ft_scores": {chr(65 + i): s for i, s in enumerate(ft_scores)},
+        })
+
+    ori_acc = ori_correct / total
+    ft_acc = ft_correct / total
+    print(f"{subject}: Original Model Accuracy: {ori_acc:.2%}")
+    print(f"{subject}: Fine-tuned Model Accuracy: {ft_acc:.2%}")
+    return {
+        "examples": rows,
+        "ori_acc": ori_acc,
+        "ft_acc": ft_acc
+    }
 
 
-# Run evaluation for each subject
-results = {}
-for subject in selected_subjects:
-    subject, ori_acc, ft_acc = evaluate_subject(subject)
-    results[subject]["original"] = ori_acc
-    results[subject]["fine_tuned"] = ft_acc
+if __name__ == "__main__":
+    BENCHMARK = "cais/mmlu"
+    SUBJECTS = [
+        "high_school_physics",
+        "college_physics",
+        "econometrics",
+        "global_facts",
+        "formal_logic",
+        "business_ethics",
+    ]
 
-# print the summary of results
-# store the results in a json file
-print("\n=== Summary ===")
-for k, v in results.items():
-    print(f"{k}: {v:.2%}")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    print("Loading models...")
+    print(f"The original model is: {config.model_name}")
+    # Load the original and fine-tuned models
+    ori_tokenizer, ori_model = load_model(config.model_name, device)
+    # Load the fine-tuned model
+    ft_tokenizer, ft_model = load_model(config.fine_tuned_model_path, device)
+
+    # # Single‐token, greedy gen config
+    # ori_gen_cfg = GenerationConfig(
+    #     max_new_tokens=1,
+    #     do_sample=False,
+    #     temperature=1.0,
+    #     top_p=1.0,
+    #     top_k=1,
+    #     bos_token_id=ori_tokenizer.bos_token_id,
+    #     pad_token_id=ori_tokenizer.pad_token_id,
+    #     eos_token_id=ori_tokenizer.eos_token_id
+    # )
+    # ft_gen_cfg = GenerationConfig(
+    #     max_new_tokens=1,
+    #     do_sample=False,
+    #     temperature=1.0,
+    #     top_p=1.0,
+    #     top_k=1,
+    #     bos_token_id=ft_tokenizer.bos_token_id,
+    #     pad_token_id=ft_tokenizer.pad_token_id,
+    #     eos_token_id=ft_tokenizer.eos_token_id
+    # )
+
+    all_results = {}
+    for subj in SUBJECTS:
+        print(f"Evaluating {subj} …")
+        all_results[subj] = evaluate_subject(
+            subj,
+            ori_tokenizer, ori_model,
+            ft_tokenizer, ft_model,
+            device
+        )
+
+    out_path = os.path.join(config.result_dir, "mmlu_all_results.json")
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(all_results, f, indent=2, ensure_ascii=False)
+    print(f"\nAll results saved to: {out_path}")
