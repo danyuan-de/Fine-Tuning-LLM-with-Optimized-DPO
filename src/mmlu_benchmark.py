@@ -1,6 +1,6 @@
 import os
 from datasets import load_dataset
-from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 import numpy as np
 import src.config as config

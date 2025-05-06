@@ -25,7 +25,9 @@ from src.utils import (
     plot_losses,
     calculate_perplexity,
     log_result_csv,
-    log_memory_snapshot
+    log_memory_snapshot,
+    compute_avg_ppl_table,
+    log_ppl_csv
 )
 
 
@@ -477,6 +479,14 @@ def run_training():
         drop_last=False,
     )
 
+    validation_ppl_loader = DataLoader(
+        val_dataset,
+        batch_size=config.val_ppl_batch_size,
+        collate_fn=customized_collate_fn,
+        drop_last=False,
+        shuffle=False
+    )
+
     # print("Train loader:")
     # for batch in train_loader:
     #     print(
@@ -485,31 +495,59 @@ def run_training():
     #     )
     # print("\n")
 
-    # Evaluate initial state
-    print("\nEvaluating initial state...")
     # log_memory_snapshot("Before initial evaluation")
 
-    # Before training loop. If chosen and rejected responses are too similar, the preference margin won’t grow.
-    batch = next(iter(train_loader))
-    print("Chosen sample:", tokenizer.decode(batch["chosen"][0].tolist()))
-    print("Rejected sample:", tokenizer.decode(batch["rejected"][0].tolist()))
+    # Evaluate initial state
+    # print("\nEvaluating initial state...")
+    # res = dpo_loss_fn.evaluate_dpo_loss_loader(
+    #     policy_model=model,
+    #     reference_model=ref_model,
+    #     train_loader=train_loader,
+    #     val_loader=val_loader,
+    #     eval_iter=5
+    # )
+    # print("Training loss:", res["train_loss"])
+    # print("Validation loss:", res["val_loss"])
 
-    res = dpo_loss_fn.evaluate_dpo_loss_loader(
-        policy_model=model,
-        reference_model=ref_model,
-        train_loader=train_loader,
-        val_loader=val_loader,
-        eval_iter=5
-    )
+    # print("Train reward margin:", res["train_chosen_reward"] - res["train_rejected_reward"])
+    # print("Val reward margin:", res["val_chosen_reward"] - res["val_rejected_reward"])
 
     # log_memory_snapshot("After initial evaluation")
 
-    # Before starting the training, print the initail losses and rewards:
-    print("Training loss:", res["train_loss"])
-    print("Validation loss:", res["val_loss"])
+    # ---- Log the reference model's perplexity on the chosen samples, rejected samples, self-generated samples ----
+    ppl_filename = get_output_filename(
+        method=config.method_name,
+        file=config.training_data_filename,
+        model=config.model_name,
+        label="ppl",
+        learning_rate=config.learning_rate,
+        beta=config.beta,
+        lambda_dpop=getattr(config, "lambda_dpop", None),
+        lambda_shift=getattr(config, "lambda_shift", None),
+        typename="csv"
+    )
 
-    print("Train reward margin:", res["train_chosen_reward"] - res["train_rejected_reward"])
-    print("Val reward margin:", res["val_chosen_reward"] - res["val_rejected_reward"])
+    print(f"\nPerplexity log file path: {ppl_filename}")
+    print("Computing reference model perplexity...\n")
+    ppl_start_time = time.time()
+
+    ref_ppl = compute_avg_ppl_table(ref_model, validation_ppl_loader, tokenizer, device)
+    log_ppl_csv(
+        filename=ppl_filename,
+        model_name="reference",
+        chosen_ppl=ref_ppl["chosen"],
+        rejected_ppl=ref_ppl["rejected"],
+        self_ppl=ref_ppl["self"]
+    )
+
+    ppl_end_time = time.time()
+    ppl_execution_time = (ppl_end_time - ppl_start_time) / 60
+    print(f"Reference model PPL computed and saved in {ppl_execution_time:.2f} minutes (in {str(timedelta(seconds=ppl_end_time - ppl_start_time))})")
+
+    print("\n[REF] PPL")
+    print(f"chosen:{ref_ppl['chosen']:.2f}  rejected:{ref_ppl['rejected']:.2f}  self‑gen:{ref_ppl['self']:.2f}\n")
+
+    # Before starting the training, print the initail losses and rewards:
     print("=" * 50)
     print("\nStarting training...")
     print("=" * 50)
@@ -563,30 +601,46 @@ def run_training():
     print(f"Validation reward accuracy: {val_acc:.3f}")
     print(f"Tokens seen: {tracking['tokens_seen'][-1]}")
 
-    print("\nAnalyzing batch records for significant loss changes:")
-    if "batch_records" in tracking and tracking["batch_records"]:
-        # Find batches with the largest loss increases and decreases
-        sorted_records = sorted(tracking["batch_records"], key=lambda x: x["loss_change"])
+    # print("\nAnalyzing batch records for significant loss changes:")
+    # if "batch_records" in tracking and tracking["batch_records"]:
+    #     # Find batches with the largest loss increases and decreases
+    #     sorted_records = sorted(tracking["batch_records"], key=lambda x: x["loss_change"])
 
-        # Top 3 decreases (improvements)
-        print("\nTop 3 Loss Decreases (Improvements):")
-        for record in sorted_records[:3]:
-            print(f"Batch {record['batch_idx']} - Loss change: {record['loss_change']:.4f}")
-            print(f"Reward difference: {record['reward_diff']:.4f}")
+    #     # Top 3 decreases (improvements)
+    #     print("\nTop 3 Loss Decreases (Improvements):")
+    #     for record in sorted_records[:3]:
+    #         print(f"Batch {record['batch_idx']} - Loss change: {record['loss_change']:.4f}")
+    #         print(f"Reward difference: {record['reward_diff']:.4f}")
 
-        # Top 3 increases (deteriorations)
-        print("\nTop 3 Loss Increases (Deteriorations):")
-        for record in sorted_records[-3:]:
-            print(f"Batch {record['batch_idx']} - Loss change: {record['loss_change']:.4f}")
-            print(f"Reward difference: {record['reward_diff']:.4f}")
-    else:
-        print("No batch records found in tracking data")
+    #     # Top 3 increases (deteriorations)
+    #     print("\nTop 3 Loss Increases (Deteriorations):")
+    #     for record in sorted_records[-3:]:
+    #         print(f"Batch {record['batch_idx']} - Loss change: {record['loss_change']:.4f}")
+    #         print(f"Reward difference: {record['reward_diff']:.4f}")
+    # else:
+    #     print("No batch records found in tracking data")
 
     # Save the model and tokenizer
     save_path = config.fine_tuned_model_path
     policy_model.save_pretrained(save_path)
     tokenizer.save_pretrained(save_path)
     print(f"Model and tokenizer saved to {save_path}")
+
+    print("\nComputing policy model perplexity...\n")
+    ppl_start_time = time.time()
+    pol_ppl = compute_avg_ppl_table(policy_model, validation_ppl_loader, tokenizer, device)
+    log_ppl_csv(
+        filename=ppl_filename,
+        model_name="policy",
+        chosen_ppl=pol_ppl["chosen"],
+        rejected_ppl=pol_ppl["rejected"],
+        self_ppl=pol_ppl["self"]
+    )
+    ppl_end_time = time.time()
+    ppl_execution_time = (ppl_end_time - ppl_start_time) / 60
+    print(f"Policy model PPL computed and saved in {ppl_execution_time:.2f} minutes (in {str(timedelta(seconds=ppl_end_time - ppl_start_time))})")
+    print("\n[POL] PPL")
+    print(f"chosen:{pol_ppl['chosen']:.2f}  rejected:{pol_ppl['rejected']:.2f}  self‑gen:{pol_ppl['self']:.2f}\n")
 
     # Plot the losses
     epochs_tensor = torch.linspace(0, config.num_epochs, len(tracking["train_losses"]))
@@ -661,6 +715,7 @@ def run_training():
         eval_top_p = None
 
     try:
+        test_start_time = time.time()
         for i, entry in enumerate(test_data):
 
             input_text = format_input(entry)
@@ -735,6 +790,10 @@ def run_training():
                 "policy_perplexity": ft_perplexity
             }
             test_results.append(sample)
+
+        test_end_time = time.time()
+        test_execution_time = (test_end_time - test_start_time) / 60
+        print(f"Test evaluation completed in {test_execution_time:.2f} minutes (in {str(timedelta(seconds=test_end_time - test_start_time))})")
 
     except KeyboardInterrupt:
         print("\nInterrupted! Saving partial results...")

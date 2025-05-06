@@ -5,6 +5,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import math
 import csv
+from tqdm import tqdm
 import src.config as config
 
 
@@ -576,6 +577,129 @@ def calculate_perplexity(
 
     # Return single value or list based on input
     return perplexities if len(perplexities) > 1 else perplexities[0]
+
+
+# ------------------------------- Logging Perplexity to CSV -------------------------------
+def log_ppl_csv(filename: str, *, model_name: str,
+                chosen_ppl: float, rejected_ppl: float, self_ppl: float):
+    headers = ["model", "chosen_ppl", "rejected_ppl", "self_ppl"]
+    write_header = not os.path.exists(filename)
+    with open(filename, "a", newline="") as f:
+        w = csv.writer(f)
+        if write_header:
+            w.writerow(headers)
+        w.writerow([model_name, chosen_ppl, rejected_ppl, self_ppl])
+
+
+def response_ppl(
+    model, tokenizer,
+    prompt: str,
+    response: str,
+    device=None,
+    max_length=None
+) -> float:
+    """
+    Compute perplexity *only* over the response tokens, conditioning on the prompt.
+
+    Steps:
+      1. Tokenize prompt+response+EOS into input_ids.
+      2. Clone input_ids to labels, then set labels[:, :prompt_len] = -100
+         so that prompt tokens are ignored in loss.
+      3. Call model(input_ids=input_ids, labels=labels) under torch.no_grad();
+         HF will return outputs.loss = mean NLL over response tokens.
+      4. Return exp(loss) as the perplexity.
+    """
+    device = device or model.device
+    eos = tokenizer.eos_token
+
+    # 1) Tokenize the full sequence
+    enc = tokenizer(
+        prompt + response + eos,
+        return_tensors="pt",
+        truncation=True,
+        max_length=max_length or tokenizer.model_max_length,
+        padding=False
+    ).to(device)
+    input_ids = enc.input_ids  # shape (1, L)
+
+    # 2) Build labels that ignore the prompt portion
+    prompt_ids = tokenizer(prompt, add_special_tokens=False).input_ids
+    prompt_len = len(prompt_ids)
+
+    labels = input_ids.clone()
+    labels[:, :prompt_len] = -100  # ignore prompt tokens
+
+    # 3) Forward pass with labels → outputs.loss is mean NLL over response tokens
+    with torch.no_grad():
+        outputs = model(input_ids=input_ids, labels=labels)
+        loss = outputs.loss  # already averaged over only the response tokens
+
+    # 4) Convert to perplexity
+    ppl = torch.exp(loss).item()
+    return ppl
+
+
+def safe_generate(prompt: str,
+                  model,
+                  tokenizer,
+                  *,
+                  device,
+                  max_new_tokens: int = 64):
+    """
+    Greedy, no-warning version of model.generate.
+    Returns decoded text (including EOS).
+    """
+    enc = tokenizer(prompt,
+                    return_tensors="pt",
+                    truncation=True,
+                    padding=False).to(device)
+
+    gen_ids = model.generate(
+        enc.input_ids,
+        attention_mask=enc.attention_mask,
+        max_new_tokens=max_new_tokens,
+        do_sample=False,          # greedy
+        top_k=1,                  # enforce greedy
+        pad_token_id=tokenizer.eos_token_id,
+        eos_token_id=tokenizer.eos_token_id,
+    )
+    return tokenizer.decode(gen_ids[0], skip_special_tokens=False)
+
+
+# ------------------------------- Average PPL Table Calculation -------------------------------
+def compute_avg_ppl_table(model, data_loader, tokenizer, device,
+                          max_items=None, max_length=None):
+    sums = {"chosen": 0.0, "rejected": 0.0, "self": 0.0}
+    cnt = 0
+
+    model.eval()
+    with torch.no_grad():
+        for batch in tqdm(data_loader, desc="PPL eval"):
+            for i in range(batch["chosen"].size(0)):
+                prompt = tokenizer.decode(batch["prompt"][i])
+                chosen_t = tokenizer.decode(batch["chosen"][i])
+                reject_t = tokenizer.decode(batch["rejected"][i])
+
+                # 1) chosen / rejected PPL
+                pc = response_ppl(model, tokenizer, prompt, chosen_t, device=device, max_length=max_length)
+                pr = response_ppl(model, tokenizer, prompt, reject_t, device=device, max_length=max_length)
+                sums["chosen"] += pc
+                sums["rejected"] += pr
+
+                # 2) self-generation PPL
+                full = safe_generate(prompt, model, tokenizer, device=device, max_new_tokens=config.max_new_tokens)
+                model_resp = postprocess_response(full)
+                ps = response_ppl(model, tokenizer, prompt, model_resp, device=device, max_length=max_length)
+                sums["self"] += ps
+
+                cnt += 1
+                if max_items and cnt >= max_items:
+                    break
+
+    model.train()
+    for k in sums:
+        sums[k] /= max(cnt, 1)
+    return sums
 
 
 # ------------------------------- GPU Memory Management -------------------------------

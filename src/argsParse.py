@@ -35,7 +35,7 @@ def parse_args():
     # --------------------- Model selection - directly select the model name ---------------------
     model_choices = list(config.models.keys())
     model_help = "Model choice: " + ", ".join(model_choices)
-    parser.add_argument('--model', type=str, choices=model_choices, default="1B-Instruct",
+    parser.add_argument('--model', type=str, choices=model_choices, default="8B-Instruct",
                         help=model_help)
 
     # -------------------- Method selection - directly select the method name --------------------

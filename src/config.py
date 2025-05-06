@@ -60,6 +60,9 @@ lambda_shift = 0.75  # Weight for the shift term in DPO loss
 allowed_max_length = 4096  # maximum number of tokens in a sequence for training input data
 max_new_tokens = 512  # maximum number of tokens to generate
 
+# --------------------------------- Validation perplexity ---------------------------------
+val_ppl_batch_size = 16  # Batch size for validation perplexity
+
 # --------------------------------- Training parameters ---------------------------------
 batch_size = 2  # Process the number of items at once
 gradient_accumulation_steps = 8  # Number of steps to accumulate gradients before stepping
@@ -89,7 +92,7 @@ training_data_files = {
     'data': os.path.join(data_dir, "orca_dpo_pairs.json")
 }
 
-training_data_filename = training_data_files['data']  # default training data
+training_data_filename = training_data_files['content']  # default training data
 
 # ------------------------ Results directory ------------------------
 result_dir = os.path.join(os.path.dirname(__file__), "..", "results")
