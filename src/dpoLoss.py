@@ -222,10 +222,10 @@ class DPOLoss(nn.Module):
             batch["rejected_mask"],
             config.average_log_probs
         )
-        print("ref chosen mean:", ref_chosen_log_probs.mean().item())
         print("pol chosen mean:", policy_chosen_log_probs.mean().item())
-        print("ref rejected mean:", ref_rejected_log_probs.mean().item())
         print("pol rejected mean:", policy_rejected_log_probs.mean().item())
+        print("ref chosen mean:", ref_chosen_log_probs.mean().item())
+        print("ref rejected mean:", ref_rejected_log_probs.mean().item())
 
         # Compute the DPO loss
         loss, chosen_rewards, rejected_rewards, reward_accuracy = self.compute_dpo_loss(
@@ -287,7 +287,7 @@ class DPOLoss(nn.Module):
                     reference_chosen_log_probs - policy_chosen_log_probs
                 ).mean().item()
                 metrics["dpop_term"] += dpop_term
-                print(f"[diag] dpop_term: {dpop_term:.4f}")
+                print(f"[diag] dpop_term: {dpop_term:.8f}")
 
         # Calculate averages
         for key in metrics:
