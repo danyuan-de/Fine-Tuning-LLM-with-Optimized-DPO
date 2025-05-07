@@ -6,6 +6,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import math
 import csv
 from tqdm import tqdm
+from typing import Dict
 import src.config as config
 
 
@@ -591,115 +592,130 @@ def log_ppl_csv(filename: str, *, model_name: str,
         w.writerow([model_name, chosen_ppl, rejected_ppl, self_ppl])
 
 
-def response_ppl(
-    model, tokenizer,
-    prompt: str,
-    response: str,
-    device=None,
-    max_length=None
-) -> float:
-    """
-    Compute perplexity *only* over the response tokens, conditioning on the prompt.
+# # ------------------------------- Get Choice Perplexities -------------------------------
+# def get_choice_perplexities(
+#     model, tokenizer,
+#     prompt: str,            # formatted prompt (with system/user headers)
+#     chosen_resp: str,       # cleaned chosen response (no EOT)
+#     rejected_resp: str,     # cleaned rejected response (no EOT)
+#     device=None,
+#     max_length=None,
+#     stride=None,
+# ):
+#     """
+#     Args:
+#         model: The model to use for scoring.
+#         tokenizer: The tokenizer to use for encoding the input.
+#         prompt: The prompt to ask.
+#         chosen_resp: The chosen response.
+#         rejected_resp: The rejected response.
+#         device: Device to run the model on (default is model's device).
+#         max_length: Maximum sequence length for truncation (default is model's max position embeddings).
+#         stride: Stride for splitting long sequences (default is None, no splitting).
+    
+#     Returns:
+#         (ppl_chosen, ppl_rejected, ppl_model_out)
+#     Calculate the perplexity of the chosen and rejected responses, as well as the model's own output.
+#     """
+#     device = device or model.device
+#     model.eval()
+#     # 1) chosen / rejected
+#     texts = [
+#         f"{prompt}{chosen_resp}{tokenizer.eos_token}",
+#         f"{prompt}{rejected_resp}{tokenizer.eos_token}"
+#     ]
+#     ppl_chosen, ppl_rejected = calculate_perplexity(
+#         model, tokenizer, texts,
+#         max_length=max_length, stride=stride, device=device
+#     )
 
-    Steps:
-      1. Tokenize prompt+response+EOS into input_ids.
-      2. Clone input_ids to labels, then set labels[:, :prompt_len] = -100
-         so that prompt tokens are ignored in loss.
-      3. Call model(input_ids=input_ids, labels=labels) under torch.no_grad();
-         HF will return outputs.loss = mean NLL over response tokens.
-      4. Return exp(loss) as the perplexity.
+#     # 2) model's own generated answer (greedy)
+#     # Only need to generate once: it is usually deterministic on the same prompt
+#     input_ids = text_to_token_ids(prompt, tokenizer).to(device)
+#     generated = generate(
+#         model, input_ids,
+#         max_new_tokens=config.max_new_tokens,
+#         do_sample=False
+#     )
+#     full_text = tokenizer.decode(generated[0], skip_special_tokens=False)
+#     model_resp = postprocess_response(full_text)
+
+#     ppl_ref_model_out = calculate_perplexity(
+#         model, tokenizer,
+#         f"{prompt}{model_resp}{tokenizer.eos_token}",
+#         max_length=max_length, stride=stride, device=device
+#     )
+
+#     return ppl_chosen, ppl_rejected, ppl_ref_model_out
+
+
+def summarize_ppl_table(model, tokenizer, data_loader, device=None):
     """
-    device = device or model.device
+    Calculate the average perplexity for the chosen, rejected, and self-generated responses.
+    Args:
+        model: The model to use for scoring.
+        tokenizer: The tokenizer to use for encoding the input.
+        data_loader: DataLoader containing the dataset.
+        device: Device to run the model on (default is model's device).
+    Returns:
+        dict: A dictionary with keys 'chosen', 'rejected', and 'self' corresponding to the average perplexity.
+    """
+    n = len(data_loader.dataset)
+    sum_ch, sum_rj, sum_self = 0.0, 0.0, 0.0
+    count = 0
     eos = tokenizer.eos_token
+    self_cache: Dict[str, float] = {}
 
-    # 1) Tokenize the full sequence
-    enc = tokenizer(
-        prompt + response + eos,
-        return_tensors="pt",
-        truncation=True,
-        max_length=max_length or tokenizer.model_max_length,
-        padding=False
-    ).to(device)
-    input_ids = enc.input_ids  # shape (1, L)
-
-    # 2) Build labels that ignore the prompt portion
-    prompt_ids = tokenizer(prompt, add_special_tokens=False).input_ids
-    prompt_len = len(prompt_ids)
-
-    labels = input_ids.clone()
-    labels[:, :prompt_len] = -100  # ignore prompt tokens
-
-    # 3) Forward pass with labels → outputs.loss is mean NLL over response tokens
-    with torch.no_grad():
-        outputs = model(input_ids=input_ids, labels=labels)
-        loss = outputs.loss  # already averaged over only the response tokens
-
-    # 4) Convert to perplexity
-    ppl = torch.exp(loss).item()
-    return ppl
-
-
-def safe_generate(prompt: str,
-                  model,
-                  tokenizer,
-                  *,
-                  device,
-                  max_new_tokens: int = 64):
-    """
-    Greedy, no-warning version of model.generate.
-    Returns decoded text (including EOS).
-    """
-    enc = tokenizer(prompt,
-                    return_tensors="pt",
-                    truncation=True,
-                    padding=False).to(device)
-
-    gen_ids = model.generate(
-        enc.input_ids,
-        attention_mask=enc.attention_mask,
-        max_new_tokens=max_new_tokens,
-        do_sample=False,          # greedy
-        top_k=1,                  # enforce greedy
-        pad_token_id=tokenizer.eos_token_id,
-        eos_token_id=tokenizer.eos_token_id,
-    )
-    return tokenizer.decode(gen_ids[0], skip_special_tokens=False)
-
-
-# ------------------------------- Average PPL Table Calculation -------------------------------
-def compute_avg_ppl_table(model, data_loader, tokenizer, device,
-                          max_items=None, max_length=None):
-    sums = {"chosen": 0.0, "rejected": 0.0, "self": 0.0}
-    cnt = 0
-
+    model.to(device)
     model.eval()
     with torch.no_grad():
-        for batch in tqdm(data_loader, desc="PPL eval"):
-            for i in range(batch["chosen"].size(0)):
-                prompt = tokenizer.decode(batch["prompt"][i])
-                chosen_t = tokenizer.decode(batch["chosen"][i])
-                reject_t = tokenizer.decode(batch["rejected"][i])
+        for batch in tqdm(data_loader, desc="Calculating perplexity", total=n):
+            prompts   = [tokenizer.decode(x, skip_special_tokens=True) for x in batch["prompt"]]
+            chosens   = [tokenizer.decode(x, skip_special_tokens=True) for x in batch["chosen"]]
+            rejecteds = [tokenizer.decode(x, skip_special_tokens=True) for x in batch["rejected"]]
 
-                # 1) chosen / rejected PPL
-                pc = response_ppl(model, tokenizer, prompt, chosen_t, device=device, max_length=max_length)
-                pr = response_ppl(model, tokenizer, prompt, reject_t, device=device, max_length=max_length)
-                sums["chosen"] += pc
-                sums["rejected"] += pr
+            bsz = len(prompts)
 
-                # 2) self-generation PPL
-                full = safe_generate(prompt, model, tokenizer, device=device, max_new_tokens=config.max_new_tokens)
-                model_resp = postprocess_response(full)
-                ps = response_ppl(model, tokenizer, prompt, model_resp, device=device, max_length=max_length)
-                sums["self"] += ps
+            # 1) Perform batch computation of perplexity for the chosen and rejected sets
+            texts = [f"{p}{c}{eos}" for p, c in zip(prompts, chosens)] \
+                  + [f"{p}{r}{eos}" for p, r in zip(prompts, rejecteds)]
+            ppls = calculate_perplexity(model, tokenizer, texts, batch_size=len(texts), device=device)
+            chosen_batch_ppls   = ppls[:bsz]
+            rejected_batch_ppls = ppls[bsz:]
 
-                cnt += 1
-                if max_items and cnt >= max_items:
-                    break
+            # 2) batch self-generation + PPL
+            input_ids = torch.stack(batch["prompt"]).to(device)
+            gen_outs = generate(
+                model, input_ids,
+                max_new_tokens=config.max_new_tokens,
+                do_sample=False
+            )
+            resps = [postprocess_response(tokenizer.decode(o, skip_special_tokens=False)) for o in gen_outs]
+            self_texts = [f"{p}{r}{eos}" for p, r in zip(prompts, resps)]
+            self_ppls = calculate_perplexity(
+                model, tokenizer, self_texts,
+                max_length=config.allowed_max_length,
+                device=device,
+                batch_size=len(self_texts)
+            )
 
-    model.train()
-    for k in sums:
-        sums[k] /= max(cnt, 1)
-    return sums
+            # accumulate with cache
+            for p, c_ppl, r_ppl, s_ppl in zip(prompts, chosen_batch_ppls, rejected_batch_ppls, self_ppls):
+                sum_ch += c_ppl
+                sum_rj += r_ppl
+                # cache self-PPL by prompt
+                if p not in self_cache:
+                    self_cache[p] = s_ppl
+                sum_self += self_cache[p]
+                count += 1
+
+    if count == 0:
+        raise ValueError("No samples processed")
+    return {
+        "chosen": sum_ch / count,
+        "rejected": sum_rj / count,
+        "self": sum_self / count,
+    }
 
 
 # ------------------------------- GPU Memory Management -------------------------------
