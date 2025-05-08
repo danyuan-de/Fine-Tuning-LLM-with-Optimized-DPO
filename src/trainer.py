@@ -444,10 +444,11 @@ def run_training():
     # ---------------------------- Custom collate function for DataLoader ---------------------------
     customized_collate_fn = partial(
         custom_collate_fn,
+        eos_token_id=eos_token_id,
         tokenizer=tokenizer,
         device=device,
         allowed_max_length=config.allowed_max_length,  # The supported context length of the model
-        mask_prompt=True
+        mask_prompt_tokens=True
     )
 
     # ---------------------------- Create datasets and dataloaders ---------------------------

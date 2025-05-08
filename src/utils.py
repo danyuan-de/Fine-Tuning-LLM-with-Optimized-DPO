@@ -204,127 +204,138 @@ def format_input(entry):
         )
 
 
-# # self-defined collate_fn for DataLoader
-# def custom_collate_fn(
-#     batch,
-#     eos_token_id=None,
-#     tokenizer=None,
-#     device=None,
-#     allowed_max_length=None,
-#     mask_prompt_tokens=None,
-# ):
-#     # Initialize the batch data
-#     batch_data = {
-#         "prompt": [],
-#         "chosen": [],
-#         "rejected": [],
-#         "chosen_mask": [],
-#         "rejected_mask": []
-#     }
-
-#     # Calculate the maximum length of the chosen and rejected sequences
-#     max_length_common = 0
-#     if batch:
-#         for key in ["chosen", "rejected"]:
-#             current_max = max(len(item[key]) for item in batch)
-#             max_length_common = max(max_length_common, current_max)
-
-#     # Process each item in the batch
-#     for item in batch:
-#         prompt = torch.tensor(item["prompt"], dtype=torch.long).to(device)
-#         batch_data["prompt"].append(prompt)
-
-#         for key in ["chosen", "rejected"]:
-#             sequence = item[key]
-#             sequence_tensor = torch.tensor(sequence, dtype=torch.long).to(device)  # Move to device immediately
-
-#             # Fill the sequence tensor with padding tokens to match the maximum length
-#             padded_sequence = torch.cat([
-#                 sequence_tensor,
-#                 torch.full((max_length_common - sequence_tensor.size(0),),
-#                            fill_value=tokenizer.pad_token_id,
-#                            dtype=torch.long).to(device)  # Move to device
-#             ])
-
-#             # Create a mask tensor to ignore the padding tokens
-#             mask = torch.ones_like(padded_sequence, dtype=torch.bool).to(device)  # Move to device
-#             mask[sequence_tensor.size(0):] = False  # Set padding tokens to False
-
-#             # Mask the prompt tokens if needed
-#             if mask_prompt_tokens:
-#                 mask[:prompt.size(0)] = False
-
-#             # Make sure the EOS token is not masked
-#             if eos_token_id in sequence_tensor:
-#                 eos_positions = (sequence_tensor == eos_token_id).nonzero(as_tuple=True)[0]
-#                 if len(eos_positions) > 0:
-#                     eos_pos = eos_positions[-1].item()  # Last EOS in response
-#                 else:
-#                     eos_pos = sequence_tensor.size(0) - 1
-#             else:
-#                 eos_pos = sequence_tensor.size(0) - 1
-
-#             mask[eos_pos] = True  # Set the EOS token to True
-
-#             # Ensure EOS token is unmasked
-#             eos_positions = (sequence_tensor == eos_token_id).nonzero(as_tuple=True)[0]
-#             eos_pos = eos_positions[-1].item() if len(eos_positions) > 0 else sequence_tensor.size(0) - 1
-#             mask[eos_pos] = True
-
-#             batch_data[key].append(padded_sequence)
-#             batch_data[f"{key}_mask"].append(mask)
-
-#     batch_data["prompt"] = pad_sequence(
-#         batch_data["prompt"],
-#         batch_first=True,
-#         padding_value=tokenizer.pad_token_id
-#     )
-#     # Stack the tensors (already on device, no need for .to(device))
-#     for key in ["chosen", "rejected", "chosen_mask", "rejected_mask"]:
-#         batch_data[key] = torch.stack(batch_data[key])
-
-#         # Truncate the sequences if needed
-#         if allowed_max_length is not None:
-#             batch_data[key] = batch_data[key][:, :allowed_max_length]
-
-#     return batch_data
-
-
+# self-defined collate_fn for DataLoader
 def custom_collate_fn(
-    batch, tokenizer, device, allowed_max_length=None, mask_prompt=False
+    batch,
+    eos_token_id=None,
+    tokenizer=None,
+    device=None,
+    allowed_max_length=None,
+    mask_prompt_tokens=None,
 ):
-    fields = ["prompt", "chosen", "rejected"]
-    data = {k: [] for k in fields}
+    # Initialize the batch data
+    batch_data = {
+        "prompt": [],
+        "chosen": [],
+        "rejected": [],
+        "chosen_mask": [],
+        "rejected_mask": []
+    }
 
-    for inst in batch:
-        for k in fields:
-            data[k].append(torch.tensor(inst[k], dtype=torch.long))
+    # Calculate the maximum length of the chosen and rejected sequences
+    max_length_common = 0
+    if batch:
+        for key in ["chosen", "rejected"]:
+            current_max = max(len(item[key]) for item in batch)
+            max_length_common = max(max_length_common, current_max)
 
-    # pad + stack
-    for k in fields:
-        padded = pad_sequence(
-            data[k], batch_first=True, padding_value=tokenizer.pad_token_id
-        )
-        if allowed_max_length:
-            padded = padded[:, :allowed_max_length]
-        data[k] = padded.to(device)
+    # Process each item in the batch
+    for item in batch:
+        prompt = torch.tensor(item["prompt"], dtype=torch.long).to(device)
+        batch_data["prompt"].append(prompt)
 
-    # attention masks
-    data["prompt_mask"] = (data["prompt"] != tokenizer.pad_token_id).long()
-    data["chosen_mask"] = (data["chosen"] != tokenizer.pad_token_id).long()
-    data["rejected_mask"] = (data["rejected"] != tokenizer.pad_token_id).long()
+        for key in ["chosen", "rejected"]:
+            sequence = item[key]
+            sequence_tensor = torch.tensor(sequence, dtype=torch.long).to(device)  # Move to device immediately
 
-    # mask the prompt tokens
-    if mask_prompt:
-        seq_len = data["prompt"].size(1)
-        data["chosen_mask"][:, :seq_len] = 0
-        data["rejected_mask"][:, :seq_len] = 0
+            # Fill the sequence tensor with padding tokens to match the maximum length
+            padded_sequence = torch.cat([
+                sequence_tensor,
+                torch.full((max_length_common - sequence_tensor.size(0),),
+                           fill_value=tokenizer.pad_token_id,
+                           dtype=torch.long).to(device)  # Move to device
+            ])
+
+            # Create a mask tensor to ignore the padding tokens
+            mask = torch.ones_like(padded_sequence, dtype=torch.bool).to(device)  # Move to device
+            mask[sequence_tensor.size(0):] = False  # Set padding tokens to False
+
+            # Mask the prompt tokens if needed
+            if mask_prompt_tokens:
+                mask[:prompt.size(0)] = False
+
+            # Make sure the EOS token is not masked
+            if eos_token_id in sequence_tensor:
+                eos_positions = (sequence_tensor == eos_token_id).nonzero(as_tuple=True)[0]
+                if len(eos_positions) > 0:
+                    eos_pos = eos_positions[-1].item()  # Last EOS in response
+                else:
+                    eos_pos = sequence_tensor.size(0) - 1
+            else:
+                eos_pos = sequence_tensor.size(0) - 1
+
+            mask[eos_pos] = True  # Set the EOS token to True
+
+            # # Ensure EOS token is unmasked
+            # eos_positions = (sequence_tensor == eos_token_id).nonzero(as_tuple=True)[0]
+            # eos_pos = eos_positions[-1].item() if len(eos_positions) > 0 else sequence_tensor.size(0) - 1
+            # mask[eos_pos] = True
+
+            batch_data[key].append(padded_sequence)
+            batch_data[f"{key}_mask"].append(mask)
+
+    batch_data["prompt"] = pad_sequence(
+        batch_data["prompt"],
+        batch_first=True,
+        padding_value=tokenizer.pad_token_id
+    )
+    # Stack the tensors (already on device, no need for .to(device))
+    for key in ["chosen", "rejected", "chosen_mask", "rejected_mask"]:
+        batch_data[key] = torch.stack(batch_data[key])
+
+        # Truncate the sequences if needed
+        if allowed_max_length is not None:
+            batch_data[key] = batch_data[key][:, :allowed_max_length]
     
-    data["question_texts"] = [inst["question_text"] for inst in batch]
-    data["chosen_texts"]   = [inst["chosen_text"]   for inst in batch]
-    data["rejected_texts"] = [inst["rejected_text"] for inst in batch]
+    batch_data["question_texts"] = [inst["question_text"] for inst in batch]
+    batch_data["chosen_texts"]   = [inst["chosen_text"]   for inst in batch]
+    batch_data["rejected_texts"] = [inst["rejected_text"] for inst in batch]
 
-    return data
+
+    return batch_data
+
+
+# def custom_collate_fn(
+#     batch, tokenizer, device, allowed_max_length=None, mask_prompt=False
+# ):
+#     fields = ["prompt", "chosen", "rejected"]
+#     data = {k: [] for k in fields}
+#     eos_id = tokenizer.eos_token_id
+#     for inst in batch:
+#         for k in fields:
+#             data[k].append(torch.tensor(inst[k], dtype=torch.long))
+
+#     # pad + stack
+#     for k in fields:
+#         padded = pad_sequence(
+#             data[k], batch_first=True, padding_value=tokenizer.pad_token_id
+#         )
+#         if allowed_max_length:
+#             padded = padded[:, :allowed_max_length]
+#         data[k] = padded.to(device)
+
+#     # attention masks
+#     data["prompt_mask"] = (data["prompt"] != tokenizer.pad_token_id).long()
+#     data["chosen_mask"] = (data["chosen"] != tokenizer.pad_token_id).long()
+#     data["rejected_mask"] = (data["rejected"] != tokenizer.pad_token_id).long()
+
+#     # mask the prompt tokens
+#     if mask_prompt:
+#         seq_len = data["prompt"].size(1)
+#         data["chosen_mask"][:, :seq_len] = 0
+#         data["rejected_mask"][:, :seq_len] = 0
+#         # chosen
+#         eos_pos = (data["chosen"] == eos_id).long().argmax(dim=1)
+#         data["chosen_mask"][torch.arange(eos_pos.size(0)), eos_pos] = 1
+#         # rejected
+#         eos_pos = (data["rejected"] == eos_id).long().argmax(dim=1)
+#         data["rejected_mask"][torch.arange(eos_pos.size(0)), eos_pos] = 1
+    
+#     data["question_texts"] = [inst["question_text"] for inst in batch]
+#     data["chosen_texts"]   = [inst["chosen_text"]   for inst in batch]
+#     data["rejected_texts"] = [inst["rejected_text"] for inst in batch]
+
+#     return data
 
 
 def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss", save_path=None):
