@@ -444,11 +444,10 @@ def run_training():
     # ---------------------------- Custom collate function for DataLoader ---------------------------
     customized_collate_fn = partial(
         custom_collate_fn,
-        eos_token_id=eos_token_id,
         tokenizer=tokenizer,
         device=device,
-        mask_prompt_tokens=True,  # This is optional
-        allowed_max_length=config.allowed_max_length  # The supported context length of the model
+        allowed_max_length=config.allowed_max_length,  # The supported context length of the model
+        mask_prompt=True
     )
 
     # ---------------------------- Create datasets and dataloaders ---------------------------
@@ -692,18 +691,18 @@ def run_training():
     input_key = "question" if "question" in test_data[0] else "instruction"
 
     # Check the maximum sequence length in the test data
-    max_length = 0
-    for entry in test_data:
-        tokens = fine_tuned_tokenizer(format_input(entry), add_special_tokens=True).input_ids
-        max_length = max(max_length, len(tokens))
-    print(f"Test data max sequence length: {max_length}")
+    # max_length = 0
+    # for entry in test_data:
+    #     tokens = fine_tuned_tokenizer(format_input(entry), add_special_tokens=True).input_ids
+    #     max_length = max(max_length, len(tokens))
+    # print(f"Test data max sequence length: {max_length}")
 
-    # Set stride based on the maximum length
-    if max_length > config.allowed_max_length:
-        print("Warning: Long sequences detected, using stride=512")
-        stride = 512
-    else:
-        stride = None
+    # # Set stride based on the maximum length
+    # if max_length > config.allowed_max_length:
+    #     print("Warning: Long sequences detected, using stride=512")
+    #     stride = 512
+    # else:
+    #     stride = None
 
     if config.EVAL_USE_SAMPLING:
         print("Using sampling for evaluation")
@@ -718,11 +717,12 @@ def run_training():
         test_results = []
         test_start_time = time.time()
         for batch in tqdm(test_loader, desc="Test Eval"):
-
+            questions = batch["question_texts"]
+            expected_pure_resps = batch["chosen_texts"]  # the chosen response without the prompt
+            
             # batch["prompt"] is a tensor of token ids (bsz, seq_len)
             # 1) decoding prompt
-            prompts = [tokenizer.decode(ids, skip_special_tokens=True) for ids in batch["prompt"]]
-            expected_resps = [tokenizer.decode(ids, skip_special_tokens=True) for ids in batch["chosen"]]
+            full_prompts = [tokenizer.decode(ids, skip_special_tokens=False) for ids in batch["prompt"]]
             
             # 2) Batch generation of responses using the reference and fine-tuned models 
             input_ids = batch["prompt"].to(device)
@@ -731,20 +731,25 @@ def run_training():
                 pol_out = fine_tuned_model.generate(input_ids, max_new_tokens=config.max_new_tokens, do_sample=False)
             
             # 3) Batch decoding the generated responses
-            ref_resps = [postprocess_response(tokenizer.decode(o, skip_special_tokens=False)) 
+            ref_resps = [postprocess_response(tokenizer.decode(o, skip_special_tokens=True)) 
                         for o in ref_out]
-            pol_resps = [postprocess_response(tokenizer.decode(o, skip_special_tokens=False)) 
+            pol_resps = [postprocess_response(tokenizer.decode(o, skip_special_tokens=True)) 
                         for o in pol_out]
+
+            ref_ful_resps = [f"{p}{r}{tokenizer.eos_token}" for p, r in zip(full_prompts, ref_resps)]
+            pol_ful_resps = [f"{p}{r}{tokenizer.eos_token}" for p, r in zip(full_prompts, pol_resps)]
+            exp_full_resps = [f"{p}{r}{tokenizer.eos_token}" for p, r in zip(full_prompts, expected_pure_resps)]
             
             # 4) Calculate perplexity for the reference and fine-tuned models and store them 
-            texts = prompts    
-            ref_ppls = calculate_perplexity(ref_model, tokenizer, texts, max_length=config.allowed_max_length, device=device)
-            pol_ppls = calculate_perplexity(fine_tuned_model, tokenizer, texts, max_length=config.allowed_max_length, device=device)
+            ref_ppls = calculate_perplexity(ref_model, tokenizer, ref_ful_resps, max_length=config.allowed_max_length, device=device)
+            pol_ppls = calculate_perplexity(fine_tuned_model, tokenizer, pol_ful_resps, max_length=config.allowed_max_length, device=device)
+            ref_exp_ppls = calculate_perplexity(ref_model, tokenizer, exp_full_resps, max_length=config.allowed_max_length, device=device)
+            pol_exp_ppls = calculate_perplexity(fine_tuned_model, tokenizer, exp_full_resps, max_length=config.allowed_max_length, device=device)
             
             # 5) Print the results and store them in the dictionary
-            for i, prompt in enumerate(prompts):
+            for i, question in enumerate(questions):
                 # Use the previously determined input key
-                print(f"\nInput {i}:\n {prompt}")
+                print(f"\nInput {i}:\n {question}")
 
                 print("\n ----- Reference Model ----- ")
                 print(f"Reference Response: {ref_resps[i]}")
@@ -755,15 +760,20 @@ def run_training():
                 print(f"Perplexity: {pol_ppls[i]:.2f}")
 
                 print("\n ----- Expected Response ----- ")
-                print(f"Expected Answer: {expected_resps[i]}")
+                print(f"Expected Answer: {expected_pure_resps[i]}")
+                print(f"Gold Answer PPL (ref):    {ref_exp_ppls[i]:.2f}")
+                print(f"Gold Answer PPL (policy): {pol_exp_ppls[i]:.2f}")
                 print("=" * 80, "\n")
+
                 test_results.append({
-                    "input": prompt,
+                    "input": question,
                     "ref_response": ref_resps[i],
                     "policy_response": pol_resps[i],
+                    "expected": expected_pure_resps[i],
                     "ref_perplexity": ref_ppls[i] if isinstance(ref_ppls, list) else ref_ppls,
-                    "policy_perplexity": pol_ppls[i] if isinstance(pol_ppls, list) else pol_ppls,
-                    "expected": expected_resps[i],  
+                    "policy_perplexity": pol_ppls[i] if isinstance(pol_ppls, list) else pol_ppls, 
+                    "ref_gold_answer_perplexity": ref_exp_ppls[i] if isinstance(ref_exp_ppls, list) else ref_exp_ppls,
+                    "policy_gold_answer_perplexity": pol_exp_ppls[i] if isinstance(pol_exp_ppls, list) else pol_exp_ppls
                 })
 
         test_end_time = time.time()
