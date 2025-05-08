@@ -7,7 +7,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import math
 import csv
 from tqdm import tqdm
-from typing import Dict
+from typing import Dict, Union, List
 import re
 import src.config as config
 
@@ -204,127 +204,138 @@ def format_input(entry):
         )
 
 
-# # self-defined collate_fn for DataLoader
-# def custom_collate_fn(
-#     batch,
-#     eos_token_id=None,
-#     tokenizer=None,
-#     device=None,
-#     allowed_max_length=None,
-#     mask_prompt_tokens=None,
-# ):
-#     # Initialize the batch data
-#     batch_data = {
-#         "prompt": [],
-#         "chosen": [],
-#         "rejected": [],
-#         "chosen_mask": [],
-#         "rejected_mask": []
-#     }
-
-#     # Calculate the maximum length of the chosen and rejected sequences
-#     max_length_common = 0
-#     if batch:
-#         for key in ["chosen", "rejected"]:
-#             current_max = max(len(item[key]) for item in batch)
-#             max_length_common = max(max_length_common, current_max)
-
-#     # Process each item in the batch
-#     for item in batch:
-#         prompt = torch.tensor(item["prompt"], dtype=torch.long).to(device)
-#         batch_data["prompt"].append(prompt)
-
-#         for key in ["chosen", "rejected"]:
-#             sequence = item[key]
-#             sequence_tensor = torch.tensor(sequence, dtype=torch.long).to(device)  # Move to device immediately
-
-#             # Fill the sequence tensor with padding tokens to match the maximum length
-#             padded_sequence = torch.cat([
-#                 sequence_tensor,
-#                 torch.full((max_length_common - sequence_tensor.size(0),),
-#                            fill_value=tokenizer.pad_token_id,
-#                            dtype=torch.long).to(device)  # Move to device
-#             ])
-
-#             # Create a mask tensor to ignore the padding tokens
-#             mask = torch.ones_like(padded_sequence, dtype=torch.bool).to(device)  # Move to device
-#             mask[sequence_tensor.size(0):] = False  # Set padding tokens to False
-
-#             # Mask the prompt tokens if needed
-#             if mask_prompt_tokens:
-#                 mask[:prompt.size(0)] = False
-
-#             # Make sure the EOS token is not masked
-#             if eos_token_id in sequence_tensor:
-#                 eos_positions = (sequence_tensor == eos_token_id).nonzero(as_tuple=True)[0]
-#                 if len(eos_positions) > 0:
-#                     eos_pos = eos_positions[-1].item()  # Last EOS in response
-#                 else:
-#                     eos_pos = sequence_tensor.size(0) - 1
-#             else:
-#                 eos_pos = sequence_tensor.size(0) - 1
-
-#             mask[eos_pos] = True  # Set the EOS token to True
-
-#             # Ensure EOS token is unmasked
-#             eos_positions = (sequence_tensor == eos_token_id).nonzero(as_tuple=True)[0]
-#             eos_pos = eos_positions[-1].item() if len(eos_positions) > 0 else sequence_tensor.size(0) - 1
-#             mask[eos_pos] = True
-
-#             batch_data[key].append(padded_sequence)
-#             batch_data[f"{key}_mask"].append(mask)
-
-#     batch_data["prompt"] = pad_sequence(
-#         batch_data["prompt"],
-#         batch_first=True,
-#         padding_value=tokenizer.pad_token_id
-#     )
-#     # Stack the tensors (already on device, no need for .to(device))
-#     for key in ["chosen", "rejected", "chosen_mask", "rejected_mask"]:
-#         batch_data[key] = torch.stack(batch_data[key])
-
-#         # Truncate the sequences if needed
-#         if allowed_max_length is not None:
-#             batch_data[key] = batch_data[key][:, :allowed_max_length]
-
-#     return batch_data
-
-
+# self-defined collate_fn for DataLoader
 def custom_collate_fn(
-    batch, tokenizer, device, allowed_max_length=None, mask_prompt=False
+    batch,
+    eos_token_id=None,
+    tokenizer=None,
+    device=None,
+    allowed_max_length=None,
+    mask_prompt_tokens=None,
 ):
-    fields = ["prompt", "chosen", "rejected"]
-    data = {k: [] for k in fields}
+    # Initialize the batch data
+    batch_data = {
+        "prompt": [],
+        "chosen": [],
+        "rejected": [],
+        "chosen_mask": [],
+        "rejected_mask": []
+    }
 
-    for inst in batch:
-        for k in fields:
-            data[k].append(torch.tensor(inst[k], dtype=torch.long))
+    # Calculate the maximum length of the chosen and rejected sequences
+    max_length_common = 0
+    if batch:
+        for key in ["chosen", "rejected"]:
+            current_max = max(len(item[key]) for item in batch)
+            max_length_common = max(max_length_common, current_max)
 
-    # pad + stack
-    for k in fields:
-        padded = pad_sequence(
-            data[k], batch_first=True, padding_value=tokenizer.pad_token_id
-        )
-        if allowed_max_length:
-            padded = padded[:, :allowed_max_length]
-        data[k] = padded.to(device)
+    # Process each item in the batch
+    for item in batch:
+        prompt = torch.tensor(item["prompt"], dtype=torch.long).to(device)
+        batch_data["prompt"].append(prompt)
 
-    # attention masks
-    data["prompt_mask"] = (data["prompt"] != tokenizer.pad_token_id).long()
-    data["chosen_mask"] = (data["chosen"] != tokenizer.pad_token_id).long()
-    data["rejected_mask"] = (data["rejected"] != tokenizer.pad_token_id).long()
+        for key in ["chosen", "rejected"]:
+            sequence = item[key]
+            sequence_tensor = torch.tensor(sequence, dtype=torch.long).to(device)  # Move to device immediately
 
-    # mask the prompt tokens
-    if mask_prompt:
-        seq_len = data["prompt"].size(1)
-        data["chosen_mask"][:, :seq_len] = 0
-        data["rejected_mask"][:, :seq_len] = 0
+            # Fill the sequence tensor with padding tokens to match the maximum length
+            padded_sequence = torch.cat([
+                sequence_tensor,
+                torch.full((max_length_common - sequence_tensor.size(0),),
+                           fill_value=tokenizer.pad_token_id,
+                           dtype=torch.long).to(device)  # Move to device
+            ])
+
+            # Create a mask tensor to ignore the padding tokens
+            mask = torch.ones_like(padded_sequence, dtype=torch.bool).to(device)  # Move to device
+            mask[sequence_tensor.size(0):] = False  # Set padding tokens to False
+
+            # Mask the prompt tokens if needed
+            if mask_prompt_tokens:
+                mask[:prompt.size(0)] = False
+
+            # Make sure the EOS token is not masked
+            if eos_token_id in sequence_tensor:
+                eos_positions = (sequence_tensor == eos_token_id).nonzero(as_tuple=True)[0]
+                if len(eos_positions) > 0:
+                    eos_pos = eos_positions[-1].item()  # Last EOS in response
+                else:
+                    eos_pos = sequence_tensor.size(0) - 1
+            else:
+                eos_pos = sequence_tensor.size(0) - 1
+
+            mask[eos_pos] = True  # Set the EOS token to True
+
+            # # Ensure EOS token is unmasked
+            # eos_positions = (sequence_tensor == eos_token_id).nonzero(as_tuple=True)[0]
+            # eos_pos = eos_positions[-1].item() if len(eos_positions) > 0 else sequence_tensor.size(0) - 1
+            # mask[eos_pos] = True
+
+            batch_data[key].append(padded_sequence)
+            batch_data[f"{key}_mask"].append(mask)
+
+    batch_data["prompt"] = pad_sequence(
+        batch_data["prompt"],
+        batch_first=True,
+        padding_value=tokenizer.pad_token_id
+    )
+    # Stack the tensors (already on device, no need for .to(device))
+    for key in ["chosen", "rejected", "chosen_mask", "rejected_mask"]:
+        batch_data[key] = torch.stack(batch_data[key])
+
+        # Truncate the sequences if needed
+        if allowed_max_length is not None:
+            batch_data[key] = batch_data[key][:, :allowed_max_length]
     
-    data["question_texts"] = [inst["question_text"] for inst in batch]
-    data["chosen_texts"]   = [inst["chosen_text"]   for inst in batch]
-    data["rejected_texts"] = [inst["rejected_text"] for inst in batch]
+    batch_data["question_texts"] = [inst["question_text"] for inst in batch]
+    batch_data["chosen_texts"]   = [inst["chosen_text"]   for inst in batch]
+    batch_data["rejected_texts"] = [inst["rejected_text"] for inst in batch]
 
-    return data
+
+    return batch_data
+
+
+# def custom_collate_fn(
+#     batch, tokenizer, device, allowed_max_length=None, mask_prompt=False
+# ):
+#     fields = ["prompt", "chosen", "rejected"]
+#     data = {k: [] for k in fields}
+#     eos_id = tokenizer.eos_token_id
+#     for inst in batch:
+#         for k in fields:
+#             data[k].append(torch.tensor(inst[k], dtype=torch.long))
+
+#     # pad + stack
+#     for k in fields:
+#         padded = pad_sequence(
+#             data[k], batch_first=True, padding_value=tokenizer.pad_token_id
+#         )
+#         if allowed_max_length:
+#             padded = padded[:, :allowed_max_length]
+#         data[k] = padded.to(device)
+
+#     # attention masks
+#     data["prompt_mask"] = (data["prompt"] != tokenizer.pad_token_id).long()
+#     data["chosen_mask"] = (data["chosen"] != tokenizer.pad_token_id).long()
+#     data["rejected_mask"] = (data["rejected"] != tokenizer.pad_token_id).long()
+
+#     # mask the prompt tokens
+#     if mask_prompt:
+#         seq_len = data["prompt"].size(1)
+#         data["chosen_mask"][:, :seq_len] = 0
+#         data["rejected_mask"][:, :seq_len] = 0
+#         # chosen
+#         eos_pos = (data["chosen"] == eos_id).long().argmax(dim=1)
+#         data["chosen_mask"][torch.arange(eos_pos.size(0)), eos_pos] = 1
+#         # rejected
+#         eos_pos = (data["rejected"] == eos_id).long().argmax(dim=1)
+#         data["rejected_mask"][torch.arange(eos_pos.size(0)), eos_pos] = 1
+    
+#     data["question_texts"] = [inst["question_text"] for inst in batch]
+#     data["chosen_texts"]   = [inst["chosen_text"]   for inst in batch]
+#     data["rejected_texts"] = [inst["rejected_text"] for inst in batch]
+
+#     return data
 
 
 def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss", save_path=None):
@@ -348,15 +359,25 @@ def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss"
     # plt.show()
 
 
-def text_to_token_ids(text, tokenizer):
-    encoded = tokenizer.encode(text)
-    encoded_tensor = torch.tensor(encoded).unsqueeze(0)  # add batch dimension
-    return encoded_tensor
+def text_to_token_ids(texts: Union[str, List[str]], tokenizer) -> torch.LongTensor:
+    if isinstance(texts, str):
+        texts = [texts]
+
+    encoding = tokenizer(
+        texts,
+        return_tensors="pt",
+        padding=True,
+        truncation=True,
+        max_length=config.allowed_max_length
+    )
+    return encoding.input_ids  # shape = (bsz, seq_len)
 
 
-def token_ids_to_text(token_ids, tokenizer):
-    flat = token_ids.squeeze(0)  # remove batch dimension
-    return tokenizer.decode(flat.tolist())
+def token_ids_to_text(token_ids: torch.Tensor, tokenizer, skip_special_tokens: bool = False) -> List[str]:
+    all_ids = token_ids.tolist()
+    texts = tokenizer.batch_decode(all_ids, skip_special_tokens=skip_special_tokens)
+    # remove empty spaces
+    return [t.strip() for t in texts]
 
 
 def generate(
@@ -544,6 +565,9 @@ def calculate_perplexity(
 
     # Initialize list to store perplexity scores
     perplexities = []
+    
+    model.to(device).eval()  # Set model to evaluation mode
+    pad_token_id = tokenizer.pad_token_id  # Get pad token ID
 
     # Process texts in batches
     for i in range(0, len(texts), batch_size):
@@ -554,69 +578,68 @@ def calculate_perplexity(
             # Tokenize texts with padding and truncation
             encodings = tokenizer(
                 batch_texts,
-                return_tensors="pt",             # Return PyTorch tensors
-                truncation=True,                 # Truncate to max_length
-                max_length=max_length,           # Maximum sequence length
-                padding=True,                    # Pad sequences to equal length
-                add_special_tokens=True          # Add special tokens (e.g., BOS, EOS)
+                return_tensors="pt",            # Return PyTorch tensors
+                truncation=(stride is None),    # Truncate to max_length
+                max_length=max_length,          # Maximum sequence length
+                padding=True,                   # Pad sequences to equal length
+                add_special_tokens=True         # Add special tokens (e.g., BOS, EOS)
             )
             # Move input tensors to specified device
             input_ids = encodings.input_ids.to(device)
             attention_mask = encodings.attention_mask.to(device)
 
-            # Handle long sequences with striding
-            if stride is not None and input_ids.size(1) > max_length:
-                batch_perplexities = []
-                # Iterate over sequence with stride
-                for j in range(0, input_ids.size(1) - max_length + 1, stride):
-                    # Define start and end indices for chunk
-                    start_idx = j
-                    end_idx = min(j + max_length, input_ids.size(1))
-                    # Extract chunk tensors
-                    chunk_input_ids = input_ids[:, start_idx:end_idx]
-                    chunk_attention_mask = attention_mask[:, start_idx:end_idx]
+            # prepare labels with ignore_index
+            labels = input_ids.clone()
+            labels[input_ids == pad_token_id] = -100  # Set labels to -100 for padding tokens
 
-                    # Compute model output without gradients
+            bsz, seq_len = input_ids.shape  
+            # Handle long sequences with striding
+            if stride and seq_len > max_length:
+                print("==== Running with striding... ====")
+                print(f"Sequence length {seq_len} exceeds max_length {max_length}. Using striding.")
+                
+                # total NLL and total token count per example
+                total_nll = torch.zeros(bsz, device=device)
+                total_tokens = torch.zeros(bsz, device=device)
+
+                # Iterate over sequence with stride
+                for start in range(0, seq_len, stride):
+                    end = min(start + max_length, seq_len)
+
                     with torch.no_grad():
                         outputs = model(
-                            input_ids=chunk_input_ids,  # Input tensor
-                            attention_mask=chunk_attention_mask,  # Attention mask
-                            labels=chunk_input_ids  # Labels for loss
+                            input_ids=input_ids[:, start:end],
+                            attention_mask=attention_mask[:, start:end],
+                            labels=labels[:, start:end]
                         )
-                        loss = outputs.loss                  # Extract loss
+                    # outputs.loss is averaged over non-ignored tokens of this chunk
+                    # Get chunk_loss * token_count_chunk and accumulate
+                    # chunk_nll = loss * N_chunk_nonpad
+                    # N_chunk_nonpad = chunk_mask.sum(dim=1)
+                    token_count = attention_mask[:, start:end].sum(dim=1)          # shape (bsz,)
+                    # expand scalar to per-example tensor
+                    total_nll += outputs.loss * token_count
+                    total_tokens += token_count
 
-                    # Check for invalid loss values
-                    if torch.isnan(loss) or torch.isinf(loss) or loss.item() > 100:
-                        batch_perplexities.append(float("inf"))
-                    else:
-                        # Calculate perplexity as exp(loss)
-                        batch_perplexities.append(math.exp(loss.item()))
+                    if end == seq_len: break
 
-                # Compute average perplexity for sequence
-                if batch_perplexities:
-                    valid_perplexities = [p for p in batch_perplexities if p != float("inf")]
-                    perplexities.append(
-                        sum(valid_perplexities) / len(valid_perplexities) if valid_perplexities else float("inf")
-                    )
-                else:
-                    perplexities.append(float("inf"))
+                # Final average Negative Log Likelihood (NLL)
+                mean_nll = total_nll / total_tokens
+                perplexities.extend(torch.exp(mean_nll).tolist())
 
             else:
-                # Process entire sequence without striding
+                print("==== Running without striding... ====")
+                # No striding, just compute loss for the entire batch
                 with torch.no_grad():
                     outputs = model(
-                        input_ids=input_ids,  # Input tensor
-                        attention_mask=attention_mask,  # Attention mask
-                        labels=input_ids  # Labels for loss
+                        input_ids=input_ids,
+                        attention_mask=attention_mask,
+                        labels=labels
                     )
-                    loss = outputs.loss            # Extract loss
-
-                # Check for invalid loss values
-                if torch.isnan(loss) or torch.isinf(loss) or loss.item() > 100:
-                    perplexities.extend([float("inf")] * len(batch_texts))
-                else:
-                    # Calculate perplexity as exp(loss)
-                    perplexities.extend([math.exp(loss.item())] * len(batch_texts))
+                # outputs.loss -- averaged over non-ignored tokens
+                ppl_batch = math.exp(outputs.loss.item())
+                # Same perplexity for all samples in the batch
+                perplexities.extend([ppl_batch] * bsz)
 
         except Exception as e:
             # Handle errors during batch processing
@@ -665,21 +688,38 @@ def summarize_ppl_table(model, tokenizer, data_loader, device=None):
             rejecteds = [tokenizer.decode(x, skip_special_tokens=True) for x in batch["rejected"]]
             
             # Debugging
-            if debug_printed < 2:
-                for i in range(len(prompts)):
+            for i in range(len(prompts)):
+                if debug_printed < 2:
                     print(f"\n=== DEBUG SAMPLE {i + 1} ===")
-                    print(f"FULL PROMPT:\n{prompts}\n")
-                    print(f"CHOSEN RAW:\n{chosens}\n\n")
-                    print(f"REJECTED RAW:\n{rejecteds}\n\n")
+                    print(f"FULL PROMPT:\n{prompts[i]}\n")
+                    print(f"CHOSEN RAW:\n{chosens[i]}\n\n")
+                    print(f"REJECTED RAW:\n{rejecteds[i]}\n\n")
+                else: break
+                debug_printed += 1
 
             bsz = len(prompts)
 
-            # 1) Perform batch computation of perplexity for the chosen and rejected sets
-            texts = [f"{p}{c}{eos}" for p, c in zip(prompts, chosens)] \
-                + [f"{p}{r}{eos}" for p, r in zip(prompts, rejecteds)]
-            ppls = calculate_perplexity(model, tokenizer, texts, batch_size=len(texts), device=device)
-            chosen_batch_ppls = ppls[:bsz]
-            rejected_batch_ppls = ppls[bsz:]
+            # # 1) Perform batch computation of perplexity for the chosen and rejected sets
+            # texts = [f"{p}{c}{eos}" for p, c in zip(prompts, chosens)] \
+            #     + [f"{p}{r}{eos}" for p, r in zip(prompts, rejecteds)]
+            # ppls = calculate_perplexity(model, tokenizer, texts, batch_size=len(texts), device=device)
+            # chosen_batch_ppls = ppls[:bsz]
+            # rejected_batch_ppls = ppls[bsz:]
+
+            chosen_texts = [f"{p}{c}{eos}" for p, c in zip(prompts, chosens)]
+            rejected_texts = [f"{p}{r}{eos}" for p, r in zip(prompts, rejecteds)]
+            chosen_ppls = calculate_perplexity(
+                model, tokenizer, chosen_texts,
+                max_length=config.allowed_max_length,
+                device=device,
+                batch_size=len(chosen_texts)
+            )
+            rejected_ppls = calculate_perplexity(
+                model, tokenizer, rejected_texts,
+                max_length=config.allowed_max_length,
+                device=device,
+                batch_size=len(rejected_texts)
+            )
 
             # 2) batch self-generation + PPL
             input_ids = batch["prompt"].to(device)
@@ -698,7 +738,7 @@ def summarize_ppl_table(model, tokenizer, data_loader, device=None):
             )
 
             # accumulate with cache
-            for prompt, chosen_batch_ppl, rejected_batch_ppl, self_ppl in zip(prompts, chosen_batch_ppls, rejected_batch_ppls, self_ppls):
+            for prompt, chosen_batch_ppl, rejected_batch_ppl, self_ppl in zip(prompts, chosen_ppls, rejected_ppls, self_ppls):
                 sum_chosen += chosen_batch_ppl
                 sum_rejected += rejected_batch_ppl
                 # cache self-PPL by prompt
