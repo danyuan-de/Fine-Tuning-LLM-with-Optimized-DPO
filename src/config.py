@@ -59,6 +59,7 @@ lambda_shift = 0.75  # Weight for the shift term in DPO loss
 # ---------------------------------- Model parameters ----------------------------------
 allowed_max_length = 4096  # maximum number of tokens in a sequence for training input data
 max_new_tokens = 1024  # maximum number of tokens to generate
+stride_length = allowed_max_length // 2  # stride length for training data
 
 # --------------------------------- Validation and Test batch size ---------------------------------
 val_ppl_batch_size = 16  # Batch size for validation perplexity
