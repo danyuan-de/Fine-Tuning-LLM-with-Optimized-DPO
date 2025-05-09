@@ -688,22 +688,38 @@ def summarize_ppl_table(model, tokenizer, data_loader, device=None):
             rejecteds = [tokenizer.decode(x, skip_special_tokens=True) for x in batch["rejected"]]
             
             # Debugging
-            if debug_printed < 2:
-                for i in range(len(prompts)):
+            for i in range(len(prompts)):
+                if debug_printed < 2:
                     print(f"\n=== DEBUG SAMPLE {i + 1} ===")
                     print(f"FULL PROMPT:\n{prompts[i]}\n")
                     print(f"CHOSEN RAW:\n{chosens[i]}\n\n")
                     print(f"REJECTED RAW:\n{rejecteds[i]}\n\n")
-                    debug_printed += 1
+                else: break
+                debug_printed += 1
 
             bsz = len(prompts)
 
-            # 1) Perform batch computation of perplexity for the chosen and rejected sets
-            texts = [f"{p}{c}{eos}" for p, c in zip(prompts, chosens)] \
-                + [f"{p}{r}{eos}" for p, r in zip(prompts, rejecteds)]
-            ppls = calculate_perplexity(model, tokenizer, texts, batch_size=len(texts), device=device)
-            chosen_batch_ppls = ppls[:bsz]
-            rejected_batch_ppls = ppls[bsz:]
+            # # 1) Perform batch computation of perplexity for the chosen and rejected sets
+            # texts = [f"{p}{c}{eos}" for p, c in zip(prompts, chosens)] \
+            #     + [f"{p}{r}{eos}" for p, r in zip(prompts, rejecteds)]
+            # ppls = calculate_perplexity(model, tokenizer, texts, batch_size=len(texts), device=device)
+            # chosen_batch_ppls = ppls[:bsz]
+            # rejected_batch_ppls = ppls[bsz:]
+
+            chosen_texts = [f"{p}{c}{eos}" for p, c in zip(prompts, chosens)]
+            rejected_texts = [f"{p}{r}{eos}" for p, r in zip(prompts, rejecteds)]
+            chosen_ppls = calculate_perplexity(
+                model, tokenizer, chosen_texts,
+                max_length=config.allowed_max_length,
+                device=device,
+                batch_size=len(chosen_texts)
+            )
+            rejected_ppls = calculate_perplexity(
+                model, tokenizer, rejected_texts,
+                max_length=config.allowed_max_length,
+                device=device,
+                batch_size=len(rejected_texts)
+            )
 
             # 2) batch self-generation + PPL
             input_ids = batch["prompt"].to(device)
@@ -722,7 +738,7 @@ def summarize_ppl_table(model, tokenizer, data_loader, device=None):
             )
 
             # accumulate with cache
-            for prompt, chosen_batch_ppl, rejected_batch_ppl, self_ppl in zip(prompts, chosen_batch_ppls, rejected_batch_ppls, self_ppls):
+            for prompt, chosen_batch_ppl, rejected_batch_ppl, self_ppl in zip(prompts, chosen_ppls, rejected_ppls, self_ppls):
                 sum_chosen += chosen_batch_ppl
                 sum_rejected += rejected_batch_ppl
                 # cache self-PPL by prompt
