@@ -274,11 +274,11 @@ def custom_collate_fn(
             batch_data[key].append(padded_sequence)
             batch_data[f"{key}_mask"].append(mask)
 
-    batch_data["prompt"] = pad_sequence(
-        batch_data["prompt"],
-        batch_first=True,
-        padding_value=tokenizer.pad_token_id
-    )
+    # batch_data["prompt"] = pad_sequence(
+    #     batch_data["prompt"],
+    #     batch_first=True,
+    #     padding_value=tokenizer.pad_token_id
+    # )
     # Stack the tensors (already on device, no need for .to(device))
     for key in ["chosen", "rejected", "chosen_mask", "rejected_mask"]:
         batch_data[key] = torch.stack(batch_data[key])

@@ -787,7 +787,7 @@ def run_training():
                 print("=" * 80, "\n")
 
                 test_results.append({
-                    "input": question,
+                    input_key: question,
                     "ref_response": ref_resps[i],
                     "policy_response": pol_resps[i],
                     "expected": expected[i],
