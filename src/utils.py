@@ -722,9 +722,14 @@ def summarize_ppl_table(model, tokenizer, data_loader, device=None):
             )
 
             # 2) batch self-generation + PPL
-            input_ids = batch["prompt"].to(device)
+            prompts_on_device = [p.to(device) for p in batch["prompt"]]
+            padded_prompts = pad_sequence(
+                prompts_on_device,
+                batch_first=True,
+                padding_value=tokenizer.pad_token_id
+            )
             gen_outs = model.generate(
-                input_ids,
+                padded_prompts,
                 max_new_tokens=config.max_new_tokens,
                 do_sample=False
             )
