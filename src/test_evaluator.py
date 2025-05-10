@@ -189,25 +189,23 @@ def test_and_evaluate_batch(
             full_prompts = [format_input(entry) for entry in original_test_data_slice]
 
             # 2) Batch generation of responses using the reference and fine-tuned models
-            ref_input_ids, ref_attn_mask = text_to_token_ids(full_prompts, ref_tokenizer).to(device)
-            pol_input_ids, pol_attn_mask = text_to_token_ids(full_prompts, fine_tuned_tokenizer).to(device)
+            ref_input_ids, ref_attn_mask = text_to_token_ids(full_prompts, ref_tokenizer)
+            pol_input_ids, pol_attn_mask = text_to_token_ids(full_prompts, fine_tuned_tokenizer)
             with torch.no_grad():
-                ref_out = generate(
-                    model=ref_model,
-                    idx=ref_input_ids,
-                    attn_mask=ref_attn_mask,
+                ref_out = ref_model.generate(
+                    input_ids=ref_input_ids.to(device),
+                    attention_mask=ref_attn_mask.to(device),
                     max_new_tokens=max_new_tokens,
-                    temperature=eval_temperature,
-                    top_p=eval_top_p,
+                    do_sample=False,
+                    pad_token_id=ref_tokenizer.pad_token_id,
                     eos_token_id=eos_token_id
                 )
-                pol_out = generate(
-                    model=fine_tuned_model,
-                    idx=pol_input_ids,
-                    attn_mask=pol_attn_mask,
+                pol_out = fine_tuned_model.generate(
+                    input_ids=pol_input_ids.to(device),
+                    attention_mask=pol_attn_mask.to(device),
                     max_new_tokens=max_new_tokens,
-                    temperature=eval_temperature,
-                    top_p=eval_top_p,
+                    do_sample=False,
+                    pad_token_id=fine_tuned_tokenizer.pad_token_id,
                     eos_token_id=eos_token_id
                 )
 
@@ -247,7 +245,7 @@ def test_and_evaluate_batch(
             # 5) Print the results and store them in the dictionary
             for i, question in enumerate(questions):
                 # Use the previously determined input key
-                print(f"\nInput {i + (count * 5) + 1}:\n {question}")
+                print(f"\nInput {i + (count * config.test_batch_size) + 1}:\n {question}")
 
                 print("\n ----- Reference Model ----- ")
                 print(f"Reference Response:\n {ref_resps[i]}")
