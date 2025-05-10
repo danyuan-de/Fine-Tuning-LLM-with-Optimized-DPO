@@ -692,18 +692,18 @@ def run_training():
     input_key = "question" if "question" in test_data[0] else "instruction"
 
     # Check the maximum sequence length in the test data
-    # max_length = 0
-    # for entry in test_data:
-    #     tokens = fine_tuned_tokenizer(format_input(entry), add_special_tokens=True).input_ids
-    #     max_length = max(max_length, len(tokens))
-    # print(f"Test data max sequence length: {max_length}")
+    max_length = 0
+    for entry in test_data:
+        tokens = fine_tuned_tokenizer(format_input(entry), add_special_tokens=True).input_ids
+        max_length = max(max_length, len(tokens))
+    print(f"Test data max sequence length: {max_length}")
 
-    # # Set stride based on the maximum length
-    # if max_length > config.allowed_max_length:
-    #     print("Warning: Long sequences detected, using stride=512")
-    #     stride = 512
-    # else:
-    #     stride = None
+    # Set stride based on the maximum length
+    if max_length > config.allowed_max_length:
+        print("Warning: Long sequences detected, using stride=512")
+        stride = 512
+    else:
+        stride = None
 
     if config.EVAL_USE_SAMPLING:
         print("Using sampling for evaluation")
