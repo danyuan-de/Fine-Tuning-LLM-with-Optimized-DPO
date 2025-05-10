@@ -1,0 +1,32 @@
+[
+  {
+    "epoch": 1,
+    "step": 2,
+    "batch_idx": 23,
+    "loss": 0.5642552301287651,
+    "loss_change": -0.1288919523358345,
+    "reward_diff": 0.3610084503889084,
+    "sample_chosen": "<observation>At constant volume, pressure $p\\propto T$ in kelvins.</observation>\n<insight>Convert \u00b0C to K: $27^{\\circ}\\mathrm{C}=300\\,\\mathrm{K}$, $327^{\\circ}\\mathrm{C}=600\\,\\mathrm{K}$.</insight>\n<t...",
+    "sample_rejected": "The kelvin temperatures are 300 K and 600 K, so the final pressure is twice the initial pressure."
+  },
+  {
+    "epoch": 1,
+    "step": 3,
+    "batch_idx": 31,
+    "loss": 0.17569828033447266,
+    "loss_change": -0.38855694979429245,
+    "reward_diff": 1.8864613324403763,
+    "sample_chosen": "<observation>Determine resonant frequency using $f = \\frac{1}{2 \\pi \\sqrt{L C}}$</observation>\n<insight>Substitute $L = 0.5\\,\\mathrm{H}$ and $C = 100\\,\\mu\\mathrm{F}$ into the formula</insight>\n<think>...",
+    "sample_rejected": "The resonant frequency of an RLC circuit containing a $10\\,\\Omega$ resistor, a $0.5\\,\\mathrm{H}$ inductor, and a $100\\,\\mu\\mathrm{F}$ capacitor is determined by $f = \\frac{1}{2 \\pi \\sqrt{L C}}$, where..."
+  },
+  {
+    "epoch": 1,
+    "step": 4,
+    "batch_idx": 39,
+    "loss": 0.03991789370775223,
+    "loss_change": -0.13578038662672043,
+    "reward_diff": 2.8202865719795227,
+    "sample_chosen": "<observation>The block is on an incline, and we need to compare the force down the incline with the maximum static friction force.</observation>\n<insight>The block stays at rest if $mg\\sin\\theta \\leq ...",
+    "sample_rejected": "Okay, so the force pulling the block down is $mg\\sin(30^{\\circ})$, and $\\sin(30^{\\circ}) = 0.5$. The max friction is $\\mu_s mg\\cos(30^{\\circ}) = 0.6 \\times mg \\times 0.866 \\approx 0.52mg$. Since $0.5m..."
+  }
+]
