@@ -7,6 +7,17 @@ import src.config as config
 import json
 
 
+BENCHMARK = "cais/mmlu"
+SUBJECTS = [
+    "high_school_physics",
+    "college_physics",
+    "econometrics",
+    "global_facts",
+    "formal_logic",
+    "business_ethics",
+]
+
+
 def load_model(model_path, device):
     tokenizer = AutoTokenizer.from_pretrained(model_path)
     model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.float16)
@@ -132,17 +143,7 @@ def evaluate_subject(subject, ori_tokenizer, ori_model, ft_tokenizer, ft_model, 
     }
 
 
-if __name__ == "__main__":
-    BENCHMARK = "cais/mmlu"
-    SUBJECTS = [
-        "high_school_physics",
-        "college_physics",
-        "econometrics",
-        "global_facts",
-        "formal_logic",
-        "business_ethics",
-    ]
-
+def run_benchmark(output_file=None):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     print("Loading models...")
@@ -183,8 +184,9 @@ if __name__ == "__main__":
             ft_tokenizer, ft_model,
             device
         )
-
-    out_path = os.path.join(config.result_dir, "mmlu_all_results.json")
+    if output_file is None:
+        output_file = f"benchmark_{config.model_name.split('/')[-1]}.json"
+    out_path = os.path.join(config.result_dir, output_file)
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(all_results, f, indent=2, ensure_ascii=False)
     print(f"\nAll results saved to: {out_path}")

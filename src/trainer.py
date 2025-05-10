@@ -14,7 +14,8 @@ import random
 import src.config as config
 from src.dpoLoss import DPOLoss
 from src.preferenceDataset import PreferenceDataset
-from src.test_evaluator import test_and_evaluate_one, test_and_evaluate_batch
+from src.TestEvaluation import test_and_evaluate_one, test_and_evaluate_batch
+from src.mmluBenchmark import run_benchmark
 from src.utils import (
     get_dpo_params,
     get_output_filename,
@@ -745,3 +746,21 @@ def run_training():
             stride_length=stride,
             eos_token_id=eos_token_id
         )
+    
+    print("Test evaluation completed.")
+    
+    # Run MMLU benchmark
+    if config.benchmark:
+        print("Running MMLU benchmark...")
+        benchmark_filename = get_output_filename(
+            method=config.method_name,
+            file=config.training_data_filename,
+            model=config.model_name,
+            label="benchmark",
+            learning_rate=config.learning_rate,
+            beta=config.beta,
+            lambda_dpop=getattr(config, "lambda_dpop", None),
+            lambda_shift=getattr(config, "lambda_shift", None),
+            typename="json"
+        )
+        mmlu_results = run_benchmark(benchmark_filename)

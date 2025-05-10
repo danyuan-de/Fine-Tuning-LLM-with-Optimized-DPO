@@ -48,7 +48,7 @@ methods = {
 method_name = methods["DPO"]  # default method
 
 # ------------------------------- Test methods -------------------------------
-test_method = 1  # 1 for test_and_evaluate_one, 2 for test_and_evaluate_batch
+test_method = 2  # 1 for test_and_evaluate_one, 2 for test_and_evaluate_batch
 
 # ---------------------------------- log probabilities ----------------------------------
 # Use log probabilities for DPO loss

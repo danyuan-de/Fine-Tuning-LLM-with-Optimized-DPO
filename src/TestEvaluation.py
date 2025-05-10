@@ -56,29 +56,30 @@ def test_and_evaluate_one(
             input_text = format_input(entry)
 
             # Reference Model Generation
-            ref_input_ids, _ = text_to_token_ids(input_text, ref_tokenizer).to(device)
-            ref_generated = generate(
-                model=ref_model,
-                idx=ref_input_ids,
+            ref_input_ids, ref_attn_mask = text_to_token_ids(input_text, ref_tokenizer).to(device)
+            ref_out = ref_model.generate(
+                input_ids=ref_input_ids.to(device),
+                attention_mask=ref_attn_mask.to(device),
                 max_new_tokens=max_new_tokens,
-                temperature=eval_temperature,
-                top_p=eval_top_p,
+                do_sample=False,
+                pad_token_id=ref_tokenizer.pad_token_id,
                 eos_token_id=eos_token_id
             )
-            ref_full_text = ref_tokenizer.decode(ref_generated[0], skip_special_tokens=False)
+                
+            ref_full_text = ref_tokenizer.decode(ref_out[0], skip_special_tokens=False)
             ref_response = postprocess_response(ref_full_text)
 
             # Fine-Tuned Model Generation
-            fine_tuned_model_input_ids, _ = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
-            fine_tuned_model_generated = generate(
-                model=fine_tuned_model,
-                idx=fine_tuned_model_input_ids.to(device),
+            pol_input_ids, pol_attn_mask = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
+            pol_out = fine_tuned_model.generate(
+                input_ids=pol_input_ids.to(device),
+                attention_mask=pol_attn_mask.to(device),
                 max_new_tokens=max_new_tokens,
-                temperature=eval_temperature,
-                top_p=eval_top_p,
+                do_sample=False,
+                pad_token_id=fine_tuned_tokenizer.pad_token_id,
                 eos_token_id=eos_token_id
             )
-            fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
+            fine_tuned_model_full_text = fine_tuned_tokenizer.decode(pol_out[0], skip_special_tokens=False)
             fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
 
             # Calculate perplexity
@@ -192,6 +193,24 @@ def test_and_evaluate_batch(
             ref_input_ids, ref_attn_mask = text_to_token_ids(full_prompts, ref_tokenizer)
             pol_input_ids, pol_attn_mask = text_to_token_ids(full_prompts, fine_tuned_tokenizer)
             with torch.no_grad():
+                # ref_out = generate(
+                #     model=ref_model,
+                #     idx=ref_input_ids.to(device),
+                #     attention_mask=ref_attn_mask.to(device),
+                #     max_new_tokens=max_new_tokens,
+                #     temperature=eval_temperature,
+                #     top_p=eval_top_p,
+                #     eos_token_id=eos_token_id
+                # )
+                # pol_out = generate(
+                #     model=fine_tuned_model,
+                #     idx=pol_input_ids.to(device),
+                #     attention_mask=pol_attn_mask.to(device),
+                #     max_new_tokens=max_new_tokens,
+                #     temperature=eval_temperature,
+                #     top_p=eval_top_p,
+                #     eos_token_id=eos_token_id
+                # )
                 ref_out = ref_model.generate(
                     input_ids=ref_input_ids.to(device),
                     attention_mask=ref_attn_mask.to(device),
@@ -210,8 +229,23 @@ def test_and_evaluate_batch(
                 )
 
             # 3) Batch decoding the generated responses
-            ref_resps = [postprocess_response(ref_tokenizer.decode(ids, skip_special_tokens=False)) for ids in ref_out]
-            pol_resps = [postprocess_response(fine_tuned_tokenizer.decode(ids, skip_special_tokens=False)) for ids in pol_out]
+            ref_resps = [
+                postprocess_response(
+                    ref_tokenizer.decode(out_ids[inp_ids.shape[-1]:],
+                                        skip_special_tokens=True).strip()
+                )
+                for out_ids, inp_ids in zip(ref_out, ref_input_ids)
+            ]
+
+            pol_resps = [
+                postprocess_response(
+                    fine_tuned_tokenizer.decode(out_ids[inp_ids.shape[-1]:],
+                                                skip_special_tokens=True).strip()
+                )
+                for out_ids, inp_ids in zip(pol_out, pol_input_ids)
+            ]
+            # ref_resps = [postprocess_response(ref_tokenizer.decode(ids, skip_special_tokens=True)) for ids in ref_out]
+            # pol_resps = [postprocess_response(fine_tuned_tokenizer.decode(ids, skip_special_tokens=True)) for ids in pol_out]
 
             ref_texts = [f"{p}{r}{ref_tokenizer.eos_token}" for p, r in zip(full_prompts, ref_resps)]
             pol_texts = [f"{p}{r}{fine_tuned_tokenizer.eos_token}" for p, r in zip(full_prompts, pol_resps)]
