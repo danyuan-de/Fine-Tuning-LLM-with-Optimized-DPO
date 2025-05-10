@@ -717,85 +717,80 @@ def run_training():
     try:
         test_results = []
         test_start_time = time.time()
-        for count, batch in enumerate(tqdm(test_loader, desc="Test Eval")):
-            questions = batch["question_texts"]   # list of str, length = batch_size
-            expected = batch["chosen_texts"]
-            denied = batch["rejected_texts"]
-            
-            # batch["prompt"] is a tensor of token ids (bsz, seq_len)
-            # 1) decoding prompt
-            full_prompts = [format_input({"question": q}) for q in questions]
-            
-            # 2) Batch generation of responses using the reference and fine-tuned models 
-            input_ids = text_to_token_ids(full_prompts, tokenizer).to(device)
-            with torch.no_grad():
-                ref_out = generate(
-                    model=ref_model,
-                    idx=input_ids,
-                    max_new_tokens=config.max_new_tokens,
-                    temperature=eval_temperature,
-                    top_p=eval_top_p,
-                    eos_token_id=eos_token_id
-                )
-                pol_out = generate(
-                    model=fine_tuned_model,
-                    idx=input_ids,
-                    max_new_tokens=config.max_new_tokens,
-                    temperature=eval_temperature,
-                    top_p=eval_top_p,
-                    eos_token_id=eos_token_id
-                )
+        for i, entry in enumerate(test_data):
 
+            input_text = format_input(entry)
 
-            # 3) Batch decoding the generated responses
-            ref_resps = [postprocess_response(tokenizer.decode(ids, skip_special_tokens=False)) for ids in ref_out]
-            pol_resps = [postprocess_response(fine_tuned_tokenizer.decode(ids, skip_special_tokens=False)) for ids in pol_out]
-            
-            
-            ref_texts = [f"{p}{r}{tokenizer.eos_token}" for p, r in zip(full_prompts, ref_resps)]
-            pol_texts = [f"{p}{r}{tokenizer.eos_token}" for p, r in zip(full_prompts, pol_resps)]
-            exp_texts = [f"{p}{r}{tokenizer.eos_token}" for p, r in zip(full_prompts, expected)]
-            denied_texts = [f"{p}{r}{tokenizer.eos_token}" for p, r in zip(full_prompts, denied)]
-            
-            # 4) Calculate perplexity for the reference and fine-tuned models and store them 
-            ref_ppls = calculate_perplexity(ref_model, tokenizer, ref_texts, max_length=config.allowed_max_length, stride=config.stride_length, batch_size=config.test_batch_size, device=device)
-            pol_ppls = calculate_perplexity(fine_tuned_model, tokenizer, pol_texts, max_length=config.allowed_max_length, stride=config.stride_length, batch_size=config.test_batch_size, device=device)
-            ref_exp_ppls = calculate_perplexity(ref_model, tokenizer, exp_texts, max_length=config.allowed_max_length, stride=config.stride_length, batch_size=config.test_batch_size, device=device)
-            pol_exp_ppls = calculate_perplexity(fine_tuned_model, tokenizer, exp_texts, max_length=config.allowed_max_length, stride=config.stride_length, batch_size=config.test_batch_size, device=device)
-            ref_denied_ppls = calculate_perplexity(ref_model, tokenizer, denied_texts, max_length=config.allowed_max_length, stride=config.stride_length, batch_size=config.test_batch_size, device=device)
-            pol_denied_ppls = calculate_perplexity(fine_tuned_model, tokenizer, denied_texts, max_length=config.allowed_max_length, stride=config.stride_length, batch_size=config.test_batch_size, device=device)
-            
-            # 5) Print the results and store them in the dictionary
-            for i, question in enumerate(questions):
-                # Use the previously determined input key
-                print(f"\nInput {i + (count * 5) + 1}:\n {question}")
+            # Reference Model Generation
+            ref_input_ids = text_to_token_ids(input_text, tokenizer).to(device)
+            ref_generated = generate(
+                model=ref_model,
+                idx=ref_input_ids.to(device),
+                max_new_tokens=config.max_new_tokens,
+                temperature=eval_temperature,
+                top_p=eval_top_p,
+                eos_token_id=eos_token_id
+            )
+            ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
+            ref_response = postprocess_response(ref_full_text)
 
-                print("\n ----- Reference Model ----- ")
-                print(f"Reference Response:\n {ref_resps[i]}")
-                print(f"Perplexity: {ref_ppls[i]:.2f}")
+            # Fine-Tuned Model Generation
+            fine_tuned_model_input_ids = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
+            fine_tuned_model_generated = generate(
+                model=fine_tuned_model,
+                idx=fine_tuned_model_input_ids.to(device),
+                max_new_tokens=config.max_new_tokens,
+                temperature=eval_temperature,
+                top_p=eval_top_p,
+                eos_token_id=eos_token_id
+            )
+            fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
+            fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
 
-                print("\n ----- Policy Model ----- ")
-                print(f"Policy Response:\n {pol_resps[i]}")
-                print(f"Perplexity: {pol_ppls[i]:.2f}")
+            # Calculate perplexity
+            ref_perplexity = calculate_perplexity(
+                model=ref_model,
+                tokenizer=tokenizer,
+                texts=input_text,
+                max_length=config.allowed_max_length,
+                stride=stride,
+                device=device
+            )
 
-                print("\n ----- Expected Response ----- ")
-                print(f"Expected Answer:\n {expected[i]}")
-                print(f"Gold Answer PPL (ref):    {ref_exp_ppls[i]:.2f}")
-                print(f"Disliked Answer PPL (ref): {ref_denied_ppls[i]:.2f}")
-                print(f"Gold Answer PPL (policy): {pol_exp_ppls[i]:.2f}")
-                print(f"Disliked Answer PPL (policy): {pol_denied_ppls[i]:.2f}")
-                print("=" * 80, "\n")
+            ft_perplexity = calculate_perplexity(
+                model=fine_tuned_model,
+                tokenizer=fine_tuned_tokenizer,
+                texts=input_text,
+                max_length=config.allowed_max_length,
+                stride=stride,
+                device=device
+            )
 
-                test_results.append({
-                    input_key: question,
-                    "ref_response": ref_resps[i],
-                    "policy_response": pol_resps[i],
-                    "expected": expected[i],
-                    "ref_perplexity": ref_ppls[i] if isinstance(ref_ppls, list) else ref_ppls,
-                    "policy_perplexity": pol_ppls[i] if isinstance(pol_ppls, list) else pol_ppls, 
-                    "ref_gold_answer_perplexity": ref_exp_ppls[i] if isinstance(ref_exp_ppls, list) else ref_exp_ppls,
-                    "policy_gold_answer_perplexity": pol_exp_ppls[i] if isinstance(pol_exp_ppls, list) else pol_exp_ppls
-                })
+            # Use the previously determined input key
+            print(f"\nInput {i}:\n {entry[input_key]}")
+
+            print("\n ----- Reference Model ----- ")
+            print(f"Reference Response: {ref_response}")
+            print(f"Perplexity: {ref_perplexity:.2f}")
+
+            print("\n ----- Policy Model ----- ")
+            print(f"Policy Response: {fine_tuned_model_response}")
+            print(f"Perplexity: {ft_perplexity:.2f}")
+
+            print("\n ----- Expected Response ----- ")
+            print(f"Expected Answer: {entry['chosen']}")
+            print("=" * 80, "\n")
+
+            # Create a single sample object and append to the results list
+            sample = {
+                input_key: entry[input_key],
+                "ref_response": ref_response,
+                "policy_response": fine_tuned_model_response,
+                "expected_response": entry['chosen'],
+                "ref_perplexity": ref_perplexity,
+                "policy_perplexity": ft_perplexity
+            }
+            test_results.append(sample)
 
         test_end_time = time.time()
         test_execution_time = (test_end_time - test_start_time) / 60
