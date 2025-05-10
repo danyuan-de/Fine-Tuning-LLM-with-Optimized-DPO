@@ -471,7 +471,7 @@ def run_training():
     test_dataset = PreferenceDataset(test_data, tokenizer)
     test_loader = DataLoader(
         test_dataset,
-        batch_size=config.batch_size,
+        batch_size=config.test_batch_size,
         collate_fn=customized_collate_fn,
         shuffle=False,
         drop_last=False,
@@ -486,31 +486,31 @@ def run_training():
     # print("\n")
 
     # Evaluate initial state
-    print("\nEvaluating initial state...")
+    # print("\nEvaluating initial state...")
     # log_memory_snapshot("Before initial evaluation")
 
     # Before training loop. If chosen and rejected responses are too similar, the preference margin won’t grow.
-    batch = next(iter(train_loader))
-    print("Chosen sample:", tokenizer.decode(batch["chosen"][0].tolist()))
-    print("Rejected sample:", tokenizer.decode(batch["rejected"][0].tolist()))
+    # batch = next(iter(train_loader))
+    # print("Chosen sample:", tokenizer.decode(batch["chosen"][0].tolist()))
+    # print("Rejected sample:", tokenizer.decode(batch["rejected"][0].tolist()))
 
-    res = dpo_loss_fn.evaluate_dpo_loss_loader(
-        policy_model=model,
-        reference_model=ref_model,
-        train_loader=train_loader,
-        val_loader=val_loader,
-        eval_iter=5
-    )
+    # res = dpo_loss_fn.evaluate_dpo_loss_loader(
+    #     policy_model=model,
+    #     reference_model=ref_model,
+    #     train_loader=train_loader,
+    #     val_loader=val_loader,
+    #     eval_iter=5
+    # )
 
-    # log_memory_snapshot("After initial evaluation")
+    # # log_memory_snapshot("After initial evaluation")
 
-    # Before starting the training, print the initail losses and rewards:
-    print("Training loss:", res["train_loss"])
-    print("Validation loss:", res["val_loss"])
+    # # Before starting the training, print the initail losses and rewards:
+    # print("Training loss:", res["train_loss"])
+    # print("Validation loss:", res["val_loss"])
 
-    print("Train reward margin:", res["train_chosen_reward"] - res["train_rejected_reward"])
-    print("Val reward margin:", res["val_chosen_reward"] - res["val_rejected_reward"])
-    print("=" * 50)
+    # print("Train reward margin:", res["train_chosen_reward"] - res["train_rejected_reward"])
+    # print("Val reward margin:", res["val_chosen_reward"] - res["val_rejected_reward"])
+    # print("=" * 50)
     print("\nStarting training...")
     print("=" * 50)
     # log_memory_snapshot("Before training")
@@ -660,81 +660,117 @@ def run_training():
         eval_temperature = 0.0
         eval_top_p = None
 
+    print("\nGenerating outputs on TEST set…")
+    policy_model.eval()
+    test_results_list = []
+    
     try:
-        for i, entry in enumerate(test_data):
+        for batch_idx, batch_from_loader in enumerate(tqdm(test_loader, desc="Evaluating Test Data Batches")):
+            # Get the original data entries corresponding to this batch for logging and expected responses
+            # The batch_size for test_loader is config.batch_size as per trainer.py L466
+            current_batch_size = batch_from_loader["prompt"].size(0) # Actual number of items in this batch
+            start_original_idx = batch_idx * config.batch_size # test_loader uses config.batch_size
+            end_original_idx = start_original_idx + current_batch_size
+            current_batch_original_entries = test_data[start_original_idx:end_original_idx]
 
-            input_text = format_input(entry)
+            # Batched prompt IDs are already on the correct device from custom_collate_fn
+            batched_prompt_ids = batch_from_loader["prompt"]
 
-            # Reference Model Generation
-            ref_input_ids = text_to_token_ids(input_text, tokenizer).to(device)
-            ref_generated = generate(
+            # Batch Reference Model Generation
+            ref_generated_batched_ids = generate(
                 model=ref_model,
-                idx=ref_input_ids.to(device),
+                idx=batched_prompt_ids,
                 max_new_tokens=config.max_new_tokens,
                 temperature=eval_temperature,
                 top_p=eval_top_p,
-                eos_token_id=eos_token_id
+                eos_token_id=tokenizer.eos_token_id # EOS from original tokenizer
             )
-            ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
-            ref_response = postprocess_response(ref_full_text)
 
-            # Fine-Tuned Model Generation
-            fine_tuned_model_input_ids = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
-            fine_tuned_model_generated = generate(
+            # Batch Fine-Tuned Model Generation
+            ft_generated_batched_ids = generate(
                 model=fine_tuned_model,
-                idx=fine_tuned_model_input_ids.to(device),
+                idx=batched_prompt_ids, # Use the same input prompts
                 max_new_tokens=config.max_new_tokens,
                 temperature=eval_temperature,
                 top_p=eval_top_p,
-                eos_token_id=eos_token_id
-            )
-            fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
-            fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
-
-            # Calculate perplexity
-            ref_perplexity = calculate_perplexity(
-                model=ref_model,
-                tokenizer=tokenizer,
-                texts=input_text,
-                max_length=config.allowed_max_length,
-                stride=stride,
-                device=device
+                eos_token_id=fine_tuned_tokenizer.eos_token_id # EOS from fine-tuned tokenizer
             )
 
-            ft_perplexity = calculate_perplexity(
-                model=fine_tuned_model,
-                tokenizer=fine_tuned_tokenizer,
-                texts=input_text,
-                max_length=config.allowed_max_length,
-                stride=stride,
-                device=device
-            )
+            # Prepare original prompt texts (as strings) for the current batch for perplexity calculation
+            original_prompt_strings_for_batch = [format_input(entry) for entry in current_batch_original_entries]
 
-            # Use the previously determined input key
-            print(f"\nInput {i}:\n {entry[input_key]}")
+            # Batch Calculate Perplexity
+            # calculate_perplexity internally handles batching using its own batch_size parameter.
+            # ref_perplexities_batch = calculate_perplexity(
+            #     model=ref_model,
+            #     tokenizer=tokenizer,
+            #     texts=original_prompt_strings_for_batch,
+            #     max_length=config.allowed_max_length, # Max length for perplexity calculation context
+            #     stride=stride_for_perplexity,
+            #     device=device,
+            #     batch_size=config.val_ppl_batch_size # Perplexity calculation batch size
+            # )
+            if not isinstance(ref_perplexities_batch, list): # Ensure it's a list for consistency
+                ref_perplexities_batch = [ref_perplexities_batch]
 
-            print("\n ----- Reference Model ----- ")
-            print(f"Reference Response: {ref_response}")
-            print(f"Perplexity: {ref_perplexity:.2f}")
+            # ft_perplexities_batch = calculate_perplexity(
+            #     model=fine_tuned_model,
+            #     tokenizer=fine_tuned_tokenizer,
+            #     texts=original_prompt_strings_for_batch,
+            #     max_length=config.allowed_max_length, # Max length for perplexity calculation context
+            #     stride=stride_for_perplexity,
+            #     device=device,
+            #     batch_size=config.val_ppl_batch_size # Perplexity calculation batch size
+            # )
+            if not isinstance(ft_perplexities_batch, list): # Ensure it's a list for consistency
+                ft_perplexities_batch = [ft_perplexities_batch]
 
-            print("\n ----- Policy Model ----- ")
-            print(f"Policy Response: {fine_tuned_model_response}")
-            print(f"Perplexity: {ft_perplexity:.2f}")
+            # Iterate through items in the current batch to decode, print, and store results
+            for item_idx_in_batch in range(current_batch_size):
+                original_entry_for_item = current_batch_original_entries[item_idx_in_batch]
+                
+                # Decode individual generated responses from the batch
+                ref_full_text_item = tokenizer.decode(ref_generated_batched_ids[item_idx_in_batch], skip_special_tokens=False)
+                ref_response_item = postprocess_response(ref_full_text_item)
 
-            print("\n ----- Expected Response ----- ")
-            print(f"Expected Answer: {entry['chosen']}")
-            print("=" * 80, "\n")
+                ft_full_text_item = fine_tuned_tokenizer.decode(ft_generated_batched_ids[item_idx_in_batch], skip_special_tokens=False)
+                ft_response_item = postprocess_response(ft_full_text_item)
 
-            # Create a single sample object and append to the results list
-            sample = {
-                input_key: entry[input_key],
-                "ref_response": ref_response,
-                "policy_response": fine_tuned_model_response,
-                "expected_response": entry['chosen'],
-                "ref_perplexity": ref_perplexity,
-                "policy_perplexity": ft_perplexity
-            }
-            test_results.append(sample)
+                # Get perplexity for the current item
+                # ref_perplexity_item = ref_perplexities_batch[item_idx_in_batch]
+                # ft_perplexity_item = ft_perplexities_batch[item_idx_in_batch]
+
+                # Get the specific input text to log based on the determined input_key_to_log
+                # Safely get the value, or use a part of the formatted input as a fallback.
+                logged_input_value = original_entry_for_item.get(input_key)
+                if logged_input_value is None: # If the key wasn't found or data is inconsistent
+                    logged_input_value = format_input(original_entry_for_item)[:200] + "..." # Summary
+
+                # Print information (optional, can be verbose)
+                # This print block can be removed or made conditional if too much output
+                print(f"\nInput sample {(start_original_idx + item_idx_in_batch)} (from original test_data):")
+                print(f"Logged Input Field ('{input_key}'): {logged_input_value}")
+                print("\n ----- Reference Model ----- ")
+                print(f"Reference Response: {ref_response_item}")
+                # print(f"Perplexity: {ref_perplexity_item:.2f}")
+                print("\n ----- Fine-Tuned Policy Model ----- ")
+                print(f"Policy Response: {ft_response_item}")
+                # print(f"Perplexity: {ft_perplexity_item:.2f}")
+                print("\n ----- Expected Response (Chosen) ----- ")
+                print(f"Expected Answer: {original_entry_for_item['chosen']}")
+                print("=" * 80, "\n")
+
+                # Store results for this item
+                sample_output = {
+                    input_key: logged_input_value, # Stores the specific field based on input_key_to_log
+                    "full_formatted_prompt": format_input(original_entry_for_item), # Always store the full prompt fed to model
+                    "ref_response": ref_response_item,
+                    "policy_response": ft_response_item,
+                    "expected_response": original_entry_for_item['chosen'],
+                    # "ref_perplexity": ref_perplexity_item,
+                    # "policy_perplexity": ft_perplexity_item
+                }
+                test_results_list.append(sample_output)
 
     except KeyboardInterrupt:
         print("\nInterrupted! Saving partial results...")
