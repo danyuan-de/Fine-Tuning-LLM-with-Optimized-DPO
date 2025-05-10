@@ -20,6 +20,10 @@ def main():
         print("Running benchmark test...")
         run_benchmark()
         print("Benchmark completed.")
+    # if args.run_test:
+    #     from src.test_evaluator import test_and_save
+    #     print("Running test evaluation...")
+    #     test_and_save()
     else:
         print("No action specified. Use --train to run training or --benchmark to run the benchmark test.")
 

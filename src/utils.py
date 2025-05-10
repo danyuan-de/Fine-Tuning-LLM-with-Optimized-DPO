@@ -274,11 +274,11 @@ def custom_collate_fn(
             batch_data[key].append(padded_sequence)
             batch_data[f"{key}_mask"].append(mask)
 
-    batch_data["prompt"] = pad_sequence(
-        batch_data["prompt"],
-        batch_first=True,
-        padding_value=tokenizer.pad_token_id
-    )
+    # batch_data["prompt"] = pad_sequence(
+    #     batch_data["prompt"],
+    #     batch_first=True,
+    #     padding_value=tokenizer.pad_token_id
+    # )
     # Stack the tensors (already on device, no need for .to(device))
     for key in ["chosen", "rejected", "chosen_mask", "rejected_mask"]:
         batch_data[key] = torch.stack(batch_data[key])
@@ -466,11 +466,10 @@ def generate(
         # Concatenate the chosen token
         idx = torch.cat((idx, next_token), dim=1)
 
+        finished = next_token == eos_token_id
         # Check EOS or max tokens
-        if eos_token_id is not None:
-            if (next_token == eos_token_id).any():
-                # If any in the batch hits EOS, you might choose to break or handle individually
-                break
+        if eos_token_id is not None and finished.all():
+            break
 
     return idx
 
@@ -722,9 +721,14 @@ def summarize_ppl_table(model, tokenizer, data_loader, device=None):
             )
 
             # 2) batch self-generation + PPL
-            input_ids = batch["prompt"].to(device)
+            prompts_on_device = [p.to(device) for p in batch["prompt"]]
+            padded_prompts = pad_sequence(
+                prompts_on_device,
+                batch_first=True,
+                padding_value=tokenizer.pad_token_id
+            )
             gen_outs = model.generate(
-                input_ids,
+                padded_prompts,
                 max_new_tokens=config.max_new_tokens,
                 do_sample=False
             )

@@ -17,6 +17,8 @@ def parse_args():
                         help='Run training on the dataset')
     parser.add_argument('--benchmark', action='store_true', default=False,
                         help='Run benchmark on the dataset')
+    parser.add_argument('--run_test', action='store_true', default=False,
+                        help='Run test evaluation on the dataset')
 
     # -------------------------------- Select benchmark test dataset --------------------------------
     benchmark_choices = list(config.benchmark_datasets.keys())
@@ -55,6 +57,12 @@ def parse_args():
                         help='Lambda DPOP value')
     parser.add_argument('--lambda_shift', type=float, default=config.lambda_shift,
                         help='Lambda shift value')
+    
+    # --------------------------------- Validation and Test batch size ---------------------------------
+    parser.add_argument('--val_ppl_batch_size', type=int, default=config.val_ppl_batch_size,
+                        help='Batch size for validation and test data')
+    parser.add_argument('--test_batch_size', type=int, default=config.test_batch_size,
+                        help='Batch size for test data')
 
     # ------------------------------------ Training parameters ------------------------------------
     parser.add_argument('--lr', type=float, default=config.learning_rate,
@@ -69,12 +77,14 @@ def parse_args():
                         help='Weight decay')
     parser.add_argument('--max_length', type=int, default=config.allowed_max_length,
                         help='Maximum input length')
-    parser.add_argument('--max_new_tokens', type=int, default=config.max_new_tokens,
-                        help='Maximum tokens to generate')
+    parser.add_argument('--stride_length', type=int, default=config.stride_length,
+                        help='Stride length for training data')
 
     # ------------------------------------ Generation parameters ------------------------------------
     parser.add_argument('--sampling', action='store_true', default=config.EVAL_USE_SAMPLING,
                         help='Use sampling for evaluation')
+    parser.add_argument('--max_new_tokens', type=int, default=config.max_new_tokens,
+                        help='Maximum tokens to generate')
     parser.add_argument('--temp', type=float, default=config.temperature,
                         help='Temperature for generation')
     parser.add_argument('--top_p', type=float, default=config.top_p,
@@ -108,6 +118,7 @@ def update_config_from_args(args):
     # Update config values with command-line arguments
     config.train = args.train
     config.benchmark = args.benchmark
+    config.run_test = args.run_test
     config.benchmark_dataset = args.benchmark_dataset
     config.num_benchmark_samples = args.num_benchmark_samples
     config.MMLU_PRO_category_isPhysics = args.category_isPhysics
@@ -129,6 +140,9 @@ def update_config_from_args(args):
     config.eval_freq = args.eval_freq
     config.model_name = config.models[args.model]
     config.method_name = config.methods[args.method]
+    config.val_ppl_batch_size = args.val_ppl_batch_size
+    config.test_batch_size = args.test_batch_size
+    config.stride_length = args.stride_length
 
     # Be able to specify a direct file path or use the mapping
     config.training_data_filename = args.data_file if args.data_file else config.training_data_files[args.data]
@@ -160,6 +174,9 @@ def print_configuration():
         print("\nTraining Parameters:")
         print(f"  Learning Rate: {config.learning_rate}")
         print(f"  Batch Size: {config.batch_size}")
+        print(f"  Validation Batch Size: {config.val_ppl_batch_size}")
+        print(f"  test Batch Size: {config.test_batch_size}")
+        print(f"  Stride Length: {config.stride_length}")
         print(f"  Gradient Accumulation Steps: {config.gradient_accumulation_steps}")
         print(f"  Epochs: {config.num_epochs}")
         print(f"  Weight Decay: {config.weight_decay}")
@@ -178,4 +195,7 @@ def print_configuration():
         print(f"Number of Benchmark Samples: {config.num_benchmark_samples}")
         print(f"Category is Physics: {config.MMLU_PRO_category_isPhysics}")
         print(f"use Sampling: {config.EVAL_USE_SAMPLING}")
+    elif config.run_test:
+        print(f"Run Test Evaluation: {config.run_test}")
+        print(f"Test Batch Size: {config.test_batch_size}")
     print(f"{'='*50}\n")
