@@ -125,6 +125,7 @@ def update_config_from_args(args):
     config.train = args.train
     config.benchmark = args.benchmark
     config.run_test = args.run_test
+    config.run_ppl = args.run_ppl
     config.benchmark_dataset = args.benchmark_dataset
     config.num_benchmark_samples = args.num_benchmark_samples
     config.MMLU_PRO_category_isPhysics = args.category_isPhysics
@@ -168,6 +169,12 @@ def print_configuration():
     print(f"Random Seed: {config.random_seed}")
     if config.train:
         print(f"Run Training: {config.train}")
+        if config.benchmark:
+            print(f"  Benchmark Dataset: {config.benchmark_dataset}")
+        if config.run_ppl:
+            print(f"  Run PPL Evaluation: {config.run_ppl}")
+        if config.run_test:
+            print(f"  Run Test Evaluation: {config.run_test}")
         print(f"Model: {config.model_name}")
         print(f"Method: {config.method_name.upper()}")
         print(f"Training Data: {config.training_data_filename}")
@@ -204,9 +211,4 @@ def print_configuration():
         print(f"Number of Benchmark Samples: {config.num_benchmark_samples}")
         print(f"Category is Physics: {config.MMLU_PRO_category_isPhysics}")
         print(f"use Sampling: {config.EVAL_USE_SAMPLING}")
-    elif config.run_test:
-        print(f"Run Test Evaluation: {config.run_test}")
-        print(f"Test Batch Size: {config.test_batch_size}")
-        method = "test_and_evaluate_one" if config.test_method == 1 else "test_and_evaluate_batch"
-        print(f"Test Method: {method}")
     print(f"{'='*50}\n")

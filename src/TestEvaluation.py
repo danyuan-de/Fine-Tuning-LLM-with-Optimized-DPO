@@ -282,16 +282,16 @@ def test_and_evaluate_batch(
                 print(f"\nInput {i + (count * config.test_batch_size) + 1}:\n {question}")
 
                 print("\n ----- Reference Model ----- ")
-                print(f"Reference Response:\n {ref_resps[i]}")
-                print(f"Perplexity: {ref_ppls[i]:.2f}")
+                print(f"Reference Response:\n{ref_resps[i]}")
+                print(f"Perplexity:{ref_ppls[i]:.2f}")
 
                 print("\n ----- Policy Model ----- ")
-                print(f"Policy Response:\n {pol_resps[i]}")
-                print(f"Perplexity: {pol_ppls[i]:.2f}")
+                print(f"Policy Response:\n{pol_resps[i]}")
+                print(f"Perplexity:{pol_ppls[i]:.2f}")
 
                 print("\n ----- Expected Response ----- ")
-                print(f"Expected Answer:\n {expected[i]}")
-                print(f"Gold Answer PPL (ref):    {ref_exp_ppls[i]:.2f}")
+                print(f"Expected Answer:\n{expected[i]}")
+                print(f"Gold Answer PPL (ref): {ref_exp_ppls[i]:.2f}")
                 print(f"Disliked Answer PPL (ref): {ref_denied_ppls[i]:.2f}")
                 print(f"Gold Answer PPL (policy): {pol_exp_ppls[i]:.2f}")
                 print(f"Disliked Answer PPL (policy): {pol_denied_ppls[i]:.2f}")
