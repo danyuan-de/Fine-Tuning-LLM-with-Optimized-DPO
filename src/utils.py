@@ -326,7 +326,9 @@ def text_to_token_ids(texts: Union[str, List[str]], tokenizer) -> torch.LongTens
         truncation=True,
         max_length=config.allowed_max_length
     )
-    return encoding.input_ids  # shape = (bsz, seq_len)
+
+    # shape = (bsz, seq_len) -> input_ids
+    return encoding.input_ids, encoding.attention_mask  
 
 
 def token_ids_to_text(token_ids: torch.Tensor, tokenizer, skip_special_tokens: bool = False) -> List[str]:
@@ -340,6 +342,7 @@ def generate(
     model,
     idx,
     max_new_tokens=512,
+    attention_mask=None,
     context_size=4096,
     temperature=0.0,
     top_k=None,
@@ -375,9 +378,17 @@ def generate(
         # Truncate the context
         idx_cond = idx[:, -context_size:]  # shape: (batch_size, <=context_size)
 
+        if attention_mask is not None:
+            mask_cond = attention_mask[:, -context_size:]
+        else:
+            mask_cond = None
+
         # Compute logits; we only need the final token’s logits
         with torch.no_grad():
-            output = model(idx_cond)
+            if mask_cond is None:
+                output = model(idx_cond)
+            else:
+                output = model(idx_cond, attention_mask=mask_cond)
             logits = output.logits if hasattr(output, "logits") else output[0]
         logits = logits[:, -1, :]  # shape: (batch_size, vocab_size)
 
@@ -422,9 +433,15 @@ def generate(
         # Concatenate the chosen token
         idx = torch.cat((idx, next_token), dim=1)
 
-        finished = next_token == eos_token_id
-        # Check EOS or max tokens
-        if eos_token_id is not None and finished.all():
+        # Extend the attention mask if provided: mark generated tokens as real (non-padding) tokens
+        if attention_mask is not None:
+            # Append a “1” for each newly generated token so it's treated as valid input
+            attention_mask = torch.cat(
+                (attention_mask, torch.ones_like(next_token, device=device)), dim=1
+            )
+
+        # Check if all generated samples have reached the end-of-sequence token
+        if eos_token_id is not None and (next_token == eos_token_id).all():
             break
 
     return idx

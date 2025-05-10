@@ -56,10 +56,10 @@ def test_and_evaluate_one(
             input_text = format_input(entry)
 
             # Reference Model Generation
-            ref_input_ids = text_to_token_ids(input_text, ref_tokenizer).to(device)
+            ref_input_ids, _ = text_to_token_ids(input_text, ref_tokenizer).to(device)
             ref_generated = generate(
                 model=ref_model,
-                idx=ref_input_ids.to(device),
+                idx=ref_input_ids,
                 max_new_tokens=max_new_tokens,
                 temperature=eval_temperature,
                 top_p=eval_top_p,
@@ -69,7 +69,7 @@ def test_and_evaluate_one(
             ref_response = postprocess_response(ref_full_text)
 
             # Fine-Tuned Model Generation
-            fine_tuned_model_input_ids = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
+            fine_tuned_model_input_ids, _ = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
             fine_tuned_model_generated = generate(
                 model=fine_tuned_model,
                 idx=fine_tuned_model_input_ids.to(device),
@@ -189,12 +189,13 @@ def test_and_evaluate_batch(
             full_prompts = [format_input(entry) for entry in original_test_data_slice]
 
             # 2) Batch generation of responses using the reference and fine-tuned models
-            ref_input_ids = text_to_token_ids(full_prompts, ref_tokenizer).to(device)
-            pol_input_ids = text_to_token_ids(full_prompts, fine_tuned_tokenizer).to(device)
+            ref_input_ids, ref_attn_mask = text_to_token_ids(full_prompts, ref_tokenizer).to(device)
+            pol_input_ids, pol_attn_mask = text_to_token_ids(full_prompts, fine_tuned_tokenizer).to(device)
             with torch.no_grad():
                 ref_out = generate(
                     model=ref_model,
                     idx=ref_input_ids,
+                    attn_mask=ref_attn_mask,
                     max_new_tokens=max_new_tokens,
                     temperature=eval_temperature,
                     top_p=eval_top_p,
@@ -203,6 +204,7 @@ def test_and_evaluate_batch(
                 pol_out = generate(
                     model=fine_tuned_model,
                     idx=pol_input_ids,
+                    attn_mask=pol_attn_mask,
                     max_new_tokens=max_new_tokens,
                     temperature=eval_temperature,
                     top_p=eval_top_p,
