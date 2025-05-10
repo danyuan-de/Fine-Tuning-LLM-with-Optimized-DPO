@@ -4,7 +4,7 @@ from tqdm import tqdm
 from datetime import timedelta
 import torch
 import time
-from src.utils import format_input, text_to_token_ids, postprocess_response, calculate_perplexity, generate
+from src.utils import format_input, text_to_token_ids, postprocess_response, calculate_perplexity
 import src.config as config
 
 
@@ -15,128 +15,6 @@ def save_test_results(test_results, output_json_path):
     with open(output_json_path, "w") as f:
         json.dump(test_results, f, indent=4)
     print("Test results saved to:", output_json_path)
-
-
-def test_and_evaluate_one(
-    output_json_path: str,
-    test_data,
-    test_loader,
-    dpo_loss_fn,
-    ref_model,
-    ref_tokenizer,
-    fine_tuned_model,
-    fine_tuned_tokenizer,
-    device,
-    eval_temperature,
-    eval_top_p,
-    max_new_tokens,
-    stride_length,
-    eos_token_id
-):
-    # Check first entry to determine data type
-    input_key = "question" if "question" in test_data[0] else "instruction"
-
-    print("Starting test evaluation...")
-    # Evaluate the model on the test set
-    test_res = dpo_loss_fn.evaluate_dpo_loss_loader(
-        policy_model=fine_tuned_model,
-        reference_model=ref_model,
-        train_loader=None,
-        val_loader=test_loader,
-        eval_iter=5
-    )
-    print("Test loss:", test_res["val_loss"])
-    print("Test reward margin:", test_res["val_chosen_reward"] - test_res["val_rejected_reward"])
-
-    test_results = []
-    test_start_time = time.time()
-    try:
-        for i, entry in enumerate(test_data):
-
-            input_text = format_input(entry)
-
-            # Reference Model Generation
-            ref_input_ids, ref_attn_mask = text_to_token_ids(input_text, ref_tokenizer).to(device)
-            ref_out = ref_model.generate(
-                input_ids=ref_input_ids.to(device),
-                attention_mask=ref_attn_mask.to(device),
-                max_new_tokens=max_new_tokens,
-                do_sample=False,
-                pad_token_id=ref_tokenizer.pad_token_id,
-                eos_token_id=eos_token_id
-            )
-                
-            ref_full_text = ref_tokenizer.decode(ref_out[0], skip_special_tokens=False)
-            ref_response = postprocess_response(ref_full_text)
-
-            # Fine-Tuned Model Generation
-            pol_input_ids, pol_attn_mask = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
-            pol_out = fine_tuned_model.generate(
-                input_ids=pol_input_ids.to(device),
-                attention_mask=pol_attn_mask.to(device),
-                max_new_tokens=max_new_tokens,
-                do_sample=False,
-                pad_token_id=fine_tuned_tokenizer.pad_token_id,
-                eos_token_id=eos_token_id
-            )
-            fine_tuned_model_full_text = fine_tuned_tokenizer.decode(pol_out[0], skip_special_tokens=False)
-            fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
-
-            # Calculate perplexity
-            ref_perplexity = calculate_perplexity(
-                model=ref_model,
-                tokenizer=ref_tokenizer,
-                texts=input_text,
-                max_length=config.allowed_max_length,
-                stride=stride_length,
-                device=device
-            )
-
-            ft_perplexity = calculate_perplexity(
-                model=fine_tuned_model,
-                tokenizer=fine_tuned_tokenizer,
-                texts=input_text,
-                max_length=config.allowed_max_length,
-                stride=stride_length,
-                device=device
-            )
-
-            # Use the previously determined input key
-            print(f"\nInput {i}:\n {entry[input_key]}")
-
-            print("\n ----- Reference Model ----- ")
-            print(f"Reference Response: {ref_response}")
-            print(f"Perplexity: {ref_perplexity:.2f}")
-
-            print("\n ----- Policy Model ----- ")
-            print(f"Policy Response: {fine_tuned_model_response}")
-            print(f"Perplexity: {ft_perplexity:.2f}")
-
-            print("\n ----- Expected Response ----- ")
-            print(f"Expected Answer: {entry['chosen']}")
-            print("=" * 80, "\n")
-
-            # Create a single sample object and append to the results list
-            sample = {
-                input_key: entry[input_key],
-                "ref_response": ref_response,
-                "policy_response": fine_tuned_model_response,
-                "expected_response": entry['chosen'],
-                "ref_perplexity": ref_perplexity,
-                "policy_perplexity": ft_perplexity
-            }
-            test_results.append(sample)
-
-        test_end_time = time.time()
-        test_execution_time = (test_end_time - test_start_time) / 60
-        print(f"Test evaluation completed in {test_execution_time:.2f} minutes (in {str(timedelta(seconds=test_end_time - test_start_time))})")
-
-    except KeyboardInterrupt:
-        print("\nInterrupted! Saving partial results...")
-
-    finally:
-        save_test_results(test_results, output_json_path)
-        print("Test results saved to:", output_json_path)
 
 
 def test_and_evaluate_batch(
@@ -193,24 +71,6 @@ def test_and_evaluate_batch(
             ref_input_ids, ref_attn_mask = text_to_token_ids(full_prompts, ref_tokenizer)
             pol_input_ids, pol_attn_mask = text_to_token_ids(full_prompts, fine_tuned_tokenizer)
             with torch.no_grad():
-                # ref_out = generate(
-                #     model=ref_model,
-                #     idx=ref_input_ids.to(device),
-                #     attention_mask=ref_attn_mask.to(device),
-                #     max_new_tokens=max_new_tokens,
-                #     temperature=eval_temperature,
-                #     top_p=eval_top_p,
-                #     eos_token_id=eos_token_id
-                # )
-                # pol_out = generate(
-                #     model=fine_tuned_model,
-                #     idx=pol_input_ids.to(device),
-                #     attention_mask=pol_attn_mask.to(device),
-                #     max_new_tokens=max_new_tokens,
-                #     temperature=eval_temperature,
-                #     top_p=eval_top_p,
-                #     eos_token_id=eos_token_id
-                # )
                 ref_out = ref_model.generate(
                     input_ids=ref_input_ids.to(device),
                     attention_mask=ref_attn_mask.to(device),
@@ -231,21 +91,17 @@ def test_and_evaluate_batch(
             # 3) Batch decoding the generated responses
             ref_resps = [
                 postprocess_response(
-                    ref_tokenizer.decode(out_ids[inp_ids.shape[-1]:],
-                                        skip_special_tokens=True).strip()
+                    ref_tokenizer.decode(out_ids[inp_ids.shape[-1]:], skip_special_tokens=False).strip()
                 )
                 for out_ids, inp_ids in zip(ref_out, ref_input_ids)
             ]
 
             pol_resps = [
                 postprocess_response(
-                    fine_tuned_tokenizer.decode(out_ids[inp_ids.shape[-1]:],
-                                                skip_special_tokens=True).strip()
+                    fine_tuned_tokenizer.decode(out_ids[inp_ids.shape[-1]:], skip_special_tokens=False).strip()
                 )
                 for out_ids, inp_ids in zip(pol_out, pol_input_ids)
             ]
-            # ref_resps = [postprocess_response(ref_tokenizer.decode(ids, skip_special_tokens=True)) for ids in ref_out]
-            # pol_resps = [postprocess_response(fine_tuned_tokenizer.decode(ids, skip_special_tokens=True)) for ids in pol_out]
 
             ref_texts = [f"{p}{r}{ref_tokenizer.eos_token}" for p, r in zip(full_prompts, ref_resps)]
             pol_texts = [f"{p}{r}{fine_tuned_tokenizer.eos_token}" for p, r in zip(full_prompts, pol_resps)]
@@ -304,8 +160,10 @@ def test_and_evaluate_batch(
                     "expected": expected[i],
                     "ref_perplexity": ref_ppls[i] if isinstance(ref_ppls, list) else ref_ppls,
                     "policy_perplexity": pol_ppls[i] if isinstance(pol_ppls, list) else pol_ppls,
-                    "ref_gold_answer_perplexity": ref_exp_ppls[i] if isinstance(ref_exp_ppls, list) else ref_exp_ppls,
-                    "policy_gold_answer_perplexity": pol_exp_ppls[i] if isinstance(pol_exp_ppls, list) else pol_exp_ppls
+                    "ref_chosen_perplexity": ref_exp_ppls[i] if isinstance(ref_exp_ppls, list) else ref_exp_ppls,
+                    "policy_chosen_perplexity": pol_exp_ppls[i] if isinstance(pol_exp_ppls, list) else pol_exp_ppls,
+                    "ref_rejected_perplexity": ref_denied_ppls[i] if isinstance(ref_denied_ppls, list) else ref_denied_ppls,
+                    "policy_rejected_perplexity": pol_denied_ppls[i] if isinstance(pol_denied_ppls, list) else pol_denied_ppls
                 })
 
         test_end_time = time.time()

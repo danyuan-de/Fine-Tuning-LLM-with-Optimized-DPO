@@ -14,7 +14,7 @@ import random
 import src.config as config
 from src.dpoLoss import DPOLoss
 from src.preferenceDataset import PreferenceDataset
-from src.TestEvaluation import test_and_evaluate_one, test_and_evaluate_batch
+from src.TestEvaluation import test_and_evaluate_batch
 from src.mmluBenchmark import run_benchmark
 from src.utils import (
     get_dpo_params,
@@ -86,8 +86,8 @@ def train_model(
 
     # Main training loop
     for epoch in range(num_epochs):
-        # if log_memory:
-        #     log_memory_snapshot(f"Starting epoch {epoch+1}/{num_epochs}")
+        if log_memory:
+            log_memory_snapshot(f"Starting epoch {epoch+1}/{num_epochs}")
 
         policy_model.train()  # Set model to training mode
 
@@ -99,8 +99,8 @@ def train_model(
 
         try:
             for batch_idx, batch in enumerate(train_loop):
-                # if log_memory and batch_idx % max(1, len(train_loader) // 10) == 0:
-                #     log_memory_snapshot(f"Epoch {epoch+1}, Batch {batch_idx+1}/{len(train_loader)}")
+                if log_memory and batch_idx % max(1, len(train_loader) // 10) == 0:
+                    log_memory_snapshot(f"Epoch {epoch+1}, Batch {batch_idx+1}/{len(train_loader)}")
 
                 (loss, chosen_rewards, rejected_rewards, reward_accuracy,
                  policy_chosen_log_probas, policy_rejected_log_probas,
@@ -299,7 +299,7 @@ def train_model(
     return tracking
 
 
-def run_training():
+def runPipeline():
     # Get relevant parameters for the selected method
     dpo_params = get_dpo_params(config.method_name)
 
@@ -578,6 +578,7 @@ def run_training():
         eval_iter=5,
         gradient_accumulation_steps=config.gradient_accumulation_steps,
         tokenizer=tokenizer,
+        log_memory=True
     )
 
     end_time = time.time()
@@ -621,10 +622,10 @@ def run_training():
     #     print("No batch records found in tracking data")
 
     # Save the model and tokenizer
-    save_path = config.fine_tuned_model_path
-    policy_model.save_pretrained(save_path)
-    tokenizer.save_pretrained(save_path)
-    print(f"Model and tokenizer saved to {save_path}")
+    saved_ft_model_path = os.path.join(config.model_workspace_dir, f"{config.model_name.split('/')[-1]}_fine-tuned")
+    policy_model.save_pretrained(saved_ft_model_path)
+    tokenizer.save_pretrained(saved_ft_model_path)
+    print(f"Model and tokenizer saved to {saved_ft_model_path}")
 
     if config.run_ppl:
         print("\nComputing policy model perplexity...\n")
@@ -666,8 +667,8 @@ def run_training():
         label="reward margin"
     )
 
-    fine_tuned_tokenizer = AutoTokenizer.from_pretrained(save_path)
-    fine_tuned_model = AutoModelForCausalLM.from_pretrained(save_path)
+    fine_tuned_tokenizer = AutoTokenizer.from_pretrained(saved_ft_model_path)
+    fine_tuned_model = AutoModelForCausalLM.from_pretrained(saved_ft_model_path)
     print("Tuned model's tokenizer loaded.")
 
     ref_model.to(device)  # Ensure reference model is on device
@@ -712,24 +713,7 @@ def run_training():
         eval_temperature = 0.0
         eval_top_p = None
 
-    if config.test_method == 1:
-        test_and_evaluate_one(
-            output_json_path=output_json,
-            test_data=test_data,
-            test_loader=test_loader,
-            dpo_loss_fn=dpo_loss_fn,
-            ref_model=ref_model,
-            ref_tokenizer=tokenizer,
-            fine_tuned_model=fine_tuned_model,
-            fine_tuned_tokenizer=fine_tuned_tokenizer,
-            device=device,
-            eval_temperature=eval_temperature,
-            eval_top_p=eval_top_p,
-            max_new_tokens=config.max_new_tokens,
-            stride_length=stride,
-            eos_token_id=eos_token_id
-        )
-    elif config.test_method == 2:
+    if config.run_test:
         test_and_evaluate_batch(
             output_json_path=output_json,
             test_data=test_data,
@@ -746,9 +730,9 @@ def run_training():
             stride_length=stride,
             eos_token_id=eos_token_id
         )
-    
+
     print("Test evaluation completed.")
-    
+
     # Run MMLU benchmark
     if config.benchmark:
         print("Running MMLU benchmark...")
@@ -763,4 +747,4 @@ def run_training():
             lambda_shift=getattr(config, "lambda_shift", None),
             typename="json"
         )
-        mmlu_results = run_benchmark(benchmark_filename)
+        run_benchmark(benchmark_filename, saved_ft_model_path)

@@ -35,15 +35,15 @@ class PreferenceDataset(Dataset):
                 "rejected_text": rejected_text
             })
 
-        print("\n=== data pre-processing validation ===")
-        sample_entry = self.encoded_texts[0]
-        print(f"Prompt:\n{self.tokenizer.decode(sample_entry['prompt'])}\n")
-        print(f"Chosen:\n{self.tokenizer.decode(sample_entry['chosen'])}\n")
-        print(f"Rejected:\n{self.tokenizer.decode(sample_entry['rejected'])}\n\n")
-        print(f"Question text:\n{sample_entry['question_text']}\n")
-        print(f"Chosen text:\n{sample_entry['chosen_text']}\n")
-        print(f"Rejected text:\n{sample_entry['rejected_text']}\n")
-        print("====================================\n")
+        # print("\n=== data pre-processing validation ===")
+        # sample_entry = self.encoded_texts[0]
+        # print(f"Prompt:\n{self.tokenizer.decode(sample_entry['prompt'])}\n")
+        # print(f"Chosen:\n{self.tokenizer.decode(sample_entry['chosen'])}\n")
+        # print(f"Rejected:\n{self.tokenizer.decode(sample_entry['rejected'])}\n\n")
+        # print(f"Question text:\n{sample_entry['question_text']}\n")
+        # print(f"Chosen text:\n{sample_entry['chosen_text']}\n")
+        # print(f"Rejected text:\n{sample_entry['rejected_text']}\n")
+        # print("====================================\n")
 
     def __getitem__(self, index):
         item = self.encoded_texts[index]

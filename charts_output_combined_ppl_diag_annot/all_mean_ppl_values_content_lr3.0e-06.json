@@ -1,0 +1,22 @@
+{
+    "Reference": {
+        "Ref_Chosen_PPL": 12.643,
+        "Ref_Rejected_PPL": 20.67,
+        "Ref_Self-Generated_PPL": 2.395
+    },
+    "DPO (\u03b2=0.30, LR=3.0e-06)": {
+        "Policy_Chosen_PPL": 14.408,
+        "Policy_Rejected_PPL": 27.178,
+        "Policy_Self-Generated_PPL": 2.623
+    },
+    "DPOP (\u03b2=0.30, dp=50, LR=3.0e-06)": {
+        "Policy_Chosen_PPL": 12.405,
+        "Policy_Rejected_PPL": 22.439,
+        "Policy_Self-Generated_PPL": 2.768
+    },
+    "DPOSHIFT (\u03b2=0.30, shift=0.75, LR=3.0e-06)": {
+        "Policy_Chosen_PPL": 9.502,
+        "Policy_Rejected_PPL": 16.169,
+        "Policy_Self-Generated_PPL": 3.23
+    }
+}

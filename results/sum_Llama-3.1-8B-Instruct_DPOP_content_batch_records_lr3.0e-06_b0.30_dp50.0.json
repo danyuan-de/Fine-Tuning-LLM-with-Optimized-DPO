@@ -1,0 +1,92 @@
+[
+  {
+    "epoch": 1,
+    "step": 5,
+    "batch_idx": 47,
+    "loss": 0.46771906316280365,
+    "loss_change": -0.13365472108125687,
+    "reward_diff": 0.536689043045044,
+    "sample_chosen": "Step 1:\n$\\frac{1}{R_{\\mathrm{eq}}} = \\frac{1}{12} + \\frac{1}{4} = \\frac{1}{12} + \\frac{3}{12} = \\frac{4}{12} = \\tfrac{1}{3}$.\nSo $R_{\\mathrm{eq}} = 3\\,\\Omega$.\nAnswer:\n$3\\,\\Omega$.",
+    "sample_rejected": "Step 1:\nAssume $R_{\\mathrm{eq}} = 12 + 4 = 16\\,\\Omega$.\nAnswer:\n$16\\,\\Omega$."
+  },
+  {
+    "epoch": 1,
+    "step": 7,
+    "batch_idx": 63,
+    "loss": 0.36681864224374294,
+    "loss_change": -0.15474138781428337,
+    "reward_diff": -0.014983177185058594,
+    "sample_chosen": "Step 1:\nConvert energy: $E = 2\\,\\mathrm{eV} = 2 \\times 1.602 \\times 10^{-19}\\,\\mathrm{J} = 3.204 \\times 10^{-19}\\,\\mathrm{J}$.\nStep 2:\nUse $E = h f$, so $f = \\frac{E}{h} = \\frac{3.204 \\times 10^{-19}\\...",
+    "sample_rejected": "Step 1:\nConvert $2\\,\\mathrm{eV}$ to joules using factor: $2\\,\\mathrm{eV} = 2 \\times 1.602 \\times 10^{-18}\\,\\mathrm{J}$.\nStep 2:\nThen $f = \\frac{3.204 \\times 10^{-18}\\,\\mathrm{J}}{6.63 \\times 10^{-34}\\..."
+  },
+  {
+    "epoch": 1,
+    "step": 10,
+    "batch_idx": 87,
+    "loss": 0.26287302281707525,
+    "loss_change": -0.1472393232397735,
+    "reward_diff": 0.910893440246582,
+    "sample_chosen": "Step 1:\nParallel: $C_{\\mathrm{total}} = C_{1} + C_{2} = 1 + 2 = 3\\,\\mu\\mathrm{F}$.\nAnswer:\n$3\\,\\mu\\mathrm{F}$.",
+    "sample_rejected": "Step 1:\nUse series formula: $\\frac{1}{C_{\\mathrm{total}}} = \\frac{1}{1} + \\frac{1}{2} = 1.5$. So $C=0.6667\\,\\mu\\mathrm{F}$.\nAnswer:\n$0.667\\,\\mu\\mathrm{F}$."
+  },
+  {
+    "epoch": 1,
+    "step": 14,
+    "batch_idx": 119,
+    "loss": 0.14284745475742966,
+    "loss_change": -0.11549136589746922,
+    "reward_diff": 2.9693312644958496,
+    "sample_chosen": "Step 1:\nConservation of momentum: $m_b v_b + m_{block} v_{block}= (m_b + m_{block}) v_f$.\nStep 2:\n$m_b=0.010\\,\\mathrm{kg}$, $v_b=400\\,\\mathrm{m/s}$, $m_{block}=0.990\\,\\mathrm{kg}$, $v_{block}=0$.\nStep...",
+    "sample_rejected": "Step 1:\nEnergy conservation: $\\frac{1}{2}m_b v_b^2= \\frac{1}{2}(m_b+m_{block}) v_f^2$.\nStep 2:\nPlug in masses: $\\frac{1}{2}(0.010)(400^2)=\\frac{1}{2}(1.0)(v_f^2)$.\n$0.5\\times0.010\\times160000= 0.5\\tim..."
+  },
+  {
+    "epoch": 1,
+    "step": 19,
+    "batch_idx": 159,
+    "loss": 0.32288248743861914,
+    "loss_change": 0.17756267043296248,
+    "reward_diff": 1.2062606811523438,
+    "sample_chosen": "Step 1:\nThe work done by an electric field on a charged particle is given by:\n$W = q \\int_{\\vec{r}_1}^{\\vec{r}_2} \\vec{E} \\cdot d\\vec{r}$\nwhere $q$ is the charge, $\\vec{E}$ is the electric field, and ...",
+    "sample_rejected": "Step 1:\nThe work done by an electric field on a charged particle is given by:\n$W = q \\int_{\\vec{r}_1}^{\\vec{r}_2} \\vec{E} \\cdot d\\vec{r}$\nwhere $q$ is the charge, $\\vec{E}$ is the electric field, and ..."
+  },
+  {
+    "epoch": 1,
+    "step": 20,
+    "batch_idx": 167,
+    "loss": 0.11855602753348649,
+    "loss_change": -0.20432645990513265,
+    "reward_diff": 1.2191174030303955,
+    "sample_chosen": "Step 1:\nDouble $T \\implies$ double $P$.\nAnswer:\nDoubles.",
+    "sample_rejected": "Step 1:\nUse $P\\propto \\sqrt{T}$. Doubling $T \\implies$ $P$ up by $\\sqrt{2}$.\nAnswer:\n$\\sqrt{2}$ times."
+  },
+  {
+    "epoch": 1,
+    "step": 29,
+    "batch_idx": 239,
+    "loss": 0.1860998454503715,
+    "loss_change": 0.13469203910790384,
+    "reward_diff": 5.233842372894287,
+    "sample_chosen": "Step 1:\nWhen a charged particle moves perpendicular to a magnetic field, it experiences a magnetic force that causes it to move in a circular path. The radius of this path is given by:\n$r = \\frac{mv}{...",
+    "sample_rejected": "Step 1:\nWhen a charged particle moves perpendicular to a magnetic field, it experiences a magnetic force that causes it to move in a circular path. The radius of this path is given by:\n$r = \\frac{mv}{..."
+  },
+  {
+    "epoch": 1,
+    "step": 30,
+    "batch_idx": 247,
+    "loss": 0.030663654863019474,
+    "loss_change": -0.15543619058735203,
+    "reward_diff": 2.911492347717285,
+    "sample_chosen": "Step 1:\nFor resistor $R$ and capacitor $X_C$ in series, $Z=\\sqrt{R^2 + X_C^2}$.\nStep 2:\nSubstitute $R=200$, $X_C=100$.\n$Z=\\sqrt{(200)^2+(100)^2}=\\sqrt{40000+10000}=\\sqrt{50000}=223.6\\,\\Omega$.\nAnswer:...",
+    "sample_rejected": "Step 1:\nTotal impedance in series is $Z=R + X_C=200+100=300\\,\\Omega$.\nAnswer:\n$300\\,\\Omega$."
+  },
+  {
+    "epoch": 1,
+    "step": 45,
+    "batch_idx": 367,
+    "loss": 0.059914663492236286,
+    "loss_change": -0.11948890535859391,
+    "reward_diff": 6.502472400665283,
+    "sample_chosen": "Step 1:\nBuoyant force $F_b= \\rho_{\\text{water}} g V$.\nStep 2:\nTake $\\rho_{\\text{water}}=1000\\,\\mathrm{kg/m^3}$, $V=4\\times10^{-5}$.\nStep 3:\nCompute $F_b= 1000\\times9.8\\times4\\times10^{-5}=9.8\\times4\\t...",
+    "sample_rejected": "Step 1:\nUse $F_b= m g= 0.5\\times9.8=4.9.\nAnswer:\n$4.9\\,\\mathrm{N}$."
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "epoch": 1,
+    "step": 2,
+    "batch_idx": 23,
+    "loss": 2.546253062784672,
+    "loss_change": 1.8531058803200722,
+    "reward_diff": 0.16741334274411201,
+    "sample_chosen": "<observation>At constant volume, pressure $p\\propto T$ in kelvins.</observation>\n<insight>Convert \u00b0C to K: $27^{\\circ}\\mathrm{C}=300\\,\\mathrm{K}$, $327^{\\circ}\\mathrm{C}=600\\,\\mathrm{K}$.</insight>\n<t...",
+    "sample_rejected": "The kelvin temperatures are 300 K and 600 K, so the final pressure is twice the initial pressure."
+  },
+  {
+    "epoch": 1,
+    "step": 3,
+    "batch_idx": 31,
+    "loss": 0.7837410196661949,
+    "loss_change": -1.7625120431184769,
+    "reward_diff": 0.17373161762952805,
+    "sample_chosen": "<observation>Determine resonant frequency using $f = \\frac{1}{2 \\pi \\sqrt{L C}}$</observation>\n<insight>Substitute $L = 0.5\\,\\mathrm{H}$ and $C = 100\\,\\mu\\mathrm{F}$ into the formula</insight>\n<think>...",
+    "sample_rejected": "The resonant frequency of an RLC circuit containing a $10\\,\\Omega$ resistor, a $0.5\\,\\mathrm{H}$ inductor, and a $100\\,\\mu\\mathrm{F}$ capacitor is determined by $f = \\frac{1}{2 \\pi \\sqrt{L C}}$, where..."
+  },
+  {
+    "epoch": 1,
+    "step": 4,
+    "batch_idx": 39,
+    "loss": 0.4897139333188534,
+    "loss_change": -0.29402708634734154,
+    "reward_diff": 0.34627075772732496,
+    "sample_chosen": "<observation>The block is on an incline, and we need to compare the force down the incline with the maximum static friction force.</observation>\n<insight>The block stays at rest if $mg\\sin\\theta \\leq ...",
+    "sample_rejected": "Okay, so the force pulling the block down is $mg\\sin(30^{\\circ})$, and $\\sin(30^{\\circ}) = 0.5$. The max friction is $\\mu_s mg\\cos(30^{\\circ}) = 0.6 \\times mg \\times 0.866 \\approx 0.52mg$. Since $0.5m..."
+  },
+  {
+    "epoch": 1,
+    "step": 5,
+    "batch_idx": 47,
+    "loss": 0.35786985233426094,
+    "loss_change": -0.13184408098459244,
+    "reward_diff": 0.8118381798267365,
+    "sample_chosen": "<observation>The applied force is $12\\,\\mathrm{N}$ and friction opposes with $5\\,\\mathrm{N}$.</observation>\n<insight>Net force is the difference: $F_{\\text{net}}=12\\,\\mathrm{N}-5\\,\\mathrm{N}$.</insigh...",
+    "sample_rejected": "You just subtract the friction from the pull: $12-5=7\\,\\mathrm{N}$. Simple enough!"
+  },
+  {
+    "epoch": 1,
+    "step": 6,
+    "batch_idx": 55,
+    "loss": 0.19685295224189758,
+    "loss_change": -0.16101690009236336,
+    "reward_diff": 1.6359524726867676,
+    "sample_chosen": "<observation>Work for constant pressure: $W = P\\,\\Delta V$.</observation>\n<insight>We must convert atm to Pa and L to $\\mathrm{m^3}$.</insight>\n<think>$P=1.013\\times10^5\\,\\mathrm{Pa}, \\Delta V = (4.0-...",
+    "sample_rejected": "You multiply that 1 atm in pascals by the change of 2 liters in cubic meters. That ends up being about 200 joules. Piece of cake."
+  }
+]

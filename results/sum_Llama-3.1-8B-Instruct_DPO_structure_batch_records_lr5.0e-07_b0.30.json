@@ -1,0 +1,22 @@
+[
+  {
+    "epoch": 1,
+    "step": 4,
+    "batch_idx": 39,
+    "loss": 0.5935115367174149,
+    "loss_change": -0.10271967947483063,
+    "reward_diff": 0.12991562485694885,
+    "sample_chosen": "<observation>The block is on an incline, and we need to compare the force down the incline with the maximum static friction force.</observation>\n<insight>The block stays at rest if $mg\\sin\\theta \\leq ...",
+    "sample_rejected": "Okay, so the force pulling the block down is $mg\\sin(30^{\\circ})$, and $\\sin(30^{\\circ}) = 0.5$. The max friction is $\\mu_s mg\\cos(30^{\\circ}) = 0.6 \\times mg \\times 0.866 \\approx 0.52mg$. Since $0.5m..."
+  },
+  {
+    "epoch": 1,
+    "step": 7,
+    "batch_idx": 63,
+    "loss": 0.39424676448106766,
+    "loss_change": -0.10420386865735054,
+    "reward_diff": 0.6609586831182241,
+    "sample_chosen": "<observation>The heat energy required is given by \\(Q=mc\\Delta T\\).</observation>\n<insight>Here, \\(m=0.5\\,\\mathrm{kg}\\), \\(c=4186\\,\\mathrm{J/(kg\\cdot K)}\\), and \\(\\Delta T=60\\,\\mathrm{K}\\).</insight>\n...",
+    "sample_rejected": "By applying \\(Q=mc\\Delta T\\) with the given mass, specific heat, and a temperature change of 60 K, the heat added is roughly \\(126\\,\\mathrm{kJ}\\)."
+  }
+]

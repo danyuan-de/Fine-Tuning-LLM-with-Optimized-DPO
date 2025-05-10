@@ -169,12 +169,8 @@ def print_configuration():
     print(f"Random Seed: {config.random_seed}")
     if config.train:
         print(f"Run Training: {config.train}")
-        if config.benchmark:
-            print(f"  Benchmark Dataset: {config.benchmark_dataset}")
-        if config.run_ppl:
-            print(f"  Run PPL Evaluation: {config.run_ppl}")
-        if config.run_test:
-            print(f"  Run Test Evaluation: {config.run_test}")
+        print(f"Run Benchmark: {config.benchmark}")
+        print(f"Run PPL Evaluation: {config.run_ppl}")
         print(f"Model: {config.model_name}")
         print(f"Method: {config.method_name.upper()}")
         print(f"Training Data: {config.training_data_filename}")

@@ -67,7 +67,7 @@ stride_length = allowed_max_length // 2  # stride length for training data
 
 # --------------------------------- Validation and Test batch size ---------------------------------
 val_ppl_batch_size = 16  # Batch size for validation perplexity
-test_batch_size = 5  # Batch size for test perplexity
+test_batch_size = 1  # Batch size for test perplexity
 
 # --------------------------------- Training parameters ---------------------------------
 batch_size = 2  # Process the number of items at once

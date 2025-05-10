@@ -143,7 +143,7 @@ def evaluate_subject(subject, ori_tokenizer, ori_model, ft_tokenizer, ft_model, 
     }
 
 
-def run_benchmark(output_file=None):
+def run_benchmark(output_file=None, ft_model_path=None):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     print("Loading models...")
@@ -151,7 +151,7 @@ def run_benchmark(output_file=None):
     # Load the original and fine-tuned models
     ori_tokenizer, ori_model = load_model(config.model_name, device)
     # Load the fine-tuned model
-    ft_tokenizer, ft_model = load_model(config.fine_tuned_model_path, device)
+    ft_tokenizer, ft_model = load_model(ft_model_path, device)
 
     # # Single‐token, greedy gen config
     # ori_gen_cfg = GenerationConfig(

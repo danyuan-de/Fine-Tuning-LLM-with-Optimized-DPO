@@ -1,0 +1,52 @@
+[
+  {
+    "epoch": 1,
+    "step": 2,
+    "batch_idx": 23,
+    "loss": 2.6980499029159546,
+    "loss_change": 2.004902720451355,
+    "reward_diff": 0.04402199015021324,
+    "sample_chosen": "<observation>The refractive indices and angle of incidence are given.</observation>\n<insight>Snell's law states $n_1\\sin\\theta_1=n_2\\sin\\theta_2$, so solve for $\\theta_2$.</insight>\n<think>Calculate: ...",
+    "sample_rejected": "Step 1:\nAccording to Snell's law, $n_1 \\sin\\theta_1 = n_2 \\sin\\theta_2$, where $\\theta_1$ is the angle of incidence and $\\theta_2$ is the angle of refraction.\nStep 2:\nRearranging to solve for $\\theta_..."
+  },
+  {
+    "epoch": 1,
+    "step": 3,
+    "batch_idx": 31,
+    "loss": 0.8713865280151367,
+    "loss_change": -1.8266633749008179,
+    "reward_diff": 0.18239250220358372,
+    "sample_chosen": "<observation>There is a resistor of $2\\,\\mathrm{\\Omega}$ with a current of $5\\,\\mathrm{A}$.</observation>\n<insight>Ohm's law states $V=IR$.</insight>\n<think>Thus, $V=(5\\,\\mathrm{A})(2\\,\\mathrm{\\Omega}...",
+    "sample_rejected": "Step 1:\nOhm's law: $V= I R$.\nStep 2:\n$= 5\\times 2= 10\\,\\mathrm{V}$.\nStep 3:\nHence $10$.\nAnswer:\n$10\\,\\mathrm{V}$."
+  },
+  {
+    "epoch": 1,
+    "step": 4,
+    "batch_idx": 39,
+    "loss": 0.5102744959294796,
+    "loss_change": -0.3611120320856571,
+    "reward_diff": 0.3633384704589844,
+    "sample_chosen": "<observation>A mass is moving with a given speed.</observation>\n<insight>Kinetic energy is $KE = \\frac{1}{2} m v^2$.</insight>\n<think>$KE = 0.5 \\times 2 \\times 7^2 = 1 \\times 49 = 49\\,\\mathrm{J}$.</th...",
+    "sample_rejected": "Step 1:\n$KE= 0.5\\times 2\\times 49= 1\\times 49=49\\,\\mathrm{J}$.\nAnswer:\n$49\\,\\mathrm{J}$."
+  },
+  {
+    "epoch": 1,
+    "step": 5,
+    "batch_idx": 47,
+    "loss": 0.38437244668602943,
+    "loss_change": -0.12590204924345016,
+    "reward_diff": 0.8475392311811447,
+    "sample_chosen": "<observation>For parallel: $\\tfrac{1}{R_{\\mathrm{eq}}}=\\tfrac{1}{12}+\\tfrac{1}{4}$.</observation>\n<insight>That sum is $\\tfrac{1}{12}+\\tfrac{3}{12}=\\tfrac{4}{12}=\\tfrac13$.</insight>\n<think>$R_{\\mathr...",
+    "sample_rejected": "Step 1:\n$\\frac{1}{R_{\\mathrm{eq}}} = \\frac{1}{12} + \\frac{1}{4} = \\frac{1}{12} + \\frac{3}{12} = \\frac{4}{12} = \\tfrac{1}{3}$.\nSo $R_{\\mathrm{eq}} = 3\\,\\Omega$.\nAnswer:\n$3\\,\\Omega$."
+  },
+  {
+    "epoch": 1,
+    "step": 6,
+    "batch_idx": 55,
+    "loss": 0.18106201197952032,
+    "loss_change": -0.2033104347065091,
+    "reward_diff": 1.6719417870044708,
+    "sample_chosen": "<observation>The volume decreases from 8 L to 2 L isothermally.</observation>\n<insight>For isothermal processes, \\(pV = \\text{constant}\\), so \\(p \\propto 1/V\\).</insight>\n<think>Volume is reduced by a...",
+    "sample_rejected": "Step 1:\nIsothermal implies $pV = \\text{constant}$.\nStep 2:\nVolume reduced by factor of $4$, so pressure increases by factor $4$.\nAnswer:\nPressure is $4\\times$ the original."
+  }
+]

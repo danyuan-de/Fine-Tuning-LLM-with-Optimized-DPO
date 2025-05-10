@@ -12,18 +12,14 @@ def main():
     print_configuration()  # Print the configuration
 
     if args.train:
-        from src.trainer import run_training
+        from src.trainer import runPipeline
         print("Running training...")
-        run_training()
+        runPipeline()
     elif args.benchmark:
-        from src.benchmark_test import run_benchmark
+        from src.mmluBenchmark import run_benchmark
         print("Running benchmark test...")
         run_benchmark()
         print("Benchmark completed.")
-    # if args.run_test:
-    #     from src.test_evaluator import test_and_save
-    #     print("Running test evaluation...")
-    #     test_and_save()
     else:
         print("No action specified. Use --train to run training or --benchmark to run the benchmark test.")
 

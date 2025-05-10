@@ -1,0 +1,32 @@
+[
+  {
+    "epoch": 1,
+    "step": 2,
+    "batch_idx": 23,
+    "loss": 0.5735155642032623,
+    "loss_change": -0.11963161826133728,
+    "reward_diff": 0.40264321863651276,
+    "sample_chosen": "<observation>The refractive indices and angle of incidence are given.</observation>\n<insight>Snell's law states $n_1\\sin\\theta_1=n_2\\sin\\theta_2$, so solve for $\\theta_2$.</insight>\n<think>Calculate: ...",
+    "sample_rejected": "Step 1:\nAccording to Snell's law, $n_1 \\sin\\theta_1 = n_2 \\sin\\theta_2$, where $\\theta_1$ is the angle of incidence and $\\theta_2$ is the angle of refraction.\nStep 2:\nRearranging to solve for $\\theta_..."
+  },
+  {
+    "epoch": 1,
+    "step": 3,
+    "batch_idx": 31,
+    "loss": 0.1933978572487831,
+    "loss_change": -0.3801177069544792,
+    "reward_diff": 1.5436729341745377,
+    "sample_chosen": "<observation>There is a resistor of $2\\,\\mathrm{\\Omega}$ with a current of $5\\,\\mathrm{A}$.</observation>\n<insight>Ohm's law states $V=IR$.</insight>\n<think>Thus, $V=(5\\,\\mathrm{A})(2\\,\\mathrm{\\Omega}...",
+    "sample_rejected": "Step 1:\nOhm's law: $V= I R$.\nStep 2:\n$= 5\\times 2= 10\\,\\mathrm{V}$.\nStep 3:\nHence $10$.\nAnswer:\n$10\\,\\mathrm{V}$."
+  },
+  {
+    "epoch": 1,
+    "step": 4,
+    "batch_idx": 39,
+    "loss": 0.02288542897440493,
+    "loss_change": -0.17051242827437818,
+    "reward_diff": 3.5947359055280685,
+    "sample_chosen": "<observation>A mass is moving with a given speed.</observation>\n<insight>Kinetic energy is $KE = \\frac{1}{2} m v^2$.</insight>\n<think>$KE = 0.5 \\times 2 \\times 7^2 = 1 \\times 49 = 49\\,\\mathrm{J}$.</th...",
+    "sample_rejected": "Step 1:\n$KE= 0.5\\times 2\\times 49= 1\\times 49=49\\,\\mathrm{J}$.\nAnswer:\n$49\\,\\mathrm{J}$."
+  }
+]
