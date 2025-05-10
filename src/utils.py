@@ -262,14 +262,19 @@ def custom_collate_fn(
 
             mask[eos_pos] = True  # Set the EOS token to True
 
-            # Ensure EOS token is unmasked
-            eos_positions = (sequence_tensor == eos_token_id).nonzero(as_tuple=True)[0]
-            eos_pos = eos_positions[-1].item() if len(eos_positions) > 0 else sequence_tensor.size(0) - 1
-            mask[eos_pos] = True
+            # # Ensure EOS token is unmasked
+            # eos_positions = (sequence_tensor == eos_token_id).nonzero(as_tuple=True)[0]
+            # eos_pos = eos_positions[-1].item() if len(eos_positions) > 0 else sequence_tensor.size(0) - 1
+            # mask[eos_pos] = True
 
             batch_data[key].append(padded_sequence)
             batch_data[f"{key}_mask"].append(mask)
 
+    # batch_data["prompt"] = pad_sequence(
+    #     batch_data["prompt"],
+    #     batch_first=True,
+    #     padding_value=tokenizer.pad_token_id
+    # )
     # Stack the tensors (already on device, no need for .to(device))
     for key in ["chosen", "rejected", "chosen_mask", "rejected_mask"]:
         batch_data[key] = torch.stack(batch_data[key])
@@ -277,6 +282,11 @@ def custom_collate_fn(
         # Truncate the sequences if needed
         if allowed_max_length is not None:
             batch_data[key] = batch_data[key][:, :allowed_max_length]
+    
+    batch_data["question_texts"] = [inst["question_text"] for inst in batch]
+    batch_data["chosen_texts"]   = [inst["chosen_text"]   for inst in batch]
+    batch_data["rejected_texts"] = [inst["rejected_text"] for inst in batch]
+
 
     return batch_data
 
