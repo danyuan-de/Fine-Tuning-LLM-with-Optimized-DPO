@@ -286,56 +286,12 @@ def custom_collate_fn(
         # Truncate the sequences if needed
         if allowed_max_length is not None:
             batch_data[key] = batch_data[key][:, :allowed_max_length]
-    
+
     batch_data["question_texts"] = [inst["question_text"] for inst in batch]
-    batch_data["chosen_texts"]   = [inst["chosen_text"]   for inst in batch]
+    batch_data["chosen_texts"] = [inst["chosen_text"] for inst in batch]
     batch_data["rejected_texts"] = [inst["rejected_text"] for inst in batch]
 
-
     return batch_data
-
-
-# def custom_collate_fn(
-#     batch, tokenizer, device, allowed_max_length=None, mask_prompt=False
-# ):
-#     fields = ["prompt", "chosen", "rejected"]
-#     data = {k: [] for k in fields}
-#     eos_id = tokenizer.eos_token_id
-#     for inst in batch:
-#         for k in fields:
-#             data[k].append(torch.tensor(inst[k], dtype=torch.long))
-
-#     # pad + stack
-#     for k in fields:
-#         padded = pad_sequence(
-#             data[k], batch_first=True, padding_value=tokenizer.pad_token_id
-#         )
-#         if allowed_max_length:
-#             padded = padded[:, :allowed_max_length]
-#         data[k] = padded.to(device)
-
-#     # attention masks
-#     data["prompt_mask"] = (data["prompt"] != tokenizer.pad_token_id).long()
-#     data["chosen_mask"] = (data["chosen"] != tokenizer.pad_token_id).long()
-#     data["rejected_mask"] = (data["rejected"] != tokenizer.pad_token_id).long()
-
-#     # mask the prompt tokens
-#     if mask_prompt:
-#         seq_len = data["prompt"].size(1)
-#         data["chosen_mask"][:, :seq_len] = 0
-#         data["rejected_mask"][:, :seq_len] = 0
-#         # chosen
-#         eos_pos = (data["chosen"] == eos_id).long().argmax(dim=1)
-#         data["chosen_mask"][torch.arange(eos_pos.size(0)), eos_pos] = 1
-#         # rejected
-#         eos_pos = (data["rejected"] == eos_id).long().argmax(dim=1)
-#         data["rejected_mask"][torch.arange(eos_pos.size(0)), eos_pos] = 1
-    
-#     data["question_texts"] = [inst["question_text"] for inst in batch]
-#     data["chosen_texts"]   = [inst["chosen_text"]   for inst in batch]
-#     data["rejected_texts"] = [inst["rejected_text"] for inst in batch]
-
-#     return data
 
 
 def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss", save_path=None):
@@ -515,7 +471,7 @@ def postprocess_response(full_text: str) -> str:
     # Remove system tokens
     for token in system_tokens:
         response = response.replace(token, "")
-    
+
     # Remove any reserved_special_token_N placeholders
     response = re.sub(r"<\|reserved_special_token_\d+\|>", "", response)
 
@@ -564,7 +520,7 @@ def calculate_perplexity(
 
     # Initialize list to store perplexity scores
     perplexities = []
-    
+
     model.to(device).eval()  # Set model to evaluation mode
     pad_token_id = tokenizer.pad_token_id  # Get pad token ID
 
@@ -591,12 +547,12 @@ def calculate_perplexity(
             labels = input_ids.clone()
             labels[input_ids == pad_token_id] = -100  # Set labels to -100 for padding tokens
 
-            bsz, seq_len = input_ids.shape  
+            bsz, seq_len = input_ids.shape
             # Handle long sequences with striding
             if stride and seq_len > max_length:
                 print("==== Running with striding... ====")
                 print(f"Sequence length {seq_len} exceeds max_length {max_length}. Using striding.")
-                
+
                 # total NLL and total token count per example
                 total_nll = torch.zeros(bsz, device=device)
                 total_tokens = torch.zeros(bsz, device=device)
@@ -620,7 +576,8 @@ def calculate_perplexity(
                     total_nll += outputs.loss * token_count
                     total_tokens += token_count
 
-                    if end == seq_len: break
+                    if end == seq_len:
+                        break
 
                 # Final average Negative Log Likelihood (NLL)
                 mean_nll = total_nll / total_tokens
@@ -685,7 +642,7 @@ def summarize_ppl_table(model, tokenizer, data_loader, device=None):
             prompts = [tokenizer.decode(x, skip_special_tokens=False) for x in batch["prompt"]]
             chosens = [tokenizer.decode(x, skip_special_tokens=True) for x in batch["chosen"]]
             rejecteds = [tokenizer.decode(x, skip_special_tokens=True) for x in batch["rejected"]]
-            
+
             # Debugging
             for i in range(len(prompts)):
                 if debug_printed < 2:
@@ -693,10 +650,11 @@ def summarize_ppl_table(model, tokenizer, data_loader, device=None):
                     print(f"FULL PROMPT:\n{prompts[i]}\n")
                     print(f"CHOSEN RAW:\n{chosens[i]}\n\n")
                     print(f"REJECTED RAW:\n{rejecteds[i]}\n\n")
-                else: break
+                else:
+                    break
                 debug_printed += 1
 
-            bsz = len(prompts)
+            # bsz = len(prompts)
 
             # # 1) Perform batch computation of perplexity for the chosen and rejected sets
             # texts = [f"{p}{c}{eos}" for p, c in zip(prompts, chosens)] \

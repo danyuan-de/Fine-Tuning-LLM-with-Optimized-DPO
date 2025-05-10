@@ -19,6 +19,8 @@ def parse_args():
                         help='Run benchmark on the dataset')
     parser.add_argument('--run_test', action='store_true', default=False,
                         help='Run test evaluation on the dataset')
+    parser.add_argument('--run_ppl', action='store_true', default=False,
+                        help='Run perplexity evaluation on the dataset')
 
     # -------------------------------- Select benchmark test dataset --------------------------------
     benchmark_choices = list(config.benchmark_datasets.keys())
@@ -46,6 +48,16 @@ def parse_args():
     parser.add_argument('--method', type=str, choices=method_choices, default="sDPO",
                         help=method_help)
 
+    # ---------------------------------- Test method selection ----------------------------------
+    parser.add_argument('--test_method', type=int, choices=[1, 2], default=config.test_method,
+                        help='Test method choice: 1 for test_and_evaluate_one, 2 for test_and_evaluate_batch')
+
+    # --------------------------------- Validation and Test batch size ---------------------------------
+    parser.add_argument('--val_ppl_batch_size', type=int, default=config.val_ppl_batch_size,
+                        help='Batch size for validation and test data')
+    parser.add_argument('--test_batch_size', type=int, default=config.test_batch_size,
+                        help='Batch size for test data')
+
     # ---------------------------------- log probabilities ----------------------------------
     parser.add_argument('--avglps', action='store_true', default=config.average_log_probs,
                         help='Use average log probabilities for DPO loss')
@@ -57,12 +69,6 @@ def parse_args():
                         help='Lambda DPOP value')
     parser.add_argument('--lambda_shift', type=float, default=config.lambda_shift,
                         help='Lambda shift value')
-    
-    # --------------------------------- Validation and Test batch size ---------------------------------
-    parser.add_argument('--val_ppl_batch_size', type=int, default=config.val_ppl_batch_size,
-                        help='Batch size for validation and test data')
-    parser.add_argument('--test_batch_size', type=int, default=config.test_batch_size,
-                        help='Batch size for test data')
 
     # ------------------------------------ Training parameters ------------------------------------
     parser.add_argument('--lr', type=float, default=config.learning_rate,
@@ -143,6 +149,7 @@ def update_config_from_args(args):
     config.val_ppl_batch_size = args.val_ppl_batch_size
     config.test_batch_size = args.test_batch_size
     config.stride_length = args.stride_length
+    config.test_method = args.test_method
 
     # Be able to specify a direct file path or use the mapping
     config.training_data_filename = args.data_file if args.data_file else config.training_data_files[args.data]
@@ -188,6 +195,8 @@ def print_configuration():
         print(f"  Use Sampling: {config.EVAL_USE_SAMPLING}")
         print(f"  Temperature: {config.temperature}")
         print(f"  Top-p: {config.top_p}")
+        method = "test_and_evaluate_one" if config.test_method == 1 else "test_and_evaluate_batch"
+        print(f"Test Method: {method}")
 
     elif config.benchmark:
         print(f"Run Benchmark: {config.benchmark}")
@@ -198,4 +207,6 @@ def print_configuration():
     elif config.run_test:
         print(f"Run Test Evaluation: {config.run_test}")
         print(f"Test Batch Size: {config.test_batch_size}")
+        method = "test_and_evaluate_one" if config.test_method == 1 else "test_and_evaluate_batch"
+        print(f"Test Method: {method}")
     print(f"{'='*50}\n")

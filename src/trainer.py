@@ -14,17 +14,14 @@ import random
 import src.config as config
 from src.dpoLoss import DPOLoss
 from src.preferenceDataset import PreferenceDataset
-from src.test_evaluator import test_and_save
+from src.test_evaluator import test_and_evaluate_one, test_and_evaluate_batch
 from src.utils import (
     get_dpo_params,
     get_output_filename,
     format_input,
-    text_to_token_ids,
-    generate,
     postprocess_response,
     custom_collate_fn,
     plot_losses,
-    calculate_perplexity,
     log_result_csv,
     log_memory_snapshot,
     summarize_ppl_table,
@@ -516,37 +513,38 @@ def run_training():
     # log_memory_snapshot("After initial evaluation")
 
     # ---- Log the reference model's perplexity on the chosen samples, rejected samples, self-generated samples ----
-    ppl_filename = get_output_filename(
-        method=config.method_name,
-        file=config.training_data_filename,
-        model=config.model_name,
-        label="ppl",
-        learning_rate=config.learning_rate,
-        beta=config.beta,
-        lambda_dpop=getattr(config, "lambda_dpop", None),
-        lambda_shift=getattr(config, "lambda_shift", None),
-        typename="csv"
-    )
+    if config.run_ppl:
+        ppl_filename = get_output_filename(
+            method=config.method_name,
+            file=config.training_data_filename,
+            model=config.model_name,
+            label="ppl",
+            learning_rate=config.learning_rate,
+            beta=config.beta,
+            lambda_dpop=getattr(config, "lambda_dpop", None),
+            lambda_shift=getattr(config, "lambda_shift", None),
+            typename="csv"
+        )
 
-    print(f"\nPerplexity log file path: {ppl_filename}")
-    print("Computing reference model perplexity...\n")
-    ppl_start_time = time.time()
+        print(f"\nPerplexity log file path: {ppl_filename}")
+        print("Computing reference model perplexity...\n")
+        ppl_start_time = time.time()
 
-    ref_ppl = summarize_ppl_table(ref_model, tokenizer, validation_ppl_loader, device)
-    log_ppl_csv(
-        filename=ppl_filename,
-        model_name="reference",
-        chosen_ppl=ref_ppl["chosen"],
-        rejected_ppl=ref_ppl["rejected"],
-        self_ppl=ref_ppl["self"]
-    )
+        ref_ppl = summarize_ppl_table(ref_model, tokenizer, validation_ppl_loader, device)
+        log_ppl_csv(
+            filename=ppl_filename,
+            model_name="reference",
+            chosen_ppl=ref_ppl["chosen"],
+            rejected_ppl=ref_ppl["rejected"],
+            self_ppl=ref_ppl["self"]
+        )
 
-    ppl_end_time = time.time()
-    ppl_execution_time = (ppl_end_time - ppl_start_time) / 60
-    print(f"Reference model PPL computed and saved in {ppl_execution_time:.2f} minutes (in {str(timedelta(seconds=ppl_end_time - ppl_start_time))})")
+        ppl_end_time = time.time()
+        ppl_execution_time = (ppl_end_time - ppl_start_time) / 60
+        print(f"Reference model PPL computed and saved in {ppl_execution_time:.2f} minutes (in {str(timedelta(seconds=ppl_end_time - ppl_start_time))})")
 
-    print("\n[REF] PPL")
-    print(f"chosen:{ref_ppl['chosen']:.2f}  rejected:{ref_ppl['rejected']:.2f}  self‑gen:{ref_ppl['self']:.2f}\n")
+        print("\n[REF] PPL")
+        print(f"chosen:{ref_ppl['chosen']:.2f}  rejected:{ref_ppl['rejected']:.2f}  self‑gen:{ref_ppl['self']:.2f}\n")
 
     # Before starting the training, print the initail losses and rewards:
     print("=" * 50)
@@ -627,21 +625,22 @@ def run_training():
     tokenizer.save_pretrained(save_path)
     print(f"Model and tokenizer saved to {save_path}")
 
-    print("\nComputing policy model perplexity...\n")
-    ppl_start_time = time.time()
-    pol_ppl = summarize_ppl_table(policy_model, tokenizer, validation_ppl_loader, device)
-    log_ppl_csv(
-        filename=ppl_filename,
-        model_name="policy",
-        chosen_ppl=pol_ppl["chosen"],
-        rejected_ppl=pol_ppl["rejected"],
-        self_ppl=pol_ppl["self"]
-    )
-    ppl_end_time = time.time()
-    ppl_execution_time = (ppl_end_time - ppl_start_time) / 60
-    print(f"Policy model PPL computed and saved in {ppl_execution_time:.2f} minutes (in {str(timedelta(seconds=ppl_end_time - ppl_start_time))})")
-    print("\n[POL] PPL")
-    print(f"chosen:{pol_ppl['chosen']:.2f}  rejected:{pol_ppl['rejected']:.2f}  self‑gen:{pol_ppl['self']:.2f}\n")
+    if config.run_ppl:
+        print("\nComputing policy model perplexity...\n")
+        ppl_start_time = time.time()
+        pol_ppl = summarize_ppl_table(policy_model, tokenizer, validation_ppl_loader, device)
+        log_ppl_csv(
+            filename=ppl_filename,
+            model_name="policy",
+            chosen_ppl=pol_ppl["chosen"],
+            rejected_ppl=pol_ppl["rejected"],
+            self_ppl=pol_ppl["self"]
+        )
+        ppl_end_time = time.time()
+        ppl_execution_time = (ppl_end_time - ppl_start_time) / 60
+        print(f"Policy model PPL computed and saved in {ppl_execution_time:.2f} minutes (in {str(timedelta(seconds=ppl_end_time - ppl_start_time))})")
+        print("\n[POL] PPL")
+        print(f"chosen:{pol_ppl['chosen']:.2f}  rejected:{pol_ppl['rejected']:.2f}  self‑gen:{pol_ppl['self']:.2f}\n")
 
     # Plot the losses
     epochs_tensor = torch.linspace(0, config.num_epochs, len(tracking["train_losses"]))
@@ -712,121 +711,37 @@ def run_training():
         eval_temperature = 0.0
         eval_top_p = None
 
-    test_and_save(
-        output_json_path=output_json,
-        test_data=test_data,
-        test_loader=test_loader,
-        dpo_loss_fn=dpo_loss_fn,
-        ref_model=ref_model,
-        ref_tokenizer=tokenizer,
-        fine_tuned_model=fine_tuned_model,
-        fine_tuned_tokenizer=fine_tuned_tokenizer,
-        device=device,
-        eval_temperature=eval_temperature,
-        eval_top_p=eval_top_p,
-        max_new_tokens=config.max_new_tokens,
-        stride_length=stride,
-        eos_token_id=eos_token_id
-    )
-    # try:
-    #     test_results = []
-    #     test_start_time = time.time()
-    #     for count, batch in enumerate(tqdm(test_loader, desc="Test Eval")):
-    #         questions = batch["question_texts"]   # list of str, length = batch_size
-    #         expected = batch["chosen_texts"]
-    #         denied = batch["rejected_texts"]
-            
-    #         # batch["prompt"] is a tensor of token ids (bsz, seq_len)
-    #         # 1) decoding prompt
-    #         start = count * config.test_batch_size
-    #         end   = start + len(batch["question_texts"])
-    #         original_test_data_slice = test_data[start:end]
-    #         full_prompts = [format_input(entry) for entry in original_test_data_slice]
-            
-    #         # 2) Batch generation of responses using the reference and fine-tuned models 
-    #         ref_input_ids = text_to_token_ids(full_prompts, tokenizer).to(device)
-    #         pol_input_ids = text_to_token_ids(full_prompts, fine_tuned_tokenizer).to(device)
-    #         with torch.no_grad():
-    #             ref_out = generate(
-    #                 model=ref_model,
-    #                 idx=ref_input_ids,
-    #                 max_new_tokens=config.max_new_tokens,
-    #                 temperature=eval_temperature,
-    #                 top_p=eval_top_p,
-    #                 eos_token_id=eos_token_id
-    #             )
-    #             pol_out = generate(
-    #                 model=fine_tuned_model,
-    #                 idx=pol_input_ids,
-    #                 max_new_tokens=config.max_new_tokens,
-    #                 temperature=eval_temperature,
-    #                 top_p=eval_top_p,
-    #                 eos_token_id=eos_token_id
-    #             )
-
-
-    #         # 3) Batch decoding the generated responses
-    #         ref_resps = [postprocess_response(tokenizer.decode(ids, skip_special_tokens=False)) for ids in ref_out]
-    #         pol_resps = [postprocess_response(fine_tuned_tokenizer.decode(ids, skip_special_tokens=False)) for ids in pol_out]
-            
-            
-    #         ref_texts = [f"{p}{r}{tokenizer.eos_token}" for p, r in zip(full_prompts, ref_resps)]
-    #         pol_texts = [f"{p}{r}{fine_tuned_tokenizer.eos_token}" for p, r in zip(full_prompts, pol_resps)]
-            
-    #         ref_exp_texts = [f"{p}{r}{tokenizer.eos_token}" for p, r in zip(full_prompts, expected)]
-    #         ref_denied_texts = [f"{p}{r}{tokenizer.eos_token}" for p, r in zip(full_prompts, denied)]
-    #         pol_exp_texts = [f"{p}{r}{fine_tuned_tokenizer.eos_token}" for p, r in zip(full_prompts, expected)]
-    #         pol_denied_texts = [f"{p}{r}{fine_tuned_tokenizer.eos_token}" for p, r in zip(full_prompts, denied)]
-            
-    #         # 4) Calculate perplexity for the reference and fine-tuned models and store them 
-    #         ref_ppls = calculate_perplexity(ref_model, tokenizer, ref_texts, max_length=config.allowed_max_length, stride=stride, batch_size=config.test_batch_size, device=device)
-    #         pol_ppls = calculate_perplexity(fine_tuned_model, fine_tuned_tokenizer, pol_texts, max_length=config.allowed_max_length, stride=stride, batch_size=config.test_batch_size, device=device)
-    #         ref_exp_ppls = calculate_perplexity(ref_model, tokenizer, ref_exp_texts, max_length=config.allowed_max_length, stride=stride, batch_size=config.test_batch_size, device=device)
-    #         pol_exp_ppls = calculate_perplexity(fine_tuned_model, fine_tuned_tokenizer, pol_exp_texts, max_length=config.allowed_max_length, stride=stride, batch_size=config.test_batch_size, device=device)
-    #         ref_denied_ppls = calculate_perplexity(ref_model, tokenizer, ref_denied_texts, max_length=config.allowed_max_length, stride=stride, batch_size=config.test_batch_size, device=device)
-    #         pol_denied_ppls = calculate_perplexity(fine_tuned_model, fine_tuned_tokenizer, pol_denied_texts, max_length=config.allowed_max_length, stride=stride, batch_size=config.test_batch_size, device=device)
-            
-    #         # 5) Print the results and store them in the dictionary
-    #         for i, question in enumerate(questions):
-    #             # Use the previously determined input key
-    #             print(f"\nInput {i + (count * 5) + 1}:\n {question}")
-
-    #             print("\n ----- Reference Model ----- ")
-    #             print(f"Reference Response:\n {ref_resps[i]}")
-    #             print(f"Perplexity: {ref_ppls[i]:.2f}")
-
-    #             print("\n ----- Policy Model ----- ")
-    #             print(f"Policy Response:\n {pol_resps[i]}")
-    #             print(f"Perplexity: {pol_ppls[i]:.2f}")
-
-    #             print("\n ----- Expected Response ----- ")
-    #             print(f"Expected Answer:\n {expected[i]}")
-    #             print(f"Gold Answer PPL (ref):    {ref_exp_ppls[i]:.2f}")
-    #             print(f"Disliked Answer PPL (ref): {ref_denied_ppls[i]:.2f}")
-    #             print(f"Gold Answer PPL (policy): {pol_exp_ppls[i]:.2f}")
-    #             print(f"Disliked Answer PPL (policy): {pol_denied_ppls[i]:.2f}")
-    #             print("=" * 80, "\n")
-
-    #             test_results.append({
-    #                 input_key: question,
-    #                 "ref_response": ref_resps[i],
-    #                 "policy_response": pol_resps[i],
-    #                 "expected": expected[i],
-    #                 "ref_perplexity": ref_ppls[i] if isinstance(ref_ppls, list) else ref_ppls,
-    #                 "policy_perplexity": pol_ppls[i] if isinstance(pol_ppls, list) else pol_ppls, 
-    #                 "ref_gold_answer_perplexity": ref_exp_ppls[i] if isinstance(ref_exp_ppls, list) else ref_exp_ppls,
-    #                 "policy_gold_answer_perplexity": pol_exp_ppls[i] if isinstance(pol_exp_ppls, list) else pol_exp_ppls
-    #             })
-
-    #     test_end_time = time.time()
-    #     test_execution_time = (test_end_time - test_start_time) / 60
-    #     print(f"Test evaluation completed in {test_execution_time:.2f} minutes (in {str(timedelta(seconds=test_end_time - test_start_time))})")
-
-    # except KeyboardInterrupt:
-    #     print("\nInterrupted! Saving partial results...")
-
-    # finally:
-    #     # Save the test results to a JSON file
-    #     with open(output_json, "w") as f:
-    #         json.dump(test_results, f, indent=4)
-    #     print("Test results saved to:", output_json)
+    if config.test_method == 1:
+        test_and_evaluate_one(
+            output_json_path=output_json,
+            test_data=test_data,
+            test_loader=test_loader,
+            dpo_loss_fn=dpo_loss_fn,
+            ref_model=ref_model,
+            ref_tokenizer=tokenizer,
+            fine_tuned_model=fine_tuned_model,
+            fine_tuned_tokenizer=fine_tuned_tokenizer,
+            device=device,
+            eval_temperature=eval_temperature,
+            eval_top_p=eval_top_p,
+            max_new_tokens=config.max_new_tokens,
+            stride_length=stride,
+            eos_token_id=eos_token_id
+        )
+    elif config.test_method == 2:
+        test_and_evaluate_batch(
+            output_json_path=output_json,
+            test_data=test_data,
+            test_loader=test_loader,
+            dpo_loss_fn=dpo_loss_fn,
+            ref_model=ref_model,
+            ref_tokenizer=tokenizer,
+            fine_tuned_model=fine_tuned_model,
+            fine_tuned_tokenizer=fine_tuned_tokenizer,
+            device=device,
+            eval_temperature=eval_temperature,
+            eval_top_p=eval_top_p,
+            max_new_tokens=config.max_new_tokens,
+            stride_length=stride,
+            eos_token_id=eos_token_id
+        )

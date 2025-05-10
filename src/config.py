@@ -5,6 +5,7 @@ import os
 benchmark = False  # Set to True to run the benchmark
 train = False  # Set to True to run the training
 run_test = False  # Set to True to run the test evaluation
+run_ppl = False  # Set to True to run the perplexity evaluation
 
 benchmark_datasets = {
     1: "cais/mmlu",
@@ -45,6 +46,9 @@ methods = {
 }
 
 method_name = methods["DPO"]  # default method
+
+# ------------------------------- Test methods -------------------------------
+test_method = 1  # 1 for test_and_evaluate_one, 2 for test_and_evaluate_batch
 
 # ---------------------------------- log probabilities ----------------------------------
 # Use log probabilities for DPO loss

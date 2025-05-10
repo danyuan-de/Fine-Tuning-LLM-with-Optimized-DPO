@@ -26,7 +26,6 @@ class PreferenceDataset(Dataset):
             chosen_ids = self.tokenizer.encode(chosen_full_text)
             rejected_ids = self.tokenizer.encode(rejected_full_text)
 
-
             self.encoded_texts.append({
                 "prompt": prompt_ids,
                 "chosen": chosen_ids,
