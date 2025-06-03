@@ -3,9 +3,9 @@
     "epoch": 1,
     "step": 3,
     "batch_idx": 31,
-    "loss": 0.47323616966605186,
-    "loss_change": -0.16934433206915855,
-    "reward_diff": 0.21762657165527344,
+    "loss": 0.488218754529953,
+    "loss_change": -0.16913916915655136,
+    "reward_diff": 0.328310489654541,
     "sample_chosen": "Step 1:\nOhm's law: $V= I R$.\nStep 2:\n$= 5\\times 2= 10\\,\\mathrm{V}$.\nStep 3:\nHence $10$.\nAnswer:\n$10\\,\\mathrm{V}$.",
     "sample_rejected": "Step 1:\nCompute $V= I +R= 5+2=7.\nStep 2:\nNo multiplication.\nStep 3:\nPresent $7$.\nAnswer:\n$7\\,\\mathrm{V}$."
   },
@@ -13,9 +13,9 @@
     "epoch": 1,
     "step": 4,
     "batch_idx": 39,
-    "loss": 0.35282086208462715,
-    "loss_change": -0.12041530758142471,
-    "reward_diff": 0.0711812973022461,
+    "loss": 0.3496188595890999,
+    "loss_change": -0.13859989494085312,
+    "reward_diff": 0.11386513710021973,
     "sample_chosen": "Step 1:\n$KE= 0.5\\times 2\\times 49= 1\\times 49=49\\,\\mathrm{J}$.\nAnswer:\n$49\\,\\mathrm{J}$.",
     "sample_rejected": "Step 1:\nCompute $KE= m v= 2\\times 7=14\\,\\mathrm{J}$.\nAnswer:\n$14\\,\\mathrm{J}$."
   },
@@ -23,9 +23,9 @@
     "epoch": 1,
     "step": 5,
     "batch_idx": 47,
-    "loss": 0.17182848881930113,
-    "loss_change": -0.18099237326532602,
-    "reward_diff": 0.5353302955627441,
+    "loss": 0.17028002440929413,
+    "loss_change": -0.17933883517980576,
+    "reward_diff": 0.7262282371520996,
     "sample_chosen": "Step 1:\n$\\frac{1}{R_{\\mathrm{eq}}} = \\frac{1}{12} + \\frac{1}{4} = \\frac{1}{12} + \\frac{3}{12} = \\frac{4}{12} = \\tfrac{1}{3}$.\nSo $R_{\\mathrm{eq}} = 3\\,\\Omega$.\nAnswer:\n$3\\,\\Omega$.",
     "sample_rejected": "Step 1:\nAssume $R_{\\mathrm{eq}} = 12 + 4 = 16\\,\\Omega$.\nAnswer:\n$16\\,\\Omega$."
   }

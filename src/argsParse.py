@@ -17,6 +17,10 @@ def parse_args():
                         help='Run training on the dataset')
     parser.add_argument('--benchmark', action='store_true', default=False,
                         help='Run benchmark on the dataset')
+    parser.add_argument('--run_test', action='store_true', default=False,
+                        help='Run test evaluation on the dataset')
+    parser.add_argument('--run_ppl', action='store_true', default=False,
+                        help='Run perplexity evaluation on the dataset')
 
     # -------------------------------- Select benchmark test dataset --------------------------------
     benchmark_choices = list(config.benchmark_datasets.keys())
@@ -35,7 +39,7 @@ def parse_args():
     # --------------------- Model selection - directly select the model name ---------------------
     model_choices = list(config.models.keys())
     model_help = "Model choice: " + ", ".join(model_choices)
-    parser.add_argument('--model', type=str, choices=model_choices, default="1B-Instruct",
+    parser.add_argument('--model', type=str, choices=model_choices, default="8B-Instruct",
                         help=model_help)
 
     # -------------------- Method selection - directly select the method name --------------------
@@ -43,6 +47,16 @@ def parse_args():
     method_help = "Method choice: " + ", ".join(method_choices)
     parser.add_argument('--method', type=str, choices=method_choices, default="sDPO",
                         help=method_help)
+
+    # ---------------------------------- Test method selection ----------------------------------
+    parser.add_argument('--test_method', type=int, choices=[1, 2], default=config.test_method,
+                        help='Test method choice: 1 for test_and_evaluate_one, 2 for test_and_evaluate_batch')
+
+    # --------------------------------- Validation and Test batch size ---------------------------------
+    parser.add_argument('--val_ppl_batch_size', type=int, default=config.val_ppl_batch_size,
+                        help='Batch size for validation and test data')
+    parser.add_argument('--test_batch_size', type=int, default=config.test_batch_size,
+                        help='Batch size for test data')
 
     # ---------------------------------- log probabilities ----------------------------------
     parser.add_argument('--avglps', action='store_true', default=config.average_log_probs,
@@ -69,12 +83,14 @@ def parse_args():
                         help='Weight decay')
     parser.add_argument('--max_length', type=int, default=config.allowed_max_length,
                         help='Maximum input length')
-    parser.add_argument('--max_new_tokens', type=int, default=config.max_new_tokens,
-                        help='Maximum tokens to generate')
+    parser.add_argument('--stride_length', type=int, default=config.stride_length,
+                        help='Stride length for training data')
 
     # ------------------------------------ Generation parameters ------------------------------------
     parser.add_argument('--sampling', action='store_true', default=config.EVAL_USE_SAMPLING,
                         help='Use sampling for evaluation')
+    parser.add_argument('--max_new_tokens', type=int, default=config.max_new_tokens,
+                        help='Maximum tokens to generate')
     parser.add_argument('--temp', type=float, default=config.temperature,
                         help='Temperature for generation')
     parser.add_argument('--top_p', type=float, default=config.top_p,
@@ -108,6 +124,8 @@ def update_config_from_args(args):
     # Update config values with command-line arguments
     config.train = args.train
     config.benchmark = args.benchmark
+    config.run_test = args.run_test
+    config.run_ppl = args.run_ppl
     config.benchmark_dataset = args.benchmark_dataset
     config.num_benchmark_samples = args.num_benchmark_samples
     config.MMLU_PRO_category_isPhysics = args.category_isPhysics
@@ -129,6 +147,10 @@ def update_config_from_args(args):
     config.eval_freq = args.eval_freq
     config.model_name = config.models[args.model]
     config.method_name = config.methods[args.method]
+    config.val_ppl_batch_size = args.val_ppl_batch_size
+    config.test_batch_size = args.test_batch_size
+    config.stride_length = args.stride_length
+    config.test_method = args.test_method
 
     # Be able to specify a direct file path or use the mapping
     config.training_data_filename = args.data_file if args.data_file else config.training_data_files[args.data]
@@ -147,6 +169,8 @@ def print_configuration():
     print(f"Random Seed: {config.random_seed}")
     if config.train:
         print(f"Run Training: {config.train}")
+        print(f"Run Benchmark: {config.benchmark}")
+        print(f"Run PPL Evaluation: {config.run_ppl}")
         print(f"Model: {config.model_name}")
         print(f"Method: {config.method_name.upper()}")
         print(f"Training Data: {config.training_data_filename}")
@@ -160,6 +184,9 @@ def print_configuration():
         print("\nTraining Parameters:")
         print(f"  Learning Rate: {config.learning_rate}")
         print(f"  Batch Size: {config.batch_size}")
+        print(f"  Validation Batch Size: {config.val_ppl_batch_size}")
+        print(f"  test Batch Size: {config.test_batch_size}")
+        print(f"  Stride Length: {config.stride_length}")
         print(f"  Gradient Accumulation Steps: {config.gradient_accumulation_steps}")
         print(f"  Epochs: {config.num_epochs}")
         print(f"  Weight Decay: {config.weight_decay}")
@@ -171,6 +198,8 @@ def print_configuration():
         print(f"  Use Sampling: {config.EVAL_USE_SAMPLING}")
         print(f"  Temperature: {config.temperature}")
         print(f"  Top-p: {config.top_p}")
+        method = "test_and_evaluate_one" if config.test_method == 1 else "test_and_evaluate_batch"
+        print(f"Test Method: {method}")
 
     elif config.benchmark:
         print(f"Run Benchmark: {config.benchmark}")

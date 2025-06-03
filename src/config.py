@@ -4,6 +4,8 @@ import os
 # -------------------------- Run benchmark --------------------------
 benchmark = False  # Set to True to run the benchmark
 train = False  # Set to True to run the training
+run_test = False  # Set to True to run the test evaluation
+run_ppl = False  # Set to True to run the perplexity evaluation
 
 benchmark_datasets = {
     1: "cais/mmlu",
@@ -45,6 +47,9 @@ methods = {
 
 method_name = methods["DPO"]  # default method
 
+# ------------------------------- Test methods -------------------------------
+test_method = 2  # 1 for test_and_evaluate_one, 2 for test_and_evaluate_batch
+
 # ---------------------------------- log probabilities ----------------------------------
 # Use log probabilities for DPO loss
 # If average_log_probs is True, the log probabilities are averaged over the sequence length
@@ -58,7 +63,11 @@ lambda_shift = 0.75  # Weight for the shift term in DPO loss
 
 # ---------------------------------- Model parameters ----------------------------------
 allowed_max_length = 4096  # maximum number of tokens in a sequence for training input data
-max_new_tokens = 512  # maximum number of tokens to generate
+stride_length = allowed_max_length // 2  # stride length for training data
+
+# --------------------------------- Validation and Test batch size ---------------------------------
+val_ppl_batch_size = 16  # Batch size for validation perplexity
+test_batch_size = 1  # Batch size for test perplexity
 
 # --------------------------------- Training parameters ---------------------------------
 batch_size = 2  # Process the number of items at once
@@ -71,6 +80,7 @@ learning_rate = 5e-7
 weight_decay = 0.01  # Original: 0.001 - Higher regularization to prevent overfitting
 
 EVAL_USE_SAMPLING = False  # Use sampling for evaluation
+max_new_tokens = 512  # maximum number of tokens to generate
 temperature = 0.7  # between 0.7 and 1.0, lower values generate more deterministic text
 top_p = 0.9  # between 0.7 and 0.95, higher values generate more diverse text
 
@@ -89,7 +99,7 @@ training_data_files = {
     'data': os.path.join(data_dir, "orca_dpo_pairs.json")
 }
 
-training_data_filename = training_data_files['data']  # default training data
+training_data_filename = training_data_files['content']  # default training data
 
 # ------------------------ Results directory ------------------------
 result_dir = os.path.join(os.path.dirname(__file__), "..", "results")

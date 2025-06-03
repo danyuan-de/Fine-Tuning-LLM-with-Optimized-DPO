@@ -2,9 +2,12 @@ import os
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 import torch
+from torch.nn.utils.rnn import pad_sequence
 from transformers import AutoModelForCausalLM, AutoTokenizer
-import math
 import csv
+from tqdm import tqdm
+from typing import Dict, Union, List
+import re
 import src.config as config
 
 
@@ -262,14 +265,19 @@ def custom_collate_fn(
 
             mask[eos_pos] = True  # Set the EOS token to True
 
-            # Ensure EOS token is unmasked
-            eos_positions = (sequence_tensor == eos_token_id).nonzero(as_tuple=True)[0]
-            eos_pos = eos_positions[-1].item() if len(eos_positions) > 0 else sequence_tensor.size(0) - 1
-            mask[eos_pos] = True
+            # # Ensure EOS token is unmasked
+            # eos_positions = (sequence_tensor == eos_token_id).nonzero(as_tuple=True)[0]
+            # eos_pos = eos_positions[-1].item() if len(eos_positions) > 0 else sequence_tensor.size(0) - 1
+            # mask[eos_pos] = True
 
             batch_data[key].append(padded_sequence)
             batch_data[f"{key}_mask"].append(mask)
 
+    # batch_data["prompt"] = pad_sequence(
+    #     batch_data["prompt"],
+    #     batch_first=True,
+    #     padding_value=tokenizer.pad_token_id
+    # )
     # Stack the tensors (already on device, no need for .to(device))
     for key in ["chosen", "rejected", "chosen_mask", "rejected_mask"]:
         batch_data[key] = torch.stack(batch_data[key])
@@ -277,6 +285,10 @@ def custom_collate_fn(
         # Truncate the sequences if needed
         if allowed_max_length is not None:
             batch_data[key] = batch_data[key][:, :allowed_max_length]
+
+    batch_data["question_texts"] = [inst["question_text"] for inst in batch]
+    batch_data["chosen_texts"] = [inst["chosen_text"] for inst in batch]
+    batch_data["rejected_texts"] = [inst["rejected_text"] for inst in batch]
 
     return batch_data
 
@@ -302,21 +314,34 @@ def plot_losses(epochs_seen, tokens_seen, train_losses, val_losses, label="loss"
     # plt.show()
 
 
-def text_to_token_ids(text, tokenizer):
-    encoded = tokenizer.encode(text)
-    encoded_tensor = torch.tensor(encoded).unsqueeze(0)  # add batch dimension
-    return encoded_tensor
+def text_to_token_ids(texts: Union[str, List[str]], tokenizer) -> torch.LongTensor:
+    if isinstance(texts, str):
+        texts = [texts]
+
+    encoding = tokenizer(
+        texts,
+        return_tensors="pt",
+        padding=True,
+        truncation=True,
+        max_length=config.allowed_max_length
+    )
+
+    # shape = (bsz, seq_len) -> input_ids
+    return encoding.input_ids, encoding.attention_mask
 
 
-def token_ids_to_text(token_ids, tokenizer):
-    flat = token_ids.squeeze(0)  # remove batch dimension
-    return tokenizer.decode(flat.tolist())
+def token_ids_to_text(token_ids: torch.Tensor, tokenizer, skip_special_tokens: bool = False) -> List[str]:
+    all_ids = token_ids.tolist()
+    texts = tokenizer.batch_decode(all_ids, skip_special_tokens=skip_special_tokens)
+    # remove empty spaces
+    return [t.strip() for t in texts]
 
 
 def generate(
     model,
     idx,
     max_new_tokens=512,
+    attention_mask=None,
     context_size=4096,
     temperature=0.0,
     top_k=None,
@@ -352,9 +377,17 @@ def generate(
         # Truncate the context
         idx_cond = idx[:, -context_size:]  # shape: (batch_size, <=context_size)
 
+        if attention_mask is not None:
+            mask_cond = attention_mask[:, -context_size:]
+        else:
+            mask_cond = None
+
         # Compute logits; we only need the final token’s logits
         with torch.no_grad():
-            output = model(idx_cond)
+            if mask_cond is None:
+                output = model(idx_cond)
+            else:
+                output = model(idx_cond, attention_mask=mask_cond)
             logits = output.logits if hasattr(output, "logits") else output[0]
         logits = logits[:, -1, :]  # shape: (batch_size, vocab_size)
 
@@ -399,11 +432,16 @@ def generate(
         # Concatenate the chosen token
         idx = torch.cat((idx, next_token), dim=1)
 
-        # Check EOS or max tokens
-        if eos_token_id is not None:
-            if (next_token == eos_token_id).any():
-                # If any in the batch hits EOS, you might choose to break or handle individually
-                break
+        # Extend the attention mask if provided: mark generated tokens as real (non-padding) tokens
+        if attention_mask is not None:
+            # Append a “1” for each newly generated token so it's treated as valid input
+            attention_mask = torch.cat(
+                (attention_mask, torch.ones_like(next_token, device=device)), dim=1
+            )
+
+        # Check if all generated samples have reached the end-of-sequence token
+        if eos_token_id is not None and (next_token == eos_token_id).all():
+            break
 
     return idx
 
@@ -450,20 +488,22 @@ def postprocess_response(full_text: str) -> str:
     for token in system_tokens:
         response = response.replace(token, "")
 
+    # Remove any reserved_special_token_N placeholders
+    response = re.sub(r"<\|reserved_special_token_\d+\|>", "", response)
+
     # Return the cleaned response
     return response.strip()
 
 
-# ------------------------------- Perplexity Calculation -------------------------------
 def calculate_perplexity(
-    model: AutoModelForCausalLM,  # Language model for computing perplexity
-    tokenizer: AutoTokenizer,     # Tokenizer for encoding input texts
-    texts: str | list[str],       # Input text(s) to evaluate
-    max_length: int = None,       # Maximum sequence length for truncation
-    stride: int = None,           # Stride for splitting long sequences
-    batch_size: int = 1,          # Number of texts to process in a batch
-    device: torch.device = None   # Device to run the model on
-) -> float | list[float]:         # Returns perplexity score(s)
+    model: AutoModelForCausalLM,   # Language model for computing perplexity
+    tokenizer: AutoTokenizer,      # Tokenizer for encoding input texts
+    texts: Union[str, List[str]],  # Input text(s) to evaluate
+    max_length: int = None,        # Maximum sequence length for truncation
+    stride: int = None,            # Stride for splitting long sequences
+    batch_size: int = 1,           # Number of texts to process in a batch
+    device: torch.device = None    # Device to run the model on
+) -> Union[float, List[float]]:    # Returns perplexity score(s)
     """
     Calculates the perplexity of the model on the given text(s).
 
@@ -490,11 +530,14 @@ def calculate_perplexity(
     # Use model's device if none specified
     device = device or model.device
 
-    # Set max_length to minimum of config or model limit
-    max_length = max_length or min(config.allowed_max_length, model.config.max_position_embeddings)
+    # Set max_length to model's maximum position embeddings if not specified
+    max_length = max_length or model.config.max_position_embeddings
 
     # Initialize list to store perplexity scores
     perplexities = []
+
+    model.to(device).eval()  # Set model to evaluation mode
+    pad_token_id = tokenizer.pad_token_id or tokenizer.eos_token_id  # Get pad token ID
 
     # Process texts in batches
     for i in range(0, len(texts), batch_size):
@@ -505,77 +548,192 @@ def calculate_perplexity(
             # Tokenize texts with padding and truncation
             encodings = tokenizer(
                 batch_texts,
-                return_tensors="pt",             # Return PyTorch tensors
-                truncation=True,                 # Truncate to max_length
-                max_length=max_length,           # Maximum sequence length
-                padding=True,                    # Pad sequences to equal length
-                add_special_tokens=True          # Add special tokens (e.g., BOS, EOS)
+                return_tensors="pt",
+                truncation=(stride is None),
+                max_length=max_length,
+                padding=True,
+                add_special_tokens=True
             )
             # Move input tensors to specified device
             input_ids = encodings.input_ids.to(device)
             attention_mask = encodings.attention_mask.to(device)
 
-            # Handle long sequences with striding
-            if stride is not None and input_ids.size(1) > max_length:
-                batch_perplexities = []
-                # Iterate over sequence with stride
-                for j in range(0, input_ids.size(1) - max_length + 1, stride):
-                    # Define start and end indices for chunk
-                    start_idx = j
-                    end_idx = min(j + max_length, input_ids.size(1))
-                    # Extract chunk tensors
-                    chunk_input_ids = input_ids[:, start_idx:end_idx]
-                    chunk_attention_mask = attention_mask[:, start_idx:end_idx]
+            # Prepare labels with ignore_index
+            labels = input_ids.clone()
+            labels[input_ids == pad_token_id] = -100  # Ignore padding tokens
 
-                    # Compute model output without gradients
+            bsz, seq_len = input_ids.shape
+            # Handle long sequences with striding
+            if stride and seq_len > max_length:
+                print("==== Running with striding... ====")
+                print(f"Sequence length {seq_len} exceeds max_length {max_length}. Using striding.")
+
+                # Total NLL and token count per example
+                total_nll = torch.zeros(bsz, device=device)
+                total_tokens = torch.zeros(bsz, device=device)
+
+                # Iterate over sequence with stride
+                for start in range(0, seq_len, stride):
+                    end = min(start + max_length, seq_len)
+                    chunk_input_ids = input_ids[:, start:end]
+                    chunk_attention_mask = attention_mask[:, start:end]
+                    chunk_labels = labels[:, start:end]
+
                     with torch.no_grad():
                         outputs = model(
-                            input_ids=chunk_input_ids,  # Input tensor
-                            attention_mask=chunk_attention_mask,  # Attention mask
-                            labels=chunk_input_ids  # Labels for loss
+                            input_ids=chunk_input_ids,
+                            attention_mask=chunk_attention_mask,
+                            labels=chunk_labels
                         )
-                        loss = outputs.loss                  # Extract loss
+                        # Compute per-sample loss
+                        logits = outputs.logits
+                        loss_fct = torch.nn.CrossEntropyLoss(reduction='none', ignore_index=-100)
+                        shift_logits = logits[:, :-1].contiguous()
+                        shift_labels = chunk_labels[:, 1:].contiguous()
+                        # Compute loss for each sample in the batch
+                        loss = loss_fct(shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1))
+                        loss = loss.view(bsz, -1).sum(dim=1)  # Sum loss over sequence length
+                        token_count = (chunk_labels != -100).sum(dim=1).float()  # Non-padding tokens
 
-                    # Check for invalid loss values
-                    if torch.isnan(loss) or torch.isinf(loss) or loss.item() > 100:
-                        batch_perplexities.append(float("inf"))
-                    else:
-                        # Calculate perplexity as exp(loss)
-                        batch_perplexities.append(math.exp(loss.item()))
+                        total_nll += loss
+                        total_tokens += token_count
 
-                # Compute average perplexity for sequence
-                if batch_perplexities:
-                    valid_perplexities = [p for p in batch_perplexities if p != float("inf")]
-                    perplexities.append(
-                        sum(valid_perplexities) / len(valid_perplexities) if valid_perplexities else float("inf")
-                    )
-                else:
-                    perplexities.append(float("inf"))
+                    if end == seq_len:
+                        break
+
+                # Final average Negative Log Likelihood (NLL) per sample
+                mean_nll = total_nll / total_tokens
+                perplexities.extend(torch.exp(mean_nll).tolist())
 
             else:
-                # Process entire sequence without striding
+                print("==== Running without striding... ====")
                 with torch.no_grad():
                     outputs = model(
-                        input_ids=input_ids,  # Input tensor
-                        attention_mask=attention_mask,  # Attention mask
-                        labels=input_ids  # Labels for loss
+                        input_ids=input_ids,
+                        attention_mask=attention_mask,
+                        labels=labels
                     )
-                    loss = outputs.loss            # Extract loss
-
-                # Check for invalid loss values
-                if torch.isnan(loss) or torch.isinf(loss) or loss.item() > 100:
-                    perplexities.extend([float("inf")] * len(batch_texts))
-                else:
-                    # Calculate perplexity as exp(loss)
-                    perplexities.extend([math.exp(loss.item())] * len(batch_texts))
+                    # Compute per-sample loss
+                    logits = outputs.logits
+                    loss_fct = torch.nn.CrossEntropyLoss(reduction='none', ignore_index=-100)
+                    shift_logits = logits[:, :-1].contiguous()
+                    shift_labels = labels[:, 1:].contiguous()
+                    # Compute loss for each sample in the batch
+                    loss = loss_fct(shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1))
+                    loss = loss.view(bsz, -1).sum(dim=1)  # Sum loss over sequence length
+                    token_count = (labels != -100).sum(dim=1).float()  # Non-padding tokens
+                    mean_nll = loss / token_count
+                    perplexities.extend(torch.exp(mean_nll).tolist())
 
         except Exception as e:
-            # Handle errors during batch processing
             print(f"Error processing batch {i // batch_size}: {e}")
             perplexities.extend([float("inf")] * len(batch_texts))
 
     # Return single value or list based on input
     return perplexities if len(perplexities) > 1 else perplexities[0]
+
+
+# ------------------------------- Logging Perplexity to CSV -------------------------------
+def log_ppl_csv(filename: str, *, model_name: str,
+                chosen_ppl: float, rejected_ppl: float, self_ppl: float):
+    headers = ["model", "chosen_ppl", "rejected_ppl", "self_ppl"]
+    write_header = not os.path.exists(filename)
+    with open(filename, "a", newline="") as f:
+        w = csv.writer(f)
+        if write_header:
+            w.writerow(headers)
+        w.writerow([model_name, chosen_ppl, rejected_ppl, self_ppl])
+
+
+def summarize_ppl_table(model, tokenizer, data_loader, device=None):
+    """
+    Calculate the average perplexity for the chosen, rejected, and self-generated responses.
+    Args:
+        model: The model to use for scoring.
+        tokenizer: The tokenizer to use for encoding the input.
+        data_loader: DataLoader containing the dataset.
+        device: Device to run the model on (default is model's device).
+    Returns:
+        dict: A dictionary with keys 'chosen', 'rejected', and 'self' corresponding to the average perplexity.
+    """
+    sum_chosen, sum_rejected, sum_self = 0.0, 0.0, 0.0
+    count = 0
+    eos = tokenizer.eos_token
+    self_cache: Dict[str, float] = {}
+    # debug_printed = 0
+
+    model.to(device)
+    model.eval()
+    with torch.no_grad():
+        for batch in tqdm(data_loader, desc="Calculating perplexity"):
+            prompts = [tokenizer.decode(x, skip_special_tokens=False) for x in batch["prompt"]]
+            chosens = [tokenizer.decode(x, skip_special_tokens=True) for x in batch["chosen"]]
+            rejecteds = [tokenizer.decode(x, skip_special_tokens=True) for x in batch["rejected"]]
+
+            # # Debugging
+            # for i in range(len(prompts)):
+            #     if debug_printed < 2:
+            #         print(f"\n=== DEBUG SAMPLE {i + 1} ===")
+            #         print(f"FULL PROMPT:\n{prompts[i]}\n")
+            #         print(f"CHOSEN RAW:\n{chosens[i]}\n\n")
+            #         print(f"REJECTED RAW:\n{rejecteds[i]}\n\n")
+            #     else:
+            #         break
+            #     debug_printed += 1
+
+            chosen_texts = [f"{p}{c}{eos}" for p, c in zip(prompts, chosens)]
+            rejected_texts = [f"{p}{r}{eos}" for p, r in zip(prompts, rejecteds)]
+            chosen_ppls = calculate_perplexity(
+                model, tokenizer, chosen_texts,
+                max_length=config.allowed_max_length,
+                device=device,
+                batch_size=len(chosen_texts)
+            )
+            rejected_ppls = calculate_perplexity(
+                model, tokenizer, rejected_texts,
+                max_length=config.allowed_max_length,
+                device=device,
+                batch_size=len(rejected_texts)
+            )
+
+            # 2) batch self-generation + PPL
+            prompts_on_device = [p.to(device) for p in batch["prompt"]]
+            padded_prompts = pad_sequence(
+                prompts_on_device,
+                batch_first=True,
+                padding_value=tokenizer.pad_token_id
+            )
+            gen_outs = model.generate(
+                padded_prompts,
+                max_new_tokens=config.max_new_tokens,
+                do_sample=False
+            )
+            resps = [postprocess_response(tokenizer.decode(o, skip_special_tokens=False)) for o in gen_outs]
+            self_texts = [f"{p}{r}{eos}" for p, r in zip(prompts, resps)]
+            self_ppls = calculate_perplexity(
+                model, tokenizer, self_texts,
+                max_length=config.allowed_max_length,
+                device=device,
+                batch_size=len(self_texts)
+            )
+
+            # accumulate with cache
+            for prompt, chosen_batch_ppl, rejected_batch_ppl, self_ppl in zip(prompts, chosen_ppls, rejected_ppls, self_ppls):
+                sum_chosen += chosen_batch_ppl
+                sum_rejected += rejected_batch_ppl
+                # cache self-PPL by prompt
+                if prompt not in self_cache:
+                    self_cache[prompt] = self_ppl
+                sum_self += self_cache[prompt]
+                count += 1
+
+    if count == 0:
+        raise ValueError("No samples processed")
+    return {
+        "chosen": sum_chosen / count,
+        "rejected": sum_rejected / count,
+        "self": sum_self / count,
+    }
 
 
 # ------------------------------- GPU Memory Management -------------------------------

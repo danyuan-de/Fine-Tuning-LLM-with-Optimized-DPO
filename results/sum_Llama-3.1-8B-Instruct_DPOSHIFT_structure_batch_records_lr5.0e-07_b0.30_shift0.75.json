@@ -1,0 +1,12 @@
+[
+  {
+    "epoch": 1,
+    "step": 6,
+    "batch_idx": 55,
+    "loss": 0.479619849473238,
+    "loss_change": -0.1008126474916935,
+    "reward_diff": 0.4653247743844986,
+    "sample_chosen": "<observation>Work for constant pressure: $W = P\\,\\Delta V$.</observation>\n<insight>We must convert atm to Pa and L to $\\mathrm{m^3}$.</insight>\n<think>$P=1.013\\times10^5\\,\\mathrm{Pa}, \\Delta V = (4.0-...",
+    "sample_rejected": "You multiply that 1 atm in pascals by the change of 2 liters in cubic meters. That ends up being about 200 joules. Piece of cake."
+  }
+]

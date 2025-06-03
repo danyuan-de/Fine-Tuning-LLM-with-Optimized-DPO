@@ -14,18 +14,19 @@ import random
 import src.config as config
 from src.dpoLoss import DPOLoss
 from src.preferenceDataset import PreferenceDataset
+from src.TestEvaluation import test_and_evaluate_batch
+from src.mmluBenchmark import run_benchmark
 from src.utils import (
     get_dpo_params,
     get_output_filename,
     format_input,
-    text_to_token_ids,
-    generate,
     postprocess_response,
     custom_collate_fn,
     plot_losses,
-    calculate_perplexity,
     log_result_csv,
-    log_memory_snapshot
+    log_memory_snapshot,
+    summarize_ppl_table,
+    log_ppl_csv
 )
 
 
@@ -85,8 +86,8 @@ def train_model(
 
     # Main training loop
     for epoch in range(num_epochs):
-        # if log_memory:
-        #     log_memory_snapshot(f"Starting epoch {epoch+1}/{num_epochs}")
+        if log_memory:
+            log_memory_snapshot(f"Starting epoch {epoch+1}/{num_epochs}")
 
         policy_model.train()  # Set model to training mode
 
@@ -98,8 +99,8 @@ def train_model(
 
         try:
             for batch_idx, batch in enumerate(train_loop):
-                # if log_memory and batch_idx % max(1, len(train_loader) // 10) == 0:
-                #     log_memory_snapshot(f"Epoch {epoch+1}, Batch {batch_idx+1}/{len(train_loader)}")
+                if log_memory and batch_idx % max(1, len(train_loader) // 10) == 0:
+                    log_memory_snapshot(f"Epoch {epoch+1}, Batch {batch_idx+1}/{len(train_loader)}")
 
                 (loss, chosen_rewards, rejected_rewards, reward_accuracy,
                  policy_chosen_log_probas, policy_rejected_log_probas,
@@ -298,7 +299,7 @@ def train_model(
     return tracking
 
 
-def run_training():
+def runPipeline():
     # Get relevant parameters for the selected method
     dpo_params = get_dpo_params(config.method_name)
 
@@ -445,8 +446,8 @@ def run_training():
         eos_token_id=eos_token_id,
         tokenizer=tokenizer,
         device=device,
-        mask_prompt_tokens=True,  # This is optional
-        allowed_max_length=config.allowed_max_length  # The supported context length of the model
+        allowed_max_length=config.allowed_max_length,  # The supported context length of the model
+        mask_prompt_tokens=True
     )
 
     # ---------------------------- Create datasets and dataloaders ---------------------------
@@ -471,10 +472,18 @@ def run_training():
     test_dataset = PreferenceDataset(test_data, tokenizer)
     test_loader = DataLoader(
         test_dataset,
-        batch_size=config.batch_size,
+        batch_size=config.test_batch_size,
         collate_fn=customized_collate_fn,
         shuffle=False,
         drop_last=False,
+    )
+
+    validation_ppl_loader = DataLoader(
+        val_dataset,
+        batch_size=config.val_ppl_batch_size,
+        collate_fn=customized_collate_fn,
+        drop_last=False,
+        shuffle=False
     )
 
     # print("Train loader:")
@@ -485,31 +494,60 @@ def run_training():
     #     )
     # print("\n")
 
-    # Evaluate initial state
-    print("\nEvaluating initial state...")
     # log_memory_snapshot("Before initial evaluation")
 
-    # Before training loop. If chosen and rejected responses are too similar, the preference margin won’t grow.
-    batch = next(iter(train_loader))
-    print("Chosen sample:", tokenizer.decode(batch["chosen"][0].tolist()))
-    print("Rejected sample:", tokenizer.decode(batch["rejected"][0].tolist()))
+    # Evaluate initial state
+    # print("\nEvaluating initial state...")
+    # res = dpo_loss_fn.evaluate_dpo_loss_loader(
+    #     policy_model=model,
+    #     reference_model=ref_model,
+    #     train_loader=train_loader,
+    #     val_loader=val_loader,
+    #     eval_iter=5
+    # )
+    # print("Training loss:", res["train_loss"])
+    # print("Validation loss:", res["val_loss"])
 
-    res = dpo_loss_fn.evaluate_dpo_loss_loader(
-        policy_model=model,
-        reference_model=ref_model,
-        train_loader=train_loader,
-        val_loader=val_loader,
-        eval_iter=5
-    )
+    # print("Train reward margin:", res["train_chosen_reward"] - res["train_rejected_reward"])
+    # print("Val reward margin:", res["val_chosen_reward"] - res["val_rejected_reward"])
 
     # log_memory_snapshot("After initial evaluation")
 
-    # Before starting the training, print the initail losses and rewards:
-    print("Training loss:", res["train_loss"])
-    print("Validation loss:", res["val_loss"])
+    # ---- Log the reference model's perplexity on the chosen samples, rejected samples, self-generated samples ----
+    if config.run_ppl:
+        ppl_filename = get_output_filename(
+            method=config.method_name,
+            file=config.training_data_filename,
+            model=config.model_name,
+            label="ppl",
+            learning_rate=config.learning_rate,
+            beta=config.beta,
+            lambda_dpop=getattr(config, "lambda_dpop", None),
+            lambda_shift=getattr(config, "lambda_shift", None),
+            typename="csv"
+        )
 
-    print("Train reward margin:", res["train_chosen_reward"] - res["train_rejected_reward"])
-    print("Val reward margin:", res["val_chosen_reward"] - res["val_rejected_reward"])
+        print(f"\nPerplexity log file path: {ppl_filename}")
+        print("Computing reference model perplexity...\n")
+        ppl_start_time = time.time()
+
+        ref_ppl = summarize_ppl_table(ref_model, tokenizer, validation_ppl_loader, device)
+        log_ppl_csv(
+            filename=ppl_filename,
+            model_name="reference",
+            chosen_ppl=ref_ppl["chosen"],
+            rejected_ppl=ref_ppl["rejected"],
+            self_ppl=ref_ppl["self"]
+        )
+
+        ppl_end_time = time.time()
+        ppl_execution_time = (ppl_end_time - ppl_start_time) / 60
+        print(f"Reference model PPL computed and saved in {ppl_execution_time:.2f} minutes (in {str(timedelta(seconds=ppl_end_time - ppl_start_time))})")
+
+        print("\n[REF] PPL")
+        print(f"chosen:{ref_ppl['chosen']:.2f}  rejected:{ref_ppl['rejected']:.2f}  self‑gen:{ref_ppl['self']:.2f}\n")
+
+    # Before starting the training, print the initail losses and rewards:
     print("=" * 50)
     print("\nStarting training...")
     print("=" * 50)
@@ -540,6 +578,7 @@ def run_training():
         eval_iter=5,
         gradient_accumulation_steps=config.gradient_accumulation_steps,
         tokenizer=tokenizer,
+        log_memory=True
     )
 
     end_time = time.time()
@@ -563,30 +602,47 @@ def run_training():
     print(f"Validation reward accuracy: {val_acc:.3f}")
     print(f"Tokens seen: {tracking['tokens_seen'][-1]}")
 
-    print("\nAnalyzing batch records for significant loss changes:")
-    if "batch_records" in tracking and tracking["batch_records"]:
-        # Find batches with the largest loss increases and decreases
-        sorted_records = sorted(tracking["batch_records"], key=lambda x: x["loss_change"])
+    # print("\nAnalyzing batch records for significant loss changes:")
+    # if "batch_records" in tracking and tracking["batch_records"]:
+    #     # Find batches with the largest loss increases and decreases
+    #     sorted_records = sorted(tracking["batch_records"], key=lambda x: x["loss_change"])
 
-        # Top 3 decreases (improvements)
-        print("\nTop 3 Loss Decreases (Improvements):")
-        for record in sorted_records[:3]:
-            print(f"Batch {record['batch_idx']} - Loss change: {record['loss_change']:.4f}")
-            print(f"Reward difference: {record['reward_diff']:.4f}")
+    #     # Top 3 decreases (improvements)
+    #     print("\nTop 3 Loss Decreases (Improvements):")
+    #     for record in sorted_records[:3]:
+    #         print(f"Batch {record['batch_idx']} - Loss change: {record['loss_change']:.4f}")
+    #         print(f"Reward difference: {record['reward_diff']:.4f}")
 
-        # Top 3 increases (deteriorations)
-        print("\nTop 3 Loss Increases (Deteriorations):")
-        for record in sorted_records[-3:]:
-            print(f"Batch {record['batch_idx']} - Loss change: {record['loss_change']:.4f}")
-            print(f"Reward difference: {record['reward_diff']:.4f}")
-    else:
-        print("No batch records found in tracking data")
+    #     # Top 3 increases (deteriorations)
+    #     print("\nTop 3 Loss Increases (Deteriorations):")
+    #     for record in sorted_records[-3:]:
+    #         print(f"Batch {record['batch_idx']} - Loss change: {record['loss_change']:.4f}")
+    #         print(f"Reward difference: {record['reward_diff']:.4f}")
+    # else:
+    #     print("No batch records found in tracking data")
 
     # Save the model and tokenizer
-    save_path = config.fine_tuned_model_path
-    policy_model.save_pretrained(save_path)
-    tokenizer.save_pretrained(save_path)
-    print(f"Model and tokenizer saved to {save_path}")
+    saved_ft_model_path = os.path.join(config.model_workspace_dir, f"{config.model_name.split('/')[-1]}_fine-tuned")
+    policy_model.save_pretrained(saved_ft_model_path)
+    tokenizer.save_pretrained(saved_ft_model_path)
+    print(f"Model and tokenizer saved to {saved_ft_model_path}")
+
+    if config.run_ppl:
+        print("\nComputing policy model perplexity...\n")
+        ppl_start_time = time.time()
+        pol_ppl = summarize_ppl_table(policy_model, tokenizer, validation_ppl_loader, device)
+        log_ppl_csv(
+            filename=ppl_filename,
+            model_name="policy",
+            chosen_ppl=pol_ppl["chosen"],
+            rejected_ppl=pol_ppl["rejected"],
+            self_ppl=pol_ppl["self"]
+        )
+        ppl_end_time = time.time()
+        ppl_execution_time = (ppl_end_time - ppl_start_time) / 60
+        print(f"Policy model PPL computed and saved in {ppl_execution_time:.2f} minutes (in {str(timedelta(seconds=ppl_end_time - ppl_start_time))})")
+        print("\n[POL] PPL")
+        print(f"chosen:{pol_ppl['chosen']:.2f}  rejected:{pol_ppl['rejected']:.2f}  self‑gen:{pol_ppl['self']:.2f}\n")
 
     # Plot the losses
     epochs_tensor = torch.linspace(0, config.num_epochs, len(tracking["train_losses"]))
@@ -611,31 +667,28 @@ def run_training():
         label="reward margin"
     )
 
-    fine_tuned_tokenizer = AutoTokenizer.from_pretrained(save_path)
-    fine_tuned_model = AutoModelForCausalLM.from_pretrained(save_path)
+    fine_tuned_tokenizer = AutoTokenizer.from_pretrained(saved_ft_model_path)
+    fine_tuned_model = AutoModelForCausalLM.from_pretrained(saved_ft_model_path)
     print("Tuned model's tokenizer loaded.")
 
     ref_model.to(device)  # Ensure reference model is on device
     fine_tuned_model.to(device)  # Ensure fine-tuned model is on device
 
-    # Use the test data to evaluate the fine-tuned model
-    print("Starting test evaluation...")
-    test_res = dpo_loss_fn.evaluate_dpo_loss_loader(
-        policy_model=fine_tuned_model,
-        reference_model=ref_model,
-        train_loader=None,
-        val_loader=test_loader,
-        eval_iter=5
-    )
+    # # Use the test data to evaluate the fine-tuned model
+    # print("Starting test evaluation...")
+    # test_res = dpo_loss_fn.evaluate_dpo_loss_loader(
+    #     policy_model=fine_tuned_model,
+    #     reference_model=ref_model,
+    #     train_loader=None,
+    #     val_loader=test_loader,
+    #     eval_iter=5
+    # )
 
-    print("Test loss:", test_res["val_loss"])
-    print("Test reward margin:", test_res["val_chosen_reward"] - test_res["val_rejected_reward"])
-
-    # List for storing the test results to write to the json file
-    test_results = []
+    # print("Test loss:", test_res["val_loss"])
+    # print("Test reward margin:", test_res["val_chosen_reward"] - test_res["val_rejected_reward"])
 
     # Check first entry to determine data type
-    input_key = "question" if "question" in test_data[0] else "instruction"
+    # input_key = "question" if "question" in test_data[0] else "instruction"
 
     # Check the maximum sequence length in the test data
     max_length = 0
@@ -660,87 +713,38 @@ def run_training():
         eval_temperature = 0.0
         eval_top_p = None
 
-    try:
-        for i, entry in enumerate(test_data):
+    if config.run_test:
+        test_and_evaluate_batch(
+            output_json_path=output_json,
+            test_data=test_data,
+            test_loader=test_loader,
+            dpo_loss_fn=dpo_loss_fn,
+            ref_model=ref_model,
+            ref_tokenizer=tokenizer,
+            fine_tuned_model=fine_tuned_model,
+            fine_tuned_tokenizer=fine_tuned_tokenizer,
+            device=device,
+            eval_temperature=eval_temperature,
+            eval_top_p=eval_top_p,
+            max_new_tokens=config.max_new_tokens,
+            stride_length=stride,
+            eos_token_id=eos_token_id
+        )
 
-            input_text = format_input(entry)
+    print("Test evaluation completed.")
 
-            # Reference Model Generation
-            ref_input_ids = text_to_token_ids(input_text, tokenizer).to(device)
-            ref_generated = generate(
-                model=ref_model,
-                idx=ref_input_ids.to(device),
-                max_new_tokens=config.max_new_tokens,
-                temperature=eval_temperature,
-                top_p=eval_top_p,
-                eos_token_id=eos_token_id
-            )
-            ref_full_text = tokenizer.decode(ref_generated[0], skip_special_tokens=False)
-            ref_response = postprocess_response(ref_full_text)
-
-            # Fine-Tuned Model Generation
-            fine_tuned_model_input_ids = text_to_token_ids(input_text, fine_tuned_tokenizer).to(device)
-            fine_tuned_model_generated = generate(
-                model=fine_tuned_model,
-                idx=fine_tuned_model_input_ids.to(device),
-                max_new_tokens=config.max_new_tokens,
-                temperature=eval_temperature,
-                top_p=eval_top_p,
-                eos_token_id=eos_token_id
-            )
-            fine_tuned_model_full_text = fine_tuned_tokenizer.decode(fine_tuned_model_generated[0], skip_special_tokens=False)
-            fine_tuned_model_response = postprocess_response(fine_tuned_model_full_text)
-
-            # Calculate perplexity
-            ref_perplexity = calculate_perplexity(
-                model=ref_model,
-                tokenizer=tokenizer,
-                texts=input_text,
-                max_length=config.allowed_max_length,
-                stride=stride,
-                device=device
-            )
-
-            ft_perplexity = calculate_perplexity(
-                model=fine_tuned_model,
-                tokenizer=fine_tuned_tokenizer,
-                texts=input_text,
-                max_length=config.allowed_max_length,
-                stride=stride,
-                device=device
-            )
-
-            # Use the previously determined input key
-            print(f"\nInput {i}:\n {entry[input_key]}")
-
-            print("\n ----- Reference Model ----- ")
-            print(f"Reference Response: {ref_response}")
-            print(f"Perplexity: {ref_perplexity:.2f}")
-
-            print("\n ----- Policy Model ----- ")
-            print(f"Policy Response: {fine_tuned_model_response}")
-            print(f"Perplexity: {ft_perplexity:.2f}")
-
-            print("\n ----- Expected Response ----- ")
-            print(f"Expected Answer: {entry['chosen']}")
-            print("=" * 80, "\n")
-
-            # Create a single sample object and append to the results list
-            sample = {
-                input_key: entry[input_key],
-                "ref_response": ref_response,
-                "policy_response": fine_tuned_model_response,
-                "expected_response": entry['chosen'],
-                "ref_perplexity": ref_perplexity,
-                "policy_perplexity": ft_perplexity
-            }
-            test_results.append(sample)
-
-    except KeyboardInterrupt:
-        print("\nInterrupted! Saving partial results...")
-
-    finally:
-        # Save the test results to a JSON file
-        with open(output_json, "w") as f:
-            json.dump(test_results, f, indent=4)
-        print("Test results saved to:", output_json)
+    # Run MMLU benchmark
+    if config.benchmark:
+        print("Running MMLU benchmark...")
+        benchmark_filename = get_output_filename(
+            method=config.method_name,
+            file=config.training_data_filename,
+            model=config.model_name,
+            label="benchmark",
+            learning_rate=config.learning_rate,
+            beta=config.beta,
+            lambda_dpop=getattr(config, "lambda_dpop", None),
+            lambda_shift=getattr(config, "lambda_shift", None),
+            typename="json"
+        )
+        run_benchmark(benchmark_filename, saved_ft_model_path)

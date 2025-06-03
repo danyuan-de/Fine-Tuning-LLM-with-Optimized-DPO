@@ -1,0 +1,32 @@
+[
+  {
+    "epoch": 1,
+    "step": 4,
+    "batch_idx": 39,
+    "loss": 0.4542710669338703,
+    "loss_change": -0.16360940411686897,
+    "reward_diff": 0.3604225441813469,
+    "sample_chosen": "<observation>The block is on an incline, and we need to compare the force down the incline with the maximum static friction force.</observation>\n<insight>The block stays at rest if $mg\\sin\\theta \\leq ...",
+    "sample_rejected": "Okay, so the force pulling the block down is $mg\\sin(30^{\\circ})$, and $\\sin(30^{\\circ}) = 0.5$. The max friction is $\\mu_s mg\\cos(30^{\\circ}) = 0.6 \\times mg \\times 0.866 \\approx 0.52mg$. Since $0.5m..."
+  },
+  {
+    "epoch": 1,
+    "step": 5,
+    "batch_idx": 47,
+    "loss": 0.31657182052731514,
+    "loss_change": -0.13769924640655518,
+    "reward_diff": 1.000527236610651,
+    "sample_chosen": "<observation>The applied force is $12\\,\\mathrm{N}$ and friction opposes with $5\\,\\mathrm{N}$.</observation>\n<insight>Net force is the difference: $F_{\\text{net}}=12\\,\\mathrm{N}-5\\,\\mathrm{N}$.</insigh...",
+    "sample_rejected": "You just subtract the friction from the pull: $12-5=7\\,\\mathrm{N}$. Simple enough!"
+  },
+  {
+    "epoch": 1,
+    "step": 6,
+    "batch_idx": 55,
+    "loss": 0.1484839953482151,
+    "loss_change": -0.16808782517910004,
+    "reward_diff": 2.068206310272217,
+    "sample_chosen": "<observation>Work for constant pressure: $W = P\\,\\Delta V$.</observation>\n<insight>We must convert atm to Pa and L to $\\mathrm{m^3}$.</insight>\n<think>$P=1.013\\times10^5\\,\\mathrm{Pa}, \\Delta V = (4.0-...",
+    "sample_rejected": "You multiply that 1 atm in pascals by the change of 2 liters in cubic meters. That ends up being about 200 joules. Piece of cake."
+  }
+]
