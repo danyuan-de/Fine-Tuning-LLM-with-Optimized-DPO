@@ -9,7 +9,7 @@ import re
 
 # --- Configuration ---
 BASE_RESULTS_PATH = "../results/"
-output_charts_folder_base = os.path.join("../charts_output_combined_ppl_diag_annot") # New folder
+output_charts_folder_base = os.path.join("../resultsChart/ppl-chartsDiagAnnot") # New folder
 os.makedirs(output_charts_folder_base, exist_ok=True)
 
 # --- Helper Functions --- (Assume get_lr_from_filename_str, extract_plot_info_from_filename, load_data_from_json are unchanged)

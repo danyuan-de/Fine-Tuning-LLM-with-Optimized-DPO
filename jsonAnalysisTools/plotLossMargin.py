@@ -146,7 +146,7 @@ else:
 
     plt.tight_layout()
     # --- Save Figure ---
-    output_folder = os.path.join("../loss_margin")
+    output_folder = os.path.join("../resultsChart/chartsLossMargin")
     os.makedirs(output_folder, exist_ok=True)
     if len(primary_configs_patterns) == 3:
         output_plot_filename = f"{output_folder}/{DATASET_TYPE_TO_PLOT}_reward_loss_comparison.png"

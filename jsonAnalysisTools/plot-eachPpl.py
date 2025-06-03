@@ -377,8 +377,8 @@ if __name__ == "__main__":
     # === Configure input and output directories ===
     script_dir = os.path.dirname(os.path.abspath(__file__))
     results_dir = os.path.join(script_dir, '..', 'results')
-    output_charts_folder = os.path.join(script_dir, '..', 'charts_output')
-    
+    output_charts_folder = os.path.join(script_dir, '../resultsChart', 'pplCharts')
+
     if not os.path.exists(output_charts_folder):
         os.makedirs(output_charts_folder)
         print(f"Created output directory: {output_charts_folder}")

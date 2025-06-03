@@ -89,7 +89,7 @@ for json_file_path in json_files:
     # e.g., if input is "my_generated_data.json", output will be "my_generated_data_averages.csv"
     base_name = os.path.basename(json_file_path) # Get filename without extension
     csv_file_name = f"{base_name}_averages.csv"
-    output_folder = os.path.join(script_dir, '..', "ppl_23_table")
+    output_folder = os.path.join(script_dir, '..', "pplTables") # Define the output folder for CSV files
     if not os.path.exists(output_folder):
         os.makedirs(output_folder) # Create the output folder if it doesn't exist
     csv_file_path = os.path.join(output_folder, csv_file_name) # Full path for the CSV file

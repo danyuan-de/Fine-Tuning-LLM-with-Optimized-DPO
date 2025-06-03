@@ -63,7 +63,7 @@ def process_file(json_path: str, plot_dir: str):
 def main():
     """
     Search for all JSON files under '../results' whose filenames contain 'benchmark',
-    process each one, and save plots under '../benchmarkPlots'.
+    process each one, and save plots under '../resultsChart/benchmarkPlots'.
     """
     results_dir = '../results'
 
@@ -76,7 +76,7 @@ def main():
     print(f"Found {len(file_list)} JSON files to process.")
 
     # 2. Ensure the output directory exists
-    plot_dir = '../benchmarkPlots'
+    plot_dir = '../resultsChart/benchmarkPlots'
     os.makedirs(plot_dir, exist_ok=True)
 
     # 3. Process each file
